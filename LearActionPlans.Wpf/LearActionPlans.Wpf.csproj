@@ -111,6 +111,9 @@
     <Compile Include="Models\Zamestnanci.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Views\ListOfActionPlanPoints.xaml.cs">
+      <DependentUpon>ListOfActionPlanPoints.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -118,6 +121,7 @@
     <Compile Include="Views\NewActionPlanView.xaml.cs">
       <DependentUpon>NewActionPlanView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\ListOfActionPlanPoints.xaml" />
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

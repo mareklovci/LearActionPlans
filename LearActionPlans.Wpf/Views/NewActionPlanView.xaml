@@ -19,33 +19,97 @@
             <RowDefinition Height="20" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
 
-        <ListView Grid.Row="1" Grid.Column="1"
-                  x:Name="listView"
-                  Height="200"
-                  d:DataContext="{d:DesignInstance models:AkcniPlany}">
-        <ListView.View>
-                <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Employees">
-                    
-                    <!-- Add GridView Columns -->
-                    <GridViewColumn Header="ID" 
-                                    Width="120"
-                                    DisplayMemberBinding="{Binding Path=akcniPlan_Id}" />
-                    <GridViewColumn Header="# AP" 
-                                    Width="120" 
-                                    DisplayMemberBinding="{Binding Path=cisloAP}" />
-                    <GridViewColumn Header="Rok" 
-                                    Width="120" 
-                                    DisplayMemberBinding="{Binding Path=rok}" />
-                    <GridViewColumn Header="Zadavatel ID" 
-                                    Width="120" 
-                                    DisplayMemberBinding="{Binding Path=zadavatel1_Id}" />
-                    
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <TextBlock Grid.Row="1" Grid.Column="1" FontWeight="Bold" Margin="5 0 0 10">
+            Number of APs
+        </TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="2" x:Name="NumberOfPlans" />
+
+        <StackPanel Grid.Row="2" Grid.Column="1" Margin="0 10">
+            <Label FontWeight="Bold">Contracting Authority #1</Label>
+            <ComboBox Name="ContractingAuthority1" SelectionChanged="ContractingAuthority1_OnSelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="models:Zamestnanci">
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} {1}">
+                                    <Binding Path="jmeno" />
+                                    <Binding Path="prijmeni" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Grid.Column="2" Margin="20 10 0 10">
+            <Label FontWeight="Bold">Contracting Authority #2</Label>
+            <ComboBox Name="ContractingAuthority2" SelectionChanged="ContractingAuthority2_OnSelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="models:Zamestnanci">
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} {1}">
+                                    <Binding Path="jmeno" />
+                                    <Binding Path="prijmeni" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Grid.Column="1" Margin="0 10">
+            <Label FontWeight="Bold">Topic</Label>
+            <TextBox />
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Grid.Column="2" Margin="20 10 0 10">
+            <Label FontWeight="Bold">Projects</Label>
+            <ComboBox Name="ProjectsComboBox">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="models:Projekty">
+                        <TextBlock Text="{Binding nazev}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Grid.Column="1" Margin="0 10">
+            <Label FontWeight="Bold">End Date</Label>
+            <DatePicker x:Name="DatePicker" SelectedDateChanged="DatePicker_OnSelectedDateChanged"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Grid.Column="2" Margin="20 10 0 10">
+            <Label FontWeight="Bold">Customer</Label>
+            <ComboBox Name="CustomersComboBox" SelectionChanged="CustomersComboBox_OnSelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="models:Zakaznici">
+                        <TextBlock Text="{Binding nazev}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="5" Grid.Column="1" Margin="0 10">
+            <RadioButton>Audits</RadioButton>
+            <RadioButton>Other</RadioButton>
+        </StackPanel>
+
+        <Button Grid.Row="6" Grid.Column="1" Padding="10" Margin="0 10 0 10" Name="SaveBtn" Click="OnClickSaveBtn">
+            Save
+        </Button>
+        <Button Grid.Row="6" Grid.Column="2" Padding="10" Margin="20 10 0 10" Name="CloseBtn" Click="OnClickCloseBtn">
+            Close
+        </Button>
     </Grid>
 </Window>

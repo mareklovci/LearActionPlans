@@ -13,7 +13,7 @@ namespace LearActionPlans.Wpf.Views
             // Populate list
             using (var context = new LearDataAllEntities())
             {
-                var query = from ap in context.AkcniPlany select ap; 
+                var query = from ap in context.AkcniPlan select ap; 
 
                 foreach (var ap in query)
                 {

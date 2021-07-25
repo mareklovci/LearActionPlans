@@ -12,17 +12,10 @@ namespace LearActionPlans.Wpf.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Zamestnanci
+    public partial class Projekt
     {
-        public int zamestnanec_Id { get; set; }
-        public string jmeno { get; set; }
-        public string prijmeni { get; set; }
-        public int personalniCislo { get; set; }
-        public int oddeleni_Id { get; set; }
-        public string email { get; set; }
-        public bool jeZamestnanec { get; set; }
-        public bool storno { get; set; }
-    
-        public virtual Oddeleni Oddeleni { get; set; }
+        public int ProjektID { get; set; }
+        public string Nazev { get; set; }
+        public bool Storno { get; set; }
     }
 }

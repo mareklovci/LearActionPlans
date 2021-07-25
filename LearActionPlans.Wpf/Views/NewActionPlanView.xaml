@@ -6,13 +6,11 @@
         xmlns:models="clr-namespace:LearActionPlans.Wpf.Models"
         mc:Ignorable="d"
         Title="NewActionPlanView" Height="450" Width="800">
-    <Grid>
+    <Grid Margin="20">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="20" />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -27,21 +25,21 @@
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="1" Grid.Column="1" FontWeight="Bold" Margin="5 0 0 10">
+        <TextBlock Grid.Row="1" Grid.Column="0" FontWeight="Bold" Margin="5 0 0 10">
             Number of APs
         </TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="2" x:Name="NumberOfPlans" />
+        <TextBlock Grid.Row="1" Grid.Column="0" x:Name="NumberOfPlans" />
 
-        <StackPanel Grid.Row="2" Grid.Column="1" Margin="0 10">
+        <StackPanel Grid.Row="2" Grid.Column="0" Margin="0 10">
             <Label FontWeight="Bold">Contracting Authority #1</Label>
             <ComboBox Name="ContractingAuthority1" SelectionChanged="ContractingAuthority1_OnSelectionChanged">
                 <ComboBox.ItemTemplate>
-                    <DataTemplate DataType="models:Zamestnanci">
+                    <DataTemplate DataType="models:Zamestnanec">
                         <TextBlock>
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0} {1}">
-                                    <Binding Path="jmeno" />
-                                    <Binding Path="prijmeni" />
+                                    <Binding Path="Jmeno" />
+                                    <Binding Path="Prijmeni" />
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
@@ -50,16 +48,16 @@
             </ComboBox>
         </StackPanel>
 
-        <StackPanel Grid.Row="2" Grid.Column="2" Margin="20 10 0 10">
+        <StackPanel Grid.Row="2" Grid.Column="1" Margin="20 10 0 10">
             <Label FontWeight="Bold">Contracting Authority #2</Label>
             <ComboBox Name="ContractingAuthority2" SelectionChanged="ContractingAuthority2_OnSelectionChanged">
                 <ComboBox.ItemTemplate>
-                    <DataTemplate DataType="models:Zamestnanci">
+                    <DataTemplate DataType="models:Zamestnanec">
                         <TextBlock>
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0} {1}">
-                                    <Binding Path="jmeno" />
-                                    <Binding Path="prijmeni" />
+                                    <Binding Path="Jmeno" />
+                                    <Binding Path="Prijmeni" />
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
@@ -68,47 +66,47 @@
             </ComboBox>
         </StackPanel>
 
-        <StackPanel Grid.Row="3" Grid.Column="1" Margin="0 10">
+        <StackPanel Grid.Row="3" Grid.Column="0" Margin="0 10">
             <Label FontWeight="Bold">Topic</Label>
-            <TextBox />
+            <TextBox x:Name="TopicField" TextChanged="TopicField_OnTextChanged" />
         </StackPanel>
 
-        <StackPanel Grid.Row="3" Grid.Column="2" Margin="20 10 0 10">
+        <StackPanel Grid.Row="3" Grid.Column="1" Margin="20 10 0 10">
             <Label FontWeight="Bold">Projects</Label>
             <ComboBox Name="ProjectsComboBox">
                 <ComboBox.ItemTemplate>
-                    <DataTemplate DataType="models:Projekty">
-                        <TextBlock Text="{Binding nazev}" />
+                    <DataTemplate DataType="models:Projekt">
+                        <TextBlock Text="{Binding Nazev}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
 
-        <StackPanel Grid.Row="4" Grid.Column="1" Margin="0 10">
+        <StackPanel Grid.Row="4" Grid.Column="0" Margin="0 10">
             <Label FontWeight="Bold">End Date</Label>
-            <DatePicker x:Name="DatePicker" SelectedDateChanged="DatePicker_OnSelectedDateChanged"/>
+            <DatePicker x:Name="DatePicker" SelectedDateChanged="DatePicker_OnSelectedDateChanged" Language="en-us" />
         </StackPanel>
 
-        <StackPanel Grid.Row="4" Grid.Column="2" Margin="20 10 0 10">
+        <StackPanel Grid.Row="4" Grid.Column="1" Margin="20 10 0 10">
             <Label FontWeight="Bold">Customer</Label>
             <ComboBox Name="CustomersComboBox" SelectionChanged="CustomersComboBox_OnSelectionChanged">
                 <ComboBox.ItemTemplate>
-                    <DataTemplate DataType="models:Zakaznici">
-                        <TextBlock Text="{Binding nazev}" />
+                    <DataTemplate DataType="models:Zakaznik">
+                        <TextBlock Text="{Binding Nazev}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
 
-        <StackPanel Grid.Row="5" Grid.Column="1" Margin="0 10">
-            <RadioButton>Audits</RadioButton>
+        <StackPanel Grid.Row="5" Grid.Column="0" Margin="0 10">
+            <RadioButton IsChecked="True">Audits</RadioButton>
             <RadioButton>Other</RadioButton>
         </StackPanel>
 
-        <Button Grid.Row="6" Grid.Column="1" Padding="10" Margin="0 10 0 10" Name="SaveBtn" Click="OnClickSaveBtn">
+        <Button Grid.Row="6" Grid.Column="0" Padding="10" Margin="0 10 0 10" Name="SaveBtn" Click="OnClickSaveBtn">
             Save
         </Button>
-        <Button Grid.Row="6" Grid.Column="2" Padding="10" Margin="20 10 0 10" Name="CloseBtn" Click="OnClickCloseBtn">
+        <Button Grid.Row="6" Grid.Column="1" Padding="10" Margin="20 10 0 10" Name="CloseBtn" Click="OnClickCloseBtn">
             Close
         </Button>
     </Grid>

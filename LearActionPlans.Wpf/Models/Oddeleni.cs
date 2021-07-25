@@ -14,17 +14,8 @@ namespace LearActionPlans.Wpf.Models
     
     public partial class Oddeleni
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Oddeleni()
-        {
-            this.Zamestnanci = new HashSet<Zamestnanci>();
-        }
-    
-        public int oddeleni_Id { get; set; }
-        public string nazev { get; set; }
-        public bool storno { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Zamestnanci> Zamestnanci { get; set; }
+        public int OddeleniID { get; set; }
+        public string Nazev { get; set; }
+        public bool Storno { get; set; }
     }
 }

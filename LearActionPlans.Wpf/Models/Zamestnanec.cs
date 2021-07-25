@@ -12,17 +12,15 @@ namespace LearActionPlans.Wpf.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class AkcniPlany
+    public partial class Zamestnanec
     {
-        public int akcniPlan_Id { get; set; }
-        public int cisloAP { get; set; }
-        public int rok { get; set; }
-        public int zadavatel1_Id { get; set; }
-        public Nullable<int> zadavatel2_Id { get; set; }
-        public string tema { get; set; }
-        public Nullable<int> projekt_Id { get; set; }
-        public System.DateTime datumZalozeni { get; set; }
-        public int zakaznik_Id { get; set; }
-        public bool audityOstatni { get; set; }
+        public int ZamestnanecID { get; set; }
+        public string Jmeno { get; set; }
+        public string Prijmeni { get; set; }
+        public int PersonalniCislo { get; set; }
+        public int OddeleniID { get; set; }
+        public string Email { get; set; }
+        public bool JeZamestnanec { get; set; }
+        public bool Storno { get; set; }
     }
 }

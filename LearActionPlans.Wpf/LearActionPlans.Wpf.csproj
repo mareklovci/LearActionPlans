@@ -69,19 +69,10 @@
     <Compile Include="Models\AkceWS.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\AkcniPlany.cs">
+    <Compile Include="Models\AkcniPlan.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\BodyAP.cs">
-      <DependentUpon>LearDataAllModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DatumUkonceniAkceWM.cs">
-      <DependentUpon>LearDataAllModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DatumUkonceniAkceWS.cs">
-      <DependentUpon>LearDataAllModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DatumUkonceniAP.cs">
+    <Compile Include="Models\BodAP.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\LearDataAllModel.Context.cs">
@@ -102,13 +93,22 @@
     <Compile Include="Models\Oddeleni.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Projekty.cs">
+    <Compile Include="Models\Projekt.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Zakaznici.cs">
+    <Compile Include="Models\UkonceniAkceWM.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Zamestnanci.cs">
+    <Compile Include="Models\UkonceniAkceWS.cs">
+      <DependentUpon>LearDataAllModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UkonceniAP.cs">
+      <DependentUpon>LearDataAllModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Zakaznik.cs">
+      <DependentUpon>LearDataAllModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Zamestnanec.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Views\ListOfActionPlanPoints.xaml.cs">
@@ -154,19 +154,19 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Models\LearDataAllModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>LearDataAllModel.Context.cs</LastGenOutput>
       <DependentUpon>LearDataAllModel.edmx</DependentUpon>
+      <LastGenOutput>LearDataAllModel.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\LearDataAllModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>LearDataAllModel.edmx</DependentUpon>
       <LastGenOutput>LearDataAllModel.cs</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

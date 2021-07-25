@@ -27,14 +27,14 @@ namespace LearActionPlans.Wpf.Models
     
         public virtual DbSet<AkceWM> AkceWM { get; set; }
         public virtual DbSet<AkceWS> AkceWS { get; set; }
-        public virtual DbSet<AkcniPlany> AkcniPlany { get; set; }
-        public virtual DbSet<BodyAP> BodyAP { get; set; }
-        public virtual DbSet<DatumUkonceniAkceWM> DatumUkonceniAkceWM { get; set; }
-        public virtual DbSet<DatumUkonceniAP> DatumUkonceniAP { get; set; }
+        public virtual DbSet<AkcniPlan> AkcniPlan { get; set; }
+        public virtual DbSet<BodAP> BodAP { get; set; }
         public virtual DbSet<Oddeleni> Oddeleni { get; set; }
-        public virtual DbSet<Projekty> Projekty { get; set; }
-        public virtual DbSet<Zakaznici> Zakaznici { get; set; }
-        public virtual DbSet<Zamestnanci> Zamestnanci { get; set; }
-        public virtual DbSet<DatumUkonceniAkceWS> DatumUkonceniAkceWS { get; set; }
+        public virtual DbSet<Projekt> Projekt { get; set; }
+        public virtual DbSet<UkonceniAkceWM> UkonceniAkceWM { get; set; }
+        public virtual DbSet<UkonceniAP> UkonceniAP { get; set; }
+        public virtual DbSet<Zakaznik> Zakaznik { get; set; }
+        public virtual DbSet<Zamestnanec> Zamestnanec { get; set; }
+        public virtual DbSet<UkonceniAkceWS> UkonceniAkceWS { get; set; }
     }
 }

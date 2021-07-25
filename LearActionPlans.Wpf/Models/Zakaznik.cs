@@ -12,11 +12,10 @@ namespace LearActionPlans.Wpf.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class DatumUkonceniAP
+    public partial class Zakaznik
     {
-        public int datumUkonceniAP_Id { get; set; }
-        public int akcniPlan_Id { get; set; }
-        public System.DateTime datumUkonceni { get; set; }
-        public string poznamka { get; set; }
+        public int ZakaznikID { get; set; }
+        public string Nazev { get; set; }
+        public bool Storno { get; set; }
     }
 }

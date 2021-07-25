@@ -7,166 +7,150 @@
       <Schema Namespace="LearDataAllModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AkceWM">
           <Key>
-            <PropertyRef Name="akceWM_Id" />
+            <PropertyRef Name="AkceWMID" />
           </Key>
-          <Property Name="akceWM_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="bodAP_Id" Type="int" Nullable="false" />
-          <Property Name="napravnaOpatreni" Type="nvarchar" MaxLength="1000" Nullable="false" />
-          <Property Name="odpovednaOsoba1" Type="int" Nullable="false" />
-          <Property Name="odpovednaOsoba2" Type="int" />
-          <Property Name="kontrolaEfektivnosti" Type="date" />
-          <Property Name="oddeleni_Id" Type="int" />
-          <Property Name="priloha" Type="nvarchar(max)" />
-          <Property Name="storno" Type="bit" Nullable="false" />
+          <Property Name="AkceWMID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BodAPID" Type="int" Nullable="false" />
+          <Property Name="NapravnaOpatreni" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="OdpovednaOsoba1" Type="int" Nullable="false" />
+          <Property Name="OdpovednaOsoba2" Type="int" />
+          <Property Name="KontrolaEfektivnosti" Type="date" />
+          <Property Name="OddeleniID" Type="int" />
+          <Property Name="Priloha" Type="nvarchar(max)" />
+          <Property Name="Storno" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="AkceWS">
           <Key>
-            <PropertyRef Name="akceWS_Id" />
+            <PropertyRef Name="AkceWSID" />
           </Key>
-          <Property Name="akceWS_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="bodAP_Id" Type="int" Nullable="false" />
-          <Property Name="napravnaOpatreni" Type="nvarchar" MaxLength="1000" Nullable="false" />
-          <Property Name="odpovednaOsoba1" Type="int" Nullable="false" />
-          <Property Name="odpovednaOsoba2" Type="int" />
-          <Property Name="kontrolaEfektivnosti" Type="date" />
-          <Property Name="oddeleni_Id" Type="int" />
-          <Property Name="priloha" Type="nvarchar(max)" />
-          <Property Name="storno" Type="bit" Nullable="false" />
+          <Property Name="AkceWSID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BodAPID" Type="int" Nullable="false" />
+          <Property Name="NapravnaOpatreni" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="OdpovednaOsoba1" Type="int" Nullable="false" />
+          <Property Name="OdpovednaOsoba2" Type="int" />
+          <Property Name="KontrolaEfektivnosti" Type="date" />
+          <Property Name="OddeleniID" Type="int" />
+          <Property Name="Priloha" Type="nvarchar(max)" />
+          <Property Name="Storno" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="AkcniPlany">
+        <EntityType Name="AkcniPlan">
           <Key>
-            <PropertyRef Name="akcniPlan_Id" />
+            <PropertyRef Name="AkcniPlanID" />
           </Key>
-          <Property Name="akcniPlan_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="cisloAP" Type="int" Nullable="false" />
-          <Property Name="rok" Type="int" Nullable="false" />
-          <Property Name="zadavatel1_Id" Type="int" Nullable="false" />
-          <Property Name="zadavatel2_Id" Type="int" />
-          <Property Name="tema" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="projekt_Id" Type="int" />
-          <Property Name="datumZalozeni" Type="date" Nullable="false" />
-          <Property Name="zakaznik_Id" Type="int" Nullable="false" />
-          <Property Name="audityOstatni" Type="bit" Nullable="false" />
+          <Property Name="AkcniPlanID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CisloAP" Type="int" Nullable="false" />
+          <Property Name="Rok" Type="int" Nullable="false" />
+          <Property Name="Zadavatel1ID" Type="int" Nullable="false" />
+          <Property Name="Zadavatel2ID" Type="int" />
+          <Property Name="Tema" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ProjektID" Type="int" />
+          <Property Name="DatumZalozeni" Type="date" Nullable="false" />
+          <Property Name="DatumUkonceni" Type="date" />
+          <Property Name="ZakaznikID" Type="int" Nullable="false" />
+          <Property Name="AudityOstatni" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="BodyAP">
+        <EntityType Name="BodAP">
           <Key>
-            <PropertyRef Name="bodAP_Id" />
+            <PropertyRef Name="BodAPID" />
           </Key>
-          <Property Name="bodAP_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="akcniPlan_Id" Type="int" Nullable="false" />
-          <Property Name="audityOstatni" Type="bit" Nullable="false" />
-          <Property Name="cisloBoduAP" Type="int" Nullable="false" />
-          <Property Name="datumZalozeni" Type="date" Nullable="false" />
-          <Property Name="odkazNaNormu" Type="nvarchar" MaxLength="20" />
-          <Property Name="hodnoceniNeshody" Type="nvarchar" MaxLength="20" />
-          <Property Name="popisProblemu" Type="nvarchar" MaxLength="1000" Nullable="false" />
-          <Property Name="skutecnaPricina" Type="nvarchar" MaxLength="1000" Nullable="false" />
-          <Property Name="APIdBodAP" Type="varchar" MaxLength="15" Nullable="false" />
-          <Property Name="storno" Type="bit" Nullable="false" />
-        </EntityType>
-        <EntityType Name="DatumUkonceniAkceWM">
-          <Key>
-            <PropertyRef Name="datumUkonceniAkceWM_Id" />
-          </Key>
-          <Property Name="datumUkonceniAkceWM_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="akceWM_Id" Type="int" Nullable="false" />
-          <Property Name="datumUkonceni" Type="date" Nullable="false" />
-          <Property Name="poznamka" Type="nvarchar" MaxLength="250" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'AkcniPlany.dbo.DatumUkonceniAkceWS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="DatumUkonceniAkceWS">
-          <Key>
-            <PropertyRef Name="datumUkonceniAkceWS_Id" />
-            <PropertyRef Name="akceWS_Id" />
-            <PropertyRef Name="datumUkonceni" />
-          </Key>
-          <Property Name="datumUkonceniAkceWS_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="akceWS_Id" Type="int" Nullable="false" />
-          <Property Name="datumUkonceni" Type="date" Nullable="false" />
-          <Property Name="poznamka" Type="nvarchar" MaxLength="250" />
-        </EntityType>
-        <EntityType Name="DatumUkonceniAP">
-          <Key>
-            <PropertyRef Name="datumUkonceniAP_Id" />
-          </Key>
-          <Property Name="datumUkonceniAP_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="akcniPlan_Id" Type="int" Nullable="false" />
-          <Property Name="datumUkonceni" Type="date" Nullable="false" />
-          <Property Name="poznamka" Type="nvarchar" MaxLength="250" />
+          <Property Name="BodAPID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AkcniPlanID" Type="int" Nullable="false" />
+          <Property Name="AudityOstatni" Type="bit" Nullable="false" />
+          <Property Name="CisloBoduAP" Type="int" Nullable="false" />
+          <Property Name="DatumZalozeni" Type="date" Nullable="false" />
+          <Property Name="OdkazNaNormu" Type="nvarchar" MaxLength="20" />
+          <Property Name="HodnoceniNeshody" Type="nvarchar" MaxLength="20" />
+          <Property Name="PopisProblemu" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="SkutecnaPricina" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="Storno" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Oddeleni">
           <Key>
-            <PropertyRef Name="oddeleni_Id" />
+            <PropertyRef Name="OddeleniID" />
           </Key>
-          <Property Name="oddeleni_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="nazev" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="storno" Type="bit" Nullable="false" />
+          <Property Name="OddeleniID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nazev" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Storno" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="Projekty">
+        <EntityType Name="Projekt">
           <Key>
-            <PropertyRef Name="projekt_Id" />
+            <PropertyRef Name="ProjektID" />
           </Key>
-          <Property Name="projekt_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="nazev" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="storno" Type="bit" Nullable="false" />
+          <Property Name="ProjektID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nazev" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Storno" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="Zakaznici">
+        <EntityType Name="UkonceniAkceWM">
           <Key>
-            <PropertyRef Name="zakaznik_Id" />
+            <PropertyRef Name="UkonceniAkceWMID" />
           </Key>
-          <Property Name="zakaznik_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="nazev" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="storno" Type="bit" Nullable="false" />
+          <Property Name="UkonceniAkceWMID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AkceWMID" Type="int" Nullable="false" />
+          <Property Name="DatumUkonceni" Type="date" Nullable="false" />
+          <Property Name="Poznamka" Type="nvarchar" MaxLength="250" />
         </EntityType>
-        <EntityType Name="Zamestnanci">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'LearDataAll.dbo.UkonceniAkceWS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="UkonceniAkceWS">
           <Key>
-            <PropertyRef Name="zamestnanec_Id" />
+            <PropertyRef Name="UkonceniAkceWSID" />
+            <PropertyRef Name="AkceWSID" />
+            <PropertyRef Name="DatumUkonceni" />
           </Key>
-          <Property Name="zamestnanec_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="jmeno" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="prijmeni" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="personalniCislo" Type="int" Nullable="false" />
-          <Property Name="oddeleni_Id" Type="int" Nullable="false" />
-          <Property Name="email" Type="nvarchar" MaxLength="100" />
-          <Property Name="jeZamestnanec" Type="bit" Nullable="false" />
-          <Property Name="storno" Type="bit" Nullable="false" />
+          <Property Name="UkonceniAkceWSID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AkceWSID" Type="int" Nullable="false" />
+          <Property Name="DatumUkonceni" Type="date" Nullable="false" />
+          <Property Name="Poznamka" Type="nvarchar" MaxLength="250" />
         </EntityType>
-        <Association Name="FK_Zamestnanci_Oddeleni">
-          <End Role="Oddeleni" Type="Self.Oddeleni" Multiplicity="1" />
-          <End Role="Zamestnanci" Type="Self.Zamestnanci" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Oddeleni">
-              <PropertyRef Name="oddeleni_Id" />
-            </Principal>
-            <Dependent Role="Zamestnanci">
-              <PropertyRef Name="oddeleni_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
+        <EntityType Name="UkonceniAP">
+          <Key>
+            <PropertyRef Name="UkonceniAPID" />
+          </Key>
+          <Property Name="UkonceniAPID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AkcniPlanID" Type="int" Nullable="false" />
+          <Property Name="DatumUkonceni" Type="date" Nullable="false" />
+          <Property Name="Poznamka" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="Zakaznik">
+          <Key>
+            <PropertyRef Name="ZakaznikID" />
+          </Key>
+          <Property Name="ZakaznikID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nazev" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Storno" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Zamestnanec">
+          <Key>
+            <PropertyRef Name="ZamestnanecID" />
+          </Key>
+          <Property Name="ZamestnanecID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Jmeno" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Prijmeni" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="PersonalniCislo" Type="int" Nullable="false" />
+          <Property Name="OddeleniID" Type="int" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" />
+          <Property Name="JeZamestnanec" Type="bit" Nullable="false" />
+          <Property Name="Storno" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityContainer Name="LearDataAllModelStoreContainer">
           <EntitySet Name="AkceWM" EntityType="Self.AkceWM" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AkceWS" EntityType="Self.AkceWS" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="AkcniPlany" EntityType="Self.AkcniPlany" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BodyAP" EntityType="Self.BodyAP" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="DatumUkonceniAkceWM" EntityType="Self.DatumUkonceniAkceWM" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="DatumUkonceniAP" EntityType="Self.DatumUkonceniAP" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AkcniPlan" EntityType="Self.AkcniPlan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BodAP" EntityType="Self.BodAP" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Oddeleni" EntityType="Self.Oddeleni" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Projekty" EntityType="Self.Projekty" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Zakaznici" EntityType="Self.Zakaznici" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Zamestnanci" EntityType="Self.Zamestnanci" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="DatumUkonceniAkceWS" EntityType="Self.DatumUkonceniAkceWS" store:Type="Tables" store:Schema="dbo">
+          <EntitySet Name="Projekt" EntityType="Self.Projekt" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UkonceniAkceWM" EntityType="Self.UkonceniAkceWM" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UkonceniAP" EntityType="Self.UkonceniAP" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Zakaznik" EntityType="Self.Zakaznik" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Zamestnanec" EntityType="Self.Zamestnanec" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UkonceniAkceWS" EntityType="Self.UkonceniAkceWS" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
-    [DatumUkonceniAkceWS].[datumUkonceniAkceWS_Id] AS [datumUkonceniAkceWS_Id], 
-    [DatumUkonceniAkceWS].[akceWS_Id] AS [akceWS_Id], 
-    [DatumUkonceniAkceWS].[datumUkonceni] AS [datumUkonceni], 
-    [DatumUkonceniAkceWS].[poznamka] AS [poznamka]
-    FROM [dbo].[DatumUkonceniAkceWS] AS [DatumUkonceniAkceWS]</DefiningQuery>
+    [UkonceniAkceWS].[UkonceniAkceWSID] AS [UkonceniAkceWSID], 
+    [UkonceniAkceWS].[AkceWSID] AS [AkceWSID], 
+    [UkonceniAkceWS].[DatumUkonceni] AS [DatumUkonceni], 
+    [UkonceniAkceWS].[Poznamka] AS [Poznamka]
+    FROM [dbo].[UkonceniAkceWS] AS [UkonceniAkceWS]</DefiningQuery>
           </EntitySet>
-          <AssociationSet Name="FK_Zamestnanci_Oddeleni" Association="Self.FK_Zamestnanci_Oddeleni">
-            <End Role="Oddeleni" EntitySet="Oddeleni" />
-            <End Role="Zamestnanci" EntitySet="Zamestnanci" />
-          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
@@ -175,159 +159,141 @@ warning 6002: The table/view 'AkcniPlany.dbo.DatumUkonceniAkceWS' does not have 
       <Schema Namespace="LearDataAllModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="AkceWM">
           <Key>
-            <PropertyRef Name="akceWM_Id" />
+            <PropertyRef Name="AkceWMID" />
           </Key>
-          <Property Name="akceWM_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="bodAP_Id" Type="Int32" Nullable="false" />
-          <Property Name="napravnaOpatreni" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="odpovednaOsoba1" Type="Int32" Nullable="false" />
-          <Property Name="odpovednaOsoba2" Type="Int32" />
-          <Property Name="kontrolaEfektivnosti" Type="DateTime" Precision="0" />
-          <Property Name="oddeleni_Id" Type="Int32" />
-          <Property Name="priloha" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="storno" Type="Boolean" Nullable="false" />
+          <Property Name="AkceWMID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BodAPID" Type="Int32" Nullable="false" />
+          <Property Name="NapravnaOpatreni" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="OdpovednaOsoba1" Type="Int32" Nullable="false" />
+          <Property Name="OdpovednaOsoba2" Type="Int32" />
+          <Property Name="KontrolaEfektivnosti" Type="DateTime" Precision="0" />
+          <Property Name="OddeleniID" Type="Int32" />
+          <Property Name="Priloha" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Storno" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="AkceWS">
           <Key>
-            <PropertyRef Name="akceWS_Id" />
+            <PropertyRef Name="AkceWSID" />
           </Key>
-          <Property Name="akceWS_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="bodAP_Id" Type="Int32" Nullable="false" />
-          <Property Name="napravnaOpatreni" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="odpovednaOsoba1" Type="Int32" Nullable="false" />
-          <Property Name="odpovednaOsoba2" Type="Int32" />
-          <Property Name="kontrolaEfektivnosti" Type="DateTime" Precision="0" />
-          <Property Name="oddeleni_Id" Type="Int32" />
-          <Property Name="priloha" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="storno" Type="Boolean" Nullable="false" />
+          <Property Name="AkceWSID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BodAPID" Type="Int32" Nullable="false" />
+          <Property Name="NapravnaOpatreni" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="OdpovednaOsoba1" Type="Int32" Nullable="false" />
+          <Property Name="OdpovednaOsoba2" Type="Int32" />
+          <Property Name="KontrolaEfektivnosti" Type="DateTime" Precision="0" />
+          <Property Name="OddeleniID" Type="Int32" />
+          <Property Name="Priloha" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Storno" Type="Boolean" Nullable="false" />
         </EntityType>
-        <EntityType Name="AkcniPlany">
+        <EntityType Name="AkcniPlan">
           <Key>
-            <PropertyRef Name="akcniPlan_Id" />
+            <PropertyRef Name="AkcniPlanID" />
           </Key>
-          <Property Name="akcniPlan_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="cisloAP" Type="Int32" Nullable="false" />
-          <Property Name="rok" Type="Int32" Nullable="false" />
-          <Property Name="zadavatel1_Id" Type="Int32" Nullable="false" />
-          <Property Name="zadavatel2_Id" Type="Int32" />
-          <Property Name="tema" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="projekt_Id" Type="Int32" />
-          <Property Name="datumZalozeni" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="zakaznik_Id" Type="Int32" Nullable="false" />
-          <Property Name="audityOstatni" Type="Boolean" Nullable="false" />
+          <Property Name="AkcniPlanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CisloAP" Type="Int32" Nullable="false" />
+          <Property Name="Rok" Type="Int32" Nullable="false" />
+          <Property Name="Zadavatel1ID" Type="Int32" Nullable="false" />
+          <Property Name="Zadavatel2ID" Type="Int32" />
+          <Property Name="Tema" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProjektID" Type="Int32" />
+          <Property Name="DatumZalozeni" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DatumUkonceni" Type="DateTime" Precision="0" />
+          <Property Name="ZakaznikID" Type="Int32" Nullable="false" />
+          <Property Name="AudityOstatni" Type="Boolean" Nullable="false" />
         </EntityType>
-        <EntityType Name="BodyAP">
+        <EntityType Name="BodAP">
           <Key>
-            <PropertyRef Name="bodAP_Id" />
+            <PropertyRef Name="BodAPID" />
           </Key>
-          <Property Name="bodAP_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="akcniPlan_Id" Type="Int32" Nullable="false" />
-          <Property Name="audityOstatni" Type="Boolean" Nullable="false" />
-          <Property Name="cisloBoduAP" Type="Int32" Nullable="false" />
-          <Property Name="datumZalozeni" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="odkazNaNormu" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="hodnoceniNeshody" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="popisProblemu" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="skutecnaPricina" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="APIdBodAP" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="storno" Type="Boolean" Nullable="false" />
-        </EntityType>
-        <EntityType Name="DatumUkonceniAkceWM">
-          <Key>
-            <PropertyRef Name="datumUkonceniAkceWM_Id" />
-          </Key>
-          <Property Name="datumUkonceniAkceWM_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="akceWM_Id" Type="Int32" Nullable="false" />
-          <Property Name="datumUkonceni" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="poznamka" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="DatumUkonceniAP">
-          <Key>
-            <PropertyRef Name="datumUkonceniAP_Id" />
-          </Key>
-          <Property Name="datumUkonceniAP_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="akcniPlan_Id" Type="Int32" Nullable="false" />
-          <Property Name="datumUkonceni" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="poznamka" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="BodAPID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AkcniPlanID" Type="Int32" Nullable="false" />
+          <Property Name="AudityOstatni" Type="Boolean" Nullable="false" />
+          <Property Name="CisloBoduAP" Type="Int32" Nullable="false" />
+          <Property Name="DatumZalozeni" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="OdkazNaNormu" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="HodnoceniNeshody" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PopisProblemu" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SkutecnaPricina" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Storno" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Oddeleni">
           <Key>
-            <PropertyRef Name="oddeleni_Id" />
+            <PropertyRef Name="OddeleniID" />
           </Key>
-          <Property Name="oddeleni_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="nazev" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="storno" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Zamestnanci" Relationship="Self.FK_Zamestnanci_Oddeleni" FromRole="Oddeleni" ToRole="Zamestnanci" />
+          <Property Name="OddeleniID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nazev" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Storno" Type="Boolean" Nullable="false" />
         </EntityType>
-        <EntityType Name="Projekty">
+        <EntityType Name="Projekt">
           <Key>
-            <PropertyRef Name="projekt_Id" />
+            <PropertyRef Name="ProjektID" />
           </Key>
-          <Property Name="projekt_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="nazev" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="storno" Type="Boolean" Nullable="false" />
+          <Property Name="ProjektID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nazev" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Storno" Type="Boolean" Nullable="false" />
         </EntityType>
-        <EntityType Name="Zakaznici">
+        <EntityType Name="UkonceniAkceWM">
           <Key>
-            <PropertyRef Name="zakaznik_Id" />
+            <PropertyRef Name="UkonceniAkceWMID" />
           </Key>
-          <Property Name="zakaznik_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="nazev" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="storno" Type="Boolean" Nullable="false" />
+          <Property Name="UkonceniAkceWMID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AkceWMID" Type="Int32" Nullable="false" />
+          <Property Name="DatumUkonceni" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Poznamka" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Zamestnanci">
+        <EntityType Name="UkonceniAP">
           <Key>
-            <PropertyRef Name="zamestnanec_Id" />
+            <PropertyRef Name="UkonceniAPID" />
           </Key>
-          <Property Name="zamestnanec_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="jmeno" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="prijmeni" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="personalniCislo" Type="Int32" Nullable="false" />
-          <Property Name="oddeleni_Id" Type="Int32" Nullable="false" />
-          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="jeZamestnanec" Type="Boolean" Nullable="false" />
-          <Property Name="storno" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Oddeleni" Relationship="Self.FK_Zamestnanci_Oddeleni" FromRole="Zamestnanci" ToRole="Oddeleni" />
+          <Property Name="UkonceniAPID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AkcniPlanID" Type="Int32" Nullable="false" />
+          <Property Name="DatumUkonceni" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Poznamka" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="DatumUkonceniAkceWS">
+        <EntityType Name="Zakaznik">
           <Key>
-            <PropertyRef Name="datumUkonceniAkceWS_Id" />
-            <PropertyRef Name="akceWS_Id" />
-            <PropertyRef Name="datumUkonceni" />
+            <PropertyRef Name="ZakaznikID" />
           </Key>
-          <Property Name="datumUkonceniAkceWS_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="akceWS_Id" Type="Int32" Nullable="false" />
-          <Property Name="datumUkonceni" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="poznamka" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ZakaznikID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nazev" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Storno" Type="Boolean" Nullable="false" />
         </EntityType>
-        <Association Name="FK_Zamestnanci_Oddeleni">
-          <End Role="Oddeleni" Type="Self.Oddeleni" Multiplicity="1" />
-          <End Role="Zamestnanci" Type="Self.Zamestnanci" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Oddeleni">
-              <PropertyRef Name="oddeleni_Id" />
-            </Principal>
-            <Dependent Role="Zamestnanci">
-              <PropertyRef Name="oddeleni_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
+        <EntityType Name="Zamestnanec">
+          <Key>
+            <PropertyRef Name="ZamestnanecID" />
+          </Key>
+          <Property Name="ZamestnanecID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Jmeno" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Prijmeni" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PersonalniCislo" Type="Int32" Nullable="false" />
+          <Property Name="OddeleniID" Type="Int32" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="JeZamestnanec" Type="Boolean" Nullable="false" />
+          <Property Name="Storno" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UkonceniAkceWS">
+          <Key>
+            <PropertyRef Name="UkonceniAkceWSID" />
+            <PropertyRef Name="AkceWSID" />
+            <PropertyRef Name="DatumUkonceni" />
+          </Key>
+          <Property Name="UkonceniAkceWSID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AkceWSID" Type="Int32" Nullable="false" />
+          <Property Name="DatumUkonceni" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Poznamka" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityContainer Name="LearDataAllEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AkceWM" EntityType="Self.AkceWM" />
           <EntitySet Name="AkceWS" EntityType="Self.AkceWS" />
-          <EntitySet Name="AkcniPlany" EntityType="Self.AkcniPlany" />
-          <EntitySet Name="BodyAP" EntityType="Self.BodyAP" />
-          <EntitySet Name="DatumUkonceniAkceWM" EntityType="Self.DatumUkonceniAkceWM" />
-          <EntitySet Name="DatumUkonceniAP" EntityType="Self.DatumUkonceniAP" />
+          <EntitySet Name="AkcniPlan" EntityType="Self.AkcniPlan" />
+          <EntitySet Name="BodAP" EntityType="Self.BodAP" />
           <EntitySet Name="Oddeleni" EntityType="Self.Oddeleni" />
-          <EntitySet Name="Projekty" EntityType="Self.Projekty" />
-          <EntitySet Name="Zakaznici" EntityType="Self.Zakaznici" />
-          <EntitySet Name="Zamestnanci" EntityType="Self.Zamestnanci" />
-          <EntitySet Name="DatumUkonceniAkceWS" EntityType="Self.DatumUkonceniAkceWS" />
-          <AssociationSet Name="FK_Zamestnanci_Oddeleni" Association="Self.FK_Zamestnanci_Oddeleni">
-            <End Role="Oddeleni" EntitySet="Oddeleni" />
-            <End Role="Zamestnanci" EntitySet="Zamestnanci" />
-          </AssociationSet>
+          <EntitySet Name="Projekt" EntityType="Self.Projekt" />
+          <EntitySet Name="UkonceniAkceWM" EntityType="Self.UkonceniAkceWM" />
+          <EntitySet Name="UkonceniAP" EntityType="Self.UkonceniAP" />
+          <EntitySet Name="Zakaznik" EntityType="Self.Zakaznik" />
+          <EntitySet Name="Zamestnanec" EntityType="Self.Zamestnanec" />
+          <EntitySet Name="UkonceniAkceWS" EntityType="Self.UkonceniAkceWS" />
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -338,134 +304,134 @@ warning 6002: The table/view 'AkcniPlany.dbo.DatumUkonceniAkceWS' does not have 
           <EntitySetMapping Name="AkceWM">
             <EntityTypeMapping TypeName="LearDataAllModel.AkceWM">
               <MappingFragment StoreEntitySet="AkceWM">
-                <ScalarProperty Name="akceWM_Id" ColumnName="akceWM_Id" />
-                <ScalarProperty Name="bodAP_Id" ColumnName="bodAP_Id" />
-                <ScalarProperty Name="napravnaOpatreni" ColumnName="napravnaOpatreni" />
-                <ScalarProperty Name="odpovednaOsoba1" ColumnName="odpovednaOsoba1" />
-                <ScalarProperty Name="odpovednaOsoba2" ColumnName="odpovednaOsoba2" />
-                <ScalarProperty Name="kontrolaEfektivnosti" ColumnName="kontrolaEfektivnosti" />
-                <ScalarProperty Name="oddeleni_Id" ColumnName="oddeleni_Id" />
-                <ScalarProperty Name="priloha" ColumnName="priloha" />
-                <ScalarProperty Name="storno" ColumnName="storno" />
+                <ScalarProperty Name="AkceWMID" ColumnName="AkceWMID" />
+                <ScalarProperty Name="BodAPID" ColumnName="BodAPID" />
+                <ScalarProperty Name="NapravnaOpatreni" ColumnName="NapravnaOpatreni" />
+                <ScalarProperty Name="OdpovednaOsoba1" ColumnName="OdpovednaOsoba1" />
+                <ScalarProperty Name="OdpovednaOsoba2" ColumnName="OdpovednaOsoba2" />
+                <ScalarProperty Name="KontrolaEfektivnosti" ColumnName="KontrolaEfektivnosti" />
+                <ScalarProperty Name="OddeleniID" ColumnName="OddeleniID" />
+                <ScalarProperty Name="Priloha" ColumnName="Priloha" />
+                <ScalarProperty Name="Storno" ColumnName="Storno" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AkceWS">
             <EntityTypeMapping TypeName="LearDataAllModel.AkceWS">
               <MappingFragment StoreEntitySet="AkceWS">
-                <ScalarProperty Name="akceWS_Id" ColumnName="akceWS_Id" />
-                <ScalarProperty Name="bodAP_Id" ColumnName="bodAP_Id" />
-                <ScalarProperty Name="napravnaOpatreni" ColumnName="napravnaOpatreni" />
-                <ScalarProperty Name="odpovednaOsoba1" ColumnName="odpovednaOsoba1" />
-                <ScalarProperty Name="odpovednaOsoba2" ColumnName="odpovednaOsoba2" />
-                <ScalarProperty Name="kontrolaEfektivnosti" ColumnName="kontrolaEfektivnosti" />
-                <ScalarProperty Name="oddeleni_Id" ColumnName="oddeleni_Id" />
-                <ScalarProperty Name="priloha" ColumnName="priloha" />
-                <ScalarProperty Name="storno" ColumnName="storno" />
+                <ScalarProperty Name="AkceWSID" ColumnName="AkceWSID" />
+                <ScalarProperty Name="BodAPID" ColumnName="BodAPID" />
+                <ScalarProperty Name="NapravnaOpatreni" ColumnName="NapravnaOpatreni" />
+                <ScalarProperty Name="OdpovednaOsoba1" ColumnName="OdpovednaOsoba1" />
+                <ScalarProperty Name="OdpovednaOsoba2" ColumnName="OdpovednaOsoba2" />
+                <ScalarProperty Name="KontrolaEfektivnosti" ColumnName="KontrolaEfektivnosti" />
+                <ScalarProperty Name="OddeleniID" ColumnName="OddeleniID" />
+                <ScalarProperty Name="Priloha" ColumnName="Priloha" />
+                <ScalarProperty Name="Storno" ColumnName="Storno" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AkcniPlany">
-            <EntityTypeMapping TypeName="LearDataAllModel.AkcniPlany">
-              <MappingFragment StoreEntitySet="AkcniPlany">
-                <ScalarProperty Name="akcniPlan_Id" ColumnName="akcniPlan_Id" />
-                <ScalarProperty Name="cisloAP" ColumnName="cisloAP" />
-                <ScalarProperty Name="rok" ColumnName="rok" />
-                <ScalarProperty Name="zadavatel1_Id" ColumnName="zadavatel1_Id" />
-                <ScalarProperty Name="zadavatel2_Id" ColumnName="zadavatel2_Id" />
-                <ScalarProperty Name="tema" ColumnName="tema" />
-                <ScalarProperty Name="projekt_Id" ColumnName="projekt_Id" />
-                <ScalarProperty Name="datumZalozeni" ColumnName="datumZalozeni" />
-                <ScalarProperty Name="zakaznik_Id" ColumnName="zakaznik_Id" />
-                <ScalarProperty Name="audityOstatni" ColumnName="audityOstatni" />
+          <EntitySetMapping Name="AkcniPlan">
+            <EntityTypeMapping TypeName="LearDataAllModel.AkcniPlan">
+              <MappingFragment StoreEntitySet="AkcniPlan">
+                <ScalarProperty Name="AkcniPlanID" ColumnName="AkcniPlanID" />
+                <ScalarProperty Name="CisloAP" ColumnName="CisloAP" />
+                <ScalarProperty Name="Rok" ColumnName="Rok" />
+                <ScalarProperty Name="Zadavatel1ID" ColumnName="Zadavatel1ID" />
+                <ScalarProperty Name="Zadavatel2ID" ColumnName="Zadavatel2ID" />
+                <ScalarProperty Name="Tema" ColumnName="Tema" />
+                <ScalarProperty Name="ProjektID" ColumnName="ProjektID" />
+                <ScalarProperty Name="DatumZalozeni" ColumnName="DatumZalozeni" />
+                <ScalarProperty Name="DatumUkonceni" ColumnName="DatumUkonceni" />
+                <ScalarProperty Name="ZakaznikID" ColumnName="ZakaznikID" />
+                <ScalarProperty Name="AudityOstatni" ColumnName="AudityOstatni" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="BodyAP">
-            <EntityTypeMapping TypeName="LearDataAllModel.BodyAP">
-              <MappingFragment StoreEntitySet="BodyAP">
-                <ScalarProperty Name="bodAP_Id" ColumnName="bodAP_Id" />
-                <ScalarProperty Name="akcniPlan_Id" ColumnName="akcniPlan_Id" />
-                <ScalarProperty Name="audityOstatni" ColumnName="audityOstatni" />
-                <ScalarProperty Name="cisloBoduAP" ColumnName="cisloBoduAP" />
-                <ScalarProperty Name="datumZalozeni" ColumnName="datumZalozeni" />
-                <ScalarProperty Name="odkazNaNormu" ColumnName="odkazNaNormu" />
-                <ScalarProperty Name="hodnoceniNeshody" ColumnName="hodnoceniNeshody" />
-                <ScalarProperty Name="popisProblemu" ColumnName="popisProblemu" />
-                <ScalarProperty Name="skutecnaPricina" ColumnName="skutecnaPricina" />
-                <ScalarProperty Name="APIdBodAP" ColumnName="APIdBodAP" />
-                <ScalarProperty Name="storno" ColumnName="storno" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DatumUkonceniAkceWM">
-            <EntityTypeMapping TypeName="LearDataAllModel.DatumUkonceniAkceWM">
-              <MappingFragment StoreEntitySet="DatumUkonceniAkceWM">
-                <ScalarProperty Name="datumUkonceniAkceWM_Id" ColumnName="datumUkonceniAkceWM_Id" />
-                <ScalarProperty Name="akceWM_Id" ColumnName="akceWM_Id" />
-                <ScalarProperty Name="datumUkonceni" ColumnName="datumUkonceni" />
-                <ScalarProperty Name="poznamka" ColumnName="poznamka" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DatumUkonceniAP">
-            <EntityTypeMapping TypeName="LearDataAllModel.DatumUkonceniAP">
-              <MappingFragment StoreEntitySet="DatumUkonceniAP">
-                <ScalarProperty Name="datumUkonceniAP_Id" ColumnName="datumUkonceniAP_Id" />
-                <ScalarProperty Name="akcniPlan_Id" ColumnName="akcniPlan_Id" />
-                <ScalarProperty Name="datumUkonceni" ColumnName="datumUkonceni" />
-                <ScalarProperty Name="poznamka" ColumnName="poznamka" />
+          <EntitySetMapping Name="BodAP">
+            <EntityTypeMapping TypeName="LearDataAllModel.BodAP">
+              <MappingFragment StoreEntitySet="BodAP">
+                <ScalarProperty Name="BodAPID" ColumnName="BodAPID" />
+                <ScalarProperty Name="AkcniPlanID" ColumnName="AkcniPlanID" />
+                <ScalarProperty Name="AudityOstatni" ColumnName="AudityOstatni" />
+                <ScalarProperty Name="CisloBoduAP" ColumnName="CisloBoduAP" />
+                <ScalarProperty Name="DatumZalozeni" ColumnName="DatumZalozeni" />
+                <ScalarProperty Name="OdkazNaNormu" ColumnName="OdkazNaNormu" />
+                <ScalarProperty Name="HodnoceniNeshody" ColumnName="HodnoceniNeshody" />
+                <ScalarProperty Name="PopisProblemu" ColumnName="PopisProblemu" />
+                <ScalarProperty Name="SkutecnaPricina" ColumnName="SkutecnaPricina" />
+                <ScalarProperty Name="Storno" ColumnName="Storno" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Oddeleni">
             <EntityTypeMapping TypeName="LearDataAllModel.Oddeleni">
               <MappingFragment StoreEntitySet="Oddeleni">
-                <ScalarProperty Name="oddeleni_Id" ColumnName="oddeleni_Id" />
-                <ScalarProperty Name="nazev" ColumnName="nazev" />
-                <ScalarProperty Name="storno" ColumnName="storno" />
+                <ScalarProperty Name="OddeleniID" ColumnName="OddeleniID" />
+                <ScalarProperty Name="Nazev" ColumnName="Nazev" />
+                <ScalarProperty Name="Storno" ColumnName="Storno" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Projekty">
-            <EntityTypeMapping TypeName="LearDataAllModel.Projekty">
-              <MappingFragment StoreEntitySet="Projekty">
-                <ScalarProperty Name="projekt_Id" ColumnName="projekt_Id" />
-                <ScalarProperty Name="nazev" ColumnName="nazev" />
-                <ScalarProperty Name="storno" ColumnName="storno" />
+          <EntitySetMapping Name="Projekt">
+            <EntityTypeMapping TypeName="LearDataAllModel.Projekt">
+              <MappingFragment StoreEntitySet="Projekt">
+                <ScalarProperty Name="ProjektID" ColumnName="ProjektID" />
+                <ScalarProperty Name="Nazev" ColumnName="Nazev" />
+                <ScalarProperty Name="Storno" ColumnName="Storno" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Zakaznici">
-            <EntityTypeMapping TypeName="LearDataAllModel.Zakaznici">
-              <MappingFragment StoreEntitySet="Zakaznici">
-                <ScalarProperty Name="zakaznik_Id" ColumnName="zakaznik_Id" />
-                <ScalarProperty Name="nazev" ColumnName="nazev" />
-                <ScalarProperty Name="storno" ColumnName="storno" />
+          <EntitySetMapping Name="UkonceniAkceWM">
+            <EntityTypeMapping TypeName="LearDataAllModel.UkonceniAkceWM">
+              <MappingFragment StoreEntitySet="UkonceniAkceWM">
+                <ScalarProperty Name="UkonceniAkceWMID" ColumnName="UkonceniAkceWMID" />
+                <ScalarProperty Name="AkceWMID" ColumnName="AkceWMID" />
+                <ScalarProperty Name="DatumUkonceni" ColumnName="DatumUkonceni" />
+                <ScalarProperty Name="Poznamka" ColumnName="Poznamka" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Zamestnanci">
-            <EntityTypeMapping TypeName="LearDataAllModel.Zamestnanci">
-              <MappingFragment StoreEntitySet="Zamestnanci">
-                <ScalarProperty Name="zamestnanec_Id" ColumnName="zamestnanec_Id" />
-                <ScalarProperty Name="jmeno" ColumnName="jmeno" />
-                <ScalarProperty Name="prijmeni" ColumnName="prijmeni" />
-                <ScalarProperty Name="personalniCislo" ColumnName="personalniCislo" />
-                <ScalarProperty Name="oddeleni_Id" ColumnName="oddeleni_Id" />
-                <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="jeZamestnanec" ColumnName="jeZamestnanec" />
-                <ScalarProperty Name="storno" ColumnName="storno" />
+          <EntitySetMapping Name="UkonceniAP">
+            <EntityTypeMapping TypeName="LearDataAllModel.UkonceniAP">
+              <MappingFragment StoreEntitySet="UkonceniAP">
+                <ScalarProperty Name="UkonceniAPID" ColumnName="UkonceniAPID" />
+                <ScalarProperty Name="AkcniPlanID" ColumnName="AkcniPlanID" />
+                <ScalarProperty Name="DatumUkonceni" ColumnName="DatumUkonceni" />
+                <ScalarProperty Name="Poznamka" ColumnName="Poznamka" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="DatumUkonceniAkceWS">
-            <EntityTypeMapping TypeName="LearDataAllModel.DatumUkonceniAkceWS">
-              <MappingFragment StoreEntitySet="DatumUkonceniAkceWS">
-                <ScalarProperty Name="datumUkonceniAkceWS_Id" ColumnName="datumUkonceniAkceWS_Id" />
-                <ScalarProperty Name="akceWS_Id" ColumnName="akceWS_Id" />
-                <ScalarProperty Name="datumUkonceni" ColumnName="datumUkonceni" />
-                <ScalarProperty Name="poznamka" ColumnName="poznamka" />
+          <EntitySetMapping Name="Zakaznik">
+            <EntityTypeMapping TypeName="LearDataAllModel.Zakaznik">
+              <MappingFragment StoreEntitySet="Zakaznik">
+                <ScalarProperty Name="ZakaznikID" ColumnName="ZakaznikID" />
+                <ScalarProperty Name="Nazev" ColumnName="Nazev" />
+                <ScalarProperty Name="Storno" ColumnName="Storno" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Zamestnanec">
+            <EntityTypeMapping TypeName="LearDataAllModel.Zamestnanec">
+              <MappingFragment StoreEntitySet="Zamestnanec">
+                <ScalarProperty Name="ZamestnanecID" ColumnName="ZamestnanecID" />
+                <ScalarProperty Name="Jmeno" ColumnName="Jmeno" />
+                <ScalarProperty Name="Prijmeni" ColumnName="Prijmeni" />
+                <ScalarProperty Name="PersonalniCislo" ColumnName="PersonalniCislo" />
+                <ScalarProperty Name="OddeleniID" ColumnName="OddeleniID" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="JeZamestnanec" ColumnName="JeZamestnanec" />
+                <ScalarProperty Name="Storno" ColumnName="Storno" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UkonceniAkceWS">
+            <EntityTypeMapping TypeName="LearDataAllModel.UkonceniAkceWS">
+              <MappingFragment StoreEntitySet="UkonceniAkceWS">
+                <ScalarProperty Name="UkonceniAkceWSID" ColumnName="UkonceniAkceWSID" />
+                <ScalarProperty Name="AkceWSID" ColumnName="AkceWSID" />
+                <ScalarProperty Name="DatumUkonceni" ColumnName="DatumUkonceni" />
+                <ScalarProperty Name="Poznamka" ColumnName="Poznamka" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -14,14 +14,14 @@ namespace LearActionPlans.Wpf.Models
     
     public partial class AkceWM
     {
-        public int akceWM_Id { get; set; }
-        public int bodAP_Id { get; set; }
-        public string napravnaOpatreni { get; set; }
-        public int odpovednaOsoba1 { get; set; }
-        public Nullable<int> odpovednaOsoba2 { get; set; }
-        public Nullable<System.DateTime> kontrolaEfektivnosti { get; set; }
-        public Nullable<int> oddeleni_Id { get; set; }
-        public string priloha { get; set; }
-        public bool storno { get; set; }
+        public int AkceWMID { get; set; }
+        public int BodAPID { get; set; }
+        public string NapravnaOpatreni { get; set; }
+        public int OdpovednaOsoba1 { get; set; }
+        public Nullable<int> OdpovednaOsoba2 { get; set; }
+        public Nullable<System.DateTime> KontrolaEfektivnosti { get; set; }
+        public Nullable<int> OddeleniID { get; set; }
+        public string Priloha { get; set; }
+        public bool Storno { get; set; }
     }
 }

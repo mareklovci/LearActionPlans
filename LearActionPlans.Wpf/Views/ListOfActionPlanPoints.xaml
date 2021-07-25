@@ -24,26 +24,27 @@
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
 
+        <!-- ReSharper disable once MarkupAttributeTypo -->
         <ListView Grid.Row="1" Grid.Column="1"
                   x:Name="listView"
                   Height="200"
-                  d:DataContext="{d:DesignInstance models:AkcniPlany}">
+                  d:DataContext="{d:DesignInstance models:AkcniPlan}">
             <ListView.View>
                 <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Employees">
                     
                     <!-- Add GridView Columns -->
                     <GridViewColumn Header="ID" 
                                     Width="120"
-                                    DisplayMemberBinding="{Binding Path=akcniPlan_Id}" />
+                                    DisplayMemberBinding="{Binding Path=AkcniPlanID}" />
                     <GridViewColumn Header="# AP" 
                                     Width="120" 
-                                    DisplayMemberBinding="{Binding Path=cisloAP}" />
+                                    DisplayMemberBinding="{Binding Path=CisloAP}" />
                     <GridViewColumn Header="Rok" 
                                     Width="120" 
-                                    DisplayMemberBinding="{Binding Path=rok}" />
+                                    DisplayMemberBinding="{Binding Path=Rok}" />
                     <GridViewColumn Header="Zadavatel ID" 
                                     Width="120" 
-                                    DisplayMemberBinding="{Binding Path=zadavatel1_Id}" />
+                                    DisplayMemberBinding="{Binding Path=Zadavatel1ID}" />
                     
                 </GridView>
             </ListView.View>

@@ -12,10 +12,17 @@ namespace LearActionPlans.Wpf.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Zakaznici
+    public partial class BodAP
     {
-        public int zakaznik_Id { get; set; }
-        public string nazev { get; set; }
-        public bool storno { get; set; }
+        public int BodAPID { get; set; }
+        public int AkcniPlanID { get; set; }
+        public bool AudityOstatni { get; set; }
+        public int CisloBoduAP { get; set; }
+        public System.DateTime DatumZalozeni { get; set; }
+        public string OdkazNaNormu { get; set; }
+        public string HodnoceniNeshody { get; set; }
+        public string PopisProblemu { get; set; }
+        public string SkutecnaPricina { get; set; }
+        public bool Storno { get; set; }
     }
 }

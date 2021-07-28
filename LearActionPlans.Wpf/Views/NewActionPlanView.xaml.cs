@@ -14,18 +14,30 @@ namespace LearActionPlans.Wpf.Views
         public NewActionPlanView()
         {
             InitializeComponent();
+
             using (var context = new LearDataAllEntities())
             {
-                var empOneQuery = from z in context.Zamestnanec select z;
+                var numberOfPlans = (from z in context.AkcniPlan select z).Count();
+                NumberOfPlans.Text = numberOfPlans.ToString();
+
+                var empOneQuery = (from z in context.Zamestnanec
+                                   where z.Storno == false && z.JeZamestnanec
+                                   select z).ToList();
                 if (empOneQuery.Any()) ContractingAuthority1.ItemsSource = empOneQuery;
                 
-                var empTwoQuery = from z in context.Zamestnanec select z;
+                var empTwoQuery = (from z in context.Zamestnanec
+                                   where z.Storno == false && z.JeZamestnanec
+                                   select z).ToList();
                 if (empTwoQuery.Any()) ContractingAuthority2.ItemsSource = empTwoQuery;
 
-                var projectsQuery = from z in context.Projekt select z;
+                var projectsQuery = (from z in context.Projekt
+                                     where z.Storno == false
+                                     select z).ToList();
                 if (projectsQuery.Any()) ProjectsComboBox.ItemsSource = projectsQuery;
                 
-                var customersQuery = from z in context.Projekt select z;
+                var customersQuery = (from z in context.Zakaznik
+                                      where z.Storno == false
+                                      select z).ToList();
                 if (customersQuery.Any()) CustomersComboBox.ItemsSource = customersQuery;
             }
         }
@@ -48,19 +60,19 @@ namespace LearActionPlans.Wpf.Views
 
         private void ContractingAuthority1_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var employee = (Zamestnanec) (ContractingAuthority1.SelectionBoxItem as PropertyInfo)?.GetValue(null);
+            var employee = (Zamestnanec) ContractingAuthority1.SelectedItem;
             if (employee != null) _akcniPlan.Zadavatel1ID = employee.ZamestnanecID;
         }
 
         private void ContractingAuthority2_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var employee = (Zamestnanec) (ContractingAuthority2.SelectionBoxItem as PropertyInfo)?.GetValue(null);
+            var employee = (Zamestnanec) ContractingAuthority2.SelectedItem;
             if (employee != null) _akcniPlan.Zadavatel2ID = employee.ZamestnanecID;
         }
 
         private void CustomersComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var customer = (Zakaznik) (CustomersComboBox.SelectionBoxItem as PropertyInfo)?.GetValue(null);
+            var customer = (Zakaznik) CustomersComboBox.SelectedItem;
             if (customer != null) _akcniPlan.ZakaznikID = customer.ZakaznikID;
         }
 
@@ -74,6 +86,16 @@ namespace LearActionPlans.Wpf.Views
         {
             var newText = TopicField.Text;
             _akcniPlan.Tema = newText;
+        }
+
+        private void BtnAudit_Click(object sender, RoutedEventArgs e)
+        {
+            if (BtnAudit.IsChecked == true) _akcniPlan.AudityOstatni = true;
+        }
+
+        private void BtnOther_Click(object sender, RoutedEventArgs e)
+        {
+            if (BtnOther.IsChecked == true) _akcniPlan.AudityOstatni = false;
         }
     }
 }

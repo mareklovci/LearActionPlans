@@ -112,6 +112,7 @@
     <Compile Include="Models\Zamestnanec.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\SelectionValidationRule.cs" />
     <Compile Include="Views\ListOfActionPlanPoints.xaml.cs">
       <DependentUpon>ListOfActionPlanPoints.xaml</DependentUpon>
     </Compile>
@@ -169,5 +170,6 @@
       <LastGenOutput>LearDataAllModel.cs</LastGenOutput>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

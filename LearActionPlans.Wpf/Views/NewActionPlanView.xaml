@@ -84,7 +84,7 @@
 
         <StackPanel Grid.Row="2" Grid.Column="1" Margin="20 10 0 10">
             <Label FontWeight="Bold">Projects</Label>
-            <ComboBox Name="ProjectsComboBox">
+            <ComboBox Name="ProjectsComboBox" SelectionChanged="ProjectsComboBox_SelectionChanged">
                 <ComboBox.ItemTemplate>
                     <DataTemplate DataType="models:Projekt">
                         <TextBlock Text="{Binding Nazev}" />

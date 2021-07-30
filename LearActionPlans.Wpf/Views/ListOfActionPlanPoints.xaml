@@ -3,49 +3,120 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:LearActionPlans.Wpf.Views"
         xmlns:models="clr-namespace:LearActionPlans.Wpf.Models"
         mc:Ignorable="d"
-        Title="ListOfActionPlanPoints" Height="450" Width="800">
-    <Grid>
+        Title="ListOfActionPlanPoints" Height="600" Width="800">
+    <Grid Margin="20">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="20" />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="20" />
         </Grid.RowDefinitions>
 
+        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0 10" Orientation="Horizontal">
+            <TextBlock FontWeight="Bold" Margin="0 0 10 0">
+                Number of AP
+            </TextBlock>
+            <TextBlock x:Name="ActionPlanNumber" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0 10" Orientation="Horizontal">
+            <TextBlock FontWeight="Bold" Margin="0 0 10 0">
+                Contracting Authority #1
+            </TextBlock>
+            <TextBlock x:Name="ActionPlanContractingAuthority1" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Grid.Column="0" Margin="0 10" Orientation="Horizontal">
+            <TextBlock FontWeight="Bold" Margin="0 0 10 0">
+                Contracting Authority #2
+            </TextBlock>
+            <TextBlock x:Name="ActionPlanContractingAuthority2" />
+        </StackPanel>
+        
+        <StackPanel Grid.Row="3" Grid.Column="0" Margin="0 10" Orientation="Horizontal">
+            <TextBlock FontWeight="Bold" Margin="0 0 10 0">
+                Topic
+            </TextBlock>
+            <TextBlock x:Name="ActionPlanTopic" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Grid.Column="0" Margin="0 10" Orientation="Horizontal">
+            <TextBlock FontWeight="Bold" Margin="0 0 10 0">
+                Project
+            </TextBlock>
+            <TextBlock x:Name="ActionPlanProject" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="5" Grid.Column="0" Margin="0 10" Orientation="Horizontal">
+            <TextBlock FontWeight="Bold" Margin="0 0 10 0">
+                End Date
+            </TextBlock>
+            <TextBlock x:Name="ActionPlanEndDate" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="6" Grid.Column="0" Margin="0 10" Orientation="Horizontal">
+            <TextBlock FontWeight="Bold" Margin="0 0 10 0">
+                Customer
+            </TextBlock>
+            <TextBlock x:Name="ActionPlanCustomer" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="6" Grid.Column="1" Margin="0 10" Orientation="Horizontal">
+            <Button Padding="10" Margin="0 10 10 10" Name="SaveAndCloseBtn">
+                Save and Close
+            </Button>
+            <Button Padding="10" Margin="0 10 10 10" Name="RepairPointBtn">
+                Repair Point
+            </Button>
+            <Button Padding="10" Margin="0 10 10 10" Name="NewPointBtn">
+                New Point
+            </Button>
+            <Button Padding="10" Margin="0 10 0 10" Name="CloseBtn">
+                Close
+            </Button>
+        </StackPanel>
+
         <!-- ReSharper disable once MarkupAttributeTypo -->
-        <ListView Grid.Row="1" Grid.Column="1"
+        <ListView Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
                   x:Name="listView"
                   Height="200"
-                  d:DataContext="{d:DesignInstance models:AkcniPlan}">
+                  d:DataContext="{d:DesignInstance models:BodAP}">
             <ListView.View>
-                <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Employees">
+                <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="ActionPlanPoint">
                     
                     <!-- Add GridView Columns -->
-                    <GridViewColumn Header="ID" 
+                    <GridViewColumn Header="Point #" 
                                     Width="120"
-                                    DisplayMemberBinding="{Binding Path=AkcniPlanID}" />
-                    <GridViewColumn Header="# AP" 
+                                    DisplayMemberBinding="{Binding Path=CisloBoduAP}" />
+                    <GridViewColumn Header="Date" 
                                     Width="120" 
-                                    DisplayMemberBinding="{Binding Path=CisloAP}" />
-                    <GridViewColumn Header="Rok" 
+                                    DisplayMemberBinding="{Binding Path=DatumZalozeni}" />
+                    <GridViewColumn Header="Norm Link" 
                                     Width="120" 
-                                    DisplayMemberBinding="{Binding Path=Rok}" />
-                    <GridViewColumn Header="Zadavatel ID" 
+                                    DisplayMemberBinding="{Binding Path=OdkazNaNormu}" />
+                    <GridViewColumn Header="Evaluation" 
                                     Width="120" 
-                                    DisplayMemberBinding="{Binding Path=Zadavatel1ID}" />
-                    
+                                    DisplayMemberBinding="{Binding Path=HodnoceniNeshody}" />
+                    <GridViewColumn Header="Description" 
+                                    Width="120" 
+                                    DisplayMemberBinding="{Binding Path=PopisProblemu}" />
+                    <GridViewColumn Header="Reason" 
+                                    Width="120" 
+                                    DisplayMemberBinding="{Binding Path=SkutecnaPricina}" />
+
                 </GridView>
             </ListView.View>
         </ListView>

@@ -1,15 +1,20 @@
 ﻿using System.Linq;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using LearActionPlans.Wpf.Models;
+using LearActionPlans.Wpf.Utilities;
 // ReSharper disable IdentifierTypo
 
 namespace LearActionPlans.Wpf.Views
 {
     public partial class NewActionPlanView
     {
-        private readonly AkcniPlan _akcniPlan = new AkcniPlan();
+        private readonly AkcniPlan _akcniPlan = new AkcniPlan
+        {
+            DatumZalozeni = System.DateTime.Today,
+            AudityOstatni = true,
+            CisloAP = Helpers.LastActionPlan().CisloAP + 1
+        };
         
         public NewActionPlanView()
         {
@@ -51,6 +56,11 @@ namespace LearActionPlans.Wpf.Views
 
                 context.SaveChanges();
             }
+
+            Close();
+
+            var win = new ListOfActionPlanPoints(_akcniPlan);
+            win.Show();
         }
         
         private void OnClickCloseBtn(object sender, RoutedEventArgs e)
@@ -76,10 +86,20 @@ namespace LearActionPlans.Wpf.Views
             if (customer != null) _akcniPlan.ZakaznikID = customer.ZakaznikID;
         }
 
+        private void ProjectsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedProject = (Projekt)ProjectsComboBox.SelectedItem;
+            if (selectedProject != null) _akcniPlan.ProjektID = selectedProject.ProjektID;
+        }
+
         private void DatePicker_OnSelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             var selectedDate = DatePicker.SelectedDate;
-            if(selectedDate.HasValue) _akcniPlan.Rok = selectedDate.Value.Year;
+            if (selectedDate.HasValue)
+            {
+                _akcniPlan.DatumUkonceni = selectedDate.Value;
+                _akcniPlan.Rok = selectedDate.Value.Year;
+            }
         }
 
         private void TopicField_OnTextChanged(object sender, TextChangedEventArgs e)

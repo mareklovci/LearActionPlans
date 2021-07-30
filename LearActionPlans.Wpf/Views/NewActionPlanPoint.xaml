@@ -1,0 +1,129 @@
+﻿<Window x:Class="LearActionPlans.Wpf.Views.NewActionPlanPoint"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="clr-namespace:LearActionPlans.Wpf.Models"
+        mc:Ignorable="d"
+        Title="NewActionPlanPoint" Height="500" Width="800">
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0 10">
+            <TextBlock FontWeight="Bold" Margin="0 0 0 10">
+                Standard Chapter
+            </TextBlock>
+            <TextBox />
+        </StackPanel>
+
+        <StackPanel Grid.Row="0" Grid.Column="1" Margin="20 10 0 0">
+            <TextBlock FontWeight="Bold" Margin="0 0 0 10">
+                Evaluation
+            </TextBlock>
+            <TextBox />
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0 10">
+            <TextBlock FontWeight="Bold" Margin="0 0 0 10">
+                Description of the Problem
+            </TextBlock>
+            <TextBox />
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="20 10 0 0">
+            <TextBlock FontWeight="Bold" Margin="0 0 0 10">
+                Root cause
+            </TextBlock>
+            <TextBox />
+        </StackPanel>
+
+        <TabControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+            <TabItem Header="Why Made">
+                <ListView x:Name="ListWhyMade"
+                  Height="200"
+                  d:DataContext="{d:DesignInstance models:BodAP}">
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="ActionPlanPoint">
+
+                            <!-- Add GridView Columns -->
+                            <GridViewColumn Header="Point #" 
+                                    Width="120"
+                                    DisplayMemberBinding="{Binding Path=CisloBoduAP}" />
+                            <GridViewColumn Header="Date" 
+                                    Width="120" 
+                                    DisplayMemberBinding="{Binding Path=DatumZalozeni}" />
+                            <GridViewColumn Header="Norm Link" 
+                                    Width="120" 
+                                    DisplayMemberBinding="{Binding Path=OdkazNaNormu}" />
+                            <GridViewColumn Header="Evaluation" 
+                                    Width="120" 
+                                    DisplayMemberBinding="{Binding Path=HodnoceniNeshody}" />
+                            <GridViewColumn Header="Description" 
+                                    Width="120" 
+                                    DisplayMemberBinding="{Binding Path=PopisProblemu}" />
+                            <GridViewColumn Header="Reason" 
+                                    Width="120" 
+                                    DisplayMemberBinding="{Binding Path=SkutecnaPricina}" />
+
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
+            
+            <TabItem Header="Why Shipped">
+                <ListView x:Name="ListWhyShipped"
+                  Height="200"
+                  d:DataContext="{d:DesignInstance models:BodAP}">
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="ActionPlanPoint">
+
+                            <!-- Add GridView Columns -->
+                            <GridViewColumn Header="Point #" 
+                                    Width="120"
+                                    DisplayMemberBinding="{Binding Path=CisloBoduAP}" />
+                            <GridViewColumn Header="Date" 
+                                    Width="120" 
+                                    DisplayMemberBinding="{Binding Path=DatumZalozeni}" />
+                            <GridViewColumn Header="Norm Link" 
+                                    Width="120" 
+                                    DisplayMemberBinding="{Binding Path=OdkazNaNormu}" />
+                            <GridViewColumn Header="Evaluation" 
+                                    Width="120" 
+                                    DisplayMemberBinding="{Binding Path=HodnoceniNeshody}" />
+                            <GridViewColumn Header="Description" 
+                                    Width="120" 
+                                    DisplayMemberBinding="{Binding Path=PopisProblemu}" />
+                            <GridViewColumn Header="Reason" 
+                                    Width="120" 
+                                    DisplayMemberBinding="{Binding Path=SkutecnaPricina}" />
+
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
+        </TabControl>
+
+        <StackPanel Grid.Row="3" Grid.Column="1" Margin="20 10 0 0" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Padding="10" Margin="0 10 0 10" Name="SaveBtn" Click="OnClickSaveBtn">
+                Delete Action
+            </Button>
+            <Button Padding="10" Margin="20 10 0 10" Name="CloseBtn" Click="OnClickCloseBtn">
+                New Action
+            </Button>
+        </StackPanel>
+        
+        
+    </Grid>
+</Window>

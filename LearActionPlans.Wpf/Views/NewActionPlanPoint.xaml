@@ -56,7 +56,7 @@
             <TabItem Header="Why Made">
                 <ListView x:Name="ListWhyMade"
                   Height="200"
-                  d:DataContext="{d:DesignInstance models:AkceWM}">
+                  d:DataContext="{d:DesignInstance models:Akce}">
                     <ListView.View>
                         <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="ActionPlanPoint">
 
@@ -92,7 +92,7 @@
             <TabItem Header="Why Shipped">
                 <ListView x:Name="ListWhyShipped"
                   Height="200"
-                  d:DataContext="{d:DesignInstance models:AkceWS}">
+                  d:DataContext="{d:DesignInstance models:Akce}">
                     <ListView.View>
                         <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="ActionPlanPoint">
 

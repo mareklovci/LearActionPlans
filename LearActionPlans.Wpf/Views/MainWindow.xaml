@@ -23,8 +23,12 @@
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
         
-        <Button Grid.Row="1" Grid.Column="1" Name="btn1" Click="OnClick1" Padding="20">
+        <Button Grid.Row="1" Grid.Column="1" Name="btnNewActionPlan" Click="BtnNewActionPlan_Click" Padding="20">
             Create New Action Plan
+        </Button>
+
+        <Button Grid.Row="1" Grid.Column="2" Name="btnFilter" Click="BtnFilter_Click" Padding="20" Margin="20 0 0 0">
+            All Action Plans
         </Button>
     </Grid>
 </Window>

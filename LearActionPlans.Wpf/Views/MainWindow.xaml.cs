@@ -12,9 +12,15 @@ namespace LearActionPlans.Wpf.Views
             InitializeComponent();
         }
 
-        private void OnClick1(object sender, RoutedEventArgs e)
+        private void BtnNewActionPlan_Click(object sender, RoutedEventArgs e)
         {
             var win = new NewActionPlanView();
+            win.Show();
+        }
+
+        private void BtnFilter_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new ActionPlansFilterView();
             win.Show();
         }
     }

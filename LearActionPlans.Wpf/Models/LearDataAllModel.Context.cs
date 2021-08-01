@@ -25,16 +25,14 @@ namespace LearActionPlans.Wpf.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<AkceWM> AkceWM { get; set; }
-        public virtual DbSet<AkceWS> AkceWS { get; set; }
+        public virtual DbSet<Akce> Akce { get; set; }
         public virtual DbSet<AkcniPlan> AkcniPlan { get; set; }
         public virtual DbSet<BodAP> BodAP { get; set; }
         public virtual DbSet<Oddeleni> Oddeleni { get; set; }
         public virtual DbSet<Projekt> Projekt { get; set; }
-        public virtual DbSet<UkonceniAkceWM> UkonceniAkceWM { get; set; }
+        public virtual DbSet<UkonceniAkce> UkonceniAkce { get; set; }
         public virtual DbSet<UkonceniAP> UkonceniAP { get; set; }
         public virtual DbSet<Zakaznik> Zakaznik { get; set; }
         public virtual DbSet<Zamestnanec> Zamestnanec { get; set; }
-        public virtual DbSet<UkonceniAkceWS> UkonceniAkceWS { get; set; }
     }
 }

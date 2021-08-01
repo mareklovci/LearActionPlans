@@ -14,8 +14,8 @@ namespace LearActionPlans.Wpf.Views
 
         private void OnClick1(object sender, RoutedEventArgs e)
         {
-            var win2 = new NewActionPlanView();
-            win2.Show();
+            var win = new NewActionPlanView();
+            win.Show();
         }
     }
 }

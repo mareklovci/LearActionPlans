@@ -79,7 +79,7 @@
 
         <StackPanel Grid.Row="2" Grid.Column="0" Margin="0 10">
             <Label FontWeight="Bold">Topic</Label>
-            <TextBox x:Name="TopicField" TextChanged="TopicField_OnTextChanged" />
+            <TextBox x:Name="TopicField" TextChanged="TopicField_OnTextChanged"/>
         </StackPanel>
 
         <StackPanel Grid.Row="2" Grid.Column="1" Margin="20 10 0 10">

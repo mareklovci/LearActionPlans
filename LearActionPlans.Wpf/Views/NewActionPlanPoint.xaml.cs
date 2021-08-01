@@ -23,5 +23,15 @@ namespace LearActionPlans.Wpf.Views
         {
             InitializeComponent();
         }
+
+        private void OnClickDeleteBtn(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnClickCloseBtn(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

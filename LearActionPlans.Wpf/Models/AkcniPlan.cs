@@ -16,13 +16,11 @@ namespace LearActionPlans.Wpf.Models
     {
         public int AkcniPlanID { get; set; }
         public int CisloAP { get; set; }
-        public int Rok { get; set; }
         public int Zadavatel1ID { get; set; }
         public Nullable<int> Zadavatel2ID { get; set; }
         public string Tema { get; set; }
         public Nullable<int> ProjektID { get; set; }
         public System.DateTime DatumZalozeni { get; set; }
-        public Nullable<System.DateTime> DatumUkonceni { get; set; }
         public int ZakaznikID { get; set; }
         public bool AudityOstatni { get; set; }
     }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:models="clr-namespace:LearActionPlans.Wpf.Models"
         mc:Ignorable="d"
-        Title="NewActionPlanPoint" Height="500" Width="800">
+        Title="NewActionPlanPoint" Height="650" Width="900">
     <Grid Margin="20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -14,6 +14,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -39,44 +40,50 @@
             <TextBlock FontWeight="Bold" Margin="0 0 0 10">
                 Description of the Problem
             </TextBlock>
-            <TextBox />
+            <TextBox Height="150" />
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="20 10 0 0">
             <TextBlock FontWeight="Bold" Margin="0 0 0 10">
                 Root cause
             </TextBlock>
-            <TextBox />
+            <TextBox Height="150" />
         </StackPanel>
-
-        <TabControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+        
+        <Separator Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 20"/>
+        
+        <TabControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
             <TabItem Header="Why Made">
                 <ListView x:Name="ListWhyMade"
                   Height="200"
-                  d:DataContext="{d:DesignInstance models:BodAP}">
+                  d:DataContext="{d:DesignInstance models:AkceWM}">
                     <ListView.View>
                         <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="ActionPlanPoint">
 
                             <!-- Add GridView Columns -->
-                            <GridViewColumn Header="Point #" 
+                            <GridViewColumn Header="Corrective Actions" 
                                     Width="120"
-                                    DisplayMemberBinding="{Binding Path=CisloBoduAP}" />
-                            <GridViewColumn Header="Date" 
+                                    DisplayMemberBinding="{Binding Path=NapravnaOpatreni}" />
+                            <GridViewColumn Header="Deadline" 
+                                    Width="120" />
+                            <!-- TODO: Add DatumUkonceniAkceWM -->
+                            <GridViewColumn Header="Effectiveness" 
                                     Width="120" 
-                                    DisplayMemberBinding="{Binding Path=DatumZalozeni}" />
-                            <GridViewColumn Header="Norm Link" 
+                                    DisplayMemberBinding="{Binding Path=KontrolaEfektivnosti}" />
+                            <GridViewColumn Header="Responsible #1" 
                                     Width="120" 
-                                    DisplayMemberBinding="{Binding Path=OdkazNaNormu}" />
-                            <GridViewColumn Header="Evaluation" 
+                                    DisplayMemberBinding="{Binding Path=OdpovednaOsoba1}" />
+                            <GridViewColumn Header="Responsible #2" 
                                     Width="120" 
-                                    DisplayMemberBinding="{Binding Path=HodnoceniNeshody}" />
-                            <GridViewColumn Header="Description" 
+                                    DisplayMemberBinding="{Binding Path=OdpovednaOsoba2}" />
+                            <GridViewColumn Header="Department" 
                                     Width="120" 
-                                    DisplayMemberBinding="{Binding Path=PopisProblemu}" />
-                            <GridViewColumn Header="Reason" 
-                                    Width="120" 
-                                    DisplayMemberBinding="{Binding Path=SkutecnaPricina}" />
-
+                                    DisplayMemberBinding="{Binding Path=OddeleniID}" />
+                            <!-- TODO: Add Oddeleni Title -->
+                            <GridViewColumn Header="Attachment" 
+                                            Width="120" 
+                                            DisplayMemberBinding="{Binding Path=Priloha}" />
+                            
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -85,29 +92,33 @@
             <TabItem Header="Why Shipped">
                 <ListView x:Name="ListWhyShipped"
                   Height="200"
-                  d:DataContext="{d:DesignInstance models:BodAP}">
+                  d:DataContext="{d:DesignInstance models:AkceWS}">
                     <ListView.View>
                         <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="ActionPlanPoint">
 
                             <!-- Add GridView Columns -->
-                            <GridViewColumn Header="Point #" 
-                                    Width="120"
-                                    DisplayMemberBinding="{Binding Path=CisloBoduAP}" />
-                            <GridViewColumn Header="Date" 
-                                    Width="120" 
-                                    DisplayMemberBinding="{Binding Path=DatumZalozeni}" />
-                            <GridViewColumn Header="Norm Link" 
-                                    Width="120" 
-                                    DisplayMemberBinding="{Binding Path=OdkazNaNormu}" />
-                            <GridViewColumn Header="Evaluation" 
-                                    Width="120" 
-                                    DisplayMemberBinding="{Binding Path=HodnoceniNeshody}" />
-                            <GridViewColumn Header="Description" 
-                                    Width="120" 
-                                    DisplayMemberBinding="{Binding Path=PopisProblemu}" />
-                            <GridViewColumn Header="Reason" 
-                                    Width="120" 
-                                    DisplayMemberBinding="{Binding Path=SkutecnaPricina}" />
+                            <GridViewColumn Header="Corrective Actions" 
+                                            Width="120"
+                                            DisplayMemberBinding="{Binding Path=NapravnaOpatreni}" />
+                            <GridViewColumn Header="Deadline" 
+                                            Width="120" />
+                            <!-- TODO: Add DatumUkonceniAkceWM -->
+                            <GridViewColumn Header="Effectiveness" 
+                                            Width="120" 
+                                            DisplayMemberBinding="{Binding Path=KontrolaEfektivnosti}" />
+                            <GridViewColumn Header="Responsible #1" 
+                                            Width="120" 
+                                            DisplayMemberBinding="{Binding Path=OdpovednaOsoba1}" />
+                            <GridViewColumn Header="Responsible #2" 
+                                            Width="120" 
+                                            DisplayMemberBinding="{Binding Path=OdpovednaOsoba2}" />
+                            <GridViewColumn Header="Department" 
+                                            Width="120" 
+                                            DisplayMemberBinding="{Binding Path=OddeleniID}" />
+                            <!-- TODO: Add Oddeleni Title -->
+                            <GridViewColumn Header="Attachment" 
+                                            Width="120" 
+                                            DisplayMemberBinding="{Binding Path=Priloha}" />
 
                         </GridView>
                     </ListView.View>
@@ -115,8 +126,8 @@
             </TabItem>
         </TabControl>
 
-        <StackPanel Grid.Row="3" Grid.Column="1" Margin="20 10 0 0" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Padding="10" Margin="0 10 0 10" Name="SaveBtn" Click="OnClickSaveBtn">
+        <StackPanel Grid.Row="4" Grid.Column="1" Margin="20 10 0 0" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Padding="10" Margin="0 10 0 10" Name="SaveBtn" Click="OnClickDeleteBtn">
                 Delete Action
             </Button>
             <Button Padding="10" Margin="20 10 0 10" Name="CloseBtn" Click="OnClickCloseBtn">

@@ -36,7 +36,13 @@ namespace LearActionPlans.Wpf.Views
                     ActionPlanProject.Text = $"{project.Nazev}";
                 }
 
-                ActionPlanEndDate.Text = actionPlan.DatumUkonceni.ToString();
+                // Get Datum Ukonceni
+                var datumUkonceni = (from z in context.UkonceniAP
+                                     where z.AkcniPlanID == actionPlan.AkcniPlanID
+                                     orderby z.UkonceniAPID
+                                     select z).FirstOrDefault();
+
+                ActionPlanEndDate.Text = datumUkonceni.DatumUkonceni.ToString();
 
                 var customer = Helpers.CustomerById(actionPlan.ZakaznikID);
                 ActionPlanCustomer.Text = $"{customer.Nazev}";
@@ -47,6 +53,12 @@ namespace LearActionPlans.Wpf.Views
                              select ap).ToList();
                 listView.ItemsSource = query;
             }
+        }
+
+        private void NewPointBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            var win = new NewActionPlanPoint();
+            win.Show();
         }
     }
 }

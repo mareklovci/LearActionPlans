@@ -64,10 +64,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\AkceWM.cs">
-      <DependentUpon>LearDataAllModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AkceWS.cs">
+    <Compile Include="Models\Akce.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AkcniPlan.cs">
@@ -97,10 +94,7 @@
     <Compile Include="Models\Projekt.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\UkonceniAkceWM.cs">
-      <DependentUpon>LearDataAllModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\UkonceniAkceWS.cs">
+    <Compile Include="Models\UkonceniAkce.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UkonceniAP.cs">
@@ -121,6 +115,9 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\NewActionPlanPoint.xaml.cs">
+      <DependentUpon>NewActionPlanPoint.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NewActionPlanView.xaml.cs">
       <DependentUpon>NewActionPlanView.xaml</DependentUpon>
     </Compile>
@@ -128,6 +125,10 @@
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NewActionPlanPoint.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\NewActionPlanView.xaml" />
   </ItemGroup>
@@ -159,6 +160,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Models\LearDataAllModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -171,6 +173,5 @@
       <LastGenOutput>LearDataAllModel.cs</LastGenOutput>
     </Content>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

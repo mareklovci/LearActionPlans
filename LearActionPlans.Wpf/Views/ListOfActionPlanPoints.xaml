@@ -81,7 +81,7 @@
             <Button Padding="10" Margin="0 10 10 10" Name="RepairPointBtn">
                 Repair Point
             </Button>
-            <Button Padding="10" Margin="0 10 10 10" Name="NewPointBtn">
+            <Button Padding="10" Margin="0 10 10 10" Name="NewPointBtn" Click="NewPointBtn_OnClick">
                 New Point
             </Button>
             <Button Padding="10" Margin="0 10 0 10" Name="CloseBtn">

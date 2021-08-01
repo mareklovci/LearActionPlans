@@ -12,9 +12,9 @@ namespace LearActionPlans.Wpf.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class AkceWM
+    public partial class Akce
     {
-        public int AkceWMID { get; set; }
+        public int AkceID { get; set; }
         public int BodAPID { get; set; }
         public string NapravnaOpatreni { get; set; }
         public int OdpovednaOsoba1 { get; set; }
@@ -22,6 +22,7 @@ namespace LearActionPlans.Wpf.Models
         public Nullable<System.DateTime> KontrolaEfektivnosti { get; set; }
         public Nullable<int> OddeleniID { get; set; }
         public string Priloha { get; set; }
+        public string Typ { get; set; }
         public bool Storno { get; set; }
     }
 }

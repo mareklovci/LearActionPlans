@@ -17,7 +17,7 @@ namespace LearActionPlans.Wpf.Models
         public int ZamestnanecID { get; set; }
         public string Jmeno { get; set; }
         public string Prijmeni { get; set; }
-        public int PersonalniCislo { get; set; }
+        public string PersonalniCislo { get; set; }
         public int OddeleniID { get; set; }
         public string Email { get; set; }
         public bool JeZamestnanec { get; set; }

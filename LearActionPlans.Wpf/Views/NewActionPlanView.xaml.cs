@@ -15,6 +15,8 @@ namespace LearActionPlans.Wpf.Views
             AudityOstatni = true,
             CisloAP = Helpers.LastActionPlan().CisloAP + 1
         };
+
+        private readonly UkonceniAP _ukonceniAP = new UkonceniAP();
         
         public NewActionPlanView()
         {
@@ -51,9 +53,15 @@ namespace LearActionPlans.Wpf.Views
         {
             using (var context = new LearDataAllEntities())
             {
+                // Save Action Plan
                 var actionPlans = context.Set<AkcniPlan>();
                 actionPlans.Add(_akcniPlan);
+                context.SaveChanges();
 
+                // Save UkonceniAP with Action Plan ID
+                _ukonceniAP.AkcniPlanID = _akcniPlan.AkcniPlanID;
+                var actionPlanEnd = context.Set<UkonceniAP>();
+                actionPlanEnd.Add(_ukonceniAP);
                 context.SaveChanges();
             }
 
@@ -88,7 +96,7 @@ namespace LearActionPlans.Wpf.Views
 
         private void ProjectsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selectedProject = (Projekt)ProjectsComboBox.SelectedItem;
+            var selectedProject = (Projekt) ProjectsComboBox.SelectedItem;
             if (selectedProject != null) _akcniPlan.ProjektID = selectedProject.ProjektID;
         }
 
@@ -97,8 +105,7 @@ namespace LearActionPlans.Wpf.Views
             var selectedDate = DatePicker.SelectedDate;
             if (selectedDate.HasValue)
             {
-                _akcniPlan.DatumUkonceni = selectedDate.Value;
-                _akcniPlan.Rok = selectedDate.Value.Year;
+                _ukonceniAP.DatumUkonceni = selectedDate.Value;
             }
         }
 

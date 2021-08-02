@@ -48,13 +48,13 @@
                         </TextBlock>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
-                <ComboBox.SelectedItem>
-                    <Binding Path="SelectedItem">
-                        <Binding.ValidationRules>
-                            <local:SelectionValidationRule ValidatesOnTargetUpdated="True" />
-                        </Binding.ValidationRules>
-                    </Binding>
-                </ComboBox.SelectedItem>
+                <!-- <ComboBox.SelectedItem> -->
+                <!--     <Binding Path="SelectedItem"> -->
+                <!--         <Binding.ValidationRules> -->
+                <!--             <local:SelectionValidationRule ValidatesOnTargetUpdated="True" /> -->
+                <!--         </Binding.ValidationRules> -->
+                <!--     </Binding> -->
+                <!-- </ComboBox.SelectedItem> -->
             </ComboBox>
         </StackPanel>
 

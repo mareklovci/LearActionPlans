@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
 using System.Windows;
 using LearActionPlans.Wpf.Models;
 using LearActionPlans.Wpf.Utilities;
+// ReSharper disable CommentTypo
+// ReSharper disable IdentifierTypo
 
 namespace LearActionPlans.Wpf.Views
 {
@@ -16,7 +19,8 @@ namespace LearActionPlans.Wpf.Views
                 var actionPlan = (from z in context.AkcniPlan
                                   where z.AkcniPlanID == akcniPlan.AkcniPlanID
                                   select z).FirstOrDefault();
-                
+
+                if (actionPlan == null) return;
                 ActionPlanNumber.Text = actionPlan.AkcniPlanID.ToString();
 
                 var zadavatel1 = Helpers.EmployeeById(actionPlan.Zadavatel1ID);
@@ -38,19 +42,20 @@ namespace LearActionPlans.Wpf.Views
 
                 // Get Datum Ukonceni
                 var datumUkonceni = (from z in context.UkonceniAP
-                                     where z.AkcniPlanID == actionPlan.AkcniPlanID
-                                     orderby z.UkonceniAPID
-                                     select z).FirstOrDefault();
+                    where z.AkcniPlanID == actionPlan.AkcniPlanID
+                    orderby z.UkonceniAPID
+                    select z).FirstOrDefault();
 
-                ActionPlanEndDate.Text = datumUkonceni.DatumUkonceni.ToString();
+                if (datumUkonceni != null)
+                    ActionPlanEndDate.Text = datumUkonceni.DatumUkonceni.ToString(CultureInfo.InvariantCulture);
 
                 var customer = Helpers.CustomerById(actionPlan.ZakaznikID);
                 ActionPlanCustomer.Text = $"{customer.Nazev}";
 
                 // Populate list
                 var query = (from ap in context.BodAP
-                             where ap.AkcniPlanID == actionPlan.AkcniPlanID
-                             select ap).ToList();
+                    where ap.AkcniPlanID == actionPlan.AkcniPlanID
+                    select ap).ToList();
                 listView.ItemsSource = query;
             }
         }

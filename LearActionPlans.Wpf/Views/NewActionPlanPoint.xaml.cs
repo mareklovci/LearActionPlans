@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 namespace LearActionPlans.Wpf.Views
 {
     /// <summary>
-    /// Interakční logika pro NewActionPlanPoint.xaml
+    /// Interaction logic for NewActionPlanPoint.xaml
     /// </summary>
     public partial class NewActionPlanPoint : Window
     {

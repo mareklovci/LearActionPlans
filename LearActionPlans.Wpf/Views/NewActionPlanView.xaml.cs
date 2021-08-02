@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using LearActionPlans.Wpf.Models;
 using LearActionPlans.Wpf.Utilities;
 // ReSharper disable IdentifierTypo
+// ReSharper disable CommentTypo
 
 namespace LearActionPlans.Wpf.Views
 {
@@ -16,7 +17,7 @@ namespace LearActionPlans.Wpf.Views
             CisloAP = Helpers.LastActionPlan().CisloAP + 1
         };
 
-        private readonly UkonceniAP _ukonceniAP = new UkonceniAP();
+        private readonly UkonceniAP _ukonceniAp = new UkonceniAP();
         
         public NewActionPlanView()
         {
@@ -59,9 +60,9 @@ namespace LearActionPlans.Wpf.Views
                 context.SaveChanges();
 
                 // Save UkonceniAP with Action Plan ID
-                _ukonceniAP.AkcniPlanID = _akcniPlan.AkcniPlanID;
+                _ukonceniAp.AkcniPlanID = _akcniPlan.AkcniPlanID;
                 var actionPlanEnd = context.Set<UkonceniAP>();
-                actionPlanEnd.Add(_ukonceniAP);
+                actionPlanEnd.Add(_ukonceniAp);
                 context.SaveChanges();
             }
 
@@ -105,7 +106,7 @@ namespace LearActionPlans.Wpf.Views
             var selectedDate = DatePicker.SelectedDate;
             if (selectedDate.HasValue)
             {
-                _ukonceniAP.DatumUkonceni = selectedDate.Value;
+                _ukonceniAp.DatumUkonceni = selectedDate.Value;
             }
         }
 

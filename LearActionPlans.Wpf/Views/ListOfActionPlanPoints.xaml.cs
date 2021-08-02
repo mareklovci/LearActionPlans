@@ -10,10 +10,13 @@ namespace LearActionPlans.Wpf.Views
 {
     public partial class ListOfActionPlanPoints : Window
     {
+        private readonly AkcniPlan _akcniPlan;
+        
         public ListOfActionPlanPoints(AkcniPlan akcniPlan)
         {
             InitializeComponent();
-
+            _akcniPlan = akcniPlan;
+            
             using (var context = new LearDataAllEntities())
             {
                 var actionPlan = (from z in context.AkcniPlan
@@ -62,7 +65,7 @@ namespace LearActionPlans.Wpf.Views
 
         private void NewPointBtn_OnClick(object sender, RoutedEventArgs e)
         {
-            var win = new NewActionPlanPoint();
+            var win = new NewActionPlanPoint(_akcniPlan);
             win.Show();
         }
     }

@@ -7,6 +7,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using LearActionPlans.Wpf.Models;
 // ReSharper disable IdentifierTypo
+// ReSharper disable CommentTypo
 
 namespace LearActionPlans.Wpf.Views
 {
@@ -15,7 +16,7 @@ namespace LearActionPlans.Wpf.Views
     /// </summary>
     public partial class ActionPlansFilterView : Window
     {
-        private CollectionView _view;
+        private readonly CollectionView _view;
         
         public ActionPlansFilterView()
         {
@@ -33,7 +34,7 @@ namespace LearActionPlans.Wpf.Views
                     where z.JeZamestnanec && allEmployeeIds1.Contains(z.ZamestnanecID)
                     select z).ToList();
                 Authority1ComboBox.ItemsSource = authority1Query;
-                
+
                 // Select only employees which are authorities
                 var allEmployeeIds2 = (from akcniPlan in query 
                     where akcniPlan.Zadavatel2ID != null 
@@ -58,19 +59,46 @@ namespace LearActionPlans.Wpf.Views
         {
             if (!(obj is AkcniPlan item)) return false;
             var empl = (Zamestnanec) Authority2ComboBox.SelectedItem;
-            return empl == null || item.Zadavatel2.ZamestnanecID == empl.ZamestnanecID;
+            return empl == null || item.Zadavatel2 == null || item.Zadavatel2.ZamestnanecID == empl.ZamestnanecID;
         }
 
         private void Authority1ComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // Reset the other ComboBox
+            Authority2ComboBox.SelectedIndex = -1;
+            
             _view.Filter += Authority1Filter;
-            CollectionViewSource.GetDefaultView(ActionPlansList.ItemsSource).Refresh();
+            _view.Refresh();
         }
-
+        
         private void Authority2ComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // Reset the other ComboBox
+            Authority1ComboBox.SelectedIndex = -1;
+            
             _view.Filter += Authority2Filter;
-            CollectionViewSource.GetDefaultView(ActionPlansList.ItemsSource).Refresh();
+            _view.Refresh();
+        }
+
+        private void StornoBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            var akcniPlan = (AkcniPlan) ActionPlansList.SelectedItem;
+
+            using (var context = new LearDataAllEntities())
+            {
+                var selectedAkcniPlan = (from ap in context.AkcniPlan
+                    where ap.AkcniPlanID == akcniPlan.AkcniPlanID
+                    select ap).FirstOrDefault();
+
+                context.AkcniPlan.Remove(selectedAkcniPlan);
+                context.SaveChanges();
+            }
+        }
+
+        private void UpdateBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            var win = new UpdateActionPlanView((AkcniPlan) ActionPlansList.SelectedItem);
+            win.Show();
         }
     }
 }

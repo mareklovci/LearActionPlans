@@ -104,10 +104,7 @@ namespace LearActionPlans.Wpf.Views
         private void DatePicker_OnSelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             var selectedDate = DatePicker.SelectedDate;
-            if (selectedDate.HasValue)
-            {
-                _ukonceniAp.DatumUkonceni = selectedDate.Value;
-            }
+            if (selectedDate.HasValue) _ukonceniAp.DatumUkonceni = selectedDate.Value;
         }
 
         private void TopicField_OnTextChanged(object sender, TextChangedEventArgs e)

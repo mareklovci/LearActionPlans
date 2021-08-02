@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using LearActionPlans.Wpf.Models;
+// ReSharper disable IdentifierTypo
 
 namespace LearActionPlans.Wpf.Views
 {
@@ -19,9 +12,28 @@ namespace LearActionPlans.Wpf.Views
     /// </summary>
     public partial class NewActionPlanPoint : Window
     {
-        public NewActionPlanPoint()
+        private readonly BodAP _bodAp;
+        
+        public NewActionPlanPoint(AkcniPlan akcniPlan)
         {
             InitializeComponent();
+            _bodAp = new BodAP
+            {
+                AkcniPlanID = akcniPlan.AkcniPlanID
+            };
+
+            using (var context = new LearDataAllEntities())
+            {
+                var whyMadeQuery = (from z in context.Akce
+                    where z.Storno == false && z.Typ == ActionTypes.Wm.ToString()
+                    select z).ToList();
+                if (whyMadeQuery.Any()) ListWhyMade.ItemsSource = whyMadeQuery;
+                
+                var whyShippedQuery = (from z in context.Akce
+                    where z.Storno == false && z.Typ == ActionTypes.Ws.ToString()
+                    select z).ToList();
+                if (whyShippedQuery.Any()) ListWhyShipped.ItemsSource = whyShippedQuery;
+            }
         }
 
         private void OnClickDeleteBtn(object sender, RoutedEventArgs e)
@@ -29,9 +41,65 @@ namespace LearActionPlans.Wpf.Views
             throw new NotImplementedException();
         }
 
-        private void OnClickCloseBtn(object sender, RoutedEventArgs e)
+        private void NewActionBtn_OnClick(object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        private void SavePointBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+        
+        private void OnClickCloseBtn(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void ResponsibleAuthority1_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ResponsibleAuthority2_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void CorrectiveActionsField_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void EffectivityDatePicker_OnSelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void DepartmentComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OpenFileButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void TypeComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void SaveActionBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void AddDeadlineBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            var win = new AddDeadlineView(new Akce());
+            win.Show();
         }
     }
 }

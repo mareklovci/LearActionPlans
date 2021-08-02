@@ -64,9 +64,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\ActionTypes.cs" />
     <Compile Include="Models\Akce.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AkceExtended.cs" />
     <Compile Include="Models\AkcniPlanExtended.cs" />
     <Compile Include="Models\AkcniPlan.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
@@ -107,10 +109,14 @@
     <Compile Include="Models\Zamestnanec.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\ComboBoxEmptyItemConverter.cs" />
     <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="Utilities\SelectionValidationRule.cs" />
     <Compile Include="Views\ActionPlansFilterView.xaml.cs">
       <DependentUpon>ActionPlansFilterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AddDeadlineView.xaml.cs">
+      <DependentUpon>AddDeadlineView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ListOfActionPlanPoints.xaml.cs">
       <DependentUpon>ListOfActionPlanPoints.xaml</DependentUpon>
@@ -125,10 +131,14 @@
     <Compile Include="Views\NewActionPlanView.xaml.cs">
       <DependentUpon>NewActionPlanView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UpdateActionPlanView.xaml.cs">
+      <DependentUpon>UpdateActionPlanView.xaml</DependentUpon>
+    </Compile>
     <Page Include="Views\ActionPlansFilterView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\AddDeadlineView.xaml" />
     <Page Include="Views\ListOfActionPlanPoints.xaml" />
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -139,6 +149,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\NewActionPlanView.xaml" />
+    <Page Include="Views\UpdateActionPlanView.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

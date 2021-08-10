@@ -6,28 +6,23 @@
         xmlns:local="clr-namespace:LearActionPlans.Wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
+    <Grid Margin="20">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="20" />
         </Grid.ColumnDefinitions>
         
-        <Grid.RowDefinitions>    
-            <RowDefinition Height="20" />  
-            <RowDefinition Height="Auto" />
+        <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="20" />
         </Grid.RowDefinitions>
         
-        <Button Grid.Row="1" Grid.Column="1" Name="btnNewActionPlan" Click="BtnNewActionPlan_Click" Padding="20">
+        <Button Grid.Row="0" Grid.Column="0" Name="btnNewActionPlan" Click="BtnNewActionPlan_Click" Padding="20">
             Create New Action Plan
         </Button>
 
-        <Button Grid.Row="1" Grid.Column="2" Name="btnFilter" Click="BtnFilter_Click" Padding="20" Margin="20 0 0 0">
+        <Button Grid.Row="0" Grid.Column="1" Name="btnFilter" Click="BtnFilter_Click" Padding="20" Margin="20 0 0 0">
             All Action Plans
         </Button>
     </Grid>

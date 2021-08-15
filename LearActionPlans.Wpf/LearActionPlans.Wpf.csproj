@@ -68,14 +68,17 @@
     <Compile Include="Models\Akce.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\AkceExtended.cs" />
-    <Compile Include="Models\AkcniPlanExtended.cs" />
     <Compile Include="Models\AkcniPlan.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\BodAP.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Extensions\AkceExtended.cs" />
+    <Compile Include="Models\Extensions\AkcniPlanExtended.cs" />
+    <Compile Include="Models\Extensions\ProjektExtended.cs" />
+    <Compile Include="Models\Extensions\ZakaznikExtended.cs" />
+    <Compile Include="Models\Extensions\ZamestnanecExtended.cs" />
     <Compile Include="Models\LearDataAllModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -97,21 +100,18 @@
     <Compile Include="Models\Projekt.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ProjektExtended.cs" />
     <Compile Include="Models\UkonceniAkce.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UkonceniAP.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ZakaznikExtended.cs" />
     <Compile Include="Models\Zakaznik.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Zamestnanec.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ZamestnanecExtended.cs" />
     <Compile Include="Utilities\ComboBoxEmptyItemConverter.cs" />
     <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="Utilities\SelectionValidationRule.cs" />

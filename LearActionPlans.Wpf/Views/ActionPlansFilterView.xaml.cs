@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using LearActionPlans.Wpf.Models;
+
 // ReSharper disable IdentifierTypo
 // ReSharper disable CommentTypo
 
@@ -14,7 +15,7 @@ namespace LearActionPlans.Wpf.Views
     public partial class ActionPlansFilterView
     {
         private readonly CollectionView _view;
-        
+
         public ActionPlansFilterView()
         {
             InitializeComponent();
@@ -33,29 +34,29 @@ namespace LearActionPlans.Wpf.Views
                 Authority1ComboBox.ItemsSource = authority1Query;
 
                 // Select only employees which are authorities
-                var allEmployeeIds2 = (from akcniPlan in query 
-                    where akcniPlan.Zadavatel2ID != null 
-                    select (int) akcniPlan.Zadavatel2ID).ToList();
+                var allEmployeeIds2 = (from akcniPlan in query
+                    where akcniPlan.Zadavatel2ID != null
+                    select (int)akcniPlan.Zadavatel2ID).ToList();
                 var authority2Query = (from z in context.Zamestnanec
                     where allEmployeeIds2.Contains(z.ZamestnanecID)
                     select z).ToList();
                 Authority2ComboBox.ItemsSource = authority2Query;
             }
-            
-            _view = (CollectionView) CollectionViewSource.GetDefaultView(ActionPlansList.ItemsSource);
+
+            _view = (CollectionView)CollectionViewSource.GetDefaultView(ActionPlansList.ItemsSource);
         }
 
         private bool Authority1Filter(object obj)
         {
             if (!(obj is AkcniPlan item)) return false;
-            var empl = (Zamestnanec) Authority1ComboBox.SelectedItem;
+            var empl = (Zamestnanec)Authority1ComboBox.SelectedItem;
             return empl == null || item.Zadavatel1.ZamestnanecID == empl.ZamestnanecID;
         }
-        
+
         private bool Authority2Filter(object obj)
         {
             if (!(obj is AkcniPlan item)) return false;
-            var empl = (Zamestnanec) Authority2ComboBox.SelectedItem;
+            var empl = (Zamestnanec)Authority2ComboBox.SelectedItem;
             return empl == null || item.Zadavatel2 == null || item.Zadavatel2.ZamestnanecID == empl.ZamestnanecID;
         }
 
@@ -63,23 +64,23 @@ namespace LearActionPlans.Wpf.Views
         {
             // Reset the other ComboBox
             Authority2ComboBox.SelectedIndex = -1;
-            
+
             _view.Filter += Authority1Filter;
             _view.Refresh();
         }
-        
+
         private void Authority2ComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Reset the other ComboBox
             Authority1ComboBox.SelectedIndex = -1;
-            
+
             _view.Filter += Authority2Filter;
             _view.Refresh();
         }
 
         private void StornoBtn_OnClick(object sender, RoutedEventArgs e)
         {
-            var akcniPlan = (AkcniPlan) ActionPlansList.SelectedItem;
+            var akcniPlan = (AkcniPlan)ActionPlansList.SelectedItem;
 
             using (var context = new LearDataAllEntities())
             {
@@ -94,7 +95,11 @@ namespace LearActionPlans.Wpf.Views
 
         private void UpdateBtn_OnClick(object sender, RoutedEventArgs e)
         {
-            var win = new UpdateActionPlanView((AkcniPlan) ActionPlansList.SelectedItem);
+            var win = new UpdateActionPlanView((AkcniPlan)ActionPlansList.SelectedItem);
+            win.Closed += (s, eventArg) =>
+            {
+                _view.Refresh();
+            };
             win.Show();
         }
     }

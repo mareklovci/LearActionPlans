@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using LearActionPlans.Wpf.Models;
 // ReSharper disable IdentifierTypo
 // ReSharper disable CommentTypo
@@ -14,7 +11,7 @@ namespace LearActionPlans.Wpf.Views
     /// <summary>
     /// Interaction logic for ActionPlansFilterView.xaml
     /// </summary>
-    public partial class ActionPlansFilterView : Window
+    public partial class ActionPlansFilterView
     {
         private readonly CollectionView _view;
         
@@ -90,7 +87,7 @@ namespace LearActionPlans.Wpf.Views
                     where ap.AkcniPlanID == akcniPlan.AkcniPlanID
                     select ap).FirstOrDefault();
 
-                context.AkcniPlan.Remove(selectedAkcniPlan);
+                if (selectedAkcniPlan != null) context.AkcniPlan.Remove(selectedAkcniPlan);
                 context.SaveChanges();
             }
         }

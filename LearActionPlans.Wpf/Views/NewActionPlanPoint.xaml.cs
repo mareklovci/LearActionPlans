@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using LearActionPlans.Wpf.Models;
+
 // ReSharper disable IdentifierTypo
 
 namespace LearActionPlans.Wpf.Views
@@ -13,7 +14,7 @@ namespace LearActionPlans.Wpf.Views
     public partial class NewActionPlanPoint : Window
     {
         private readonly BodAP _bodAp;
-        
+
         public NewActionPlanPoint(AkcniPlan akcniPlan)
         {
             InitializeComponent();
@@ -28,7 +29,7 @@ namespace LearActionPlans.Wpf.Views
                     where z.Storno == false && z.Typ == ActionTypes.Wm.ToString()
                     select z).ToList();
                 if (whyMadeQuery.Any()) ListWhyMade.ItemsSource = whyMadeQuery;
-                
+
                 var whyShippedQuery = (from z in context.Akce
                     where z.Storno == false && z.Typ == ActionTypes.Ws.ToString()
                     select z).ToList();
@@ -50,7 +51,7 @@ namespace LearActionPlans.Wpf.Views
         {
             throw new NotImplementedException();
         }
-        
+
         private void OnClickCloseBtn(object sender, RoutedEventArgs e)
         {
             Close();

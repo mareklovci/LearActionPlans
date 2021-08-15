@@ -3,10 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:models="clr-namespace:LearActionPlans.Wpf.Models"
         mc:Ignorable="d"
         Title="ActionPlansFilterView" Height="450" Width="1050">
+    
+    <!-- ReSharper disable MarkupAttributeTypo -->
+    <!-- ReSharper disable IdentifierTypo -->
+    <!-- ReSharper disable MarkupTextTypo -->
     <Grid Margin="20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -61,7 +64,6 @@
             </ComboBox>
         </StackPanel>
         
-        <!-- ReSharper disable once MarkupAttributeTypo -->
         <ListView x:Name="ActionPlansList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"
                   Height="200" Margin="0 20 0 0"
                   d:DataContext="{d:DesignInstance models:AkcniPlan}">
@@ -101,7 +103,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                        
+                    
                     <GridViewColumn Header="Topic"
                                     Width="120"
                                     DisplayMemberBinding="{Binding Path=Tema}" />
@@ -128,6 +130,7 @@
         <Button Grid.Row="2" Grid.Column="0" Padding="10" Margin="0 10 0 10" Name="UpdateBtn" Click="UpdateBtn_OnClick">
             Update
         </Button>
+        
         <Button Grid.Row="2" Grid.Column="1" Padding="10" Margin="20 10 0 10" Name="StornoBtn" Click="StornoBtn_OnClick">
             Storno
         </Button>

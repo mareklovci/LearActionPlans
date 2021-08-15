@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using LearActionPlans.Wpf.Models;
+using LearActionPlans.Wpf.Utilities;
 
 // ReSharper disable IdentifierTypo
 
@@ -38,35 +39,39 @@ namespace LearActionPlans.Wpf.Views
                     where z.Storno == false && z.JeZamestnanec
                     select z).ToList();
                 if (empOneQuery.Any()) ContractingAuthority1.ItemsSource = empOneQuery;
-
+                Helpers.AppendNullObject(empOneQuery, Zamestnanec.Null);
+                
                 empTwoQuery = (from z in context.Zamestnanec
                     where z.Storno == false && z.JeZamestnanec
                     select z).ToList();
                 if (empTwoQuery.Any()) ContractingAuthority2.ItemsSource = empTwoQuery;
+                Helpers.AppendNullObject(empTwoQuery, Zamestnanec.Null);
 
                 projectsQuery = (from z in context.Projekt
                     where z.Storno == false
                     select z).ToList();
                 if (projectsQuery.Any()) ProjectsComboBox.ItemsSource = projectsQuery;
+                Helpers.AppendNullObject(projectsQuery, Projekt.Null);
 
                 customersQuery = (from z in context.Zakaznik
                     where z.Storno == false
                     select z).ToList();
                 if (customersQuery.Any()) CustomersComboBox.ItemsSource = customersQuery;
+                Helpers.AppendNullObject(customersQuery, Zakaznik.Null);
             }
 
             // Add Selected Items
             ContractingAuthority1.SelectedItem =
-                empOneQuery.FirstOrDefault(x => x.ZamestnanecID == _akcniPlan.Zadavatel1ID);
+                empOneQuery.FirstOrDefault(x => x.ZamestnanecID == _akcniPlan.Zadavatel1ID) ?? Zamestnanec.Null;
 
             ContractingAuthority2.SelectedItem =
-                empTwoQuery.FirstOrDefault(x => x.ZamestnanecID == _akcniPlan.Zadavatel2ID);
+                empTwoQuery.FirstOrDefault(x => x.ZamestnanecID == _akcniPlan.Zadavatel2ID) ?? Zamestnanec.Null;
 
             ProjectsComboBox.SelectedItem =
-                projectsQuery.FirstOrDefault(x => x.ProjektID == _akcniPlan.Projekt.ProjektID);
+                projectsQuery.FirstOrDefault(x => x.ProjektID == _akcniPlan.Projekt.ProjektID) ?? Projekt.Null;
 
             CustomersComboBox.SelectedItem =
-                customersQuery.FirstOrDefault(x => x.ZakaznikID == _akcniPlan.ZakaznikID);
+                customersQuery.FirstOrDefault(x => x.ZakaznikID == _akcniPlan.ZakaznikID) ?? Zakaznik.Null;
 
             TopicField.Text = _akcniPlan.Tema;
 

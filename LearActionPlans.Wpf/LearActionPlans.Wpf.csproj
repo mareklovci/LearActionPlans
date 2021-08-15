@@ -97,18 +97,21 @@
     <Compile Include="Models\Projekt.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ProjektExtended.cs" />
     <Compile Include="Models\UkonceniAkce.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UkonceniAP.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ZakaznikExtended.cs" />
     <Compile Include="Models\Zakaznik.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Zamestnanec.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ZamestnanecExtended.cs" />
     <Compile Include="Utilities\ComboBoxEmptyItemConverter.cs" />
     <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="Utilities\SelectionValidationRule.cs" />

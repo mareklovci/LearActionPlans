@@ -1,17 +1,14 @@
 ﻿using LearActionPlans.Wpf.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LearActionPlans.Wpf.Utilities
 {
-    class Helpers
+    internal static class Helpers
     {
         public static AkcniPlan LastActionPlan()
         {
-            AkcniPlan actionPlan = null;
+            AkcniPlan actionPlan;
 
             using (var context = new LearDataAllEntities())
             {
@@ -25,7 +22,7 @@ namespace LearActionPlans.Wpf.Utilities
 
         public static Zamestnanec EmployeeById(int id)
         {
-            Zamestnanec employee = null;
+            Zamestnanec employee;
 
             using (var context = new LearDataAllEntities())
             {
@@ -39,7 +36,7 @@ namespace LearActionPlans.Wpf.Utilities
 
         public static Projekt ProjectById(int id)
         {
-            Projekt project = null;
+            Projekt project;
 
             using (var context = new LearDataAllEntities())
             {
@@ -53,7 +50,7 @@ namespace LearActionPlans.Wpf.Utilities
 
         public static Zakaznik CustomerById(int id)
         {
-            Zakaznik customer = null;
+            Zakaznik customer;
 
             using (var context = new LearDataAllEntities())
             {
@@ -64,5 +61,7 @@ namespace LearActionPlans.Wpf.Utilities
 
             return customer;
         }
+
+        public static void AppendNullObject<T>(List<T> appendable, T append) => appendable.Insert(0, append);
     }
 }

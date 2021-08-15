@@ -4,10 +4,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:models="clr-namespace:LearActionPlans.Wpf.Models"
-        xmlns:local="clr-namespace:LearActionPlans.Wpf.Utilities"
         mc:Ignorable="d"
         Title="NewActionPlanView" Height="450" Width="800">
 
+    <!-- ReSharper disable MarkupAttributeTypo -->
+    <!-- ReSharper disable IdentifierTypo -->
+    <!-- ReSharper disable MarkupTextTypo -->
     <Grid Margin="20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />

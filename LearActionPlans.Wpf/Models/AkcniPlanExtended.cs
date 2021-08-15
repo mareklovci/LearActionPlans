@@ -18,7 +18,7 @@ namespace LearActionPlans.Wpf.Models
             {
                 var query = (from z in context.UkonceniAP
                     where z.AkcniPlanID == AkcniPlanID
-                    orderby z.DatumUkonceni
+                    orderby z.DatumUkonceni descending 
                     select z).FirstOrDefault();
                 return query;
             }

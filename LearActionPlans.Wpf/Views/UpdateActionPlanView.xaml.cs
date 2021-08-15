@@ -109,10 +109,13 @@ namespace LearActionPlans.Wpf.Views
             if (_ukonceniPlanu != null)
                 _ukonceniPlanu.DatumUkonceni = selectedDate.Value;
             else
+            {
                 _ukonceniPlanu = new UkonceniAP
                 {
-                    DatumUkonceni = selectedDate.Value
+                    DatumUkonceni = selectedDate.Value,
+                    AkcniPlanID = _akcniPlan.AkcniPlanID
                 };
+            }
         }
 
         private void CustomersComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -148,13 +151,8 @@ namespace LearActionPlans.Wpf.Views
                 selectedAkcniPlan.AudityOstatni = _akcniPlan.AudityOstatni;
                 selectedAkcniPlan.CisloAP = _akcniPlan.CisloAP;
 
-                context.UkonceniAP.Add(new UkonceniAP
-                {
-                    DatumUkonceni = _ukonceniPlanu.DatumUkonceni,
-                    Poznamka = _ukonceniPlanu.Poznamka,
-                    UkonceniAPID = _akcniPlan.AkcniPlanID
-                });
-                
+                if (_ukonceniPlanu != null && _ukonceniPlanu.AkcniPlanID != 0) context.UkonceniAP.Add(_ukonceniPlanu);
+
                 context.SaveChanges();
             }
             

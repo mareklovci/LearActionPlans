@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using LearActionPlans.Wpf.Models;
+using LearActionPlans.Wpf.Utilities;
 
 // ReSharper disable IdentifierTypo
 
@@ -11,7 +12,7 @@ namespace LearActionPlans.Wpf.Views
     /// <summary>
     /// Interaction logic for NewActionPlanPoint.xaml
     /// </summary>
-    public partial class NewActionPlanPoint : Window
+    public partial class NewActionPlanPoint
     {
         private readonly BodAP _bodAp;
 

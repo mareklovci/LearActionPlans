@@ -64,7 +64,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\ActionTypes.cs" />
     <Compile Include="Models\Akce.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
@@ -112,9 +111,8 @@
     <Compile Include="Models\Zamestnanec.cs">
       <DependentUpon>LearDataAllModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\ComboBoxEmptyItemConverter.cs" />
+    <Compile Include="Utilities\Enums.cs" />
     <Compile Include="Utilities\Helpers.cs" />
-    <Compile Include="Utilities\SelectionValidationRule.cs" />
     <Compile Include="Views\ActionPlansFilterView.xaml.cs">
       <DependentUpon>ActionPlansFilterView.xaml</DependentUpon>
     </Compile>

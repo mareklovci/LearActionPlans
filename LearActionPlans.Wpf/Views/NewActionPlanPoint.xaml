@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:models="clr-namespace:LearActionPlans.Wpf.Models"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:local="clr-namespace:LearActionPlans.Wpf.Views"
+        xmlns:utilities="clr-namespace:LearActionPlans.Wpf.Utilities"
         mc:Ignorable="d"
         Title="NewActionPlanPoint" Height="800" Width="950">
 
@@ -14,11 +14,14 @@
                             MethodName="GetValues"
                             ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="models:ActionTypes" />
+                <x:Type TypeName="utilities:ActionTypes" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </Window.Resources>
 
+    <!-- ReSharper disable MarkupAttributeTypo -->
+    <!-- ReSharper disable IdentifierTypo -->
+    <!-- ReSharper disable MarkupTextTypo -->
     <ScrollViewer>
         <Grid Margin="20">
             <Grid.ColumnDefinitions>

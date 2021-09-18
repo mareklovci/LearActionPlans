@@ -10,6 +10,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         
@@ -24,6 +25,10 @@
 
         <Button Grid.Row="0" Grid.Column="1" Name="btnFilter" Click="BtnFilter_Click" Padding="20" Margin="20 0 0 0">
             All Action Plans
+        </Button>
+        
+        <Button Grid.Row="0" Grid.Column="2" Name="btnEditable" Click="BtnEditable_Click" Padding="20" Margin="20 0 0 0">
+            Editable Action Plans
         </Button>
     </Grid>
 </Window>

@@ -113,6 +113,9 @@
     </Compile>
     <Compile Include="Utilities\Enums.cs" />
     <Compile Include="Utilities\Helpers.cs" />
+    <Compile Include="Views\ActionPlansEditableView.xaml.cs">
+      <DependentUpon>ActionPlansEditableView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ActionPlansFilterView.xaml.cs">
       <DependentUpon>ActionPlansFilterView.xaml</DependentUpon>
     </Compile>
@@ -135,6 +138,10 @@
     <Compile Include="Views\UpdateActionPlanView.xaml.cs">
       <DependentUpon>UpdateActionPlanView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\ActionPlansEditableView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ActionPlansFilterView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

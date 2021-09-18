@@ -9,5 +9,7 @@ namespace LearActionPlans.Wpf.Models
         {
             protected internal NullEmployee() => Jmeno = "(Select an Employee)";
         }
+
+        public override string ToString() => $"{Jmeno} {Prijmeni}";
     }
 }

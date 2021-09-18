@@ -23,5 +23,11 @@ namespace LearActionPlans.Wpf.Views
             var win = new ActionPlansFilterView();
             win.Show();
         }
+
+        private void BtnEditable_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new ActionPlansEditableView();
+            win.Show();
+        }
     }
 }

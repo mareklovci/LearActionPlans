@@ -1,6 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearActionPlans.Wpf", "LearActionPlans.Wpf\LearActionPlans.Wpf.csproj", "{F1F0A31D-82B3-430C-8BDC-1720676CF123}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearActionPlans", "LearActionPlans.csproj", "{961B9299-5DE8-42D2-8190-DDD5CAFB8371}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F1F0A31D-82B3-430C-8BDC-1720676CF123}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1F0A31D-82B3-430C-8BDC-1720676CF123}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1F0A31D-82B3-430C-8BDC-1720676CF123}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1F0A31D-82B3-430C-8BDC-1720676CF123}.Release|Any CPU.Build.0 = Release|Any CPU
+		{961B9299-5DE8-42D2-8190-DDD5CAFB8371}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{961B9299-5DE8-42D2-8190-DDD5CAFB8371}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{961B9299-5DE8-42D2-8190-DDD5CAFB8371}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{961B9299-5DE8-42D2-8190-DDD5CAFB8371}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {33ACE960-303C-4280-A5EF-F0C99612FC0A}
 	EndGlobalSection
 EndGlobal

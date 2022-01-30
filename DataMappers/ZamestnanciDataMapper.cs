@@ -11,27 +11,23 @@ namespace LearActionPlans.DataMappers
     public static class ZamestnanciDataMapper
     {
         private static readonly string ConnectionString =
-            ConfigurationManager.ConnectionStrings["ZamestnanciEntity"].ConnectionString;
+            ConfigurationManager.ConnectionStrings["ActionPlansEntity"].ConnectionString;
 
         public static IEnumerable<Zamestnanci> GetZamestnanciAll()
         {
-            using (var connection = new SqlConnection(ConnectionString))
-            {
-                connection.Open();
+            using var connection = new SqlConnection(ConnectionString);
+            connection.Open();
 
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandType = CommandType.Text;
+            using var command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
 
-                    command.CommandText = $"SELECT * FROM Zamestnanec";
+            command.CommandText = $"SELECT * FROM Zamestnanec";
 
-                    var reader = command.ExecuteReader();
+            var reader = command.ExecuteReader();
 
-                    if (!reader.HasRows) yield break;
-                    while (reader.Read())
-                        yield return ConstructZamestnanec(reader); 
-                }
-            }
+            if (!reader.HasRows) yield break;
+            while (reader.Read())
+                yield return ConstructZamestnanec(reader);
         }
 
         private static Zamestnanci ConstructZamestnanec(IDataRecord reader)
@@ -50,50 +46,42 @@ namespace LearActionPlans.DataMappers
 
         public static IEnumerable<Zamestnanci> GetZadavatelId(int zadavatelId)
         {
-            using (var connection = new SqlConnection(ConnectionString))
-            {
-                connection.Open();
+            using var connection = new SqlConnection(ConnectionString);
+            connection.Open();
 
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandType = CommandType.Text;
+            using var command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
 
-                    command.CommandText = $"SELECT * FROM Zamestnanec WHERE ZamestnanecId = @zadavatelId";
-                    command.Parameters.AddWithValue("@zadavatelId", zadavatelId);
+            command.CommandText = $"SELECT * FROM Zamestnanec WHERE ZamestnanecId = @zadavatelId";
+            command.Parameters.AddWithValue("@zadavatelId", zadavatelId);
 
-                    var reader = command.ExecuteReader();
+            var reader = command.ExecuteReader();
 
-                    if (!reader.HasRows)
-                        yield break;
+            if (!reader.HasRows)
+                yield break;
 
-                    while (reader.Read())
-                        yield return ConstructZadavatel(reader);
-                }
-            }
+            while (reader.Read())
+                yield return ConstructZadavatel(reader);
         }
 
         public static IEnumerable<Zamestnanci> GetZadavatelLogin(string login)
         {
-            using (var connection = new SqlConnection(ConnectionString))
-            {
-                connection.Open();
+            using var connection = new SqlConnection(ConnectionString);
+            connection.Open();
 
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandType = CommandType.Text;
+            using var command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
 
-                    command.CommandText = $"SELECT * FROM Zamestnanec WHERE PrihlasovaciJmeno = @prihlasovaciJmeno";
-                    command.Parameters.AddWithValue("@prihlasovaciJmeno", login);
+            command.CommandText = $"SELECT * FROM Zamestnanec WHERE PrihlasovaciJmeno = @prihlasovaciJmeno";
+            command.Parameters.AddWithValue("@prihlasovaciJmeno", login);
 
-                    var reader = command.ExecuteReader();
+            var reader = command.ExecuteReader();
 
-                    if (!reader.HasRows)
-                        yield break;
+            if (!reader.HasRows)
+                yield break;
 
-                    while (reader.Read())
-                        yield return ConstructZadavatel(reader);
-                }
-            }
+            while (reader.Read())
+                yield return ConstructZadavatel(reader);
         }
 
         private static Zamestnanci ConstructZadavatel(IDataRecord reader)
@@ -109,27 +97,23 @@ namespace LearActionPlans.DataMappers
         {
             try
             {
-                using (var connection = new SqlConnection(ConnectionString))
-                {
-                    connection.Open();
+                using var connection = new SqlConnection(ConnectionString);
+                connection.Open();
 
-                    using (var command = connection.CreateCommand())
-                    {
-                        command.CommandType = CommandType.Text;
-                        command.CommandText = $"INSERT INTO Zamestnanec (Jmeno, Prijmeni, PrihlasovaciJmeno, OddeleniID, Email, AdminAP, StavObjektu)" +
-                            $" VALUES (@jmeno, @prijmeni, @prihlasovaciJmeno, @oddeleniId, @email, @adminAP, @stavObjektu)";
+                using var command = connection.CreateCommand();
+                command.CommandType = CommandType.Text;
+                command.CommandText = $"INSERT INTO Zamestnanec (Jmeno, Prijmeni, PrihlasovaciJmeno, OddeleniID, Email, AdminAP, StavObjektu)" +
+                                      $" VALUES (@jmeno, @prijmeni, @prihlasovaciJmeno, @oddeleniId, @email, @adminAP, @stavObjektu)";
 
-                        command.Parameters.AddWithValue("@jmeno", jmeno);
-                        command.Parameters.AddWithValue("@prijmeni", prijmeni);
-                        command.Parameters.AddWithValue("@prihlasovaciJmeno", prihlasovaciJmeno);
-                        command.Parameters.AddWithValue("@OddeleniId", oddeleniId);
-                        command.Parameters.AddWithValue("@email", email);
-                        command.Parameters.AddWithValue("@adminAP", adminAP);
-                        command.Parameters.AddWithValue("@stavObjektu", stavObjektu);
+                command.Parameters.AddWithValue("@jmeno", jmeno);
+                command.Parameters.AddWithValue("@prijmeni", prijmeni);
+                command.Parameters.AddWithValue("@prihlasovaciJmeno", prihlasovaciJmeno);
+                command.Parameters.AddWithValue("@OddeleniId", oddeleniId);
+                command.Parameters.AddWithValue("@email", email);
+                command.Parameters.AddWithValue("@adminAP", adminAP);
+                command.Parameters.AddWithValue("@stavObjektu", stavObjektu);
 
-                        command.ExecuteNonQuery();
-                    }
-                }
+                command.ExecuteNonQuery();
 
                 return true;
             }
@@ -147,33 +131,29 @@ namespace LearActionPlans.DataMappers
         {
             try
             {
-                using (var connection = new SqlConnection(ConnectionString))
-                {
-                    connection.Open();
+                using var connection = new SqlConnection(ConnectionString);
+                connection.Open();
 
-                    using (var command = connection.CreateCommand())
-                    {
-                        command.CommandText = $"UPDATE Zamestnanec SET Jmeno = @jmeno, " +
-                            $"Prijmeni = @prijmeni, " +
-                            $"PrihlasovaciJmeno = @prihlasovaciJmeno, " +
-                            $"OddeleniID = @oddeleniId, " +
-                            $"Email = @email, " +
-                            $"AdminAP = @adminAP, " +
-                            $"StavObjektu = @stavObjektu " +
-                            $"WHERE ZamestnanecID = @zamestnanecId";
+                using var command = connection.CreateCommand();
+                command.CommandText = $"UPDATE Zamestnanec SET Jmeno = @jmeno, " +
+                                      $"Prijmeni = @prijmeni, " +
+                                      $"PrihlasovaciJmeno = @prihlasovaciJmeno, " +
+                                      $"OddeleniID = @oddeleniId, " +
+                                      $"Email = @email, " +
+                                      $"AdminAP = @adminAP, " +
+                                      $"StavObjektu = @stavObjektu " +
+                                      $"WHERE ZamestnanecID = @zamestnanecId";
 
-                        command.Parameters.AddWithValue("@zamestnanecId", zamestnanecId);
-                        command.Parameters.AddWithValue("@jmeno", jmeno);
-                        command.Parameters.AddWithValue("@prijmeni", prijmeni);
-                        command.Parameters.AddWithValue("@prihlasovaciJmeno", prihlasovaciJmeno);
-                        command.Parameters.AddWithValue("@oddeleniId", oddeleniId);
-                        command.Parameters.AddWithValue("@email", email);
-                        command.Parameters.AddWithValue("@adminAP", adminAP);
-                        command.Parameters.AddWithValue("@stavObjektu", stavObjektu);
+                command.Parameters.AddWithValue("@zamestnanecId", zamestnanecId);
+                command.Parameters.AddWithValue("@jmeno", jmeno);
+                command.Parameters.AddWithValue("@prijmeni", prijmeni);
+                command.Parameters.AddWithValue("@prihlasovaciJmeno", prihlasovaciJmeno);
+                command.Parameters.AddWithValue("@oddeleniId", oddeleniId);
+                command.Parameters.AddWithValue("@email", email);
+                command.Parameters.AddWithValue("@adminAP", adminAP);
+                command.Parameters.AddWithValue("@stavObjektu", stavObjektu);
 
-                        command.ExecuteNonQuery();
-                    }
-                }
+                command.ExecuteNonQuery();
 
                 return true;
             }

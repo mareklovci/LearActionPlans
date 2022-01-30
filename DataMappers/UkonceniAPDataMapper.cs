@@ -13,32 +13,28 @@ namespace LearActionPlans.DataMappers
     public static class UkonceniAPDataMapper
     {
         private static readonly string ConnectionString =
-            ConfigurationManager.ConnectionStrings["AkcniPlanyEntity"].ConnectionString;
+            ConfigurationManager.ConnectionStrings["ActionPlansEntity"].ConnectionString;
 
         public static IEnumerable<UkonceniAP> GetUkonceniAP(int apId)
         {
-            using (var connection = new SqlConnection(ConnectionString))
+            using var connection = new SqlConnection(ConnectionString);
+            connection.Open();
+
+            using var command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+
+            command.CommandText = $"SELECT * FROM UkonceniAP WHERE AkcniPlanID = @apId ORDER BY UkonceniAPID DESC";
+            command.Parameters.AddWithValue("@apId", apId);
+
+            var reader = command.ExecuteReader();
+
+            if (reader.HasRows)
             {
-                connection.Open();
-
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandType = CommandType.Text;
-
-                    command.CommandText = $"SELECT * FROM UkonceniAP WHERE AkcniPlanID = @apId ORDER BY UkonceniAPID DESC";
-                    command.Parameters.AddWithValue("@apId", apId);
-
-                    var reader = command.ExecuteReader();
-
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                            yield return ConstructUkonceniAP(reader);
-                    }
-                    else
-                        yield break;
-                }
+                while (reader.Read())
+                    yield return ConstructUkonceniAP(reader);
             }
+            else
+                yield break;
         }
 
         private static UkonceniAP ConstructUkonceniAP(IDataRecord readerData)

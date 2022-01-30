@@ -9,27 +9,23 @@ namespace LearActionPlans.DataMappers
     public static class ProjektyDataMapper
     {
         private static readonly string ConnectionString =
-            ConfigurationManager.ConnectionStrings["ProjektyEntity"].ConnectionString;
+            ConfigurationManager.ConnectionStrings["ActionPlansEntity"].ConnectionString;
 
         public static IEnumerable<Projekty> GetProjektyAll()
         {
-            using (var connection = new SqlConnection(ConnectionString))
-            {
-                connection.Open();
+            using var connection = new SqlConnection(ConnectionString);
+            connection.Open();
 
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandType = CommandType.Text;
+            using var command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
 
-                    command.CommandText = $"SELECT * FROM Projekt";
+            command.CommandText = $"SELECT * FROM Projekt";
 
-                    var reader = command.ExecuteReader();
+            var reader = command.ExecuteReader();
 
-                    if (!reader.HasRows) yield break;
-                    while (reader.Read())
-                        yield return ConstructProjekt(reader);
-                }
-            }
+            if (!reader.HasRows) yield break;
+            while (reader.Read())
+                yield return ConstructProjekt(reader);
         }
 
         private static Projekty ConstructProjekt(IDataRecord reader)

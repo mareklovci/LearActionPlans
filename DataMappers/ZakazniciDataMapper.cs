@@ -9,27 +9,23 @@ namespace LearActionPlans.DataMappers
     public static class ZakazniciDataMapper
     {
         private static readonly string ConnectionString =
-            ConfigurationManager.ConnectionStrings["ZakazniciEntity"].ConnectionString;
+            ConfigurationManager.ConnectionStrings["ActionPlansEntity"].ConnectionString;
 
         public static IEnumerable<Zakaznici> GetZakazniciAll()
         {
-            using (var connection = new SqlConnection(ConnectionString))
-            {
-                connection.Open();
+            using var connection = new SqlConnection(ConnectionString);
+            connection.Open();
 
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandType = CommandType.Text;
+            using var command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
 
-                    command.CommandText = $"SELECT * FROM Zakaznik";
+            command.CommandText = $"SELECT * FROM Zakaznik";
 
-                    var reader = command.ExecuteReader();
+            var reader = command.ExecuteReader();
 
-                    if (!reader.HasRows) yield break;
-                    while (reader.Read())
-                        yield return ConstructZakaznik(reader);
-                }
-            }
+            if (!reader.HasRows) yield break;
+            while (reader.Read())
+                yield return ConstructZakaznik(reader);
         }
 
         private static Zakaznici ConstructZakaznik(IDataRecord reader)

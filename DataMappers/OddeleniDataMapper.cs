@@ -9,34 +9,31 @@ namespace LearActionPlans.DataMappers
     public static class OddeleniDataMapper
     {
         private static readonly string ConnectionString =
-            ConfigurationManager.ConnectionStrings["OddeleniEntity"].ConnectionString;
+            ConfigurationManager.ConnectionStrings["ActionPlansEntity"].ConnectionString;
 
         public static IEnumerable<Oddeleni> GetOddeleniAll()
         {
-            using (var connection = new SqlConnection(ConnectionString))
+            using var connection = new SqlConnection(ConnectionString);
+            connection.Open();
+
+            using var command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+
+            //command.CommandText = $"SELECT akcniPlan_Id, MAX(cisloAP) AS maxCislo FROM AkcniPlany WHERE rok = @rok GROUP BY akcniPlan_Id";
+            command.CommandText = $"SELECT * FROM Oddeleni";
+
+            var reader = command.ExecuteReader();
+
+            if (reader.HasRows)
             {
-                connection.Open();
-
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandType = CommandType.Text;
-
-                    //command.CommandText = $"SELECT akcniPlan_Id, MAX(cisloAP) AS maxCislo FROM AkcniPlany WHERE rok = @rok GROUP BY akcniPlan_Id";
-                    command.CommandText = $"SELECT * FROM Oddeleni";
-
-                    var reader = command.ExecuteReader();
-
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                            yield return ConstructOddeleniAll(reader);
-                    }
-                    else
-                    {
-                        yield return null;
-                    }
-                }
+                while (reader.Read())
+                    yield return ConstructOddeleniAll(reader);
             }
+            else
+            {
+                yield return null;
+            }
+
             //try
             //{
             //}

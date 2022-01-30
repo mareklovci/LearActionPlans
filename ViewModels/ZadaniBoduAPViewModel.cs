@@ -43,50 +43,28 @@ namespace LearActionPlans.ViewModels
             public string HodnoceniNeshody { get; set; }
             public string PopisProblemu { get; set; }
             public string SkutecnaPricinaWM { get; set; }
-            //public List<WMWS> WM { get; set; }
-            //public List<WMWS> WS { get; set; }
-        }
-
-        //public class WMWS
-        //{
-        //    public string NapravnaOpatreni { get; set; }
-        //    public int OdpovednaOsoba1 { get; set; }
-        //    public int? OdpovednaOsoba2 { get; set; }
-        //    public DateTime DatumUkonceni { get; set; }
-        //    public DateTime KontrolaEfektivnosti { get; set; }
-        //    public int OddeleniId { get; set; }
-        //    public string Priloha { get; set; }
-        //}
-
-        public ZadaniBoduAPViewModel()
-        { 
         }
 
         public static ZadaniBoduAPViewModel Zamestnanec(int id, string jmeno)
         {
-            var zadaniBoduAPViewModel = new ZadaniBoduAPViewModel
-            {
-                ZamestnanecId = id,
-                Jmeno = jmeno
-            };
+            var zadaniBoduAPViewModel = new ZadaniBoduAPViewModel {ZamestnanecId = id, Jmeno = jmeno};
 
             return zadaniBoduAPViewModel;
         }
 
         public static ZadaniBoduAPViewModel Oddeleni(int id, string nazev)
         {
-            var zadaniBoduAPViewModel = new ZadaniBoduAPViewModel
-            {
-                OddeleniId_ = id,
-                Nazev = nazev
-            };
+            var zadaniBoduAPViewModel = new ZadaniBoduAPViewModel {OddeleniId_ = id, Nazev = nazev};
 
             return zadaniBoduAPViewModel;
         }
 
-        public static ZadaniBoduAPViewModel BodyAP(int id, int idAP, int cisloBoduAP, DateTime datumZalozeni, string odkazNaNormu,
-            string hodnoceniNeshody, string popisProblemu, string skurecnaPricinaWM, string napravnaOpatreniWM, string skutecnaPricinaWS, string napravnaOpatreniWS, 
-            int odpovednaOsoba1Id, int? odpovednaOsoba2Id, int? oddeleniId, DateTime? kontrolaEfektivnosti, string priloha, bool znovuOtevrit, byte stavObjektuBodAP)
+        public static ZadaniBoduAPViewModel BodyAP(int id, int idAP, int cisloBoduAP, DateTime datumZalozeni,
+            string odkazNaNormu,
+            string hodnoceniNeshody, string popisProblemu, string skurecnaPricinaWM, string napravnaOpatreniWM,
+            string skutecnaPricinaWS, string napravnaOpatreniWS,
+            int odpovednaOsoba1Id, int? odpovednaOsoba2Id, int? oddeleniId, DateTime? kontrolaEfektivnosti,
+            string priloha, bool znovuOtevrit, byte stavObjektuBodAP)
         {
             var zadaniBoduAPViewModel = new ZadaniBoduAPViewModel
             {
@@ -116,21 +94,19 @@ namespace LearActionPlans.ViewModels
         {
             var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
 
-            var query = from z in zamestnanci
-                        where z.StavObjektu == 1
-                        orderby z.Prijmeni, z.Jmeno
-                        select Zamestnanec(z.Id, z.Prijmeni + " " + z.Jmeno);
+            var query = zamestnanci.Where(z => z.StavObjektu == 1)
+                .OrderBy(z => z.Prijmeni)
+                .ThenBy(z => z.Jmeno)
+                .Select(z => Zamestnanec(z.Id, z.Prijmeni + " " + z.Jmeno)).ToList();
 
-            if (query.Count() == 0)
+            if (!query.Any())
             {
                 yield break;
             }
-            else
+
+            foreach (var q in query)
             {
-                foreach (var q in query)
-                {
-                    yield return q;
-                }
+                yield return q;
             }
         }
 
@@ -138,28 +114,23 @@ namespace LearActionPlans.ViewModels
         {
             var oddeleni = OddeleniDataMapper.GetOddeleniAll().ToList();
 
-            if (oddeleni[0] == null || oddeleni.Count() == 0)
+            if (oddeleni[0] == null || oddeleni.Count == 0)
             {
                 yield break;
             }
 
-            var query = from o in oddeleni
-                        where o.StavObjektu == 1
-                        orderby o.Nazev
-                        select Oddeleni(o.Id, o.Nazev);
+            var query = oddeleni.Where(o => o.StavObjektu == 1)
+                .OrderBy(o => o.Nazev)
+                .Select(o => Oddeleni(o.Id, o.Nazev)).ToList();
 
-            //where o.StavObjektu == 1
-
-            if (query.Count() == 0) 
+            if (!query.Any())
             {
                 yield break;
             }
-            else
+
+            foreach (var q in query)
             {
-                foreach (var q in query)
-                {
-                    yield return q;
-                }
+                yield return q;
             }
         }
 
@@ -167,15 +138,17 @@ namespace LearActionPlans.ViewModels
         {
             var bodyAP = BodAPDataMapper.GetBodId(idBodAP).ToList();
 
-            if (bodyAP == null || bodyAP.Count() == 0)
+            if (bodyAP.Count == 0)
             {
                 yield break;
             }
 
             var query = from b in bodyAP
-                        select BodyAP(b.Id, b.AkcniPlanId, b.CisloBoduAP, b.DatumZalozeni, b.OdkazNaNormu, b.HodnoceniNeshody, b.PopisProblemu, 
-                        b.SkutecnaPricinaWM, b.NapravnaOpatreniWM, b.SkutecnaPricinaWS, b.NapravnaOpatreniWS, 
-                        b.OdpovednaOsoba1Id, b.OdpovednaOsoba2Id, b.OddeleniId, b.KontrolaEfektivnosti, b.Priloha, b.ZnovuOtevrit, b.StavObjektu);
+                select BodyAP(b.Id, b.AkcniPlanId, b.CisloBoduAP, b.DatumZalozeni, b.OdkazNaNormu, b.HodnoceniNeshody,
+                    b.PopisProblemu,
+                    b.SkutecnaPricinaWM, b.NapravnaOpatreniWM, b.SkutecnaPricinaWS, b.NapravnaOpatreniWS,
+                    b.OdpovednaOsoba1Id, b.OdpovednaOsoba2Id, b.OddeleniId, b.KontrolaEfektivnosti, b.Priloha,
+                    b.ZnovuOtevrit, b.StavObjektu);
 
             foreach (var q in query)
             {

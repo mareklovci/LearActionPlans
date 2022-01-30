@@ -148,14 +148,14 @@ namespace LearActionPlans.ViewModels
             }
         }
 
-        public static IEnumerable<NovyAkcniPlanViewModel> GetProjekty()
+        public static IEnumerable<NewActionPlanViewModel> GetProjekty()
         {
             var projekty = ProjektyDataMapper.GetProjektyAll().ToList();
 
             var query = from p in projekty
                         where p.StavObjektu == 1
                         orderby p.Nazev
-                        select NovyAkcniPlanViewModel.Projekt(p.Id, p.Nazev);
+                        select NewActionPlanViewModel.Project(p.Id, p.Nazev);
 
             if (query.Count() == 0)
             {

@@ -26,19 +26,16 @@ namespace LearActionPlans.ViewModels
         {
             var zadavatel = ZamestnanciDataMapper.GetZadavatelLogin(login).ToList();
 
-            var query = from z in zadavatel
-                        select Zadavatel(z.Id, z.PrihlasovaciJmeno, z.AdminAP);
+            var query = zadavatel.Select(z => Zadavatel(z.Id, z.PrihlasovaciJmeno, z.AdminAP)).ToList();
 
-            if (query.Count() == 0)
+            if (!query.Any())
             {
                 yield break;
             }
-            else
+
+            foreach (var q in query)
             {
-                foreach (var q in query)
-                {
-                    yield return q;
-                }
+                yield return q;
             }
         }
     }

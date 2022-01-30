@@ -86,11 +86,9 @@ namespace LearActionPlans.ViewModels
                             on ap.ZakaznikId equals zak.Id into gZak
                         from subZak in gZak.DefaultIfEmpty()
                         where ap.StavObjektu == 1
-                        orderby ap.DatumZalozeni.Year ascending, ap.CisloAP ascending
+                        orderby ap.DatumZalozeni.Year, ap.CisloAP
                         select new PrehledAPViewModel(ap.Id, ap.DatumZalozeni, ap.CisloAP, ap.Zadavatel1Id, ap?.Zadavatel2Id, subZam.Prijmeni + " " + subZam.Jmeno, ap.Tema, ap?.ProjektId,
                             subPro?.Nazev ?? string.Empty, ap.ZakaznikId, subZak.Nazev, ap.TypAP, ap.StavObjektu, ap.UzavreniAP);
-
-            //where z.Storno = false
 
             foreach (var q in query)
             {
@@ -111,16 +109,13 @@ namespace LearActionPlans.ViewModels
             }
         }
 
-        public PrehledAPViewModel(int bodAPId)
-        {
-            this.BodAPId = bodAPId;
-        }
+        public PrehledAPViewModel(int bodAPId) => this.BodAPId = bodAPId;
 
         public static IEnumerable<PrehledAPViewModel> GetBodyAPId(int idAP)
         {
             var bodyAP = BodAPDataMapper.GetBodyIdAP(idAP).ToList();
 
-            if (bodyAP == null || bodyAP.Count() == 0)
+            if (!bodyAP.Any())
             {
                 yield break;
             }
@@ -133,24 +128,5 @@ namespace LearActionPlans.ViewModels
                 yield return q;
             }
         }
-
-        //public static IEnumerable<PrehledAPViewModel> GetAkceBodId(int idBody)
-        //{
-        //    var akce = BodAPDataMapper.GetAkceBodyId(idBody).ToList();
-
-        //    if (akce == null || akce.Count() == 0)
-        //    {
-        //        yield break;
-        //    }
-
-        //    var query = from a in akce
-        //                where a.StavObjektuAkce == 1
-        //                select new PrehledAPViewModel(a.Id, a.OdpovednaOsoba1Id, a.OdpovednaOsoba2Id);
-
-        //    foreach (var q in query)
-        //    {
-        //        yield return q;
-        //    }
-        //}
     }
 }

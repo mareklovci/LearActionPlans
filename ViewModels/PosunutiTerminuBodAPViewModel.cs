@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
 using LearActionPlans.DataMappers;
 
 namespace LearActionPlans.ViewModels
@@ -65,19 +63,17 @@ namespace LearActionPlans.ViewModels
         {
             var ukonceni = UkonceniBodAPDataMapper.GetUkonceniBodAPId(bodAPId).ToList();
 
-            var query = from u in ukonceni
-                        select UkonceniBodAP(u.Id, u.BodAPId, u.DatumUkonceni, u.Poznamka, u.Odpoved, u.StavZadosti, u.StavObjektuUkonceni);
+            var query = ukonceni.Select(u => UkonceniBodAP(u.Id, u.BodAPId, u.DatumUkonceni, u.Poznamka, u.Odpoved,
+                u.StavZadosti, u.StavObjektuUkonceni)).ToList();
 
-            if (query.Count() == 0)
+            if (!query.Any())
             {
                 yield break;
             }
-            else
+
+            foreach (var q in query)
             {
-                foreach (var q in query)
-                {
-                    yield return q;
-                }
+                yield return q;
             }
         }
 
@@ -85,19 +81,16 @@ namespace LearActionPlans.ViewModels
         {
             var bodAP = BodAPDataMapper.GetZbyvajiciTerminyBodAPId(bodAPId).ToList();
 
-            var query = from b in bodAP
-                        select ZbyvajiciTerminy(b.Id, b.ZamitnutiTerminu, b.ZmenaTerminu);
+            var query = bodAP.Select(b => ZbyvajiciTerminy(b.Id, b.ZamitnutiTerminu, b.ZmenaTerminu)).ToList();
 
-            if (query.Count() == 0)
+            if (!query.Any())
             {
                 yield break;
             }
-            else
+
+            foreach (var q in query)
             {
-                foreach (var q in query)
-                {
-                    yield return q;
-                }
+                yield return q;
             }
         }
 
@@ -105,20 +98,17 @@ namespace LearActionPlans.ViewModels
         {
             var ukonceni = UkonceniBodAPDataMapper.GetUkonceniBodAPId(bodAPId).ToList();
 
-            var query = from u in ukonceni
-                        where u.BodAPId == bodAPId && u.StavZadosti == 1
-                        select ZavritPrvniTermin(u.Id);
+            var query = ukonceni.Where(u => u.BodAPId == bodAPId && u.StavZadosti == 1)
+                .Select(u => ZavritPrvniTermin(u.Id)).ToList();
 
-            if (query.Count() == 0)
+            if (!query.Any())
             {
                 yield break;
             }
-            else
+
+            foreach (var q in query)
             {
-                foreach (var q in query)
-                {
-                    yield return q;
-                }
+                yield return q;
             }
         }
     }

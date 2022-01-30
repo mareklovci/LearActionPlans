@@ -63,7 +63,7 @@ namespace LearActionPlans.Views
         private void FormNovyAkcniPlan_Load(object sender, EventArgs e)
         {
             //tady zjistím poslední obsazené číslo Akčního plánu
-            this.posledniCisloAP = NovyAkcniPlanViewModel.GetPosledniCisloAP(DateTime.Now.Year);
+            this.posledniCisloAP = NewActionPlanViewModel.GetLastActionPlanNumber(DateTime.Now.Year);
             //když bude posledniCisloAP = -1, došlo k problému při práci s databází a zadání AP se ukončí
             if (this.posledniCisloAP == -1)
             {
@@ -88,7 +88,7 @@ namespace LearActionPlans.Views
                 this.ComboBoxZadavatel1.Enabled = true;
                 this.ComboBoxZadavatel2.Enabled = true;
             }
-                        
+
             if (this.NaplnitComboBoxProjekty() == false)
             {
                 this.ComboBoxProjekty.Enabled = false;
@@ -101,7 +101,7 @@ namespace LearActionPlans.Views
             {
                 this.ComboBoxProjekty.Enabled = true;
             }
-                        
+
             if (this.NaplnitComboBoxZakaznici() == false)
             {
                 this.ComboBoxZakaznici.Enabled = false;
@@ -164,7 +164,7 @@ namespace LearActionPlans.Views
 
         private bool NaplnitComboBoxZamestnanec1a2()
         {
-            var zamestnanci = NovyAkcniPlanViewModel.GetZamestnanci().ToList();
+            var zamestnanci = NewActionPlanViewModel.GetEmployees().ToList();
 
             if (zamestnanci.Count == 0)
             {
@@ -184,8 +184,8 @@ namespace LearActionPlans.Views
 
                 foreach (var z in zamestnanci)
                 {
-                    zam1.Add(new Zam(z.Jmeno, z.ZamestnanecId));
-                    zam2.Add(new Zam(z.Jmeno, z.ZamestnanecId));
+                    zam1.Add(new Zam(z.EmployeeName, z.EmployeeId));
+                    zam2.Add(new Zam(z.EmployeeName, z.EmployeeId));
                 }
 
                 this.ComboBoxZadavatel1.DataSource = zam1;
@@ -214,7 +214,7 @@ namespace LearActionPlans.Views
 
         private bool NaplnitComboBoxProjekty()
         {
-            var projekty = NovyAkcniPlanViewModel.GetProjekty().ToList();
+            var projekty = NewActionPlanViewModel.GetProjects().ToList();
 
             if (projekty.Count == 0)
             {
@@ -228,7 +228,7 @@ namespace LearActionPlans.Views
                 };
                 foreach (var p in projekty)
                 {
-                    proj.Add(new Proj(p.NazevProjektu, p.ProjektId));
+                    proj.Add(new Proj(p.ProjectName, p.ProjectId));
                 }
 
                 this.ComboBoxProjekty.DataSource = proj;
@@ -253,7 +253,7 @@ namespace LearActionPlans.Views
 
         private bool NaplnitComboBoxZakaznici()
         {
-            var zakaznici = NovyAkcniPlanViewModel.GetZakaznici().ToList();
+            var zakaznici = NewActionPlanViewModel.GetCustomers().ToList();
 
             if (zakaznici.Count == 0)
             {
@@ -268,7 +268,7 @@ namespace LearActionPlans.Views
                 //new Zak() { NazevZakaznika = "(choose a customer)", ZakaznikId = 0 }
                 foreach (var z in zakaznici)
                 {
-                    zak.Add(new Zak(z.NazevZakaznika, z.ZakaznikId));
+                    zak.Add(new Zak(z.CustomerName, z.CustomerId));
                 }
                 //zak.Add(new Zak() { NazevZakaznika = z.NazevZakaznika, ZakaznikId = z.ZakaznikId });
                 this.ComboBoxZakaznici.DataSource = zak;
@@ -341,7 +341,7 @@ namespace LearActionPlans.Views
                 this.akcniPlan.Tema = this.TextBoxTema.Text;
                 this.temaPovoleno = true;
             }
-                
+
             // kontrola, jestli mohu zaktivnit talčítko pro uložení AP
             if (this.zadavatel1Povolen == true && this.temaPovoleno == true && this.datumUkonceniPovolen == true && this.zakaznikPovolen == true)
             {

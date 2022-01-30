@@ -12,7 +12,8 @@ namespace LearActionPlans.ViewModels
         public int AkcniPlanId { get; set; }
         public byte ZmenaTerminu { get; set; }
         public byte ZnovuOtevrit { get; set; }
-        public string DuvodZnovuotevreni{ get; set; }
+        public string DuvodZnovuotevreni { get; set; }
+
         public DateTime? UzavreniAP { get; set; }
         //End Akční plán
 
@@ -20,6 +21,7 @@ namespace LearActionPlans.ViewModels
         public int UkonceniAPId { get; set; }
         public int APId { get; set; }
         public DateTime DatumUkonceni { get; set; }
+
         public string Poznamka { get; set; }
         //End UkonceniAP
 
@@ -27,88 +29,54 @@ namespace LearActionPlans.ViewModels
         public DateTime? KontrolaEfektivnosti { get; set; }
         //End Akce
 
-        //Start Ukončení akce
-        //public int UkonceniAkceId { get; set; }
-        
-        //public int AkceId { get; set; }
-
-        //public DateTime DatumUkonceni { get; set; }
-        //public byte StavZadosti { get; set; }
-        //End Ukončení akce
-
-
-        //public int IdBodAP { get; set; }
-        //public int IdAP  { get; set; }
-        //public byte StavObjektuBodAP  { get; set; }
-
         //Start Zaměstnanci
         public int ZamestnanecId { get; set; }
         public string Jmeno { get; set; }
+
         public string Prijmeni { get; set; }
         //End Zaměstannci
 
         //Start Projekty
         public int ProjektId { get; set; }
         public string NazevProjektu { get; set; }
+
         public bool StornoProjektu { get; set; }
         //End Projekty
 
         //Start Zákazníci
         public int ZakaznikId { get; set; }
         public string NazevZakaznika { get; set; }
+
         public bool StornoZakaznika { get; set; }
         //End Zákazníci
 
         public static EditAPViewModel Zamestnanec(int zamestnanecId, string jmeno)
         {
-            var editAPViewModel = new EditAPViewModel
-            {
-                ZamestnanecId = zamestnanecId,
-                Jmeno = jmeno
-            };
-            //ZamestnanecId = zamestnanecId;
-            //Jmeno = jmeno;
+            var editAPViewModel = new EditAPViewModel {ZamestnanecId = zamestnanecId, Jmeno = jmeno};
             return editAPViewModel;
         }
 
         public static EditAPViewModel Projekt(int projektId, string nazev)
         {
-            var editAPViewModel = new EditAPViewModel
-            {
-                ProjektId = projektId,
-                NazevProjektu = nazev
-            };
-            //ProjektId = projektId;
-            //NazevProjektu = nazev;
-            //StornoProjektu = storno;
+            var editAPViewModel = new EditAPViewModel {ProjektId = projektId, NazevProjektu = nazev};
             return editAPViewModel;
         }
 
         public static EditAPViewModel Zakaznik(int zakaznikId, string nazev)
         {
-            var editAPViewModel = new EditAPViewModel
-            {
-                ZakaznikId = zakaznikId,
-                NazevZakaznika = nazev
-            };
-            //ZakaznikId = zakazniktId;
-            //NazevZakaznika = nazev;
-            //StornoZakaznika = storno;
+            var editAPViewModel = new EditAPViewModel {ZakaznikId = zakaznikId, NazevZakaznika = nazev};
             return editAPViewModel;
         }
 
         public static EditAPViewModel ZmenaTerminuAP(int akcniPlanId, byte zmenaTerminu)
         {
-            var editAPViewModel = new EditAPViewModel
-            {
-                AkcniPlanId = akcniPlanId,
-                ZmenaTerminu = zmenaTerminu
-            };
+            var editAPViewModel = new EditAPViewModel {AkcniPlanId = akcniPlanId, ZmenaTerminu = zmenaTerminu};
 
             return editAPViewModel;
         }
 
-        public static EditAPViewModel ZnovuOtevritAP(int akcniPlanId, byte znovuOtevrit, DateTime? uzavreniAP, string duvod)
+        public static EditAPViewModel ZnovuOtevritAP(int akcniPlanId, byte znovuOtevrit, DateTime? uzavreniAP,
+            string duvod)
         {
             var editAPViewModel = new EditAPViewModel
             {
@@ -125,10 +93,7 @@ namespace LearActionPlans.ViewModels
         {
             var editAPViewModel = new EditAPViewModel
             {
-                UkonceniAPId = id,
-                AkcniPlanId = akcniPlanId,
-                DatumUkonceni = datumUkonceni,
-                Poznamka = poznamka
+                UkonceniAPId = id, AkcniPlanId = akcniPlanId, DatumUkonceni = datumUkonceni, Poznamka = poznamka
             };
 
             return editAPViewModel;
@@ -138,22 +103,17 @@ namespace LearActionPlans.ViewModels
         {
             var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
 
-            var query = from z in zamestnanci
-                        where z.Id == id
-                        select Zamestnanec(z.Id, z.Prijmeni + " " + z.Jmeno);
+            var query = zamestnanci.Where(z => z.Id == id).Select(z => Zamestnanec(z.Id, z.Prijmeni + " " + z.Jmeno))
+                .ToList();
 
-            //where z.JeZamestnanec == true && z.Storno == false
-
-            if (query.Count() == 0)
+            if (!query.Any())
             {
                 yield break;
             }
-            else
+
+            foreach (var q in query)
             {
-                foreach (var q in query)
-                {
-                    yield return q;
-                }
+                yield return q;
             }
         }
 
@@ -161,22 +121,18 @@ namespace LearActionPlans.ViewModels
         {
             var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
 
-            var query = from z in zamestnanci
-                        orderby z.Prijmeni, z.Jmeno
-                        select Zamestnanec(z.Id, z.Prijmeni + " " + z.Jmeno);
+            var query = zamestnanci.OrderBy(z => z.Prijmeni)
+                .ThenBy(z => z.Jmeno)
+                .Select(z => Zamestnanec(z.Id, z.Prijmeni + " " + z.Jmeno)).ToList();
 
-            //where z.JeZamestnanec == true && z.Storno == false
-
-            if (query.Count() == 0)
+            if (!query.Any())
             {
                 yield break;
             }
-            else
+
+            foreach (var q in query)
             {
-                foreach (var q in query)
-                {
-                    yield return q;
-                }
+                yield return q;
             }
         }
 
@@ -184,20 +140,16 @@ namespace LearActionPlans.ViewModels
         {
             var projekty = ProjektyDataMapper.GetProjektyAll().ToList();
 
-            var query = from p in projekty
-                        where p.Id == id
-                        select Projekt(p.Id, p.Nazev);
+            var query = projekty.Where(p => p.Id == id).Select(p => Projekt(p.Id, p.Nazev)).ToList();
 
-            if (query.Count() == 0)
+            if (!query.Any())
             {
                 yield break;
             }
-            else
+
+            foreach (var q in query)
             {
-                foreach (var q in query)
-                {
-                    yield return q;
-                }
+                yield return q;
             }
         }
 
@@ -205,42 +157,33 @@ namespace LearActionPlans.ViewModels
         {
             var projekty = ProjektyDataMapper.GetProjektyAll().ToList();
 
-            var query = from p in projekty
-                        orderby p.Nazev
-                        select Projekt(p.Id, p.Nazev);
+            var query = projekty.OrderBy(p => p.Nazev).Select(p => Projekt(p.Id, p.Nazev)).ToList();
 
-            //where p.Storno == false
-
-            if (query.Count() == 0)
+            if (!query.Any())
             {
                 yield break;
             }
-            else
+
+            foreach (var q in query)
             {
-                foreach (var q in query)
-                {
-                    yield return q;
-                }
+                yield return q;
             }
         }
+
         public static IEnumerable<EditAPViewModel> GetZakaznikId(int id)
         {
             var zakaznici = ZakazniciDataMapper.GetZakazniciAll().ToList();
 
-            var query = from z in zakaznici
-                        where z.Id == id
-                        select Zakaznik(z.Id, z.Nazev);
+            var query = zakaznici.Where(z => z.Id == id).Select(z => Zakaznik(z.Id, z.Nazev)).ToList();
 
-            if (query.Count() == 0)
+            if (!query.Any())
             {
                 yield break;
             }
-            else
+
+            foreach (var q in query)
             {
-                foreach (var q in query)
-                {
-                    yield return q;
-                }
+                yield return q;
             }
         }
 
@@ -248,52 +191,35 @@ namespace LearActionPlans.ViewModels
         {
             var zakaznici = ZakazniciDataMapper.GetZakazniciAll().ToList();
 
-            var query = from z in zakaznici
-                        orderby z.Nazev
-                        select Zakaznik(z.Id, z.Nazev);
+            var query = zakaznici.OrderBy(z => z.Nazev).Select(z => Zakaznik(z.Id, z.Nazev)).ToList();
 
-            if (query.Count() == 0)
+            if (!query.Any())
             {
                 yield break;
             }
-            else
+
+            foreach (var q in query)
             {
-                foreach (var q in query)
-                {
-                    yield return q;
-                }
+                yield return q;
             }
         }
 
         public static EditAPViewModel UkonceniAkce(DateTime? kontrolaEfektivnosti)
         {
-            var editAPViewModel = new EditAPViewModel
-            {
-                KontrolaEfektivnosti = kontrolaEfektivnosti
-            };
+            var editAPViewModel = new EditAPViewModel {KontrolaEfektivnosti = kontrolaEfektivnosti};
             return editAPViewModel;
         }
-
-        //public static EditAPViewModel Akce(int akceId)
-        //{
-        //    var editAPViewModel = new EditAPViewModel
-        //    {
-        //        AkceId = akceId
-        //    };
-        //    return editAPViewModel;
-        //}
 
         public static IEnumerable<EditAPViewModel> GetUkonceniAkce(int idAP)
         {
             var uzavreneAkce = UkonceniBodAPDataMapper.GetUkonceniAkceAll(idAP).ToList();
 
-            if (uzavreneAkce.Count() == 0)
+            if (!uzavreneAkce.Any())
             {
                 yield break;
             }
 
-            var query = from ua in uzavreneAkce
-                         select UkonceniAkce(ua.KontrolaEfektivnosti);
+            var query = uzavreneAkce.Select(ua => UkonceniAkce(ua.KontrolaEfektivnosti));
 
             foreach (var q in query)
             {
@@ -305,13 +231,12 @@ namespace LearActionPlans.ViewModels
         {
             var terminy = AkcniPlanyDataMapper.GetPocetTerminuAP(idAP).ToList();
 
-            if (terminy.Count() == 0)
+            if (!terminy.Any())
             {
                 yield break;
             }
 
-            var query = from t in terminy
-                        select ZmenaTerminuAP(t.Id, t.ZmenaTerminu);
+            var query = terminy.Select(t => ZmenaTerminuAP(t.Id, t.ZmenaTerminu));
 
             foreach (var q in query)
             {
@@ -323,13 +248,12 @@ namespace LearActionPlans.ViewModels
         {
             var datumUkonceni = UkonceniAPDataMapper.GetUkonceniAP(idAP).ToList();
 
-            if (datumUkonceni.Count() == 0)
+            if (!datumUkonceni.Any())
             {
                 yield break;
             }
 
-            var query = from du in datumUkonceni
-                        select DatumUkonceniAP(du.Id, du.APId, du.DatumUkonceni, du.Poznamka);
+            var query = datumUkonceni.Select(du => DatumUkonceniAP(du.Id, du.APId, du.DatumUkonceni, du.Poznamka));
 
             foreach (var q in query)
             {
@@ -341,13 +265,13 @@ namespace LearActionPlans.ViewModels
         {
             var znovuOtevrit = AkcniPlanyDataMapper.GetZnovuOtevritAP(idAP).ToList();
 
-            if (znovuOtevrit.Count() == 0)
+            if (!znovuOtevrit.Any())
             {
                 yield break;
             }
 
-            var query = from zo in znovuOtevrit
-                        select ZnovuOtevritAP(zo.Id, zo.ZnovuOtevrit, zo.UzavreniAP, zo.DuvodZnovuotevreni);
+            var query = znovuOtevrit.Select(zo =>
+                ZnovuOtevritAP(zo.Id, zo.ZnovuOtevrit, zo.UzavreniAP, zo.DuvodZnovuotevreni));
 
             foreach (var q in query)
             {

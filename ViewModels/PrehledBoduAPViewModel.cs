@@ -47,9 +47,9 @@ namespace LearActionPlans.ViewModels
         public byte StavObjektuUkonceni { get; set; }
 
         public static PrehledBoduAPViewModel BodyAP(int id, int idAP, int cisloBoduAP, DateTime datumZalozeni, string odkazNaNormu,
-            string hodnoceniNeshody, string popisProblemu, 
+            string hodnoceniNeshody, string popisProblemu,
             string skutecnaPricinaWM, string napravnaOpatreniWM, string skutecnaPricinaWS, string napravnaOpatreniWS,
-            int odpovednaOsoba1Id, int? odpovednaOsoba2Id, string odpovednaOsoba1, DateTime? kontrolaEfektivnosti, int? oddeleniId, string oddeleni, string priloha, 
+            int odpovednaOsoba1Id, int? odpovednaOsoba2Id, string odpovednaOsoba1, DateTime? kontrolaEfektivnosti, int? oddeleniId, string oddeleni, string priloha,
             byte zamitnutiTerminu, byte zmenaTerminu, bool znovuOtevrit, byte stavObjektuBodAP)
         {
             var prehledBoduAPViewModel = new PrehledBoduAPViewModel
@@ -113,7 +113,7 @@ namespace LearActionPlans.ViewModels
             var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
             var oddeleni = OddeleniDataMapper.GetOddeleniAll();
 
-            if (bodyAP == null || bodyAP.Count() == 0)
+            if (!bodyAP.Any())
             {
                 yield break;
             }
@@ -126,9 +126,9 @@ namespace LearActionPlans.ViewModels
                             on b.OddeleniId equals odd.Id into gOdd
                         from subOdd in gOdd.DefaultIfEmpty()
                         orderby b.CisloBoduAP
-                        select BodyAP(b.Id, b.AkcniPlanId, b.CisloBoduAP, b.DatumZalozeni, b.OdkazNaNormu, b.HodnoceniNeshody, b.PopisProblemu, 
-                        b.SkutecnaPricinaWM, b.NapravnaOpatreniWM, b.SkutecnaPricinaWS, b.NapravnaOpatreniWS, 
-                        b.OdpovednaOsoba1Id, b.OdpovednaOsoba2Id, subZam.Prijmeni + " " + subZam.Jmeno, b.KontrolaEfektivnosti, b.OddeleniId, subOdd.Nazev, b.Priloha, 
+                        select BodyAP(b.Id, b.AkcniPlanId, b.CisloBoduAP, b.DatumZalozeni, b.OdkazNaNormu, b.HodnoceniNeshody, b.PopisProblemu,
+                        b.SkutecnaPricinaWM, b.NapravnaOpatreniWM, b.SkutecnaPricinaWS, b.NapravnaOpatreniWS,
+                        b.OdpovednaOsoba1Id, b.OdpovednaOsoba2Id, subZam.Prijmeni + " " + subZam.Jmeno, b.KontrolaEfektivnosti, b.OddeleniId, subOdd.Nazev, b.Priloha,
                         b.ZamitnutiTerminu, b.ZmenaTerminu, b.ZnovuOtevrit, b.StavObjektu);
 
             foreach (var q in query)
@@ -141,7 +141,7 @@ namespace LearActionPlans.ViewModels
         {
             var ukonceniBodAP = BodAPDataMapper.GetUkonceniBodAP(bodAPId).ToList();
 
-            if (ukonceniBodAP == null || ukonceniBodAP.Count() == 0)
+            if (!ukonceniBodAP.Any())
             {
                 yield break;
             }
@@ -157,31 +157,11 @@ namespace LearActionPlans.ViewModels
             }
         }
 
-        //public static IEnumerable<PrehledBoduAPViewModel> GetUkonceniBodAPId(int bodAPId)
-        //{
-        //    var ukonceniBodAP = BodAPDataMapper.GetUkonceniBodAP(bodAPId).ToList();
-
-        //    if (ukonceniBodAP == null || ukonceniBodAP.Count() == 0)
-        //    {
-        //        yield break;
-        //    }
-
-        //    var query = from u in ukonceniBodAP
-        //                where u.BodAPId == bodAPId
-        //                orderby u.Id descending
-        //                select UkonceniBodAP(u.Id, u.BodAPId, u.DatumUkonceni, u.Poznamka, u.Odpoved, u.StavZadosti, u.StavObjektuUkonceni);
-
-        //    foreach (var q in query)
-        //    {
-        //        yield return q;
-        //    }
-        //}
-
         public static IEnumerable<PrehledBoduAPViewModel> GetUkonceniAPId(int idAP)
         {
             var ukonceniAP = UkonceniAPDataMapper.GetUkonceniAP(idAP).ToList();
 
-            if (ukonceniAP == null || ukonceniAP.Count() == 0)
+            if (!ukonceniAP.Any())
             {
                 yield break;
             }

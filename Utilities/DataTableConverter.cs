@@ -16,9 +16,13 @@ namespace LearActionPlans.Utilities
                 var prop = props[i];
                 if (prop.PropertyType.IsGenericType &&
                     prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                {
                     table.Columns.Add(prop.Name, prop.PropertyType.GetGenericArguments()[0]);
+                }
                 else
+                {
                     table.Columns.Add(prop.Name, prop.PropertyType);
+                }
             }
 
             var values = new object[props.Count];

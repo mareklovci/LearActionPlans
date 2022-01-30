@@ -48,103 +48,106 @@ namespace LearActionPlans.Views
 
         public FormNovyAkcniPlan()
         {
-            InitializeComponent();
-            ulozeniDat = false;
+            this.InitializeComponent();
+            this.ulozeniDat = false;
 
-            akcniPlan = new AkcniPlanTmp();
-            zadavatel1Povolen = false;
-            temaPovoleno = false;
-            datumUkonceniPovolen = false;
-            zakaznikPovolen = false;
+            this.akcniPlan = new AkcniPlanTmp();
+            this.zadavatel1Povolen = false;
+            this.temaPovoleno = false;
+            this.datumUkonceniPovolen = false;
+            this.zakaznikPovolen = false;
 
-            ButtonUlozit.Enabled = false;
+            this.ButtonUlozit.Enabled = false;
         }
 
         private void FormNovyAkcniPlan_Load(object sender, EventArgs e)
         {
             //tady zjistím poslední obsazené číslo Akčního plánu
-            posledniCisloAP = NovyAkcniPlanViewModel.GetPosledniCisloAP(DateTime.Now.Year);
+            this.posledniCisloAP = NovyAkcniPlanViewModel.GetPosledniCisloAP(DateTime.Now.Year);
             //když bude posledniCisloAP = -1, došlo k problému při práci s databází a zadání AP se ukončí
-            if (posledniCisloAP == -1)
-                Close();
-            //posledniCisloAP++;
-            labelCisloAPVygenerovat.Text = posledniCisloAP.ToString("D3") + " / " + DateTime.Now.Year.ToString();
-            akcniPlan.CisloAPRok = labelCisloAPVygenerovat.Text;
-
-            if (NaplnitComboBoxZamestnanec1a2() == false)
+            if (this.posledniCisloAP == -1)
             {
-                ComboBoxZadavatel1.Enabled = false;
-                ComboBoxZadavatel2.Enabled = false;
+                this.Close();
+            }
+
+            //posledniCisloAP++;
+            this.labelCisloAPVygenerovat.Text = this.posledniCisloAP.ToString("D3") + " / " + DateTime.Now.Year.ToString();
+            this.akcniPlan.CisloAPRok = this.labelCisloAPVygenerovat.Text;
+
+            if (this.NaplnitComboBoxZamestnanec1a2() == false)
+            {
+                this.ComboBoxZadavatel1.Enabled = false;
+                this.ComboBoxZadavatel2.Enabled = false;
                 //Nejsou dostupní žádní zaměstnanci.
                 //Zadání nového Akčního plánu bude ukončeno.
                 MessageBox.Show("No employees available." + (char)10 + "Entering a new Action plan will be completed.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Close();
+                this.Close();
             }
             else
             {
-                ComboBoxZadavatel1.Enabled = true;
-                ComboBoxZadavatel2.Enabled = true;
+                this.ComboBoxZadavatel1.Enabled = true;
+                this.ComboBoxZadavatel2.Enabled = true;
             }
                         
-            if (NaplnitComboBoxProjekty() == false)
+            if (this.NaplnitComboBoxProjekty() == false)
             {
-                ComboBoxProjekty.Enabled = false;
+                this.ComboBoxProjekty.Enabled = false;
                 //Nejsou dostupné žádné projekty.
                 //Zadání nového Akčního plánu bude ukončeno.
                 MessageBox.Show("No projects available." + (char)10 + "Entering a new Action plan will be completed.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Close();
+                this.Close();
             }
             else
             {
-                ComboBoxProjekty.Enabled = true;
+                this.ComboBoxProjekty.Enabled = true;
             }
                         
-            if (NaplnitComboBoxZakaznici() == false)
+            if (this.NaplnitComboBoxZakaznici() == false)
             {
-                ComboBoxZakaznici.Enabled = false;
+                this.ComboBoxZakaznici.Enabled = false;
                 //Nejsou dostupní žádní zákazníci.
                 //Zadání nového Akčního plánu bude ukončeno.
                 MessageBox.Show("No customers available." + (char)10 + "Entering a new Action plan will be completed.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Close();
+                this.Close();
             }
             else
             {
-                ComboBoxZakaznici.Enabled = true;
+                this.ComboBoxZakaznici.Enabled = true;
             }
 
             //tady se vytvoří event handlery
-            ComboBoxZadavatel1.SelectedIndexChanged +=
-            new System.EventHandler(ComboBoxZadavatel1_SelectedIndexChanged);
+            this.ComboBoxZadavatel1.SelectedIndexChanged +=
+            new EventHandler(this.ComboBoxZadavatel1_SelectedIndexChanged);
 
-            ComboBoxZadavatel2.SelectedIndexChanged +=
-            new System.EventHandler(ComboBoxZadavatel2_SelectedIndexChanged);
+            this.ComboBoxZadavatel2.SelectedIndexChanged +=
+            new EventHandler(this.ComboBoxZadavatel2_SelectedIndexChanged);
 
-            TextBoxTema.TextChanged +=
-            new System.EventHandler(TextBoxTema_TextChanged);
+            this.TextBoxTema.TextChanged +=
+            new EventHandler(this.TextBoxTema_TextChanged);
 
-            ComboBoxProjekty.SelectedIndexChanged +=
-            new System.EventHandler(ComboBoxProjekty_SelectedIndexChanged);
-            
-            DateTimePickerDatumUkonceni.ValueChanged +=
-            new System.EventHandler(DateTimePickerDatumUkonceni_ValueChanged);
+            this.ComboBoxProjekty.SelectedIndexChanged +=
+            new EventHandler(this.ComboBoxProjekty_SelectedIndexChanged);
 
-            ComboBoxZakaznici.SelectedIndexChanged +=
-            new System.EventHandler(ComboBoxZakaznici_SelectedIndexChanged);
+            this.DateTimePickerDatumUkonceni.ValueChanged +=
+            new EventHandler(this.DateTimePickerDatumUkonceni_ValueChanged);
 
-            RadioButtonAudity.CheckedChanged +=
-            new System.EventHandler(RadioButtonAudity_CheckedChanged);
+            this.ComboBoxZakaznici.SelectedIndexChanged +=
+            new EventHandler(this.ComboBoxZakaznici_SelectedIndexChanged);
 
-            RadioButtonOstatni.CheckedChanged +=
-            new System.EventHandler(RadioButtonOstatni_CheckedChanged);
+            this.RadioButtonAudity.CheckedChanged +=
+            new EventHandler(this.RadioButtonAudity_CheckedChanged);
 
-            akcniPlan.DatumUkonceni = DateTimePickerDatumUkonceni.Value;
+            this.RadioButtonOstatni.CheckedChanged +=
+            new EventHandler(this.RadioButtonOstatni_CheckedChanged);
 
-            RadioButtonAudity.Checked = true;
-            RadioButtonOstatni.Checked = false;
+            this.akcniPlan.DatumUkonceni = this.DateTimePickerDatumUkonceni.Value;
 
-            akcniPlan.TypAP = 1;
+            this.RadioButtonAudity.Checked = true;
+            this.RadioButtonOstatni.Checked = false;
 
-            datumUkonceniPovolen = true;
+            this.akcniPlan.TypAP = 1;
+
+            this.datumUkonceniPovolen = true;
         }
 
         private class Zam
@@ -154,8 +157,8 @@ namespace LearActionPlans.Views
 
             public Zam(string jmeno, int zamestnanecId)
             {
-                Jmeno = jmeno;
-                ZamestnanecId = zamestnanecId;
+                this.Jmeno = jmeno;
+                this.ZamestnanecId = zamestnanecId;
             }
         }
 
@@ -169,12 +172,12 @@ namespace LearActionPlans.Views
             }
             else
             {
-                List<Zam> zam1 = new List<Zam>
+                var zam1 = new List<Zam>
                 {
                     new Zam("(select employee)", 0)
                 };
 
-                List<Zam> zam2 = new List<Zam>
+                var zam2 = new List<Zam>
                 {
                     new Zam("(select employee)", 0)
                 };
@@ -184,14 +187,15 @@ namespace LearActionPlans.Views
                     zam1.Add(new Zam(z.Jmeno, z.ZamestnanecId));
                     zam2.Add(new Zam(z.Jmeno, z.ZamestnanecId));
                 }
-                ComboBoxZadavatel1.DataSource = zam1;
-                ComboBoxZadavatel2.DataSource = zam2;
-                ComboBoxZadavatel1.DisplayMember = "Jmeno";
-                ComboBoxZadavatel2.DisplayMember = "Jmeno";
-                ComboBoxZadavatel1.ValueMember = "ZamestnanecId";
-                ComboBoxZadavatel2.ValueMember = "ZamestnanecId";
-                ComboBoxZadavatel1.SelectedIndex = 0;
-                ComboBoxZadavatel2.SelectedIndex = 0;
+
+                this.ComboBoxZadavatel1.DataSource = zam1;
+                this.ComboBoxZadavatel2.DataSource = zam2;
+                this.ComboBoxZadavatel1.DisplayMember = "Jmeno";
+                this.ComboBoxZadavatel2.DisplayMember = "Jmeno";
+                this.ComboBoxZadavatel1.ValueMember = "ZamestnanecId";
+                this.ComboBoxZadavatel2.ValueMember = "ZamestnanecId";
+                this.ComboBoxZadavatel1.SelectedIndex = 0;
+                this.ComboBoxZadavatel2.SelectedIndex = 0;
                 return true;
             }
         }
@@ -203,8 +207,8 @@ namespace LearActionPlans.Views
 
             public Proj(string nazevProjektu, int projektId)
             {
-                NazevProjektu = nazevProjektu;
-                ProjektId = projektId;
+                this.NazevProjektu = nazevProjektu;
+                this.ProjektId = projektId;
             }
         }
 
@@ -218,7 +222,7 @@ namespace LearActionPlans.Views
             }
             else
             {
-                List<Proj> proj = new List<Proj>
+                var proj = new List<Proj>
                 {
                     new Proj("(select a project)", 0)
                 };
@@ -226,10 +230,11 @@ namespace LearActionPlans.Views
                 {
                     proj.Add(new Proj(p.NazevProjektu, p.ProjektId));
                 }
-                ComboBoxProjekty.DataSource = proj;
-                ComboBoxProjekty.DisplayMember = "NazevProjektu";
-                ComboBoxProjekty.ValueMember = "ProjektId";
-                ComboBoxProjekty.SelectedIndex = 0;
+
+                this.ComboBoxProjekty.DataSource = proj;
+                this.ComboBoxProjekty.DisplayMember = "NazevProjektu";
+                this.ComboBoxProjekty.ValueMember = "ProjektId";
+                this.ComboBoxProjekty.SelectedIndex = 0;
                 return true;
             }
         }
@@ -241,8 +246,8 @@ namespace LearActionPlans.Views
 
             public Zak(string nazevZakaznika, int zakaznikId)
             {
-                NazevZakaznika = nazevZakaznika;
-                ZakaznikId = zakaznikId;
+                this.NazevZakaznika = nazevZakaznika;
+                this.ZakaznikId = zakaznikId;
             }
         }
 
@@ -256,7 +261,7 @@ namespace LearActionPlans.Views
             }
             else
             {
-                List<Zak> zak = new List<Zak>
+                var zak = new List<Zak>
                 {
                     new Zak("(choose a customer)", 0)
                 };
@@ -266,168 +271,186 @@ namespace LearActionPlans.Views
                     zak.Add(new Zak(z.NazevZakaznika, z.ZakaznikId));
                 }
                 //zak.Add(new Zak() { NazevZakaznika = z.NazevZakaznika, ZakaznikId = z.ZakaznikId });
-                ComboBoxZakaznici.DataSource = zak;
-                ComboBoxZakaznici.DisplayMember = "NazevZakaznika";
-                ComboBoxZakaznici.ValueMember = "ZakaznikId";
-                ComboBoxZakaznici.SelectedIndex = 0;
+                this.ComboBoxZakaznici.DataSource = zak;
+                this.ComboBoxZakaznici.DisplayMember = "NazevZakaznika";
+                this.ComboBoxZakaznici.ValueMember = "ZakaznikId";
+                this.ComboBoxZakaznici.SelectedIndex = 0;
                 return true;
             }
         }
 
         private void ComboBoxZadavatel1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ComboBoxZadavatel1.SelectedIndex > 0)
+            if (this.ComboBoxZadavatel1.SelectedIndex > 0)
             {
-                akcniPlan.Zadavatel1Id = (int)ComboBoxZadavatel1.SelectedValue;
-                akcniPlan.Zadavatel1Jmeno = ComboBoxZadavatel1.Text;
-                zadavatel1Povolen = true;
+                this.akcniPlan.Zadavatel1Id = (int)this.ComboBoxZadavatel1.SelectedValue;
+                this.akcniPlan.Zadavatel1Jmeno = this.ComboBoxZadavatel1.Text;
+                this.zadavatel1Povolen = true;
             }
-            else if (ComboBoxZadavatel1.SelectedIndex == 0)
+            else if (this.ComboBoxZadavatel1.SelectedIndex == 0)
             {
-                akcniPlan.Zadavatel1Id = (int)ComboBoxZadavatel1.SelectedValue;
-                akcniPlan.Zadavatel1Jmeno = null;
-                zadavatel1Povolen = false;
+                this.akcniPlan.Zadavatel1Id = (int)this.ComboBoxZadavatel1.SelectedValue;
+                this.akcniPlan.Zadavatel1Jmeno = null;
+                this.zadavatel1Povolen = false;
             }
 
             // kontrola, jsetli mohu zaktivnit talčítko pro uložení AP
-            if (zadavatel1Povolen == true && temaPovoleno == true && datumUkonceniPovolen == true && zakaznikPovolen == true)
-                ButtonUlozit.Enabled = true;
+            if (this.zadavatel1Povolen == true && this.temaPovoleno == true && this.datumUkonceniPovolen == true && this.zakaznikPovolen == true)
+            {
+                this.ButtonUlozit.Enabled = true;
+            }
             else
-                ButtonUlozit.Enabled = false;
+            {
+                this.ButtonUlozit.Enabled = false;
+            }
         }
 
         private void ComboBoxZadavatel2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ComboBoxZadavatel2.SelectedIndex > 0)
+            if (this.ComboBoxZadavatel2.SelectedIndex > 0)
             {
-                akcniPlan.Zadavatel2Id = (int)ComboBoxZadavatel2.SelectedValue;
-                akcniPlan.Zadavatel2Jmeno = ComboBoxZadavatel2.Text;
+                this.akcniPlan.Zadavatel2Id = (int)this.ComboBoxZadavatel2.SelectedValue;
+                this.akcniPlan.Zadavatel2Jmeno = this.ComboBoxZadavatel2.Text;
             }
-            else if (ComboBoxZadavatel2.SelectedIndex == 0)
+            else if (this.ComboBoxZadavatel2.SelectedIndex == 0)
             {
-                akcniPlan.Zadavatel2Id = (int)ComboBoxZadavatel2.SelectedValue;
-                akcniPlan.Zadavatel2Jmeno = null;
+                this.akcniPlan.Zadavatel2Id = (int)this.ComboBoxZadavatel2.SelectedValue;
+                this.akcniPlan.Zadavatel2Jmeno = null;
             }
 
             // kontrola, jestli mohu zaktivnit talčítko pro uložení AP
-            if (zadavatel1Povolen == true && temaPovoleno == true && datumUkonceniPovolen == true && zakaznikPovolen == true)
-                ButtonUlozit.Enabled = true;
+            if (this.zadavatel1Povolen == true && this.temaPovoleno == true && this.datumUkonceniPovolen == true && this.zakaznikPovolen == true)
+            {
+                this.ButtonUlozit.Enabled = true;
+            }
             else
-                ButtonUlozit.Enabled = false;
+            {
+                this.ButtonUlozit.Enabled = false;
+            }
         }
 
         private void TextBoxTema_TextChanged(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(TextBoxTema.Text))
+            if (string.IsNullOrWhiteSpace(this.TextBoxTema.Text))
             {
-                akcniPlan.Tema = null;
-                temaPovoleno = false;
+                this.akcniPlan.Tema = null;
+                this.temaPovoleno = false;
             }
             else
             {
-                akcniPlan.Tema = TextBoxTema.Text;
-                temaPovoleno = true;
+                this.akcniPlan.Tema = this.TextBoxTema.Text;
+                this.temaPovoleno = true;
             }
                 
             // kontrola, jestli mohu zaktivnit talčítko pro uložení AP
-            if (zadavatel1Povolen == true && temaPovoleno == true && datumUkonceniPovolen == true && zakaznikPovolen == true)
-                ButtonUlozit.Enabled = true;
+            if (this.zadavatel1Povolen == true && this.temaPovoleno == true && this.datumUkonceniPovolen == true && this.zakaznikPovolen == true)
+            {
+                this.ButtonUlozit.Enabled = true;
+            }
             else
-                ButtonUlozit.Enabled = false;
+            {
+                this.ButtonUlozit.Enabled = false;
+            }
         }
 
         private void ComboBoxProjekty_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ComboBoxProjekty.SelectedIndex > 0)
+            if (this.ComboBoxProjekty.SelectedIndex > 0)
             {
-                akcniPlan.ProjektId = (int)ComboBoxProjekty.SelectedValue;
-                akcniPlan.ProjektNazev = ComboBoxProjekty.Text;
+                this.akcniPlan.ProjektId = (int)this.ComboBoxProjekty.SelectedValue;
+                this.akcniPlan.ProjektNazev = this.ComboBoxProjekty.Text;
             }
-            else if (ComboBoxProjekty.SelectedIndex == 0)
+            else if (this.ComboBoxProjekty.SelectedIndex == 0)
             {
-                akcniPlan.ProjektId = (int)ComboBoxProjekty.SelectedValue;
-                akcniPlan.ProjektNazev = null;
+                this.akcniPlan.ProjektId = (int)this.ComboBoxProjekty.SelectedValue;
+                this.akcniPlan.ProjektNazev = null;
             }
         }
 
         private void DateTimePickerDatumUkonceni_ValueChanged(object sender, EventArgs e)
         {
-            akcniPlan.DatumUkonceni = DateTimePickerDatumUkonceni.Value;
-            datumUkonceniPovolen = true;
+            this.akcniPlan.DatumUkonceni = this.DateTimePickerDatumUkonceni.Value;
+            this.datumUkonceniPovolen = true;
         }
 
         private void ComboBoxZakaznici_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ComboBoxZakaznici.SelectedIndex > 0)
+            if (this.ComboBoxZakaznici.SelectedIndex > 0)
             {
-                akcniPlan.ZakaznikId = (int)ComboBoxZakaznici.SelectedValue;
-                akcniPlan.ZakaznikNazev = ComboBoxZakaznici.Text;
-                zakaznikPovolen = true;
+                this.akcniPlan.ZakaznikId = (int)this.ComboBoxZakaznici.SelectedValue;
+                this.akcniPlan.ZakaznikNazev = this.ComboBoxZakaznici.Text;
+                this.zakaznikPovolen = true;
             }
-            else if (ComboBoxZakaznici.SelectedIndex == 0)
+            else if (this.ComboBoxZakaznici.SelectedIndex == 0)
             {
-                akcniPlan.ZakaznikId = (int)ComboBoxZakaznici.SelectedValue;
-                zakaznikPovolen = false;
+                this.akcniPlan.ZakaznikId = (int)this.ComboBoxZakaznici.SelectedValue;
+                this.zakaznikPovolen = false;
             }
 
             // kontrola, jsetli mohu zaktivnit talčítko pro uložení AP
-            if (zadavatel1Povolen == true && temaPovoleno == true && datumUkonceniPovolen == true && zakaznikPovolen == true)
-                ButtonUlozit.Enabled = true;
+            if (this.zadavatel1Povolen == true && this.temaPovoleno == true && this.datumUkonceniPovolen == true && this.zakaznikPovolen == true)
+            {
+                this.ButtonUlozit.Enabled = true;
+            }
             else
-                ButtonUlozit.Enabled = false;
+            {
+                this.ButtonUlozit.Enabled = false;
+            }
         }
 
         private void RadioButtonAudity_CheckedChanged(object sender, EventArgs e)
         {
-            if (RadioButtonAudity.Checked == true)
-                akcniPlan.TypAP = 1;
+            if (this.RadioButtonAudity.Checked == true)
+            {
+                this.akcniPlan.TypAP = 1;
+            }
         }
 
         private void RadioButtonOstatni_CheckedChanged(object sender, EventArgs e)
         {
-            if (RadioButtonOstatni.Checked == true)
-                akcniPlan.TypAP = 2;
+            if (this.RadioButtonOstatni.Checked == true)
+            {
+                this.akcniPlan.TypAP = 2;
+            }
         }
 
         private void ButtonUlozit_MouseClick(object sender, MouseEventArgs e)
         {
-            ulozeniDat = true;
-            Close();
+            this.ulozeniDat = true;
+            this.Close();
             //UlozitAP();
         }
 
         private void UlozitAP()
         {
-            akcniPlan.CisloAP = posledniCisloAP;
+            this.akcniPlan.CisloAP = this.posledniCisloAP;
             //akcniPlan.Rok = DateTime.Now.Year;
 
-            akcniPlan.Id = AkcniPlanyDataMapper.InsertAP(akcniPlan);
+            this.akcniPlan.Id = AkcniPlanyDataMapper.InsertAP(this.akcniPlan);
             //nastavím vlastníkAP na true, protože musí být editovány jednotlivé body
             //FormMain.VlastnikAP = true;
-            using (var form = new FormPrehledBoduAP(true, akcniPlan, 1))
-            {
-                Hide();
-                form.ShowDialog();
-                //Close();
-            }
+            using var form = new FormPrehledBoduAP(true, this.akcniPlan, 1);
+            this.Hide();
+            form.ShowDialog();
+            //Close();
         }
 
         private void ZavritOkno()
         {
-            if (ulozeniDat == true)
+            if (this.ulozeniDat == true)
             {
-                UlozitAP();
+                this.UlozitAP();
             }
             else
             {
                 //byly založeny všechny údaje pro uložení dat
-                if (ButtonUlozit.Enabled == true)
+                if (this.ButtonUlozit.Enabled == true)
                 {
-                    DialogResult dialogResult = MessageBox.Show("Do you want to create AP.", "Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    var dialogResult = MessageBox.Show("Do you want to create AP.", "Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
                     if (dialogResult == DialogResult.Yes)
                     {
-                        UlozitAP();
+                        this.UlozitAP();
                         //Close();
                     }
                     else if (dialogResult == DialogResult.No)
@@ -439,12 +462,12 @@ namespace LearActionPlans.Views
 
         private void FormNovyAkcniPlan_FormClosing(object sender, FormClosingEventArgs e)
         {
-            ZavritOkno();
+            this.ZavritOkno();
         }
 
         private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e)
         {
-            Close();
+            this.Close();
         }
     }
 }

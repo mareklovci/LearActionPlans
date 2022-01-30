@@ -25,9 +25,15 @@ namespace LearActionPlans.DataMappers
 
             var reader = command.ExecuteReader();
 
-            if (!reader.HasRows) yield break;
+            if (!reader.HasRows)
+            {
+                yield break;
+            }
+
             while (reader.Read())
+            {
                 yield return ConstructZamestnanec(reader);
+            }
         }
 
         private static Zamestnanci ConstructZamestnanec(IDataRecord reader)
@@ -58,10 +64,14 @@ namespace LearActionPlans.DataMappers
             var reader = command.ExecuteReader();
 
             if (!reader.HasRows)
+            {
                 yield break;
+            }
 
             while (reader.Read())
+            {
                 yield return ConstructZadavatel(reader);
+            }
         }
 
         public static IEnumerable<Zamestnanci> GetZadavatelLogin(string login)
@@ -78,10 +88,14 @@ namespace LearActionPlans.DataMappers
             var reader = command.ExecuteReader();
 
             if (!reader.HasRows)
+            {
                 yield break;
+            }
 
             while (reader.Read())
+            {
                 yield return ConstructZadavatel(reader);
+            }
         }
 
         private static Zamestnanci ConstructZadavatel(IDataRecord reader)

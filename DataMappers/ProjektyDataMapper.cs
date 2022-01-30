@@ -23,9 +23,15 @@ namespace LearActionPlans.DataMappers
 
             var reader = command.ExecuteReader();
 
-            if (!reader.HasRows) yield break;
+            if (!reader.HasRows)
+            {
+                yield break;
+            }
+
             while (reader.Read())
+            {
                 yield return ConstructProjekt(reader);
+            }
         }
 
         private static Projekty ConstructProjekt(IDataRecord reader)

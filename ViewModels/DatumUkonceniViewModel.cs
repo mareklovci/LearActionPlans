@@ -30,7 +30,7 @@ namespace LearActionPlans.ViewModels
 
             var query = from z in zamestnanci
                         where z.Id == idZam
-                        select DatumUkonceniViewModel.Zamestnanec(z.Id, z.Jmeno, z.Prijmeni);
+                        select Zamestnanec(z.Id, z.Jmeno, z.Prijmeni);
 
             if (query.Count() == 0)
             {
@@ -39,7 +39,9 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
     }

@@ -64,7 +64,7 @@ namespace LearActionPlans.ViewModels
             var query = from z in zamestnanci
                         where z.StavObjektu == 1
                         orderby z.Prijmeni, z.Jmeno
-                        select NovyAkcniPlanViewModel.Zamestnanec(z.Id, z.Prijmeni + " " + z.Jmeno);
+                        select Zamestnanec(z.Id, z.Prijmeni + " " + z.Jmeno);
 
             //where z.JeZamestnanec == true && z.Storno == false
 
@@ -75,7 +75,9 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
 
@@ -86,7 +88,7 @@ namespace LearActionPlans.ViewModels
             var query = from p in projekty
                         where p.StavObjektu == 1
                         orderby p.Nazev
-                        select NovyAkcniPlanViewModel.Projekt(p.Id, p.Nazev);
+                        select Projekt(p.Id, p.Nazev);
 
             if (query.Count() == 0)
             {
@@ -95,7 +97,9 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
 
@@ -106,7 +110,7 @@ namespace LearActionPlans.ViewModels
             var query = from z in zakaznici
                         where z.StavObjektu == 1
                         orderby z.Nazev
-                        select NovyAkcniPlanViewModel.Zakaznik(z.Id, z.Nazev);
+                        select Zakaznik(z.Id, z.Nazev);
 
             if (query.Count() == 0)
             {
@@ -115,13 +119,15 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
 
         public static int GetPosledniCisloAP(int rok)
         {
-            int posledniCisloAP = AkcniPlanyDataMapper.GetPosledniCisloAP(rok);
+            var posledniCisloAP = AkcniPlanyDataMapper.GetPosledniCisloAP(rok);
             
             return posledniCisloAP;
             //var query = from z in zakaznici

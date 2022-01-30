@@ -30,16 +30,16 @@ namespace LearActionPlans.Views
 
         public FormSeznamPozadavku()
         {
-            InitializeComponent();
-            dtActions = new DataTable();
+            this.InitializeComponent();
+            this.dtActions = new DataTable();
 
 
         }
 
         private void FormSeznamPozadavku_Load(object sender, EventArgs e)
         {
-            bindingSourceAkce.DataSource = dtActions;
-            DataGridViewSeznamPozadavku.DataSource = bindingSourceAkce;
+            this.bindingSourceAkce.DataSource = this.dtActions;
+            this.DataGridViewSeznamPozadavku.DataSource = this.bindingSourceAkce;
 
             var zam = SeznamPozadavkuViewModel.GetZamestnanciAll().ToList();
             //var oddeleni = ZadaniBoduAPViewModel.GetOddeleniAll().ToList();
@@ -56,9 +56,9 @@ namespace LearActionPlans.Views
             //ComboBoxZamestnanci.ValueMember = "Id";
 
             //ComboBoxZamestnanci.SelectedIndex = 0;
-            NaplnitCmbZamestnanec();
+            this.NaplnitCmbZamestnanec();
 
-            CreateColumns(zam);
+            this.CreateColumns(zam);
 
             //ZobrazitDGVAkce();
         }
@@ -87,18 +87,18 @@ namespace LearActionPlans.Views
         {
             var zamestnanci = SeznamPozadavkuViewModel.GetZamestnanciAll();
 
-            itemsZamestnanec.Add(new Zamestnanec { ZamestnanecId = 0, Jmeno = "(Select emploees)", PrihlasovaciJmeno = null, Email = null, StavObjektu = 1 });
+            this.itemsZamestnanec.Add(new Zamestnanec { ZamestnanecId = 0, Jmeno = "(Select emploees)", PrihlasovaciJmeno = null, Email = null, StavObjektu = 1 });
             foreach (var z in zamestnanci)
             {
-                itemsZamestnanec.Add(new Zamestnanec { ZamestnanecId = z.Id, Jmeno = z.Jmeno, PrihlasovaciJmeno = z.PrihlasovaciJmeno, Email = z.Email, StavObjektu = z.StavObjektu });
+                this.itemsZamestnanec.Add(new Zamestnanec { ZamestnanecId = z.Id, Jmeno = z.Jmeno, PrihlasovaciJmeno = z.PrihlasovaciJmeno, Email = z.Email, StavObjektu = z.StavObjektu });
             }
 
-            ComboBoxZamestnanci.DataSource = itemsZamestnanec;
+            this.ComboBoxZamestnanci.DataSource = this.itemsZamestnanec;
 
-            ComboBoxZamestnanci.DisplayMember = "Jmeno";
-            ComboBoxZamestnanci.ValueMember = "ZamestnanecId";
-            ComboBoxZamestnanci.SelectedIndex = 0;
-            ComboBoxZamestnanci.SelectedIndexChanged += ComboBoxZamestnanci_SelectedIndexChanged;
+            this.ComboBoxZamestnanci.DisplayMember = "Jmeno";
+            this.ComboBoxZamestnanci.ValueMember = "ZamestnanecId";
+            this.ComboBoxZamestnanci.SelectedIndex = 0;
+            this.ComboBoxZamestnanci.SelectedIndexChanged += this.ComboBoxZamestnanci_SelectedIndexChanged;
         }
 
         private void ComboBoxZamestnanci_SelectedIndexChanged(object sender, EventArgs e)
@@ -107,8 +107,9 @@ namespace LearActionPlans.Views
             {
                 return;
             }
-            selectedZamestnanec = combo.SelectedItem as Zamestnanec;
-            if (selectedZamestnanec == null)
+
+            this.selectedZamestnanec = combo.SelectedItem as Zamestnanec;
+            if (this.selectedZamestnanec == null)
             {
                 //MessageBox.Show("You didn't select anything at the moment");
                 ;
@@ -132,9 +133,9 @@ namespace LearActionPlans.Views
 
         private void CreateColumns<T>(IEnumerable<T> zam)
         {
-            dtActions.Columns.Add(new DataColumn("textBoxNapravnaOpatreni", typeof(string)));
+            this.dtActions.Columns.Add(new DataColumn("textBoxNapravnaOpatreni", typeof(string)));
 
-            dtActions.Columns.Add(new DataColumn("textBoxDatumUkonceni", typeof(DateTime)));
+            this.dtActions.Columns.Add(new DataColumn("textBoxDatumUkonceni", typeof(DateTime)));
             var btn = new DataGridViewButtonColumn
             {
                 Name = "buttonDatumUkonceni",
@@ -144,10 +145,10 @@ namespace LearActionPlans.Views
                 FlatStyle = FlatStyle.Flat,
                 ReadOnly = true
             };
-            DataGridViewSeznamPozadavku.Columns.Add(btn);
+            this.DataGridViewSeznamPozadavku.Columns.Add(btn);
 
-            dtActions.Columns.Add(new DataColumn("textBoxKontrolaEfektivnosti", typeof(DateTime)));
-            DataGridViewSeznamPozadavku.Columns["textBoxKontrolaEfektivnosti"].Visible = false;
+            this.dtActions.Columns.Add(new DataColumn("textBoxKontrolaEfektivnosti", typeof(DateTime)));
+            this.DataGridViewSeznamPozadavku.Columns["textBoxKontrolaEfektivnosti"].Visible = false;
             
             var dtZam = DataTableConverter.ConvertToDataTable(zam);
 
@@ -157,17 +158,17 @@ namespace LearActionPlans.Views
             drZam["Id"] = 0;
             dtZam.Rows.InsertAt(drZam, 0);
 
-            dtActions.Columns.Add(new DataColumn("textBoxOdpovednaOsoba1", typeof(string)));
-            dtActions.Columns.Add(new DataColumn("textBoxOdpovednaOsoba2", typeof(string)));
-            dtActions.Columns.Add(new DataColumn("textBoxOddeleni", typeof(string)));
-            DataGridViewSeznamPozadavku.Columns["textBoxNapravnaOpatreni"].HeaderText = @"Corrective actions";
-            DataGridViewSeznamPozadavku.Columns["textBoxOdpovednaOsoba1"].HeaderText = @"Responsibel #1";
-            DataGridViewSeznamPozadavku.Columns["textBoxOdpovednaOsoba2"].HeaderText = @"Responsibel #2";
-            DataGridViewSeznamPozadavku.Columns["textBoxOddeleni"].HeaderText = @"Department";
+            this.dtActions.Columns.Add(new DataColumn("textBoxOdpovednaOsoba1", typeof(string)));
+            this.dtActions.Columns.Add(new DataColumn("textBoxOdpovednaOsoba2", typeof(string)));
+            this.dtActions.Columns.Add(new DataColumn("textBoxOddeleni", typeof(string)));
+            this.DataGridViewSeznamPozadavku.Columns["textBoxNapravnaOpatreni"].HeaderText = @"Corrective actions";
+            this.DataGridViewSeznamPozadavku.Columns["textBoxOdpovednaOsoba1"].HeaderText = @"Responsibel #1";
+            this.DataGridViewSeznamPozadavku.Columns["textBoxOdpovednaOsoba2"].HeaderText = @"Responsibel #2";
+            this.DataGridViewSeznamPozadavku.Columns["textBoxOddeleni"].HeaderText = @"Department";
 
-            dtActions.Columns.Add(new DataColumn("textBoxPriloha", typeof(string)));
+            this.dtActions.Columns.Add(new DataColumn("textBoxPriloha", typeof(string)));
 
-            DataGridViewSeznamPozadavku.Columns["textBoxPriloha"].Visible = false;
+            this.DataGridViewSeznamPozadavku.Columns["textBoxPriloha"].Visible = false;
             btn = new DataGridViewButtonColumn
             {
                 Name = "buttonPriloha",
@@ -178,46 +179,46 @@ namespace LearActionPlans.Views
                 ReadOnly = true
             };
             //DataPropertyName = "buttonPrilohaTmp",
-            DataGridViewSeznamPozadavku.Columns.Add(btn);
-            DataGridViewSeznamPozadavku.Columns["buttonPriloha"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            this.DataGridViewSeznamPozadavku.Columns.Add(btn);
+            this.DataGridViewSeznamPozadavku.Columns["buttonPriloha"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-            dtActions.Columns.Add(new DataColumn("prilohaTmp", typeof(string)));
-            dtActions.Columns["prilohaTmp"].Expression = string.Format("IIF([textBoxPriloha] = {0}, '', '(attachment)')", "''");
+            this.dtActions.Columns.Add(new DataColumn("prilohaTmp", typeof(string)));
+            this.dtActions.Columns["prilohaTmp"].Expression = string.Format("IIF([textBoxPriloha] = {0}, '', '(attachment)')", "''");
 
-            dtActions.Columns.Add(new DataColumn("akceId", typeof(int)));
-            DataGridViewSeznamPozadavku.Columns["akceId"].Visible = false;
+            this.dtActions.Columns.Add(new DataColumn("akceId", typeof(int)));
+            this.DataGridViewSeznamPozadavku.Columns["akceId"].Visible = false;
 
-            DataGridViewSeznamPozadavku.Columns["textBoxNapravnaOpatreni"].Width = 200;
-            DataGridViewSeznamPozadavku.Columns["textBoxOdpovednaOsoba1"].Width = 200;
-            DataGridViewSeznamPozadavku.Columns["textBoxOdpovednaOsoba2"].Width = 200;
-            DataGridViewSeznamPozadavku.Columns["textBoxOddeleni"].Width = 150;
+            this.DataGridViewSeznamPozadavku.Columns["textBoxNapravnaOpatreni"].Width = 200;
+            this.DataGridViewSeznamPozadavku.Columns["textBoxOdpovednaOsoba1"].Width = 200;
+            this.DataGridViewSeznamPozadavku.Columns["textBoxOdpovednaOsoba2"].Width = 200;
+            this.DataGridViewSeznamPozadavku.Columns["textBoxOddeleni"].Width = 150;
             //DataGridViewSeznamPozadavku.Columns[""].Width = 200;
 
-            DataGridViewSeznamPozadavku.MultiSelect = false;
-            DataGridViewSeznamPozadavku.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
-            DataGridViewSeznamPozadavku.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
-            DataGridViewSeznamPozadavku.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            DataGridViewSeznamPozadavku.AllowUserToResizeRows = false;
-            DataGridViewSeznamPozadavku.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-            DataGridViewSeznamPozadavku.AllowUserToResizeColumns = false;
-            DataGridViewSeznamPozadavku.AllowUserToAddRows = false;
-            DataGridViewSeznamPozadavku.ReadOnly = false;
-            DataGridViewSeznamPozadavku.EditMode = DataGridViewEditMode.EditOnEnter;
-            DataGridViewSeznamPozadavku.AutoGenerateColumns = false;
+            this.DataGridViewSeznamPozadavku.MultiSelect = false;
+            this.DataGridViewSeznamPozadavku.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
+            this.DataGridViewSeznamPozadavku.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+            this.DataGridViewSeznamPozadavku.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.DataGridViewSeznamPozadavku.AllowUserToResizeRows = false;
+            this.DataGridViewSeznamPozadavku.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            this.DataGridViewSeznamPozadavku.AllowUserToResizeColumns = false;
+            this.DataGridViewSeznamPozadavku.AllowUserToAddRows = false;
+            this.DataGridViewSeznamPozadavku.ReadOnly = false;
+            this.DataGridViewSeznamPozadavku.EditMode = DataGridViewEditMode.EditOnEnter;
+            this.DataGridViewSeznamPozadavku.AutoGenerateColumns = false;
 
-            foreach (DataGridViewColumn column in DataGridViewSeznamPozadavku.Columns)
+            foreach (DataGridViewColumn column in this.DataGridViewSeznamPozadavku.Columns)
             {
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
 
-            DataGridViewSeznamPozadavku.Columns["textBoxDatumUkonceni"].Visible = false;
-            DataGridViewSeznamPozadavku.Columns["textBoxKontrolaEfektivnosti"].ReadOnly = true;
-            DataGridViewSeznamPozadavku.Columns["buttonPriloha"].ReadOnly = true;
+            this.DataGridViewSeznamPozadavku.Columns["textBoxDatumUkonceni"].Visible = false;
+            this.DataGridViewSeznamPozadavku.Columns["textBoxKontrolaEfektivnosti"].ReadOnly = true;
+            this.DataGridViewSeznamPozadavku.Columns["buttonPriloha"].ReadOnly = true;
         }
 
         private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e)
         {
-            Close();
+            this.Close();
         }
 
         private void ButtonZavrit_Click(object sender, EventArgs e)

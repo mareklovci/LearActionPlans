@@ -13,30 +13,30 @@
 
         public Zamestnanci(int id, string prihlasovaciJmeno, bool adminAP)
         {
-            Id = id;
-            PrihlasovaciJmeno = prihlasovaciJmeno;
-            AdminAP = adminAP;
+            this.Id = id;
+            this.PrihlasovaciJmeno = prihlasovaciJmeno;
+            this.AdminAP = adminAP;
         }
 
         public Zamestnanci(int id, string jmeno, string prijmeni, string prihlasovaciJmeno, byte stavObjektu)
         {
-            Id = id;
-            Jmeno = jmeno;
-            Prijmeni = prijmeni;
-            PrihlasovaciJmeno = prihlasovaciJmeno;
-            StavObjektu = stavObjektu;
+            this.Id = id;
+            this.Jmeno = jmeno;
+            this.Prijmeni = prijmeni;
+            this.PrihlasovaciJmeno = prihlasovaciJmeno;
+            this.StavObjektu = stavObjektu;
         }
 
         public Zamestnanci(int id, string jmeno, string prijmeni, string prihlasovaciJmeno, string email, bool adminAP, int oddeleniId, byte stavObjektu)
         {
-            Id = id;
-            Jmeno = jmeno;
-            Prijmeni = prijmeni;
-            PrihlasovaciJmeno = prihlasovaciJmeno;
-            Email = email;
-            AdminAP = adminAP;
-            OddeleniId = oddeleniId;
-            StavObjektu = stavObjektu;
+            this.Id = id;
+            this.Jmeno = jmeno;
+            this.Prijmeni = prijmeni;
+            this.PrihlasovaciJmeno = prihlasovaciJmeno;
+            this.Email = email;
+            this.AdminAP = adminAP;
+            this.OddeleniId = oddeleniId;
+            this.StavObjektu = stavObjektu;
         }
     }
 

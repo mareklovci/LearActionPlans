@@ -31,10 +31,14 @@ namespace LearActionPlans.DataMappers
             if (reader.HasRows)
             {
                 while (reader.Read())
+                {
                     yield return ConstructUkonceniAP(reader);
+                }
             }
             else
+            {
                 yield break;
+            }
         }
 
         private static UkonceniAP ConstructUkonceniAP(IDataRecord readerData)

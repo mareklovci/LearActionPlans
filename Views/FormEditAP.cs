@@ -44,34 +44,34 @@ namespace LearActionPlans.Views
 
         public FormEditAP(int apId, string cisloAPRok, string zadavatel1, string zadavatel2, string tema, string projekt, string zakaznik, int zadavatel1Id, int? zadavatel2Id, int? projektId, int zakaznikId)
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
-            apId_ = apId;
-            cisloAPRok_ = cisloAPRok;
-            zadavatel1_ = zadavatel1;
-            zadavatel2_ = zadavatel2;
-            tema_ = tema;
-            projekt_ = projekt;
-            zakaznik_ = zakaznik;
+            this.apId_ = apId;
+            this.cisloAPRok_ = cisloAPRok;
+            this.zadavatel1_ = zadavatel1;
+            this.zadavatel2_ = zadavatel2;
+            this.tema_ = tema;
+            this.projekt_ = projekt;
+            this.zakaznik_ = zakaznik;
 
-            zadavatel1Id_ = zadavatel1Id;
-            zadavatel2Id_ = zadavatel2Id;
-            projektId_ = projektId;
-            zakaznikId_ = zakaznikId;
+            this.zadavatel1Id_ = zadavatel1Id;
+            this.zadavatel2Id_ = zadavatel2Id;
+            this.projektId_ = projektId;
+            this.zakaznikId_ = zakaznikId;
 
-            zmenaDat = false;
+            this.zmenaDat = false;
 
-            panelTerminy = new Panel();
-            groupBoxTerminy = new List<GroupBox>();
-            labelTerminyDatum = new List<Label>();
-            richTextBoxTermin = new List<RichTextBox>();
+            this.panelTerminy = new Panel();
+            this.groupBoxTerminy = new List<GroupBox>();
+            this.labelTerminyDatum = new List<Label>();
+            this.richTextBoxTermin = new List<RichTextBox>();
         }
 
         private void FormEditAP_Load(object sender, EventArgs e)
         {
-            labelNumber.Text = cisloAPRok_;
+            this.labelNumber.Text = this.cisloAPRok_;
 
-            InitForm();
+            this.InitForm();
         }
 
         private void InitForm()
@@ -79,10 +79,10 @@ namespace LearActionPlans.Views
             //načíst všechny akce daného AP a zjistit, jestli mají všechny vyplněné datum efektivnosti
             //jestli ano, tak mohu aktivovat tlačítko pro ukončení AP
             //po uzavření AP uložím datum ukončení
-            var uzavreneAkce = EditAPViewModel.GetUkonceniAkce(apId_).ToList();
-            var znovuOtevrit = EditAPViewModel.GetZnovuOtevritAP(apId_).ToList();
+            var uzavreneAkce = EditAPViewModel.GetUkonceniAkce(this.apId_).ToList();
+            var znovuOtevrit = EditAPViewModel.GetZnovuOtevritAP(this.apId_).ToList();
 
-            bool akceUkonceny = true;
+            var akceUkonceny = true;
             if (uzavreneAkce.Count == 0)
             {
                 akceUkonceny = false;
@@ -99,228 +99,237 @@ namespace LearActionPlans.Views
             }
 
             //pokud je AP uzavřen a ještě nebyl reopen, tak aktivuji tlačítko Reopen
-            ButtonZnovuOtevrit.Enabled = false;
-            labelDuvodZnovuOtevreni.Enabled = false;
-            richTextBoxDuvodZnovuOtevreni.Enabled = false;
-            richTextBoxDuvodZnovuOtevreni.Text = string.Empty;
+            this.ButtonZnovuOtevrit.Enabled = false;
+            this.labelDuvodZnovuOtevreni.Enabled = false;
+            this.richTextBoxDuvodZnovuOtevreni.Enabled = false;
+            this.richTextBoxDuvodZnovuOtevreni.Text = string.Empty;
             //když už byl AP uzavřen a ještě nebyl Reopen, bude tlačítko Reopen aktivní
-            znovuOtevritAP = znovuOtevrit[0].ZnovuOtevrit;
+            this.znovuOtevritAP = znovuOtevrit[0].ZnovuOtevrit;
             //AP byl uzavřen a ještě nebyl znovuotevřen
-            if (!(znovuOtevrit[0].UzavreniAP == null) && znovuOtevritAP == 1)
+            if (!(znovuOtevrit[0].UzavreniAP == null) && this.znovuOtevritAP == 1)
             {
-                ButtonZnovuOtevrit.Enabled = true;
-                labelDuvodZnovuOtevreni.Enabled = true;
-                richTextBoxDuvodZnovuOtevreni.Enabled = true;
+                this.ButtonZnovuOtevrit.Enabled = true;
+                this.labelDuvodZnovuOtevreni.Enabled = true;
+                this.richTextBoxDuvodZnovuOtevreni.Enabled = true;
             }
-            if (znovuOtevritAP == 0)
+            if (this.znovuOtevritAP == 0)
             {
-                ButtonZnovuOtevrit.Visible = false;
-                richTextBoxDuvodZnovuOtevreni.Text = znovuOtevrit[0].DuvodZnovuotevreni;
+                this.ButtonZnovuOtevrit.Visible = false;
+                this.richTextBoxDuvodZnovuOtevreni.Text = znovuOtevrit[0].DuvodZnovuotevreni;
             }
-            
-            labelDatumUzavreni.Text = string.Empty;
+
+            this.labelDatumUzavreni.Text = string.Empty;
             if (!(znovuOtevrit[0].UzavreniAP == null))
             {
-                labelDatumUzavreni.Text = Convert.ToDateTime(znovuOtevrit[0].UzavreniAP).ToShortDateString();
+                this.labelDatumUzavreni.Text = Convert.ToDateTime(znovuOtevrit[0].UzavreniAP).ToShortDateString();
             }
 
             //počet zbývajícíh termínů
-            var pocetTerminu = EditAPViewModel.GetPocetTerminu(apId_).ToList();
-            labelZbyvajiciPocetTerminu.Text = pocetTerminu[0].ZmenaTerminu.ToString();
+            var pocetTerminu = EditAPViewModel.GetPocetTerminu(this.apId_).ToList();
+            this.labelZbyvajiciPocetTerminu.Text = pocetTerminu[0].ZmenaTerminu.ToString();
             //pokud ještě mám volné termíny a AP nebyl uzavřen
             if (pocetTerminu[0].ZmenaTerminu == 0 || !(znovuOtevrit[0].UzavreniAP == null))
             {
-                dateTimePickerDatumUkonceni.Enabled = false;
-                labelPoznamkaTermin.Enabled = false;
-                richTextBoxNovaPoznamka.Enabled = false;
+                this.dateTimePickerDatumUkonceni.Enabled = false;
+                this.labelPoznamkaTermin.Enabled = false;
+                this.richTextBoxNovaPoznamka.Enabled = false;
 
-                ButtonNovyTermin.Enabled = false;
+                this.ButtonNovyTermin.Enabled = false;
             }
             else
             {
-                dateTimePickerDatumUkonceni.Enabled = true;
-                labelPoznamkaTermin.Enabled = true;
-                richTextBoxNovaPoznamka.Enabled = true;
+                this.dateTimePickerDatumUkonceni.Enabled = true;
+                this.labelPoznamkaTermin.Enabled = true;
+                this.richTextBoxNovaPoznamka.Enabled = true;
 
-                ButtonNovyTermin.Enabled = true;
+                this.ButtonNovyTermin.Enabled = true;
             }
             //počet zbývajícíh termínů
 
             if (pocetTerminu[0].ZmenaTerminu == 0)
             {
-                dateTimePickerDatumUkonceni.Visible = false;
-                labelPoznamkaTermin.Visible = false;
-                richTextBoxNovaPoznamka.Visible = false;
-                ButtonNovyTermin.Visible = false;
+                this.dateTimePickerDatumUkonceni.Visible = false;
+                this.labelPoznamkaTermin.Visible = false;
+                this.richTextBoxNovaPoznamka.Visible = false;
+                this.ButtonNovyTermin.Visible = false;
             }
 
-            ButtonUkoncitAP.Enabled = false;
+            this.ButtonUkoncitAP.Enabled = false;
             //v případě, že jsou všechny akce uzavřené a AP ještě nebyl uzavřen, povolím tlačítko pro ukončení AP
             if (akceUkonceny == true && znovuOtevrit[0].UzavreniAP == null)
             {
-                ButtonUkoncitAP.Enabled = true;
+                this.ButtonUkoncitAP.Enabled = true;
             }
             //v případě, že nebyl AP ještě uzavřen, mohu upravovat jeho parametry
             if (znovuOtevrit[0].UzavreniAP == null)
             {
-                InitComboBox();
+                this.InitComboBox();
             }
             else
             {
-                ComboBoxZadavatel1.SelectedIndexChanged -= ComboBoxZadavatel1_SelectedIndexChanged;
-                ComboBoxZadavatel2.SelectedIndexChanged -= ComboBoxZadavatel2_SelectedIndexChanged;
-                ComboBoxProjekty.SelectedIndexChanged -= ComboBoxProjekty_SelectedIndexChanged;
-                ComboBoxZakaznici.SelectedIndexChanged -= ComboBoxZakaznici_SelectedIndexChanged;
+                this.ComboBoxZadavatel1.SelectedIndexChanged -= this.ComboBoxZadavatel1_SelectedIndexChanged;
+                this.ComboBoxZadavatel2.SelectedIndexChanged -= this.ComboBoxZadavatel2_SelectedIndexChanged;
+                this.ComboBoxProjekty.SelectedIndexChanged -= this.ComboBoxProjekty_SelectedIndexChanged;
+                this.ComboBoxZakaznici.SelectedIndexChanged -= this.ComboBoxZakaznici_SelectedIndexChanged;
 
-                ComboBoxZadavatel1.Visible = false;
-                ComboBoxZadavatel2.Visible = false;
-                ComboBoxProjekty.Visible = false;
-                ComboBoxZakaznici.Visible = false;
+                this.ComboBoxZadavatel1.Visible = false;
+                this.ComboBoxZadavatel2.Visible = false;
+                this.ComboBoxProjekty.Visible = false;
+                this.ComboBoxZakaznici.Visible = false;
 
                 //tlačítko pro uzavření AP musí být neaktivní, když je aktivní tlačítko pro Reopen
-                ButtonUkoncitAP.Enabled = false;
-                var zamestnanec1 = EditAPViewModel.GetZamestnanecId(zadavatel1Id_).ToList();
-                labelZam1.Location = new Point(20, 105);
-                labelZam1.Visible = true;
-                labelZam1.AutoSize = true;
-                labelZam1.Text = zamestnanec1[0].Jmeno;
-                groupBoxEditAP.Controls.Add(labelZam1);
+                this.ButtonUkoncitAP.Enabled = false;
+                var zamestnanec1 = EditAPViewModel.GetZamestnanecId(this.zadavatel1Id_).ToList();
+                this.labelZam1.Location = new Point(20, 105);
+                this.labelZam1.Visible = true;
+                this.labelZam1.AutoSize = true;
+                this.labelZam1.Text = zamestnanec1[0].Jmeno;
+                this.groupBoxEditAP.Controls.Add(this.labelZam1);
 
-                if (zadavatel2Id_ == null) { }
+                if (this.zadavatel2Id_ == null) { }
                 else
                 {
-                    var zamestnanec2 = EditAPViewModel.GetZamestnanecId(Convert.ToInt32(zadavatel2Id_)).ToList();
-                    labelZam2.Location = new Point(20, 165);
-                    labelZam2.Visible = true;
-                    labelZam1.AutoSize = true;
-                    labelZam2.Text = zamestnanec2[0].Jmeno;
-                    groupBoxEditAP.Controls.Add(labelZam2);
+                    var zamestnanec2 = EditAPViewModel.GetZamestnanecId(Convert.ToInt32(this.zadavatel2Id_)).ToList();
+                    this.labelZam2.Location = new Point(20, 165);
+                    this.labelZam2.Visible = true;
+                    this.labelZam1.AutoSize = true;
+                    this.labelZam2.Text = zamestnanec2[0].Jmeno;
+                    this.groupBoxEditAP.Controls.Add(this.labelZam2);
                 }
-                if (projektId_ == null) { }
+                if (this.projektId_ == null) { }
                 else
                 {
-                    var projekt = EditAPViewModel.GetProjektId(Convert.ToInt32(projektId_)).ToList();
-                    labelProjekt.Location = new Point(20, 225);
-                    labelProjekt.Visible = true;
-                    labelProjekt.AutoSize = true;
-                    labelProjekt.Text = projekt[0].NazevProjektu;
-                    groupBoxEditAP.Controls.Add(labelProjekt);
+                    var projekt = EditAPViewModel.GetProjektId(Convert.ToInt32(this.projektId_)).ToList();
+                    this.labelProjekt.Location = new Point(20, 225);
+                    this.labelProjekt.Visible = true;
+                    this.labelProjekt.AutoSize = true;
+                    this.labelProjekt.Text = projekt[0].NazevProjektu;
+                    this.groupBoxEditAP.Controls.Add(this.labelProjekt);
                 }
-                var zakaznik = EditAPViewModel.GetZakaznikId(Convert.ToInt32(zakaznikId_)).ToList();
-                labelZakaznik.Location = new Point(20, 285);
-                labelZakaznik.Visible = true;
-                labelZakaznik.AutoSize = true;
-                labelZakaznik.Text = zakaznik[0].NazevZakaznika;
-                groupBoxEditAP.Controls.Add(labelZakaznik);
+                var zakaznik = EditAPViewModel.GetZakaznikId(Convert.ToInt32(this.zakaznikId_)).ToList();
+                this.labelZakaznik.Location = new Point(20, 285);
+                this.labelZakaznik.Visible = true;
+                this.labelZakaznik.AutoSize = true;
+                this.labelZakaznik.Text = zakaznik[0].NazevZakaznika;
+                this.groupBoxEditAP.Controls.Add(this.labelZakaznik);
             }
 
-            ButtonUlozit.Enabled = false;
+            this.ButtonUlozit.Enabled = false;
 
-            HistorieTerminu();
+            this.HistorieTerminu();
         }
 
         private void RemoveControl()
         {
-            for (int i = groupBoxTerminy.Count - 1; i >= 0; i--)
+            for (var i = this.groupBoxTerminy.Count - 1; i >= 0; i--)
             {
-                groupBoxTerminy[i].Controls.Remove(labelTerminyDatum[i]);
-                groupBoxTerminy[i].Controls.Remove(richTextBoxTermin[i]);
+                this.groupBoxTerminy[i].Controls.Remove(this.labelTerminyDatum[i]);
+                this.groupBoxTerminy[i].Controls.Remove(this.richTextBoxTermin[i]);
 
-                panelTerminy.Controls.Remove(groupBoxTerminy[i]);
+                this.panelTerminy.Controls.Remove(this.groupBoxTerminy[i]);
 
-                labelTerminyDatum[i].Dispose();
-                richTextBoxTermin[i].Dispose();
+                this.labelTerminyDatum[i].Dispose();
+                this.richTextBoxTermin[i].Dispose();
 
-                groupBoxTerminy[i].Dispose();
+                this.groupBoxTerminy[i].Dispose();
             }
-            Controls.Remove(panelTerminy);
-            panelTerminy.Dispose();
 
-            panelTerminy = new Panel();
-            groupBoxTerminy = new List<GroupBox>();
-            labelTerminyDatum = new List<Label>();
-            richTextBoxTermin = new List<RichTextBox>();
+            this.Controls.Remove(this.panelTerminy);
+            this.panelTerminy.Dispose();
+
+            this.panelTerminy = new Panel();
+            this.groupBoxTerminy = new List<GroupBox>();
+            this.labelTerminyDatum = new List<Label>();
+            this.richTextBoxTermin = new List<RichTextBox>();
         }
 
         private void InitComboBox()
         {
-            ComboBoxZadavatel1.SelectedIndexChanged -= ComboBoxZadavatel1_SelectedIndexChanged;
-            ComboBoxZadavatel2.SelectedIndexChanged -= ComboBoxZadavatel2_SelectedIndexChanged;
-            ComboBoxProjekty.SelectedIndexChanged -= ComboBoxProjekty_SelectedIndexChanged;
-            ComboBoxZakaznici.SelectedIndexChanged -= ComboBoxZakaznici_SelectedIndexChanged;
+            this.ComboBoxZadavatel1.SelectedIndexChanged -= this.ComboBoxZadavatel1_SelectedIndexChanged;
+            this.ComboBoxZadavatel2.SelectedIndexChanged -= this.ComboBoxZadavatel2_SelectedIndexChanged;
+            this.ComboBoxProjekty.SelectedIndexChanged -= this.ComboBoxProjekty_SelectedIndexChanged;
+            this.ComboBoxZakaznici.SelectedIndexChanged -= this.ComboBoxZakaznici_SelectedIndexChanged;
 
             //inicializace comboboxů ----------------------------------------------------------------------------
-            labelZam1.Visible = false;
-            labelZam2.Visible = false;
-            labelProjekt.Visible = false;
-            labelZakaznik.Visible = false;
+            this.labelZam1.Visible = false;
+            this.labelZam2.Visible = false;
+            this.labelProjekt.Visible = false;
+            this.labelZakaznik.Visible = false;
 
-            ComboBoxZadavatel1.Visible = true;
-            ComboBoxZadavatel2.Visible = true;
-            ComboBoxProjekty.Visible = true;
-            ComboBoxZakaznici.Visible = true;
+            this.ComboBoxZadavatel1.Visible = true;
+            this.ComboBoxZadavatel2.Visible = true;
+            this.ComboBoxProjekty.Visible = true;
+            this.ComboBoxZakaznici.Visible = true;
 
-            NaplnitComboBoxZamestnanec1a2();
-            NaplnitComboBoxProjekty();
-            NaplnitComboBoxZakaznici();
+            this.NaplnitComboBoxZamestnanec1a2();
+            this.NaplnitComboBoxProjekty();
+            this.NaplnitComboBoxZakaznici();
 
-            ComboBoxZadavatel1.SelectedIndex = Convert.ToInt32(ComboBoxZadavatel1.FindStringExact(zadavatel1_));
-            if (string.IsNullOrEmpty(zadavatel2_))
-                ComboBoxZadavatel2.SelectedIndex = 0;
+            this.ComboBoxZadavatel1.SelectedIndex = Convert.ToInt32(this.ComboBoxZadavatel1.FindStringExact(this.zadavatel1_));
+            if (string.IsNullOrEmpty(this.zadavatel2_))
+            {
+                this.ComboBoxZadavatel2.SelectedIndex = 0;
+            }
             else
-                ComboBoxZadavatel2.SelectedIndex = Convert.ToInt32(ComboBoxZadavatel2.FindStringExact(zadavatel2_));
+            {
+                this.ComboBoxZadavatel2.SelectedIndex = Convert.ToInt32(this.ComboBoxZadavatel2.FindStringExact(this.zadavatel2_));
+            }
 
-            if (string.IsNullOrEmpty(projekt_))
-                ComboBoxProjekty.SelectedIndex = 0;
+            if (string.IsNullOrEmpty(this.projekt_))
+            {
+                this.ComboBoxProjekty.SelectedIndex = 0;
+            }
             else
-                ComboBoxProjekty.SelectedIndex = Convert.ToInt32(ComboBoxProjekty.FindStringExact(projekt_));
+            {
+                this.ComboBoxProjekty.SelectedIndex = Convert.ToInt32(this.ComboBoxProjekty.FindStringExact(this.projekt_));
+            }
 
-            ComboBoxZakaznici.SelectedIndex = Convert.ToInt32(ComboBoxZakaznici.FindStringExact(zakaznik_));
+            this.ComboBoxZakaznici.SelectedIndex = Convert.ToInt32(this.ComboBoxZakaznici.FindStringExact(this.zakaznik_));
 
-            ComboBoxZadavatel1.SelectedIndexChanged += ComboBoxZadavatel1_SelectedIndexChanged;
-            ComboBoxZadavatel2.SelectedIndexChanged += ComboBoxZadavatel2_SelectedIndexChanged;
-            ComboBoxProjekty.SelectedIndexChanged += ComboBoxProjekty_SelectedIndexChanged;
-            ComboBoxZakaznici.SelectedIndexChanged += ComboBoxZakaznici_SelectedIndexChanged;
+            this.ComboBoxZadavatel1.SelectedIndexChanged += this.ComboBoxZadavatel1_SelectedIndexChanged;
+            this.ComboBoxZadavatel2.SelectedIndexChanged += this.ComboBoxZadavatel2_SelectedIndexChanged;
+            this.ComboBoxProjekty.SelectedIndexChanged += this.ComboBoxProjekty_SelectedIndexChanged;
+            this.ComboBoxZakaznici.SelectedIndexChanged += this.ComboBoxZakaznici_SelectedIndexChanged;
             //inicializace comboboxů ----------------------------------------------------------------------------
         }
 
         private void HistorieTerminu()
         {
             //zjištění posledního termínu
-            var datumUkonceni = EditAPViewModel.GetDatumUkonceniAP(apId_).ToList();
+            var datumUkonceni = EditAPViewModel.GetDatumUkonceniAP(this.apId_).ToList();
 
-            panelTerminy.Size = new Size(390, 550);
-            panelTerminy.Name = "panelPrehledTerminu";
-            panelTerminy.Location = new Point(290, 60);
-            panelTerminy.BorderStyle = BorderStyle.FixedSingle;
-            panelTerminy.BackColor = SystemColors.Control;
-            panelTerminy.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            panelTerminy.AutoScroll = false;
-            panelTerminy.HorizontalScroll.Enabled = false;
-            panelTerminy.HorizontalScroll.Visible = false;
-            panelTerminy.HorizontalScroll.Maximum = 0;
-            panelTerminy.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            panelTerminy.AutoScroll = true;
+            this.panelTerminy.Size = new Size(390, 550);
+            this.panelTerminy.Name = "panelPrehledTerminu";
+            this.panelTerminy.Location = new Point(290, 60);
+            this.panelTerminy.BorderStyle = BorderStyle.FixedSingle;
+            this.panelTerminy.BackColor = SystemColors.Control;
+            this.panelTerminy.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            this.panelTerminy.AutoScroll = false;
+            this.panelTerminy.HorizontalScroll.Enabled = false;
+            this.panelTerminy.HorizontalScroll.Visible = false;
+            this.panelTerminy.HorizontalScroll.Maximum = 0;
+            this.panelTerminy.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            this.panelTerminy.AutoScroll = true;
 
-            groupBoxNovyTermin.Controls.Add(panelTerminy);
+            this.groupBoxNovyTermin.Controls.Add(this.panelTerminy);
 
             var datumUkonceniASC = datumUkonceni.OrderBy(index => index.UkonceniAPId);
             foreach (var du in datumUkonceni)
             {
-                dateTimePickerDatumUkonceni.Value = du.DatumUkonceni.AddDays(1);
-                dateTimePickerDatumUkonceni.MinDate = du.DatumUkonceni.AddDays(1);
+                this.dateTimePickerDatumUkonceni.Value = du.DatumUkonceni.AddDays(1);
+                this.dateTimePickerDatumUkonceni.MinDate = du.DatumUkonceni.AddDays(1);
                 if (Convert.ToDateTime(du.DatumUkonceni.ToShortDateString()) < Convert.ToDateTime(DateTime.Now.ToShortDateString()))
                 {
-                    dateTimePickerDatumUkonceni.Value = DateTime.Now;
+                    this.dateTimePickerDatumUkonceni.Value = DateTime.Now;
                 }
 
                 break;
             }
 
-            int i = 0;
+            var i = 0;
             foreach (var du in datumUkonceniASC)
             {
-                groupBoxTerminy.Add(new GroupBox()
+                this.groupBoxTerminy.Add(new GroupBox()
                 {
                     Name = "groupBoxTerminy" + i + 1,
                     Location = new Point(10, 10 + (i * 150)),
@@ -328,7 +337,7 @@ namespace LearActionPlans.Views
                     Text = (i + 1).ToString() + ". term",
                 });
 
-                labelTerminyDatum.Add(new Label()
+                this.labelTerminyDatum.Add(new Label()
                 {
                     Name = "labelTerminyDatum" + i + 1,
                     Location = new Point(10, 20),
@@ -336,14 +345,14 @@ namespace LearActionPlans.Views
                     Text = du.DatumUkonceni.ToShortDateString(),
                     ForeColor = Color.Black
                 });
-                int delkaRetezce = 0;
-                using (System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(new Bitmap(1, 1)))
+                var delkaRetezce = 0;
+                using (var graphics = Graphics.FromImage(new Bitmap(1, 1)))
                 {
-                    SizeF size = graphics.MeasureString(du.DatumUkonceni.ToShortDateString(), new Font("Microsoft Sans Serif", 14F, FontStyle.Regular, GraphicsUnit.Pixel));
+                    var size = graphics.MeasureString(du.DatumUkonceni.ToShortDateString(), new Font("Microsoft Sans Serif", 14F, FontStyle.Regular, GraphicsUnit.Pixel));
                     delkaRetezce = Convert.ToInt32(size.Width);
                 }
 
-                richTextBoxTermin.Add(new RichTextBox()
+                this.richTextBoxTermin.Add(new RichTextBox()
                 {
                     Name = "RichTextBoxTermin" + i + 1,
                     Location = new Point(10, 45),
@@ -357,11 +366,11 @@ namespace LearActionPlans.Views
                 i++;
             }
 
-            for (i = 0; i < groupBoxTerminy.Count; i++)
+            for (i = 0; i < this.groupBoxTerminy.Count; i++)
             {
-                panelTerminy.Controls.Add(groupBoxTerminy[i]);
-                groupBoxTerminy[i].Controls.Add(labelTerminyDatum[i]);
-                groupBoxTerminy[i].Controls.Add(richTextBoxTermin[i]);
+                this.panelTerminy.Controls.Add(this.groupBoxTerminy[i]);
+                this.groupBoxTerminy[i].Controls.Add(this.labelTerminyDatum[i]);
+                this.groupBoxTerminy[i].Controls.Add(this.richTextBoxTermin[i]);
             }
         }
 
@@ -372,8 +381,8 @@ namespace LearActionPlans.Views
 
             public Zam(string jmeno, int zamestnanecId)
             {
-                Jmeno = jmeno;
-                ZamestnanecId = zamestnanecId;
+                this.Jmeno = jmeno;
+                this.ZamestnanecId = zamestnanecId;
             }
         }
 
@@ -387,12 +396,12 @@ namespace LearActionPlans.Views
             }
             else
             {
-                List<Zam> zam1 = new List<Zam>
+                var zam1 = new List<Zam>
                 {
                     new Zam("(select employees)", 0)
                 };
 
-                List<Zam> zam2 = new List<Zam>
+                var zam2 = new List<Zam>
                 {
                     new Zam("(select employees)", 0)
                 };
@@ -402,14 +411,15 @@ namespace LearActionPlans.Views
                     zam1.Add(new Zam(z.Jmeno, z.ZamestnanecId));
                     zam2.Add(new Zam(z.Jmeno, z.ZamestnanecId));
                 }
-                ComboBoxZadavatel1.DataSource = zam1;
-                ComboBoxZadavatel2.DataSource = zam2;
-                ComboBoxZadavatel1.DisplayMember = "Jmeno";
-                ComboBoxZadavatel2.DisplayMember = "Jmeno";
-                ComboBoxZadavatel1.ValueMember = "ZamestnanecId";
-                ComboBoxZadavatel2.ValueMember = "ZamestnanecId";
-                ComboBoxZadavatel1.SelectedIndex = 0;
-                ComboBoxZadavatel2.SelectedIndex = 0;
+
+                this.ComboBoxZadavatel1.DataSource = zam1;
+                this.ComboBoxZadavatel2.DataSource = zam2;
+                this.ComboBoxZadavatel1.DisplayMember = "Jmeno";
+                this.ComboBoxZadavatel2.DisplayMember = "Jmeno";
+                this.ComboBoxZadavatel1.ValueMember = "ZamestnanecId";
+                this.ComboBoxZadavatel2.ValueMember = "ZamestnanecId";
+                this.ComboBoxZadavatel1.SelectedIndex = 0;
+                this.ComboBoxZadavatel2.SelectedIndex = 0;
                 return true;
             }
         }
@@ -421,8 +431,8 @@ namespace LearActionPlans.Views
 
             public Proj(string nazevProjektu, int projektId)
             {
-                NazevProjektu = nazevProjektu;
-                ProjektId = projektId;
+                this.NazevProjektu = nazevProjektu;
+                this.ProjektId = projektId;
             }
         }
 
@@ -436,7 +446,7 @@ namespace LearActionPlans.Views
             }
             else
             {
-                List<Proj> proj = new List<Proj>
+                var proj = new List<Proj>
                 {
                     new Proj("(select a project)", 0)
                 };
@@ -444,10 +454,11 @@ namespace LearActionPlans.Views
                 {
                     proj.Add(new Proj(p.NazevProjektu, p.ProjektId));
                 }
-                ComboBoxProjekty.DataSource = proj;
-                ComboBoxProjekty.DisplayMember = "NazevProjektu";
-                ComboBoxProjekty.ValueMember = "ProjektId";
-                ComboBoxProjekty.SelectedIndex = 0;
+
+                this.ComboBoxProjekty.DataSource = proj;
+                this.ComboBoxProjekty.DisplayMember = "NazevProjektu";
+                this.ComboBoxProjekty.ValueMember = "ProjektId";
+                this.ComboBoxProjekty.SelectedIndex = 0;
                 return true;
             }
         }
@@ -459,8 +470,8 @@ namespace LearActionPlans.Views
 
             public Zak(string nazevZakaznika, int zakaznikId)
             {
-                NazevZakaznika = nazevZakaznika;
-                ZakaznikId = zakaznikId;
+                this.NazevZakaznika = nazevZakaznika;
+                this.ZakaznikId = zakaznikId;
             }
         }
 
@@ -474,7 +485,7 @@ namespace LearActionPlans.Views
             }
             else
             {
-                List<Zak> zak = new List<Zak>
+                var zak = new List<Zak>
                 {
                     new Zak("(choose a customer)", 0)
                 };
@@ -484,41 +495,41 @@ namespace LearActionPlans.Views
                     zak.Add(new Zak(z.NazevZakaznika, z.ZakaznikId));
                 }
                 //zak.Add(new Zak() { NazevZakaznika = z.NazevZakaznika, ZakaznikId = z.ZakaznikId });
-                ComboBoxZakaznici.DataSource = zak;
-                ComboBoxZakaznici.DisplayMember = "NazevZakaznika";
-                ComboBoxZakaznici.ValueMember = "ZakaznikId";
-                ComboBoxZakaznici.SelectedIndex = 0;
+                this.ComboBoxZakaznici.DataSource = zak;
+                this.ComboBoxZakaznici.DisplayMember = "NazevZakaznika";
+                this.ComboBoxZakaznici.ValueMember = "ZakaznikId";
+                this.ComboBoxZakaznici.SelectedIndex = 0;
                 return true;
             }
         }
 
         private void ComboBoxZadavatel1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            zmenaDat = true;
-            ButtonUlozit.Enabled = true;
+            this.zmenaDat = true;
+            this.ButtonUlozit.Enabled = true;
         }
 
         private void ComboBoxZadavatel2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            zmenaDat = true;
-            ButtonUlozit.Enabled = true;
+            this.zmenaDat = true;
+            this.ButtonUlozit.Enabled = true;
         }
 
         private void ComboBoxProjekty_SelectedIndexChanged(object sender, EventArgs e)
         {
-            zmenaDat = true;
-            ButtonUlozit.Enabled = true;
+            this.zmenaDat = true;
+            this.ButtonUlozit.Enabled = true;
         }
 
         private void ComboBoxZakaznici_SelectedIndexChanged(object sender, EventArgs e)
         {
-            zmenaDat = true;
-            ButtonUlozit.Enabled = true;
+            this.zmenaDat = true;
+            this.ButtonUlozit.Enabled = true;
         }
 
         private void ButtonUlozit_MouseClick(object sender, MouseEventArgs e)
         {
-            UlozitAP();
+            this.UlozitAP();
         }
 
         private void UlozitAP()
@@ -526,96 +537,103 @@ namespace LearActionPlans.Views
             int? zadavatel2ID;
             int? projektID;
 
-            if (ComboBoxZadavatel2.SelectedIndex == 0)
+            if (this.ComboBoxZadavatel2.SelectedIndex == 0)
+            {
                 zadavatel2ID = null;
+            }
             else
-                zadavatel2ID = Convert.ToInt32(ComboBoxZadavatel2.SelectedValue);
+            {
+                zadavatel2ID = Convert.ToInt32(this.ComboBoxZadavatel2.SelectedValue);
+            }
 
-            if (ComboBoxProjekty.SelectedIndex == 0)
+            if (this.ComboBoxProjekty.SelectedIndex == 0)
+            {
                 projektID = null;
+            }
             else
-                projektID = Convert.ToInt32(ComboBoxProjekty.SelectedValue);
+            {
+                projektID = Convert.ToInt32(this.ComboBoxProjekty.SelectedValue);
+            }
 
-            AkcniPlanyDataMapper.UpdateAP(apId_, Convert.ToInt32(ComboBoxZadavatel1.SelectedValue), zadavatel2ID,
-                tema_, projektID, Convert.ToInt32(ComboBoxZakaznici.SelectedValue));
+            AkcniPlanyDataMapper.UpdateAP(this.apId_, Convert.ToInt32(this.ComboBoxZadavatel1.SelectedValue), zadavatel2ID, this.tema_, projektID, Convert.ToInt32(this.ComboBoxZakaznici.SelectedValue));
 
             //MessageBox.Show("Data has been saved.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            zmenaDat = false;
-            ButtonUlozit.Enabled = false;
+            this.zmenaDat = false;
+            this.ButtonUlozit.Enabled = false;
         }
 
         private void ButtonNovyTermin_MouseClick(object sender, MouseEventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show("Do you really want to change the deadline of the action plan?.", "Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            var dialogResult = MessageBox.Show("Do you really want to change the deadline of the action plan?.", "Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
             if (dialogResult == DialogResult.Yes)
             {
-                if (richTextBoxNovaPoznamka.Text == string.Empty)
+                if (this.richTextBoxNovaPoznamka.Text == string.Empty)
                 {
                     //Musí být vyplněn důvod prodloužení.
                     MessageBox.Show("The reason for the extension must be filled in.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    AkcniPlanyDataMapper.ZmenaTerminuAP(apId_, Convert.ToInt32(labelZbyvajiciPocetTerminu.Text) - 1, Convert.ToDateTime(dateTimePickerDatumUkonceni.Value), richTextBoxNovaPoznamka.Text);
-                    dateTimePickerDatumUkonceni.Enabled = false;
-                    labelPoznamkaTermin.Enabled = false;
-                    richTextBoxNovaPoznamka.Enabled = false;
-                    richTextBoxNovaPoznamka.Text = string.Empty;
+                    AkcniPlanyDataMapper.ZmenaTerminuAP(this.apId_, Convert.ToInt32(this.labelZbyvajiciPocetTerminu.Text) - 1, Convert.ToDateTime(this.dateTimePickerDatumUkonceni.Value), this.richTextBoxNovaPoznamka.Text);
+                    this.dateTimePickerDatumUkonceni.Enabled = false;
+                    this.labelPoznamkaTermin.Enabled = false;
+                    this.richTextBoxNovaPoznamka.Enabled = false;
+                    this.richTextBoxNovaPoznamka.Text = string.Empty;
 
-                    var pocetTerminu = EditAPViewModel.GetPocetTerminu(apId_).ToList();
-                    labelZbyvajiciPocetTerminu.Text = pocetTerminu[0].ZmenaTerminu.ToString();
+                    var pocetTerminu = EditAPViewModel.GetPocetTerminu(this.apId_).ToList();
+                    this.labelZbyvajiciPocetTerminu.Text = pocetTerminu[0].ZmenaTerminu.ToString();
 
-                    RemoveControl();
-                    InitForm();
+                    this.RemoveControl();
+                    this.InitForm();
                 }
             }
         }
 
         private void ButtonUkoncitAP_MouseClick(object sender, MouseEventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show("You really want to close the Action plan.", "Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            var dialogResult = MessageBox.Show("You really want to close the Action plan.", "Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
             if (dialogResult == DialogResult.Yes)
             {
-                AkcniPlanyDataMapper.UpdateUkonceniAP(apId_);
+                AkcniPlanyDataMapper.UpdateUkonceniAP(this.apId_);
 
-                RemoveControl();
-                InitForm();
+                this.RemoveControl();
+                this.InitForm();
             }
         }
 
         private void ButtonZnovuOtevrit_MouseClick(object sender, MouseEventArgs e)
         {
 
-            DialogResult dialogResult = MessageBox.Show("You really want to reopen the AP.", "Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            var dialogResult = MessageBox.Show("You really want to reopen the AP.", "Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
             if (dialogResult == DialogResult.Yes)
             {
-                if (richTextBoxDuvodZnovuOtevreni.Text == string.Empty)
+                if (this.richTextBoxDuvodZnovuOtevreni.Text == string.Empty)
                 {
                     MessageBox.Show("You must fill in the reason for reopening the Action plan.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    AkcniPlanyDataMapper.UpdateZnovuOtevritAP(apId_, richTextBoxDuvodZnovuOtevreni.Text);
+                    AkcniPlanyDataMapper.UpdateZnovuOtevritAP(this.apId_, this.richTextBoxDuvodZnovuOtevreni.Text);
 
-                    RemoveControl();
-                    InitForm();
+                    this.RemoveControl();
+                    this.InitForm();
                 }
             }
         }
 
         private void FormEditAP_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (zmenaDat == true)
+            if (this.zmenaDat == true)
             {
-                DialogResult dialogResult = MessageBox.Show("You want to save your changes.", "Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                var dialogResult = MessageBox.Show("You want to save your changes.", "Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
                 if (dialogResult == DialogResult.Yes)
                 {
-                    UlozitAP();
+                    this.UlozitAP();
                 }
                 else if (dialogResult == DialogResult.No)
                 {
@@ -625,7 +643,7 @@ namespace LearActionPlans.Views
 
         private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e)
         {
-            Close();
+            this.Close();
         }
     }
 }

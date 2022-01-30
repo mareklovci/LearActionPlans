@@ -94,7 +94,7 @@ namespace LearActionPlans.ViewModels
 
             var query = from z in zamestnanci
                         orderby z.Prijmeni, z.Jmeno
-                        select AdminViewModel.Zamestnanec(z.Id, z.Jmeno, z.Prijmeni, z.PrihlasovaciJmeno, z.Email, z.AdminAP, z.OddeleniId, z.StavObjektu);
+                        select Zamestnanec(z.Id, z.Jmeno, z.Prijmeni, z.PrihlasovaciJmeno, z.Email, z.AdminAP, z.OddeleniId, z.StavObjektu);
 
             if (query.Count() == 0)
             {
@@ -103,7 +103,9 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
 
@@ -113,7 +115,7 @@ namespace LearActionPlans.ViewModels
 
             var query = from z in zamestnanci
                         where z.PrihlasovaciJmeno == login
-                        select AdminViewModel.Zamestnanec(z.Id, z.Jmeno, z.Prijmeni, z.PrihlasovaciJmeno, z.Email, z.AdminAP, z.OddeleniId, z.StavObjektu);
+                        select Zamestnanec(z.Id, z.Jmeno, z.Prijmeni, z.PrihlasovaciJmeno, z.Email, z.AdminAP, z.OddeleniId, z.StavObjektu);
 
             if (query.Count() == 0)
             {
@@ -131,7 +133,7 @@ namespace LearActionPlans.ViewModels
 
             var query = from o in oddeleni
                         orderby o.Nazev
-                        select AdminViewModel.Oddeleni(o.Id, o.Nazev);
+                        select Oddeleni(o.Id, o.Nazev);
 
             if (query.Count() == 0)
             {
@@ -140,7 +142,9 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
 
@@ -160,7 +164,9 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
 
@@ -171,7 +177,7 @@ namespace LearActionPlans.ViewModels
             var query = from z in zakaznici
                         where z.StavObjektu == 1
                         orderby z.Nazev
-                        select AdminViewModel.Zakaznik(z.Id, z.Nazev);
+                        select Zakaznik(z.Id, z.Nazev);
 
             if (query.Count() == 0)
             {
@@ -180,7 +186,9 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
 
@@ -190,7 +198,7 @@ namespace LearActionPlans.ViewModels
 
             var query = from z in zamestnanci
                         where z.StavObjektu == 1 && z.AdminAP is true
-                        select AdminViewModel.Admin(z.Id);
+                        select Admin(z.Id);
 
             if (query.Count() == 0)
             {
@@ -199,7 +207,9 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
     }

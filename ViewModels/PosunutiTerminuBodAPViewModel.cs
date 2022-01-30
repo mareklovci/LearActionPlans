@@ -66,7 +66,7 @@ namespace LearActionPlans.ViewModels
             var ukonceni = UkonceniBodAPDataMapper.GetUkonceniBodAPId(bodAPId).ToList();
 
             var query = from u in ukonceni
-                        select PosunutiTerminuBodAPViewModel.UkonceniBodAP(u.Id, u.BodAPId, u.DatumUkonceni, u.Poznamka, u.Odpoved, u.StavZadosti, u.StavObjektuUkonceni);
+                        select UkonceniBodAP(u.Id, u.BodAPId, u.DatumUkonceni, u.Poznamka, u.Odpoved, u.StavZadosti, u.StavObjektuUkonceni);
 
             if (query.Count() == 0)
             {
@@ -75,7 +75,9 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
 
@@ -84,7 +86,7 @@ namespace LearActionPlans.ViewModels
             var bodAP = BodAPDataMapper.GetZbyvajiciTerminyBodAPId(bodAPId).ToList();
 
             var query = from b in bodAP
-                        select PosunutiTerminuBodAPViewModel.ZbyvajiciTerminy(b.Id, b.ZamitnutiTerminu, b.ZmenaTerminu);
+                        select ZbyvajiciTerminy(b.Id, b.ZamitnutiTerminu, b.ZmenaTerminu);
 
             if (query.Count() == 0)
             {
@@ -93,7 +95,9 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
 
@@ -103,7 +107,7 @@ namespace LearActionPlans.ViewModels
 
             var query = from u in ukonceni
                         where u.BodAPId == bodAPId && u.StavZadosti == 1
-                        select PosunutiTerminuBodAPViewModel.ZavritPrvniTermin(u.Id);
+                        select ZavritPrvniTermin(u.Id);
 
             if (query.Count() == 0)
             {
@@ -112,7 +116,9 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
     }

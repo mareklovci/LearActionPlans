@@ -119,7 +119,7 @@ namespace LearActionPlans.ViewModels
             var query = from z in zamestnanci
                         where z.StavObjektu == 1
                         orderby z.Prijmeni, z.Jmeno
-                        select ZadaniBoduAPViewModel.Zamestnanec(z.Id, z.Prijmeni + " " + z.Jmeno);
+                        select Zamestnanec(z.Id, z.Prijmeni + " " + z.Jmeno);
 
             if (query.Count() == 0)
             {
@@ -146,7 +146,7 @@ namespace LearActionPlans.ViewModels
             var query = from o in oddeleni
                         where o.StavObjektu == 1
                         orderby o.Nazev
-                        select ZadaniBoduAPViewModel.Oddeleni(o.Id, o.Nazev);
+                        select Oddeleni(o.Id, o.Nazev);
 
             //where o.StavObjektu == 1
 

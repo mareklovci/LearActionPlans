@@ -17,39 +17,39 @@ namespace LearActionPlans.Models
 
         public UkonceniBodAP(DateTime? kontrolaEfektivnosti)
         {
-            KontrolaEfektivnosti = kontrolaEfektivnosti;
+            this.KontrolaEfektivnosti = kontrolaEfektivnosti;
         }
 
         public UkonceniBodAP(int id, int bodAPId, DateTime datumUkonceni, string poznamka, string odpoved,  byte stavZadosti, byte stavObjektu, bool datUkonBodAPUlozen)
         {
-            Id = id;
-            BodAPId = bodAPId;
-            DatumUkonceni = datumUkonceni;
-            Poznamka = poznamka;
-            Odpoved = odpoved;
-            StavZadosti = stavZadosti;
-            StavObjektuUkonceni = stavObjektu;
-            DatUkonBodAPUlozen = datUkonBodAPUlozen;
+            this.Id = id;
+            this.BodAPId = bodAPId;
+            this.DatumUkonceni = datumUkonceni;
+            this.Poznamka = poznamka;
+            this.Odpoved = odpoved;
+            this.StavZadosti = stavZadosti;
+            this.StavObjektuUkonceni = stavObjektu;
+            this.DatUkonBodAPUlozen = datUkonBodAPUlozen;
         }
 
         public UkonceniBodAP(int id, int bodAPId, DateTime datumUkonceni, string poznamka, string odpoved, byte stavZadosti, byte stavObjektu)
         {
-            Id = id;
-            BodAPId = bodAPId;
-            DatumUkonceni = datumUkonceni;
-            Poznamka = poznamka;
-            Odpoved = odpoved;
-            StavZadosti = stavZadosti;
-            StavObjektuUkonceni = stavObjektu;
+            this.Id = id;
+            this.BodAPId = bodAPId;
+            this.DatumUkonceni = datumUkonceni;
+            this.Poznamka = poznamka;
+            this.Odpoved = odpoved;
+            this.StavZadosti = stavZadosti;
+            this.StavObjektuUkonceni = stavObjektu;
         }
 
         //konstruktor pro ukládání datumu ukončení
         public UkonceniBodAP(DateTime datumUkonceni, string poznamka, string odpoved, byte stavZadosti, bool datUkonAkceUlozena)
         {
-            DatumUkonceni = datumUkonceni;
-            Poznamka = poznamka;
-            Odpoved = odpoved;
-            StavZadosti = stavZadosti;
+            this.DatumUkonceni = datumUkonceni;
+            this.Poznamka = poznamka;
+            this.Odpoved = odpoved;
+            this.StavZadosti = stavZadosti;
             //DatUkonAkceUlozen = datUkonAkceUlozena;
         }
     }

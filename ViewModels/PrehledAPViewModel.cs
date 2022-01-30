@@ -37,35 +37,35 @@ namespace LearActionPlans.ViewModels
 
         public PrehledAPViewModel(int zad2Id, string zadavatel2Jmeno)
         {
-            Zadavatel2Id = zad2Id;
-            Zadavatel2 = zadavatel2Jmeno;
+            this.Zadavatel2Id = zad2Id;
+            this.Zadavatel2 = zadavatel2Jmeno;
         }
 
         public PrehledAPViewModel(int akceAPId, int zadavatel1IdAkce, int? zadavatel2IdAkce)
         {
-            AkceAPId = akceAPId;
-            Zadavatel1IdAkce = zadavatel1IdAkce;
-            Zadavatel2IdAkce = zadavatel2IdAkce;
+            this.AkceAPId = akceAPId;
+            this.Zadavatel1IdAkce = zadavatel1IdAkce;
+            this.Zadavatel2IdAkce = zadavatel2IdAkce;
         }
 
         public PrehledAPViewModel(int id, DateTime datumZalozeni, int cisloAP, int zadavatel1Id, int? zadavatel2Id,
             string zadavatel1Jmeno, string tema, int? projektId, string projekt,
             int zakaznikId, string zakaznik, byte typAP, byte stavObjektu, DateTime? datumUzavreni)
         {
-            Id = id;
-            DatumZalozeni = datumZalozeni;
-            CisloAP = cisloAP;
-            Zadavatel1Id = zadavatel1Id;
-            Zadavatel2Id = zadavatel2Id;
-            Zadavatel1 = zadavatel1Jmeno;
-            Tema = tema;
-            ProjektId = projektId;
-            Projekt = projekt;
-            ZakaznikId = zakaznikId;
-            Zakaznik = zakaznik;
-            TypAP = typAP;
-            StavObjektu = stavObjektu;
-            DatumUzavreni = datumUzavreni;
+            this.Id = id;
+            this.DatumZalozeni = datumZalozeni;
+            this.CisloAP = cisloAP;
+            this.Zadavatel1Id = zadavatel1Id;
+            this.Zadavatel2Id = zadavatel2Id;
+            this.Zadavatel1 = zadavatel1Jmeno;
+            this.Tema = tema;
+            this.ProjektId = projektId;
+            this.Projekt = projekt;
+            this.ZakaznikId = zakaznikId;
+            this.Zakaznik = zakaznik;
+            this.TypAP = typAP;
+            this.StavObjektu = stavObjektu;
+            this.DatumUzavreni = datumUzavreni;
         }
 
         public static IEnumerable<PrehledAPViewModel> GetAPAll()
@@ -113,7 +113,7 @@ namespace LearActionPlans.ViewModels
 
         public PrehledAPViewModel(int bodAPId)
         {
-            BodAPId = bodAPId;
+            this.BodAPId = bodAPId;
         }
 
         public static IEnumerable<PrehledAPViewModel> GetBodyAPId(int idAP)

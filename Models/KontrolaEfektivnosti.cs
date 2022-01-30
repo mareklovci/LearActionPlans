@@ -13,9 +13,9 @@ namespace LearActionPlans.Models
 
         public KontrolaEfektivnosti(DateTime puvodniDatum, DateTime odstranitDatum, string poznamka)
         {
-            PuvodniDatum = puvodniDatum;
-            OdstranitDatum = odstranitDatum;
-            Poznamka = poznamka;
+            this.PuvodniDatum = puvodniDatum;
+            this.OdstranitDatum = odstranitDatum;
+            this.Poznamka = poznamka;
         }
     }
 }

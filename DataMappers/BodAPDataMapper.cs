@@ -4,14 +4,12 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
 using LearActionPlans.Models;
-using LearActionPlans.Views;
 using LearActionPlans.Utilities;
 
 namespace LearActionPlans.DataMappers
 {
-    public static class BodAPDataMapper
+    public static partial class BodAPDataMapper
     {
         private static readonly string ConnectionString =
             ConfigurationManager.ConnectionStrings["ActionPlansEntity"].ConnectionString;
@@ -32,7 +30,9 @@ namespace LearActionPlans.DataMappers
             if (reader.HasRows)
             {
                 while (reader.Read())
+                {
                     yield return ConstructBodyAP(reader);
+                }
             }
         }
 
@@ -51,12 +51,18 @@ namespace LearActionPlans.DataMappers
             var reader = command.ExecuteReader();
 
             if (reader == null)
-                yield break;
-
-            if (reader.HasRows)
             {
-                while (reader.Read())
-                    yield return ConstructBodyAP(reader);
+                yield break;
+            }
+
+            if (!reader.HasRows)
+            {
+                yield break;
+            }
+
+            while (reader.Read())
+            {
+                yield return ConstructBodyAP(reader);
             }
         }
 
@@ -75,72 +81,51 @@ namespace LearActionPlans.DataMappers
             var reader = command.ExecuteReader();
 
             if (reader == null)
-                yield break;
-
-            if (reader.HasRows)
             {
-                while (reader.Read())
-                    yield return ConstructBodyAP(reader);
+                yield break;
+            }
+
+            if (!reader.HasRows)
+            {
+                yield break;
+            }
+
+            while (reader.Read())
+            {
+                yield return ConstructBodyAP(reader);
             }
         }
 
         private static BodAP ConstructBodyAP(IDataRecord readerData)
         {
-            int id = (int)readerData["BodAPID"];
-            int akcniPlanId = (int)readerData["AkcniPlanID"];
-            int cisloBoduAP = (int)readerData["CisloBoduAP"];
-            DateTime datumZalozeni = (DateTime)readerData["DatumZalozeni"];
-            string odkazNaNormu = DatabaseReader.ConvertString(readerData, "OdkazNaNormu");
-            string hodnoceniNeshody = DatabaseReader.ConvertString(readerData, "HodnoceniNeshody");
-            string popisProblemu = DatabaseReader.ConvertString(readerData, "PopisProblemu");
-            string skutecnaPricinaWM = DatabaseReader.ConvertString(readerData, "SkutecnaPricinaWM");
-            string napravnaOpatreniWM = DatabaseReader.ConvertString(readerData, "NapravnaOpatreniWM");
-            string skutecnaPricinaWS = DatabaseReader.ConvertString(readerData, "SkutecnaPricinaWS");
-            string napravnaOpatreniWS = DatabaseReader.ConvertString(readerData, "NapravnaOpatreniWS");
+            var id = (int)readerData["BodAPID"];
+            var akcniPlanId = (int)readerData["AkcniPlanID"];
+            var cisloBoduAP = (int)readerData["CisloBoduAP"];
+            var datumZalozeni = (DateTime)readerData["DatumZalozeni"];
+            var odkazNaNormu = DatabaseReader.ConvertString(readerData, "OdkazNaNormu");
+            var hodnoceniNeshody = DatabaseReader.ConvertString(readerData, "HodnoceniNeshody");
+            var popisProblemu = DatabaseReader.ConvertString(readerData, "PopisProblemu");
+            var skutecnaPricinaWM = DatabaseReader.ConvertString(readerData, "SkutecnaPricinaWM");
+            var napravnaOpatreniWM = DatabaseReader.ConvertString(readerData, "NapravnaOpatreniWM");
+            var skutecnaPricinaWS = DatabaseReader.ConvertString(readerData, "SkutecnaPricinaWS");
+            var napravnaOpatreniWS = DatabaseReader.ConvertString(readerData, "NapravnaOpatreniWS");
 
-            int odpovednaOsoba1Id = (int)readerData["OdpovednaOsoba1ID"];
-            int? odpovednaOsoba2Id = DatabaseReader.ConvertInteger(readerData, "OdpovednaOsoba2ID");
-            DateTime? kontrolaEfektivnosti = DatabaseReader.ConvertDateTime(readerData, "KontrolaEfektivnosti");
-            int? oddeleniId = DatabaseReader.ConvertInteger(readerData, "OddeleniID");
-            string priloha = DatabaseReader.ConvertString(readerData, "Priloha");
-            byte zamitnutiTerminu = (byte)readerData["ZamitnutiTerminu"];
-            byte zmenaTerminu = (byte)readerData["ZmenaTerminu"];
+            var odpovednaOsoba1Id = (int)readerData["OdpovednaOsoba1ID"];
+            var odpovednaOsoba2Id = DatabaseReader.ConvertInteger(readerData, "OdpovednaOsoba2ID");
+            var kontrolaEfektivnosti = DatabaseReader.ConvertDateTime(readerData, "KontrolaEfektivnosti");
+            var oddeleniId = DatabaseReader.ConvertInteger(readerData, "OddeleniID");
+            var priloha = DatabaseReader.ConvertString(readerData, "Priloha");
+            var zamitnutiTerminu = (byte)readerData["ZamitnutiTerminu"];
+            var zmenaTerminu = (byte)readerData["ZmenaTerminu"];
 
             //List<Akce> typAkce = new List<Akce>();
-            bool znovuOtevrit = (bool)readerData["ZnovuOtevrit"];
-            byte stavObjektu = (byte)readerData["StavObjektu"];
+            var znovuOtevrit = (bool)readerData["ZnovuOtevrit"];
+            var stavObjektu = (byte)readerData["StavObjektu"];
 
             return new BodAP(id, akcniPlanId, cisloBoduAP, datumZalozeni, odkazNaNormu, hodnoceniNeshody, popisProblemu,
                 skutecnaPricinaWM, napravnaOpatreniWM, skutecnaPricinaWS, napravnaOpatreniWS, odpovednaOsoba1Id, odpovednaOsoba2Id, kontrolaEfektivnosti, oddeleniId, priloha, zamitnutiTerminu, zmenaTerminu,
                 znovuOtevrit, true, stavObjektu);
         }
-
-        //public static IEnumerable<Akce> GetUkonceniBodAPId(int bodAPId)
-        //{
-        //    using (var connection = new SqlConnection(ConnectionString))
-        //    {
-        //        connection.Open();
-
-        //        using (var command = connection.CreateCommand())
-        //        {
-        //            command.CommandType = CommandType.Text;
-
-        //            command.CommandText = $"SELECT * FROM UkonceniBodAP WHERE BodAPID = @bodAPId";
-        //            command.Parameters.AddWithValue("@bodAPId", bodAPId);
-
-        //            var reader = command.ExecuteReader();
-
-        //            if (reader == null)
-        //                yield break;
-
-        //            if (reader.HasRows)
-        //            {
-        //                while (reader.Read())
-        //                    yield return ConstructAkce(reader);
-        //            }
-        //        }
-        //    }
-        //}
 
         public static IEnumerable<UkonceniBodAP> GetUkonceniAkceZadost()
         {
@@ -156,87 +141,33 @@ namespace LearActionPlans.DataMappers
             var reader = command.ExecuteReader();
 
             if (reader == null)
-                yield break;
-
-            if (reader.HasRows)
             {
-                while (reader.Read())
-                    yield return ConstructUkonceniAkceZadost(reader);
+                yield break;
+            }
+
+            if (!reader.HasRows)
+            {
+                yield break;
+            }
+
+            while (reader.Read())
+            {
+                yield return ConstructUkonceniAkceZadost(reader);
             }
         }
 
-        //public static IEnumerable<Akce> GetAkceAll()
-        //{
-        //    using (var connection = new SqlConnection(ConnectionString))
-        //    {
-        //        connection.Open();
-
-        //        using (var command = connection.CreateCommand())
-        //        {
-        //            command.CommandType = CommandType.Text;
-
-        //            command.CommandText = $"SELECT * FROM Akce";
-
-        //            var reader = command.ExecuteReader();
-
-        //            if (reader == null)
-        //                yield break;
-
-        //            if (reader.HasRows)
-        //            {
-        //                while (reader.Read())
-        //                    yield return ConstructAkceZadost(reader);
-        //            }
-        //        }
-        //    }
-        //}
-        //private static Akce ConstructAkceZadost(IDataRecord readerData)
-        //{
-        //    int id = Convert.ToInt32(readerData["AkceID"]);
-        //    int bodyAPId = Convert.ToInt32(readerData["BodAPID"]);
-        //    string napravnaOpatreni = DatabaseReader.ConvertString(readerData, "NapravnaOpatreni");
-        //    int odpovednaOsoba1 = Convert.ToInt32(readerData["OdpovednaOsoba1"]);
-        //    int? odpovednaOsoba2 = DatabaseReader.ConvertInteger(readerData, "OdpovednaOsoba2");
-        //    List<UkonceniBodAP> ukonceniAkce = new List<UkonceniBodAP>();
-        //    DateTime? kontrolaEfektivnosti = DatabaseReader.ConvertDateTime(readerData, "KontrolaEfektivnosti");
-        //    int? oddeleniId = DatabaseReader.ConvertInteger(readerData, "OddeleniId");
-        //    string priloha = DatabaseReader.ConvertString(readerData, "Priloha");
-        //    byte typ = Convert.ToByte(readerData["Typ"]);
-        //    byte stavObjektu = Convert.ToByte(readerData["StavObjektu"]);
-
-        //    return new Akce(id, bodyAPId, napravnaOpatreni, odpovednaOsoba1, odpovednaOsoba2, ukonceniAkce, kontrolaEfektivnosti, oddeleniId, priloha, typ, stavObjektu);
-        //}
-
         private static UkonceniBodAP ConstructUkonceniAkceZadost(IDataRecord readerData)
         {
-            int id = Convert.ToInt32(readerData["UkonceniAkceID"]);
-            int akceId = Convert.ToInt32(readerData["AkceID"]);
-            DateTime ukonceniAkce = Convert.ToDateTime(readerData["DatumUkonceni"]);
-            string poznamka = DatabaseReader.ConvertString(readerData, "Poznamka");
-            string odpoved = DatabaseReader.ConvertString(readerData, "Odpoved");
-            byte stavZadosti = Convert.ToByte(readerData["StavZadosti"]);
-            byte stavObjektu = Convert.ToByte(readerData["StavObjektu"]);
+            var id = Convert.ToInt32(readerData["UkonceniAkceID"]);
+            var akceId = Convert.ToInt32(readerData["AkceID"]);
+            var ukonceniAkce = Convert.ToDateTime(readerData["DatumUkonceni"]);
+            var poznamka = DatabaseReader.ConvertString(readerData, "Poznamka");
+            var odpoved = DatabaseReader.ConvertString(readerData, "Odpoved");
+            var stavZadosti = Convert.ToByte(readerData["StavZadosti"]);
+            var stavObjektu = Convert.ToByte(readerData["StavObjektu"]);
 
             return new UkonceniBodAP(id, akceId, ukonceniAkce, poznamka, odpoved, stavZadosti, stavObjektu);
         }
-
-        //private static Akce ConstructAkce(IDataRecord readerData)
-        //{
-        //    int id = Convert.ToInt32(readerData["AkceID"]);
-        //    int bodyAPId = Convert.ToInt32(readerData["BodAPID"]);
-        //    string napravnaOpatreni = DatabaseReader.ConvertString(readerData, "NapravnaOpatreni");
-        //    int odpovednaOsoba1 = Convert.ToInt32(readerData["OdpovednaOsoba1"]);
-        //    int? odpovednaOsoba2 = DatabaseReader.ConvertInteger(readerData, "OdpovednaOsoba2");
-        //    List<UkonceniBodAP> ukonceniAkce = new List<UkonceniBodAP>();
-        //    DateTime? kontrolaEfektivnosti = DatabaseReader.ConvertDateTime(readerData, "KontrolaEfektivnosti");
-        //    int? oddeleniId = DatabaseReader.ConvertInteger(readerData, "OddeleniId");
-        //    string priloha = DatabaseReader.ConvertString(readerData, "Priloha");
-        //    byte typ = Convert.ToByte(readerData["Typ"]);
-        //    bool reopen = Convert.ToBoolean(readerData["ZnovuOtevrit"]);
-        //    byte stavObjektu = Convert.ToByte(readerData["StavObjektu"]);
-
-        //    return new Akce(id, bodyAPId, napravnaOpatreni, odpovednaOsoba1, odpovednaOsoba2, ukonceniAkce, kontrolaEfektivnosti, oddeleniId, priloha, typ, stavObjektu, true, reopen);
-        //}
 
         public static IEnumerable<UkonceniBodAP> GetUkonceniBodAP(int bodAPId)
         {
@@ -252,24 +183,28 @@ namespace LearActionPlans.DataMappers
             var reader = command.ExecuteReader();
 
             if (reader == null)
+            {
                 yield break;
+            }
 
             if (reader.HasRows)
             {
                 while (reader.Read())
+                {
                     yield return ConstructUkonceniBodAP(reader);
+                }
             }
         }
 
         private static UkonceniBodAP ConstructUkonceniBodAP(IDataRecord readerData)
         {
-            int id = Convert.ToInt32(readerData["UkonceniBodAPID"]);
-            int bodAPId = Convert.ToInt32(readerData["BodAPID"]);
-            DateTime ukonceniBodAP = Convert.ToDateTime(readerData["DatumUkonceni"]);
-            string poznamka = DatabaseReader.ConvertString(readerData, "Poznamka");
-            string odpoved = DatabaseReader.ConvertString(readerData, "Odpoved");
-            byte stavZadosti = Convert.ToByte(readerData["StavZadosti"]);
-            byte stavObjektu = Convert.ToByte(readerData["StavObjektu"]);
+            var id = Convert.ToInt32(readerData["UkonceniBodAPID"]);
+            var bodAPId = Convert.ToInt32(readerData["BodAPID"]);
+            var ukonceniBodAP = Convert.ToDateTime(readerData["DatumUkonceni"]);
+            var poznamka = DatabaseReader.ConvertString(readerData, "Poznamka");
+            var odpoved = DatabaseReader.ConvertString(readerData, "Odpoved");
+            var stavZadosti = Convert.ToByte(readerData["StavZadosti"]);
+            var stavObjektu = Convert.ToByte(readerData["StavObjektu"]);
 
             return new UkonceniBodAP(id, bodAPId, ukonceniBodAP, poznamka, odpoved, stavZadosti, stavObjektu, true);
         }
@@ -278,7 +213,7 @@ namespace LearActionPlans.DataMappers
         //public static void InsertUpdateBodyAP(int idAP)
         public static int InsertUpdateBodAP(BodAP ulozitBodAP)
         {
-            int idZaznamu = 0;
+            var idZaznamu = 0;
 
             try
             {
@@ -288,29 +223,10 @@ namespace LearActionPlans.DataMappers
                 if (ulozitBodAP.BodUlozen == false)
                 {
                     idZaznamu = InsertBodAP(ulozitBodAP, connection);
-
-                    //foreach (var akce in ulozitBodAP.TypAkce)
-                    //{
-                    //    InsertAkce(idZaznamu, akce, connection);
-                    //}
                 }
                 else
                 {
                     UpdateBodAP(ulozitBodAP, connection);
-
-                    //foreach (Akce akce in ulozitBodAP.TypAkce)
-                    //{
-                    //    if (akce.AkceUlozena == true)
-                    //    {
-                    //        if (akce.StavObjektuAkce == 1)
-                    //            UpdateAkce(akce.Id, akce, connection);
-                    //    }
-                    //    else
-                    //    {
-                    //        idZaznamu = ulozitBodAP.Id;
-                    //        InsertAkce(idZaznamu, akce, connection);
-                    //    }
-                    //}
                 }
                 connection.Close();
             }
@@ -320,100 +236,6 @@ namespace LearActionPlans.DataMappers
                 //MessageBox.Show(ex.ToString(), "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
-            return idZaznamu;
-        }
-
-        private static int InsertBodAP(BodAP bodAP, SqlConnection connection)
-        {
-            using var command = connection.CreateCommand();
-            //bodAP ještě nebyl uložen a tak bude proveden pouze Insert
-            //------------------------------------------------------------------------------------------
-            command.CommandType = CommandType.Text;
-            command.CommandText = $"INSERT INTO BodAP (AkcniPlanID, CisloBoduAP, DatumZalozeni, OdkazNaNormu, HodnoceniNeshody, PopisProblemu, " +
-                                  $"SkutecnaPricinaWM, NapravnaOpatreniWM, SkutecnaPricinaWS, NapravnaOpatreniWS, OdpovednaOsoba1ID, OdpovednaOsoba2ID, " +
-                                  $"KontrolaEfektivnosti, OddeleniID, Priloha, ZnovuOtevrit, StavObjektu) output INSERTED.BodAPID VALUES" +
-                                  $"(@APId, @cisloBoduAP, @datumZalozeni, @odkazNaNormu, @hodnoceniNeshody, @popisProblemu, " +
-                                  $"@skutecnaPricinaWM, @napravnaOpatreniWM, @skutecnaPricinaWS, @napravnaOpatreniWS, " +
-                                  $"@odpovednaOsoba1Id, @odpovednaOsoba2Id, @kontrolaEfektivnosti, @oddeleniId,  @priloha, @znovuOtevrit, @stavObjektu)";
-            command.Parameters.AddWithValue("@APId", bodAP.AkcniPlanId);
-            command.Parameters.AddWithValue("@cisloBoduAP", bodAP.CisloBoduAP);
-            command.Parameters.AddWithValue("@datumZalozeni", DateTime.Now);
-            if (string.IsNullOrWhiteSpace(bodAP.OdkazNaNormu))
-                command.Parameters.AddWithValue("@odkazNaNormu", DBNull.Value);
-            else
-                command.Parameters.AddWithValue("@odkazNaNormu", bodAP.OdkazNaNormu);
-            if (string.IsNullOrWhiteSpace(bodAP.HodnoceniNeshody))
-                command.Parameters.AddWithValue("@hodnoceniNeshody", DBNull.Value);
-            else
-                command.Parameters.AddWithValue("@hodnoceniNeshody", bodAP.HodnoceniNeshody);
-            command.Parameters.AddWithValue("@popisProblemu", bodAP.PopisProblemu);
-
-            command.Parameters.AddWithValue("@skutecnaPricinaWM", bodAP.SkutecnaPricinaWM);
-            command.Parameters.AddWithValue("@napravnaOpatreniWM", bodAP.NapravnaOpatreniWM);
-            command.Parameters.AddWithValue("@skutecnaPricinaWS", bodAP.SkutecnaPricinaWS);
-            command.Parameters.AddWithValue("@napravnaOpatreniWS", bodAP.NapravnaOpatreniWS);
-
-            command.Parameters.AddWithValue("@odpovednaOsoba1Id", bodAP.OdpovednaOsoba1Id);
-
-            if (bodAP.OdpovednaOsoba2Id == null)
-                command.Parameters.AddWithValue("@odpovednaOsoba2Id", DBNull.Value);
-            else
-                command.Parameters.AddWithValue("@odpovednaOsoba2Id", bodAP.OdpovednaOsoba2Id);
-
-            if (bodAP.KontrolaEfektivnosti == null)
-                command.Parameters.AddWithValue("@kontrolaEfektivnosti", DBNull.Value);
-            else
-                command.Parameters.AddWithValue("@kontrolaEfektivnosti", bodAP.KontrolaEfektivnosti);
-
-            if (bodAP.OddeleniId == null)
-                command.Parameters.AddWithValue("@oddeleniId", DBNull.Value);
-            else
-                command.Parameters.AddWithValue("@oddeleniId", bodAP.OddeleniId);
-
-            if (string.IsNullOrWhiteSpace(bodAP.Priloha))
-                command.Parameters.AddWithValue("@priloha", DBNull.Value);
-            else
-                command.Parameters.AddWithValue("@priloha", bodAP.Priloha);
-
-            command.Parameters.AddWithValue("@znovuOtevrit", bodAP.ZnovuOtevrit);
-            command.Parameters.AddWithValue("@stavObjektu", 1);
-
-            int idZaznamu = Convert.ToInt32(command.ExecuteScalar());
-
-            if (bodAP.DatumUkonceni == null) { }
-            else
-            {
-                using var commandUkonceniDatum = connection.CreateCommand();
-                commandUkonceniDatum.CommandType = CommandType.Text;
-                commandUkonceniDatum.CommandText = $"INSERT INTO UkonceniBodAP (BodAPID, DatumUkonceni, Poznamka) VALUES" +
-                                                   $"(@bodAPId, @datumUkonceni, @poznamka)";
-                commandUkonceniDatum.Parameters.AddWithValue("@bodAPId", idZaznamu);
-                commandUkonceniDatum.Parameters.AddWithValue("@datumUkonceni", bodAP.DatumUkonceni);
-                if (string.IsNullOrWhiteSpace(bodAP.UkonceniPoznamka))
-                    commandUkonceniDatum.Parameters.AddWithValue("@poznamka", DBNull.Value);
-                else
-                    commandUkonceniDatum.Parameters.AddWithValue("@poznamka", bodAP.UkonceniPoznamka);
-
-                commandUkonceniDatum.ExecuteNonQuery();
-            }
-            //foreach (var ukonceni in bodAP.UkonceniBodAP)
-            //{
-            //    using (var commandUkonceniDatum = connection.CreateCommand())
-            //    {
-            //        commandUkonceniDatum.CommandType = CommandType.Text;
-            //        commandUkonceniDatum.CommandText = $"INSERT INTO UkonceniBodAP (BodAPID, DatumUkonceni, Poznamka) VALUES" +
-            //            $"(@bodAPId, @datumUkonceni, @poznamka)";
-            //        commandUkonceniDatum.Parameters.AddWithValue("@bodAPId", idZaznamu);
-            //        commandUkonceniDatum.Parameters.AddWithValue("@datumUkonceni", ukonceni.DatumUkonceni);
-            //        if (string.IsNullOrWhiteSpace(ukonceni.Poznamka))
-            //            commandUkonceniDatum.Parameters.AddWithValue("@poznamka", DBNull.Value);
-            //        else
-            //            commandUkonceniDatum.Parameters.AddWithValue("@poznamka", ukonceni.Poznamka);
-
-            //        commandUkonceniDatum.ExecuteNonQuery();
-            //    }
-            //}
 
             return idZaznamu;
         }
@@ -440,13 +262,23 @@ namespace LearActionPlans.DataMappers
                                   $" WHERE BodAPID = @bodAPId";
             command.Parameters.AddWithValue("@bodAPId", bodAP.Id);
             if (string.IsNullOrWhiteSpace(bodAP.OdkazNaNormu))
+            {
                 command.Parameters.AddWithValue("@odkazNaNormu", DBNull.Value);
+            }
             else
+            {
                 command.Parameters.AddWithValue("@odkazNaNormu", bodAP.OdkazNaNormu);
+            }
+
             if (string.IsNullOrWhiteSpace(bodAP.HodnoceniNeshody))
+            {
                 command.Parameters.AddWithValue("@hodnoceniNeshody", DBNull.Value);
+            }
             else
+            {
                 command.Parameters.AddWithValue("@hodnoceniNeshody", bodAP.HodnoceniNeshody);
+            }
+
             command.Parameters.AddWithValue("@popisProblemu", bodAP.PopisProblemu);
 
             command.Parameters.AddWithValue("@skutecnaPricinaWM", bodAP.SkutecnaPricinaWM);
@@ -457,66 +289,43 @@ namespace LearActionPlans.DataMappers
             command.Parameters.AddWithValue("@odpovednaOsoba1Id", bodAP.OdpovednaOsoba1Id);
 
             if (bodAP.OdpovednaOsoba2Id == null)
+            {
                 command.Parameters.AddWithValue("@odpovednaOsoba2Id", DBNull.Value);
+            }
             else
+            {
                 command.Parameters.AddWithValue("@odpovednaOsoba2Id", bodAP.OdpovednaOsoba2Id);
+            }
 
             if (bodAP.KontrolaEfektivnosti == null)
+            {
                 command.Parameters.AddWithValue("@kontrolaEfektivnosti", DBNull.Value);
+            }
             else
+            {
                 command.Parameters.AddWithValue("@kontrolaEfektivnosti", bodAP.KontrolaEfektivnosti);
+            }
 
             if (bodAP.OddeleniId == null)
+            {
                 command.Parameters.AddWithValue("@oddeleniId", DBNull.Value);
+            }
             else
+            {
                 command.Parameters.AddWithValue("@oddeleniId", bodAP.OddeleniId);
+            }
 
             if (string.IsNullOrWhiteSpace(bodAP.Priloha))
+            {
                 command.Parameters.AddWithValue("@priloha", DBNull.Value);
+            }
             else
+            {
                 command.Parameters.AddWithValue("@priloha", bodAP.Priloha);
+            }
+
             command.ExecuteNonQuery();
         }
-
-        //private static void InsertAkce(int idZaznamu, Akce akce, SqlConnection connection)
-        //{
-        //    //int idAkce = 0;
-
-        //    using (var commandAkce = connection.CreateCommand())
-        //    {
-        //        commandAkce.CommandType = CommandType.Text;
-        //        commandAkce.CommandText = $"INSERT INTO Akce (BodAPID, SkutecnaPricina, NapravnaOpatreni, Typ, StavObjektu) output INSERTED.AkceID VALUES" +
-        //            $"(@bodAPId, @skutecnaPricina, @napravnaOpatreni, @typ, @stavObjektu)";
-        //        commandAkce.Parameters.AddWithValue("@bodAPId", idZaznamu);
-        //        commandAkce.Parameters.AddWithValue("@skutecnaPricina", akce.SkutecnaPricina);
-        //        commandAkce.Parameters.AddWithValue("@napravnaOpatreni", akce.NapravnaOpatreni);
-
-        //        commandAkce.Parameters.AddWithValue("@typ", akce.Typ);
-        //        commandAkce.Parameters.AddWithValue("@stavObjektu", 1);
-
-        //        commandAkce.ExecuteNonQuery();
-        //    }
-        //}
-
-        //public static void UpdateAkce(int akceId, Akce akce, SqlConnection connection)
-        //{
-        //    using (var commandAkce = connection.CreateCommand())
-        //    {
-        //        commandAkce.CommandType = CommandType.Text;
-        //        commandAkce.CommandText = $"UPDATE Akce SET " +
-        //            $"SkutecnaPricina = @skutecnaPricina," +
-        //            $" NapravnaOpatreni = @napravnaOpatreni," +
-        //            $" StavObjektu = @stavObjektu " +
-        //            $"WHERE AkceID = @akceId";
-        //        commandAkce.Parameters.AddWithValue("@akceId", akceId);
-        //        commandAkce.Parameters.AddWithValue("@skutecnaPricina", akce.SkutecnaPricina);
-        //        commandAkce.Parameters.AddWithValue("@napravnaOpatreni", akce.NapravnaOpatreni);
-
-        //        commandAkce.Parameters.AddWithValue("@stavObjektu", akce.StavObjektuAkce);
-        //        //WM = 1
-        //        commandAkce.ExecuteNonQuery();
-        //    }
-        //}
 
         public static void UpdateKontrolaEfektivity(int bodAPId, DateTime datumEfektivita)
         {
@@ -602,20 +411,26 @@ namespace LearActionPlans.DataMappers
             var reader = command.ExecuteReader();
 
             if (reader == null)
-                yield break;
-
-            if (reader.HasRows)
             {
-                while (reader.Read())
-                    yield return ConstructBodAP(reader);
+                yield break;
+            }
+
+            if (!reader.HasRows)
+            {
+                yield break;
+            }
+
+            while (reader.Read())
+            {
+                yield return ConstructBodAP(reader);
             }
         }
 
         private static BodAP ConstructBodAP(IDataRecord readerData)
         {
-            int bodAPid = Convert.ToInt32(readerData["BodAPID"]);
-            byte zamitnutiTerminu = Convert.ToByte(readerData["ZamitnutiTerminu"]);
-            byte zmenaTerminu = Convert.ToByte(readerData["ZmenaTerminu"]);
+            var bodAPid = Convert.ToInt32(readerData["BodAPID"]);
+            var zamitnutiTerminu = Convert.ToByte(readerData["ZamitnutiTerminu"]);
+            var zmenaTerminu = Convert.ToByte(readerData["ZmenaTerminu"]);
 
             return new BodAP(bodAPid, zamitnutiTerminu, zmenaTerminu);
         }

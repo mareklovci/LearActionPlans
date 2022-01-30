@@ -18,14 +18,14 @@ namespace LearActionPlans.Models
 
         public AkceWM()
         {
-            Id = 0;
-            NapravnaOpatreni = null;
-            OdpovednaOsoba1Id = 0;
-            OdpovednaOsoba2Id = null;
-            KontrolaEfektivnosti = null;
-            Oddeleni_Id = 0;
-            Priloha = null;
-            Storno = false;
+            this.Id = 0;
+            this.NapravnaOpatreni = null;
+            this.OdpovednaOsoba1Id = 0;
+            this.OdpovednaOsoba2Id = null;
+            this.KontrolaEfektivnosti = null;
+            this.Oddeleni_Id = 0;
+            this.Priloha = null;
+            this.Storno = false;
         }
 
         public AkceWM(int id,
@@ -38,14 +38,14 @@ namespace LearActionPlans.Models
             string priloha,
             bool storno)
         {
-            Id = id;
-            NapravnaOpatreni = napravnaOpatreni;
-            OdpovednaOsoba1Id = odpovednaOsoba1Id;
-            OdpovednaOsoba2Id = odpovednaOsoba2Id;
-            KontrolaEfektivnosti = kontrolaEfektivnosti;
-            Oddeleni_Id = oddeleniId;
-            Priloha = priloha;
-            Storno = storno;
+            this.Id = id;
+            this.NapravnaOpatreni = napravnaOpatreni;
+            this.OdpovednaOsoba1Id = odpovednaOsoba1Id;
+            this.OdpovednaOsoba2Id = odpovednaOsoba2Id;
+            this.KontrolaEfektivnosti = kontrolaEfektivnosti;
+            this.Oddeleni_Id = oddeleniId;
+            this.Priloha = priloha;
+            this.Storno = storno;
         }
 
         public AkceWM(string napravnaOpatreni,
@@ -56,14 +56,14 @@ namespace LearActionPlans.Models
             string priloha,
             bool storno)
         {
-            NapravnaOpatreni = napravnaOpatreni;
-            OdpovednaOsoba1Id = odpovednaOsoba1Id;
-            OdpovednaOsoba2Id = odpovednaOsoba2Id;
-            UkonceniBodu = new List<DatumUkonceniAkceWM>();
-            KontrolaEfektivnosti = kontrolaEfektivnosti;
-            Oddeleni_Id = oddeleniId;
-            Priloha = priloha;
-            Storno = storno;
+            this.NapravnaOpatreni = napravnaOpatreni;
+            this.OdpovednaOsoba1Id = odpovednaOsoba1Id;
+            this.OdpovednaOsoba2Id = odpovednaOsoba2Id;
+            this.UkonceniBodu = new List<DatumUkonceniAkceWM>();
+            this.KontrolaEfektivnosti = kontrolaEfektivnosti;
+            this.Oddeleni_Id = oddeleniId;
+            this.Priloha = priloha;
+            this.Storno = storno;
         }
     }
 }

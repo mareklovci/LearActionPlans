@@ -16,102 +16,120 @@ namespace LearActionPlans.Views
 
         public FormPriloha(bool novyBodAP, bool readOnly, string priloha, int cisloRadkyDGVBody)
         {
-            InitializeComponent();
-            folderBrowserDialogFolder = new System.Windows.Forms.FolderBrowserDialog();
-            richTextBoxPridanaSlozka.Text = priloha;
-            ReturnValueFolder = priloha;
-            cisloRadkyDGVBody_ = cisloRadkyDGVBody;
-            zavritOkno = false;
-            pridatOdstranit = false;
-            readOnly_ = readOnly;
-            novyBodAP_ = novyBodAP;
+            this.InitializeComponent();
+            this.folderBrowserDialogFolder = new FolderBrowserDialog();
+            this.richTextBoxPridanaSlozka.Text = priloha;
+            this.ReturnValueFolder = priloha;
+            this.cisloRadkyDGVBody_ = cisloRadkyDGVBody;
+            this.zavritOkno = false;
+            this.pridatOdstranit = false;
+            this.readOnly_ = readOnly;
+            this.novyBodAP_ = novyBodAP;
         }
 
         private void FormPriloha_Load(object sender, EventArgs e)
         {
-            if (ReturnValueFolder == string.Empty)
-                ButtonOdstranitSlozku.Enabled = false;
-            else
-                ButtonPridatSlozku.Enabled = false;
-            
-            ButtonPotvrdit.Enabled = false;
-
-            if (readOnly_ == true)
+            if (this.ReturnValueFolder == string.Empty)
             {
-                ButtonPridatSlozku.Visible = false;
-                ButtonOdstranitSlozku.Visible = false;
-                ButtonPotvrdit.Visible = false;
+                this.ButtonOdstranitSlozku.Enabled = false;
             }
             else
             {
-                ButtonPridatSlozku.Visible = true;
-                ButtonOdstranitSlozku.Visible = true;
-                ButtonPotvrdit.Visible = true;
+                this.ButtonPridatSlozku.Enabled = false;
+            }
+
+            this.ButtonPotvrdit.Enabled = false;
+
+            if (this.readOnly_ == true)
+            {
+                this.ButtonPridatSlozku.Visible = false;
+                this.ButtonOdstranitSlozku.Visible = false;
+                this.ButtonPotvrdit.Visible = false;
+            }
+            else
+            {
+                this.ButtonPridatSlozku.Visible = true;
+                this.ButtonOdstranitSlozku.Visible = true;
+                this.ButtonPotvrdit.Visible = true;
             }
         }
 
         private void ButtonOdstranitSlozku_MouseClick(object sender, MouseEventArgs e)
         {
-            ButtonPridatSlozku.Enabled = true;
-            ButtonOdstranitSlozku.Enabled = false;
-            ButtonPotvrdit.Enabled = true;
-            ReturnValueFolder = string.Empty;
-            richTextBoxPridanaSlozka.Text = string.Empty;
-            if (novyBodAP_ == false)
-                FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody_].Priloha = null;
-            DialogResult = DialogResult.Abort;
-            zavritOkno = false;
-            pridatOdstranit = false;
+            this.ButtonPridatSlozku.Enabled = true;
+            this.ButtonOdstranitSlozku.Enabled = false;
+            this.ButtonPotvrdit.Enabled = true;
+            this.ReturnValueFolder = string.Empty;
+            this.richTextBoxPridanaSlozka.Text = string.Empty;
+            if (this.novyBodAP_ == false)
+            {
+                FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody_].Priloha = null;
+            }
+
+            this.DialogResult = DialogResult.Abort;
+            this.zavritOkno = false;
+            this.pridatOdstranit = false;
         }
 
         private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e)
         {
-            DialogResult = DialogResult.Cancel;
-            zavritOkno = true;
-            Close();
+            this.DialogResult = DialogResult.Cancel;
+            this.zavritOkno = true;
+            this.Close();
         }
 
         private void ButtonPridatSlozku_MouseClick(object sender, MouseEventArgs e)
         {
-            DialogResult result = folderBrowserDialogFolder.ShowDialog();
+            var result = this.folderBrowserDialogFolder.ShowDialog();
             if (result == DialogResult.OK)
             {
-                ButtonOdstranitSlozku.Enabled = true;
-                ButtonPridatSlozku.Enabled = false;
-                ButtonPotvrdit.Enabled = true;
-                ReturnValueFolder = folderBrowserDialogFolder.SelectedPath;
-                string priloha = folderBrowserDialogFolder.SelectedPath;
+                this.ButtonOdstranitSlozku.Enabled = true;
+                this.ButtonPridatSlozku.Enabled = false;
+                this.ButtonPotvrdit.Enabled = true;
+                this.ReturnValueFolder = this.folderBrowserDialogFolder.SelectedPath;
+                var priloha = this.folderBrowserDialogFolder.SelectedPath;
                 //labelPridanaSlozka.Text = folderBrowserDialogFolder.SelectedPath;
                 //labelPridanaSlozka.Text = priloha;
-                richTextBoxPridanaSlozka.Text = priloha;
-                if (novyBodAP_ == false)
-                    FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody_].Priloha = priloha;
-                DialogResult = DialogResult.OK;
-                pridatOdstranit = true;
+                this.richTextBoxPridanaSlozka.Text = priloha;
+                if (this.novyBodAP_ == false)
+                {
+                    FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody_].Priloha = priloha;
+                }
+
+                this.DialogResult = DialogResult.OK;
+                this.pridatOdstranit = true;
             }
             if (result == DialogResult.Cancel)
             {
                 //nebyla vybrána žádná složka
-                DialogResult = DialogResult.Cancel;
-                pridatOdstranit = false;
+                this.DialogResult = DialogResult.Cancel;
+                this.pridatOdstranit = false;
             }
-            zavritOkno = false;
+
+            this.zavritOkno = false;
         }
 
         private void FormPriloha_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (zavritOkno == false)
+            if (this.zavritOkno == false)
+            {
                 e.Cancel = true;
+            }
         }
 
         private void ButtonPotvrdit_MouseClick(object sender, MouseEventArgs e)
         {
-            if (pridatOdstranit == true)
-                DialogResult = DialogResult.OK;
+            if (this.pridatOdstranit == true)
+            {
+                this.DialogResult = DialogResult.OK;
+            }
             else
-                DialogResult = DialogResult.Abort;
-            zavritOkno = true;
-            Close();
+            {
+                this.DialogResult = DialogResult.Abort;
+            }
+
+            this.zavritOkno = true;
+            this.Close();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace LearActionPlans.Views
     {
         public FormFiltry()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void FormFiltry_Load(object sender, EventArgs e)

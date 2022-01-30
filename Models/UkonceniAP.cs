@@ -10,10 +10,10 @@ namespace LearActionPlans.Models
 
         public UkonceniAP(int id, int apId, DateTime datumUkonceni, string poznamka)
         {
-            Id = id;
-            APId = apId;
-            DatumUkonceni = datumUkonceni;
-            Poznamka = poznamka;
+            this.Id = id;
+            this.APId = apId;
+            this.DatumUkonceni = datumUkonceni;
+            this.Poznamka = poznamka;
         }
     }
 }

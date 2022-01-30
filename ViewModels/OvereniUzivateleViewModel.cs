@@ -27,7 +27,7 @@ namespace LearActionPlans.ViewModels
             var zadavatel = ZamestnanciDataMapper.GetZadavatelLogin(login).ToList();
 
             var query = from z in zadavatel
-                        select OvereniUzivateleViewModel.Zadavatel(z.Id, z.PrihlasovaciJmeno, z.AdminAP);
+                        select Zadavatel(z.Id, z.PrihlasovaciJmeno, z.AdminAP);
 
             if (query.Count() == 0)
             {
@@ -36,7 +36,9 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
     }

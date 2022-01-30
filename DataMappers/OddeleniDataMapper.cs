@@ -27,7 +27,9 @@ namespace LearActionPlans.DataMappers
             if (reader.HasRows)
             {
                 while (reader.Read())
+                {
                     yield return ConstructOddeleniAll(reader);
+                }
             }
             else
             {
@@ -47,9 +49,9 @@ namespace LearActionPlans.DataMappers
 
         private static Oddeleni ConstructOddeleniAll(IDataRecord readerData)
         {
-            int id = (int)readerData["OddeleniID"];
-            string nazev = (string)readerData["Nazev"];
-            byte stavObjektu = (byte)readerData["StavObjektu"];
+            var id = (int)readerData["OddeleniID"];
+            var nazev = (string)readerData["Nazev"];
+            var stavObjektu = (byte)readerData["StavObjektu"];
 
             return new Oddeleni(id, nazev, stavObjektu);
         }

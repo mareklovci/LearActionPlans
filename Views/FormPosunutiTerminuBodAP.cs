@@ -66,7 +66,7 @@ namespace LearActionPlans.Views
         public FormPosunutiTerminuBodAP(bool opravitTermin, string cisloAPStr, int cisloRadkyDGV)
         {
             //bool kontrolaEfektivnosti,
-            InitializeComponent();
+            this.InitializeComponent();
             //kontrolaEfektivnosti_ = kontrolaEfektivnosti;
 
             //vlastnikAP_ = vlastnikAP;
@@ -74,46 +74,46 @@ namespace LearActionPlans.Views
             //vlastnikAkceId_ = vlastnikAkceId;
             
             //když je opravitTermin = true, tak AP ještě není uazavřen
-            opravitTermin_ = opravitTermin;
-            zmenaPoznamky = false;
-            zamitnutaZmena = false;
+            this.opravitTermin_ = opravitTermin;
+            this.zmenaPoznamky = false;
+            this.zamitnutaZmena = false;
             //action_ = action;
-            cisloRadkyDGVBody = cisloRadkyDGV;
-            cisloAPStr_ = cisloAPStr;
-            apId = FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody].AkcniPlanId;
-            bodAPId = FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody].Id;
-            InitControls();
+            this.cisloRadkyDGVBody = cisloRadkyDGV;
+            this.cisloAPStr_ = cisloAPStr;
+            this.apId = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].AkcniPlanId;
+            this.bodAPId = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id;
+            this.InitControls();
         }
 
         private void InitControls()
         {
-            panelTerminy = new Panel();
-            groupBoxTerminy = new List<GroupBox>();
-            labelTerminyDatum = new List<Label>();
-            labelStatus = new List<Label>();
-            richTextBoxPoznamka = new List<RichTextBox>();
+            this.panelTerminy = new Panel();
+            this.groupBoxTerminy = new List<GroupBox>();
+            this.labelTerminyDatum = new List<Label>();
+            this.labelStatus = new List<Label>();
+            this.richTextBoxPoznamka = new List<RichTextBox>();
 
-            labelOdpoved = new List<Label>();
-            richTextBoxOdpoved = new List<RichTextBox>();
+            this.labelOdpoved = new List<Label>();
+            this.richTextBoxOdpoved = new List<RichTextBox>();
 
-            ukonceni = new List<PosunutiTerminuBodAPViewModel>();
+            this.ukonceni = new List<PosunutiTerminuBodAPViewModel>();
         }
 
         private void FormPosunutiTerminuAkce_Load(object sender, EventArgs e)
         {
             //kontrolaEfektivnosti_ == false &&  && (FormMain.VlastnikAP == true || FormMain.VlastnikAkce == true)
-            if (opravitTermin_ == true)
+            if (this.opravitTermin_ == true)
             {
-                ButtonUlozit.Visible = true;
-                ButtonZavrit.Text = "Close";
-                CheckBoxPoslatZadost.CheckedChanged += new EventHandler(CheckBoxPoslatZadost_CheckedChanged);
+                this.ButtonUlozit.Visible = true;
+                this.ButtonZavrit.Text = "Close";
+                this.CheckBoxPoslatZadost.CheckedChanged += new EventHandler(this.CheckBoxPoslatZadost_CheckedChanged);
             }
             else
             {
-                ButtonUlozit.Visible = false;
-                ButtonZavrit.Text = "Close";
+                this.ButtonUlozit.Visible = false;
+                this.ButtonZavrit.Text = "Close";
                 //zneviditelní groupbox pro vytvoření nové žádosti
-                groupBoxZadost.Visible = false;
+                this.groupBoxZadost.Visible = false;
             }
 
             //if (FormMain.VlastnikAP == true)
@@ -121,40 +121,40 @@ namespace LearActionPlans.Views
             //if (FormMain.VlastnikAkce == true)
             //    ButtonZadost.Text = "Request for a new Deadline";
 
-            VytvoritObsahPanelu();
+            this.VytvoritObsahPanelu();
         }
 
         private void VytvoritObsahPanelu()
         {
-            richTextBoxNovaPoznamka.Text = string.Empty;
+            this.richTextBoxNovaPoznamka.Text = string.Empty;
 
             //to je proto aby zareagoval handler
             //kontrolaEfektivnosti_ == false &&  && (FormMain.VlastnikAP == true || FormMain.VlastnikAkce == true)
-            if (opravitTermin_ == true)
+            if (this.opravitTermin_ == true)
             {
-                CheckBoxPoslatZadost.Checked = true;
-                CheckBoxPoslatZadost.Checked = false;
+                this.CheckBoxPoslatZadost.Checked = true;
+                this.CheckBoxPoslatZadost.Checked = false;
             }
 
-            panelTerminy.Size = new Size(760, 600);
-            panelTerminy.Name = "panelPrehledTerminu";
-            panelTerminy.Location = new Point(10, 10);
-            panelTerminy.BorderStyle = BorderStyle.FixedSingle;
-            panelTerminy.BackColor = SystemColors.Control;
-            panelTerminy.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            panelTerminy.AutoScroll = false;
-            panelTerminy.HorizontalScroll.Enabled = false;
-            panelTerminy.HorizontalScroll.Visible = false;
-            panelTerminy.HorizontalScroll.Maximum = 0;
-            panelTerminy.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            panelTerminy.AutoScroll = true;
+            this.panelTerminy.Size = new Size(760, 600);
+            this.panelTerminy.Name = "panelPrehledTerminu";
+            this.panelTerminy.Location = new Point(10, 10);
+            this.panelTerminy.BorderStyle = BorderStyle.FixedSingle;
+            this.panelTerminy.BackColor = SystemColors.Control;
+            this.panelTerminy.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            this.panelTerminy.AutoScroll = false;
+            this.panelTerminy.HorizontalScroll.Enabled = false;
+            this.panelTerminy.HorizontalScroll.Visible = false;
+            this.panelTerminy.HorizontalScroll.Maximum = 0;
+            this.panelTerminy.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            this.panelTerminy.AutoScroll = true;
 
-            Controls.Add(panelTerminy);
+            this.Controls.Add(this.panelTerminy);
 
             //zbývající počet počet zamítnutí a změn
             
             //var akce = PosunutiTerminuBodAPViewModel.GetZbyvajiciTerminy(Convert.ToInt32(action_["akceId"])).ToList();
-            var akce = PosunutiTerminuBodAPViewModel.GetZbyvajiciTerminy(FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody].Id).ToList();
+            var akce = PosunutiTerminuBodAPViewModel.GetZbyvajiciTerminy(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id).ToList();
             byte zamitnutiTerminu = 0;
             byte zmenaTerminu = 0;
             int i;
@@ -162,23 +162,23 @@ namespace LearActionPlans.Views
             //vyhledá datumy ukončení pro dané ID akce
             //jsou setříděny podle UkonceniAkceID
             //ukonceni = PosunutiTerminuBodAPViewModel.GetUkonceniAkce(Convert.ToInt32(action_["akceId"])).ToList();
-            ukonceni = PosunutiTerminuBodAPViewModel.GetUkonceniBodAP(FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody].Id).ToList();
-            dtUkonceni = DataTableConverter.ConvertToDataTable(ukonceni);
+            this.ukonceni = PosunutiTerminuBodAPViewModel.GetUkonceniBodAP(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id).ToList();
+            this.dtUkonceni = DataTableConverter.ConvertToDataTable(this.ukonceni);
             //to je kvůli nastavení minimálního datumu pro datetimepicker - založení nového termínu
-            var minDatumZmeny = ukonceni.OrderByDescending(item => item.UkonceniBodAPId);
+            var minDatumZmeny = this.ukonceni.OrderByDescending(item => item.UkonceniBodAPId);
 
             foreach (var a in akce)
             {
                 zamitnutiTerminu = a.ZamitnutiTerminu;
                 zmenaTerminu = a.ZmenaTerminu;
-                zmenaTerminu_ = zmenaTerminu;
+                this.zmenaTerminu_ = zmenaTerminu;
                 //kontrolaEfektivnosti_ == false &&  && (FormMain.VlastnikAP == true || FormMain.VlastnikAkce == true)
-                if (opravitTermin_ == true)
+                if (this.opravitTermin_ == true)
                 {
                     //FormMain.VlastnikAP == true && 
                     if (zmenaTerminu == 0)
                     {
-                        groupBoxZadost.Visible = false;
+                        this.groupBoxZadost.Visible = false;
                     }
 
                     //FormMain.VlastnikAkce == true && 
@@ -186,13 +186,13 @@ namespace LearActionPlans.Views
                     {
                         //již nelze dále prodlužovat termíny
                         //když bude žádost 3x zamítnuta, nemůže již vlastník akce žádat o prodloužení
-                        groupBoxZadost.Visible = false;
+                        this.groupBoxZadost.Visible = false;
                         //protože už byly možné termíny majitele akce vyčerpány, bude zablována editace poznámek
-                        zamitnutaZmena = true;
+                        this.zamitnutaZmena = true;
                     }
                     else
                     {
-                        DateTime minDatum = DateTime.Now;
+                        var minDatum = DateTime.Now;
                         i = 0;
                         foreach (var m in minDatumZmeny)
                         {
@@ -201,10 +201,12 @@ namespace LearActionPlans.Views
                                 //nastavení toho, že můžu poslat žádost nebo ne
                                 if (m.StavZadosti == 3)
                                 {
-                                    groupBoxZadost.Visible = false;
+                                    this.groupBoxZadost.Visible = false;
                                 }
                                 else
-                                    groupBoxZadost.Visible = true;
+                                {
+                                    this.groupBoxZadost.Visible = true;
+                                }
                             }
                             //když bude poslední termín zamítnut, bude přeskočen
                             if (m.StavZadosti == 1 || m.StavZadosti == 2 || m.StavZadosti == 3 || m.StavZadosti == 4 || m.StavZadosti == 5)
@@ -219,16 +221,18 @@ namespace LearActionPlans.Views
                         }
 
                         //nastavení minmálního datumu v datatimepickeru
-                        dateTimePickerNovyTerminUkonceni.Value = minDatum;
-                        dateTimePickerNovyTerminUkonceni.MinDate = minDatum;
+                        this.dateTimePickerNovyTerminUkonceni.Value = minDatum;
+                        this.dateTimePickerNovyTerminUkonceni.MinDate = minDatum;
                         if (minDatum < DateTime.Now)
-                            dateTimePickerNovyTerminUkonceni.Value = DateTime.Now;
+                        {
+                            this.dateTimePickerNovyTerminUkonceni.Value = DateTime.Now;
+                        }
                     }
                 }
             }
 
             //počet zamítnutí
-            labelZamTer = new Label
+            this.labelZamTer = new Label
             {
                 Name = "labelZamitnuti",
                 Location = new Point(10, 10),
@@ -236,8 +240,8 @@ namespace LearActionPlans.Views
                 Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel),
                 Text = "Remaining number of rejections:"
             };
-            panelTerminy.Controls.Add(labelZamTer);
-            labelZamTerPocet = new Label
+            this.panelTerminy.Controls.Add(this.labelZamTer);
+            this.labelZamTerPocet = new Label
             {
                 Name = "labelZamitnutiPocet",
                 Location = new Point(250, 10),
@@ -245,11 +249,11 @@ namespace LearActionPlans.Views
                 Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel),
                 Text = "3"
             };
-            labelZamTerPocet.Text = Convert.ToString(zamitnutiTerminu);
-            panelTerminy.Controls.Add(labelZamTerPocet);
+            this.labelZamTerPocet.Text = Convert.ToString(zamitnutiTerminu);
+            this.panelTerminy.Controls.Add(this.labelZamTerPocet);
 
             //počet změn
-            labelZmenyTer = new Label
+            this.labelZmenyTer = new Label
             {
                 Name = "labeZmeny",
                 Location = new Point(10, 35),
@@ -257,8 +261,8 @@ namespace LearActionPlans.Views
                 Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel),
                 Text = "Remaining number of changes:"
             };
-            panelTerminy.Controls.Add(labelZmenyTer);
-            labelZmenyTerPocet = new Label
+            this.panelTerminy.Controls.Add(this.labelZmenyTer);
+            this.labelZmenyTerPocet = new Label
             {
                 Name = "labelZmenyPocet",
                 Location = new Point(250, 35),
@@ -266,20 +270,20 @@ namespace LearActionPlans.Views
                 Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel),
                 Text = "5"
             };
-            labelZmenyTerPocet.Text = Convert.ToString(zmenaTerminu);
-            panelTerminy.Controls.Add(labelZmenyTerPocet);
+            this.labelZmenyTerPocet.Text = Convert.ToString(zmenaTerminu);
+            this.panelTerminy.Controls.Add(this.labelZmenyTerPocet);
 
             i = 0;
-            foreach (var u in ukonceni)
+            foreach (var u in this.ukonceni)
             {
-                groupBoxTerminy.Add(new GroupBox()
+                this.groupBoxTerminy.Add(new GroupBox()
                 {
                     Name = "groupBoxTerminy" + i + 1,
                     Location = new Point(10, 60 + (i * 150)),
                     Size = new Size(720, 140),
                     Text = (i + 1).ToString() + ". term",
                 });
-                labelTerminyDatum.Add(new Label()
+                this.labelTerminyDatum.Add(new Label()
                 {
                     Name = "labelTerminyDatum" + i + 1,
                     Location = new Point(10, 20),
@@ -287,38 +291,38 @@ namespace LearActionPlans.Views
                     Text = u.DatumUkonceni.ToShortDateString(),
                     ForeColor = Color.Black
                 });
-                int delkaRetezce = 0;
-                using (System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(new Bitmap(1, 1)))
+                var delkaRetezce = 0;
+                using (var graphics = Graphics.FromImage(new Bitmap(1, 1)))
                 {
-                    SizeF size = graphics.MeasureString(u.DatumUkonceni.ToShortDateString(), new Font("Microsoft Sans Serif", 14F, FontStyle.Regular, GraphicsUnit.Pixel));
+                    var size = graphics.MeasureString(u.DatumUkonceni.ToShortDateString(), new Font("Microsoft Sans Serif", 14F, FontStyle.Regular, GraphicsUnit.Pixel));
                     delkaRetezce = Convert.ToInt32(size.Width);
                 }
                 string stavTerminu;
-                Color barva = Color.Black;
+                var barva = Color.Black;
                 switch (u.StavZadosti)
                 {
                     case 1:
-                        stavTerminu = zadost[0];
+                        stavTerminu = this.zadost[0];
                         barva = Color.Black;
                         break;
                     case 2:
-                        stavTerminu = zadost[1];
+                        stavTerminu = this.zadost[1];
                         barva = Color.Black;
                         break;
                     case 3:
-                        stavTerminu = zadost[2];
+                        stavTerminu = this.zadost[2];
                         barva = Color.Black;
                         break;
                     case 4:
-                        stavTerminu = zadost[3];
+                        stavTerminu = this.zadost[3];
                         barva = Color.Green;
                         break;
                     case 5:
-                        stavTerminu = zadost[4];
+                        stavTerminu = this.zadost[4];
                         barva = Color.Blue;
                         break;
                     case 6:
-                        stavTerminu = zadost[5];
+                        stavTerminu = this.zadost[5];
                         barva = Color.Red;
                         break;
                     default:
@@ -326,7 +330,7 @@ namespace LearActionPlans.Views
                         break;
                 }
                 stavTerminu = "(" + stavTerminu + ")";
-                labelStatus.Add(new Label()
+                this.labelStatus.Add(new Label()
                 {
                     Name = "labelStatus" + i + 1,
                     Location = new Point(10 + delkaRetezce + 10, 20),
@@ -338,7 +342,7 @@ namespace LearActionPlans.Views
                 //blokování editace pole Poznámka
                 //to musím předělat
                 //var podminka = u.StavZadosti == 1 || u.StavZadosti == 3 || u.StavZadosti == 4 || u.StavZadosti == 5;
-                richTextBoxPoznamka.Add(new RichTextBox()
+                this.richTextBoxPoznamka.Add(new RichTextBox()
                 {
                     Name = "RichTextBoxPoznamka" + i + 1,
                     Location = new Point(10, 45),
@@ -349,9 +353,9 @@ namespace LearActionPlans.Views
                     Tag = u.UkonceniBodAPId.ToString(),
                     ForeColor = Color.Black
                 });
-                richTextBoxPoznamka[i].TextChanged += new EventHandler(RichTextBoxPoznamka_TextChanged);
+                this.richTextBoxPoznamka[i].TextChanged += new EventHandler(this.RichTextBoxPoznamka_TextChanged);
 
-                labelOdpoved.Add(new Label()
+                this.labelOdpoved.Add(new Label()
                 {
                     Name = "labelOdpoved" + i + 1,
                     Location = new Point(370, 20),
@@ -359,7 +363,7 @@ namespace LearActionPlans.Views
                     Text = "Reply",
                     ForeColor = Color.Black
                 });
-                richTextBoxOdpoved.Add(new RichTextBox()
+                this.richTextBoxOdpoved.Add(new RichTextBox()
                 {
                     Name = "RichTextBoxOdpoved" + i + 1,
                     Location = new Point(370, 45),
@@ -376,30 +380,30 @@ namespace LearActionPlans.Views
             //nastavím poslední Poznámku na povolit zápis
             //zamítnuté termíny nemůžu editovat
             //editovat lze pouze poslední termín, když není zamítnut
-            i = richTextBoxPoznamka.Count - 1;
+            i = this.richTextBoxPoznamka.Count - 1;
             foreach (var m in minDatumZmeny)
             {
                 //poznámky projíždím od konce, stejně kako datumy
-                if (i == richTextBoxPoznamka.Count - 1)
+                if (i == this.richTextBoxPoznamka.Count - 1)
                 {
                     if (m.StavZadosti == 6)
                     {
                         //zamítnutí termínu
-                        richTextBoxPoznamka[i].Enabled = false;
+                        this.richTextBoxPoznamka[i].Enabled = false;
                     }
                     else
                     {
                         //všechny ostatní varianty
                         //kontrolaEfektivnosti_ == true ||  && (FormMain.VlastnikAP == true || FormMain.VlastnikAkce == true)
-                        if (opravitTermin_ == false)
+                        if (this.opravitTermin_ == false)
                         {
                             //AP nebo akce je uzavřena
-                            richTextBoxPoznamka[i].Enabled = false;
+                            this.richTextBoxPoznamka[i].Enabled = false;
                         }
                         else
                         {
                             //když je počet zbývajících zamítnutí nebo 
-                            richTextBoxPoznamka[i].Enabled = true;
+                            this.richTextBoxPoznamka[i].Enabled = true;
                             //if (zamitnutaZmena == false)
                             //    richTextBoxPoznamka[i].Enabled = true;
                             //else
@@ -409,43 +413,43 @@ namespace LearActionPlans.Views
                 }
                 else
                 {
-                    richTextBoxPoznamka[i].Enabled = false;
+                    this.richTextBoxPoznamka[i].Enabled = false;
                 }
                 i--;
                 break;
             }
 
-            for (i = 0; i < groupBoxTerminy.Count; i++)
+            for (i = 0; i < this.groupBoxTerminy.Count; i++)
             {
                 //GroupBox itemGrpBox = groupBoxTerminy[i];
-                panelTerminy.Controls.Add(groupBoxTerminy[i]);
+                this.panelTerminy.Controls.Add(this.groupBoxTerminy[i]);
                 //Label itemLbl = labelTerminyDatum[i];
-                groupBoxTerminy[i].Controls.Add(labelTerminyDatum[i]);
-                groupBoxTerminy[i].Controls.Add(labelStatus[i]);
-                groupBoxTerminy[i].Controls.Add(richTextBoxPoznamka[i]);
+                this.groupBoxTerminy[i].Controls.Add(this.labelTerminyDatum[i]);
+                this.groupBoxTerminy[i].Controls.Add(this.labelStatus[i]);
+                this.groupBoxTerminy[i].Controls.Add(this.richTextBoxPoznamka[i]);
 
-                groupBoxTerminy[i].Controls.Add(labelOdpoved[i]);
-                groupBoxTerminy[i].Controls.Add(richTextBoxOdpoved[i]);
+                this.groupBoxTerminy[i].Controls.Add(this.labelOdpoved[i]);
+                this.groupBoxTerminy[i].Controls.Add(this.richTextBoxOdpoved[i]);
 
                 if (i == 0)
                 {
-                    labelOdpoved[i].Visible = false;
-                    richTextBoxOdpoved[i].Visible = false;
+                    this.labelOdpoved[i].Visible = false;
+                    this.richTextBoxOdpoved[i].Visible = false;
                 }
             }
 
-            ButtonUlozit.Enabled = false;
+            this.ButtonUlozit.Enabled = false;
         }
 
         private void RichTextBoxPoznamka_TextChanged(object sender, EventArgs e)
         {
-            RichTextBox poznamka = (RichTextBox)sender;
+            var poznamka = (RichTextBox)sender;
 
             if (!string.IsNullOrEmpty(poznamka.Text))
             {
                 //tady povolím možnost odeslat žádost, zviditelním pole pro odeslání žádosti
-                ButtonUlozit.Enabled = true;
-                zmenaPoznamky = true;
+                this.ButtonUlozit.Enabled = true;
+                this.zmenaPoznamky = true;
             }
             else
             { 
@@ -456,18 +460,20 @@ namespace LearActionPlans.Views
         {
             int idZadost;
 
-            if (string.IsNullOrEmpty(richTextBoxNovaPoznamka.Text))
+            if (string.IsNullOrEmpty(this.richTextBoxNovaPoznamka.Text))
             {
                 MessageBox.Show("You must fill in the note field.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
                 //v případě, že byly provedeny úpravy v poznámce, bude nejdřív uložena
-                if (ButtonUlozit.Enabled == true)
-                    UlozitPoznamky();
-                
+                if (this.ButtonUlozit.Enabled == true)
+                {
+                    this.UlozitPoznamky();
+                }
+
                 //var prvniTermin = PosunutiTerminuBodAPViewModel.GetZavritPrvniTermin(Convert.ToInt32(action_["akceId"])).ToList();
-                var prvniTermin = PosunutiTerminuBodAPViewModel.GetZavritPrvniTermin(FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody].Id).ToList();
+                var prvniTermin = PosunutiTerminuBodAPViewModel.GetZavritPrvniTermin(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id).ToList();
                 if (prvniTermin.Count > 0)
                 {
                     //provede se jenom při první změně termínu
@@ -475,11 +481,11 @@ namespace LearActionPlans.Views
                 }
                 //nejdřív založím nový termín
                 //idZadost = UkonceniBodAPDataMapper.InsertUkonceniAkce(Convert.ToInt32(action_["akceId"]), dateTimePickerNovyTerminUkonceni.Value, richTextBoxNovaPoznamka.Text);
-                idZadost = UkonceniBodAPDataMapper.InsertUkonceniBodAP(FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody].Id, dateTimePickerNovyTerminUkonceni.Value, richTextBoxNovaPoznamka.Text);
+                idZadost = UkonceniBodAPDataMapper.InsertUkonceniBodAP(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id, this.dateTimePickerNovyTerminUkonceni.Value, this.richTextBoxNovaPoznamka.Text);
 
                 //snížení počtu možných změn termínů dané akce
                 //UkonceniBodAPDataMapper.UpdateAkceZmenaTerminu(Convert.ToInt32(action_["akceId"]), zmenaTerminu_);
-                UkonceniBodAPDataMapper.UpdateBodAPZmenaTerminu(FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody].Id, zmenaTerminu_);
+                UkonceniBodAPDataMapper.UpdateBodAPZmenaTerminu(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id, this.zmenaTerminu_);
 
                 //if (FormMain.VlastnikAkce == true)
                 //{
@@ -487,16 +493,16 @@ namespace LearActionPlans.Views
 
                 //----- odeslání požadavku -----------------------------------------------------------------------------------------------------
                 //var zam = DatumUkonceniViewModel.GetZamestnanec(Convert.ToInt32(action_["comboBoxOdpovednaOsoba1Id"])).ToList();
-                var zam = DatumUkonceniViewModel.GetZamestnanec(FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody].OdpovednaOsoba1Id).ToList();
+                var zam = DatumUkonceniViewModel.GetZamestnanec(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OdpovednaOsoba1Id).ToList();
 
-                string odpovedny1 = zam[0].Prijmeni + " " + zam[0].Jmeno;
+                var odpovedny1 = zam[0].Prijmeni + " " + zam[0].Jmeno;
 
-                string odpovedny2 = string.Empty;
+                var odpovedny2 = string.Empty;
                 //if (Convert.ToInt32(action_["comboBoxOdpovednaOsoba2Id"]) > 0)
-                if (FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody].OdpovednaOsoba2Id > 0)
+                if (FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OdpovednaOsoba2Id > 0)
                 {
                     //zam = DatumUkonceniViewModel.GetZamestnanec(Convert.ToInt32(action_["comboBoxOdpovednaOsoba2Id"])).ToList();
-                    zam = DatumUkonceniViewModel.GetZamestnanec(Convert.ToInt32(FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody].OdpovednaOsoba2Id)).ToList();
+                    zam = DatumUkonceniViewModel.GetZamestnanec(Convert.ToInt32(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OdpovednaOsoba2Id)).ToList();
 
                     odpovedny2 = zam[0].Prijmeni + " " + zam[0].Jmeno;
                 }
@@ -504,7 +510,7 @@ namespace LearActionPlans.Views
                 using (var message = new MailMessage())
                 {
                     //MailMessage message = new MailMessage();
-                    SmtpClient smtp = new SmtpClient
+                    var smtp = new SmtpClient
                     {
                         UseDefaultCredentials = false,
                         Credentials = new NetworkCredential("bartos.grammer@seznam.cz", "stepan12"),
@@ -521,47 +527,47 @@ namespace LearActionPlans.Views
                     message.Subject = string.Format(@"Request for a new Deadline");
                     message.IsBodyHtml = true;
 
-                    string htmlTableStart = "<table style=\"border-collapse:collapse; text-align:left; font-family:Arial, Helvetica, Sans-serif;\" >";
-                    string htmlTableEnd = "</table>";
+                    var htmlTableStart = "<table style=\"border-collapse:collapse; text-align:left; font-family:Arial, Helvetica, Sans-serif;\" >";
+                    var htmlTableEnd = "</table>";
 
                     //string htmlHeaderRowStart = "<tr style=\"background-color:#6FA1D2; color:#ffffff;\">";
                     //string htmlHeaderRowEnd = "</tr>";
 
-                    string htmlTrStart = "<tr style=\"color:#555555;\">";
-                    string htmlTrEnd = "</tr>";
+                    var htmlTrStart = "<tr style=\"color:#555555;\">";
+                    var htmlTrEnd = "</tr>";
 
-                    string htmlTdStartFirstColumn = "<td style=\" border-color:#5c87b2; border-style:solid; border-width:thin; padding:5px; width:300px\">";
-                    string htmlTdEndFirstColumn = "</td>";
+                    var htmlTdStartFirstColumn = "<td style=\" border-color:#5c87b2; border-style:solid; border-width:thin; padding:5px; width:300px\">";
+                    var htmlTdEndFirstColumn = "</td>";
 
-                    string htmlTdStartSecondColumn = "<td style=\" border-color:#5c87b2; border-style:solid; border-width:thin; padding:5px; width:450px\">";
-                    string htmlTdEndSecondColumn = "</td>";
+                    var htmlTdStartSecondColumn = "<td style=\" border-color:#5c87b2; border-style:solid; border-width:thin; padding:5px; width:450px\">";
+                    var htmlTdEndSecondColumn = "</td>";
 
-                    string htmlTdStart = "<td style='border-color:#5c87b2; border-style:solid; border-width:thin; padding:5px;'>";
-                    string htmlTdEnd = "</td>";
+                    var htmlTdStart = "<td style='border-color:#5c87b2; border-style:solid; border-width:thin; padding:5px;'>";
+                    var htmlTdEnd = "</td>";
 
-                    string htmlTdStartPozadi = "<td style=\" border-color:#5c87b2; border-style:solid; border-width:thin; padding:5px; background-color:#e1e1ff;\">";
-                    string htmlTdEndPozadi = "</td>";
+                    var htmlTdStartPozadi = "<td style=\" border-color:#5c87b2; border-style:solid; border-width:thin; padding:5px; background-color:#e1e1ff;\">";
+                    var htmlTdEndPozadi = "</td>";
 
                     message.Body += htmlTableStart;
                     message.Body += htmlTrStart;
                     message.Body += htmlTdStartFirstColumn + @"<b>AP</b>" + htmlTdEndFirstColumn;
-                    message.Body += htmlTdStartSecondColumn + cisloAPStr_ + htmlTdEndSecondColumn;
+                    message.Body += htmlTdStartSecondColumn + this.cisloAPStr_ + htmlTdEndSecondColumn;
                     message.Body += htmlTrEnd;
                     message.Body += htmlTrStart;
                     message.Body += htmlTdStart + @"<b>Point AP</b>" + htmlTdEnd;
-                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody].CisloBoduAP.ToString() + htmlTdEnd;
+                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].CisloBoduAP.ToString() + htmlTdEnd;
                     message.Body += htmlTrEnd;
                     message.Body += htmlTrStart;
                     message.Body += htmlTdStart + @"<b> &nbsp; &nbsp; Standard chapter</b>" + htmlTdEnd;
-                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody].OdkazNaNormu + htmlTdEnd;
+                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OdkazNaNormu + htmlTdEnd;
                     message.Body += htmlTrEnd;
                     message.Body += htmlTrStart;
                     message.Body += htmlTdStart + @"<b> &nbsp; &nbsp; Evaluation</b>" + htmlTdEnd;
-                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody].HodnoceniNeshody + htmlTdEnd;
+                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].HodnoceniNeshody + htmlTdEnd;
                     message.Body += htmlTrEnd;
                     message.Body += htmlTrStart;
                     message.Body += htmlTdStart + @"<b> &nbsp; &nbsp; Description of the problem</b>" + htmlTdEnd;
-                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody].PopisProblemu + htmlTdEnd;
+                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].PopisProblemu + htmlTdEnd;
                     message.Body += htmlTrEnd;
 
                     message.Body += htmlTrStart;
@@ -571,12 +577,12 @@ namespace LearActionPlans.Views
 
                     message.Body += htmlTrStart;
                     message.Body += htmlTdStart + @"<b> &nbsp; &nbsp; Root cause</b>" + htmlTdEnd;
-                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody].SkutecnaPricinaWM + htmlTdEnd;
+                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].SkutecnaPricinaWM + htmlTdEnd;
                     message.Body += htmlTrEnd;
 
                     message.Body += htmlTrStart;
                     message.Body += htmlTdStart + @"<b> &nbsp; &nbsp; Corrective action" + htmlTdEnd;
-                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody].NapravnaOpatreniWM + htmlTdEnd;
+                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].NapravnaOpatreniWM + htmlTdEnd;
                     message.Body += htmlTrEnd;
 
                     message.Body += htmlTrStart;
@@ -586,28 +592,28 @@ namespace LearActionPlans.Views
 
                     message.Body += htmlTrStart;
                     message.Body += htmlTdStart + @"<b> &nbsp; &nbsp; Root cause</b>" + htmlTdEnd;
-                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody].SkutecnaPricinaWS + htmlTdEnd;
+                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].SkutecnaPricinaWS + htmlTdEnd;
                     message.Body += htmlTrEnd;
 
                     message.Body += htmlTrStart;
                     message.Body += htmlTdStart + @"<b> &nbsp; &nbsp; Corrective action</b>" + htmlTdEnd;
-                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody].NapravnaOpatreniWS + htmlTdEnd;
+                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].NapravnaOpatreniWS + htmlTdEnd;
                     message.Body += htmlTrEnd;
 
                     message.Body += htmlTrStart;
                     message.Body += htmlTdStartPozadi + @"<b>Last Deadline</b>" + htmlTdEndPozadi;
-                    DateTime posledniMoznyTermin = dateTimePickerNovyTerminUkonceni.MinDate;
+                    var posledniMoznyTermin = this.dateTimePickerNovyTerminUkonceni.MinDate;
                     posledniMoznyTermin = posledniMoznyTermin.AddDays(-1);
                     message.Body += htmlTdStartPozadi + posledniMoznyTermin.ToShortDateString() + htmlTdEndPozadi;
                     message.Body += htmlTrEnd;
                     message.Body += htmlTrStart;
                     message.Body += htmlTdStartPozadi + @"<b>New Deadline</b>" + htmlTdEndPozadi;
-                    message.Body += htmlTdStartPozadi + dateTimePickerNovyTerminUkonceni.Value.ToShortDateString() + htmlTdEndPozadi;
+                    message.Body += htmlTdStartPozadi + this.dateTimePickerNovyTerminUkonceni.Value.ToShortDateString() + htmlTdEndPozadi;
                     message.Body += htmlTrEnd;
                     message.Body += htmlTrStart;
                     message.Body += htmlTdStartPozadi + @"<b>Note</b>" + htmlTdEndPozadi;
                     //action_["textBoxPoznamka"]
-                    message.Body += htmlTdStartPozadi + richTextBoxNovaPoznamka.Text + htmlTdEndPozadi;
+                    message.Body += htmlTdStartPozadi + this.richTextBoxNovaPoznamka.Text + htmlTdEndPozadi;
                     message.Body += htmlTrEnd;
 
                     message.Body += htmlTrStart;
@@ -625,7 +631,7 @@ namespace LearActionPlans.Views
                     //message.Body += string.Format(@"<p style='font-family:Arial, Helvetica, Sans-serif; font-size:150 %; '><a href='LearAPConfirmation:?{0}&{1}&{2}&{3}&{4}&{5}' type='application/octet-stream'>Process the request</a></p>", cisloAPStr_, apId, bodAPId, Convert.ToInt32(action_["akceId"]), idZadost, FormMain.VlastnikIdAkce);
                     //message.Body += string.Format(@"<p style='font-family:Arial, Helvetica, Sans-serif; font-size:150 %; '><a href='LearAPConfirmation:?{0}&{1}&{2}&{3}&{4}&{5}' type='application/octet-stream'>Process the request</a></p>", cisloAPStr_, apId, bodAPId, Convert.ToInt32(action_["akceId"]), idZadost, Convert.ToInt32(action_["comboBoxOdpovednaOsoba1Id"]));
                     //odebrán čtvrtý parametr
-                    message.Body += string.Format(@"<p style='font-family:Arial, Helvetica, Sans-serif; font-size:150 %; '><a href='LearAPConfirmation:?{0}&{1}&{2}&{3}&{4}' type='application/octet-stream'>Process the request</a></p>", cisloAPStr_, apId, bodAPId, idZadost, FormPrehledBoduAP.bodyAP[cisloRadkyDGVBody].OdpovednaOsoba1Id);
+                    message.Body += string.Format(@"<p style='font-family:Arial, Helvetica, Sans-serif; font-size:150 %; '><a href='LearAPConfirmation:?{0}&{1}&{2}&{3}&{4}' type='application/octet-stream'>Process the request</a></p>", this.cisloAPStr_, this.apId, this.bodAPId, idZadost, FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OdpovednaOsoba1Id);
 
                     message.To.Add(new MailAddress("bartos.grammer@seznam.cz"));
 
@@ -634,88 +640,87 @@ namespace LearActionPlans.Views
                 //----- odeslání požadavku -----------------------------------------------------------------------------------------------------
 
                 //odstraní vytvořené objekty z panelu
-                RemoveControl();
+                this.RemoveControl();
 
                 //init controls
-                InitControls();
+                this.InitControls();
 
                 //znovu vytvoří obsah panelu
-                VytvoritObsahPanelu();
+                this.VytvoritObsahPanelu();
             }
         }
 
         private void RemoveControl()
         {
-            panelTerminy.Controls.Remove(labelZamTer);
-            panelTerminy.Controls.Remove(labelZamTerPocet);
-            panelTerminy.Controls.Remove(labelZmenyTer);
-            panelTerminy.Controls.Remove(labelZmenyTerPocet);
+            this.panelTerminy.Controls.Remove(this.labelZamTer);
+            this.panelTerminy.Controls.Remove(this.labelZamTerPocet);
+            this.panelTerminy.Controls.Remove(this.labelZmenyTer);
+            this.panelTerminy.Controls.Remove(this.labelZmenyTerPocet);
 
-            labelZamTer.Dispose();
-            labelZamTerPocet.Dispose();
-            labelZmenyTer.Dispose();
-            labelZmenyTerPocet.Dispose();
+            this.labelZamTer.Dispose();
+            this.labelZamTerPocet.Dispose();
+            this.labelZmenyTer.Dispose();
+            this.labelZmenyTerPocet.Dispose();
 
-            for (int i = groupBoxTerminy.Count - 1; i >= 0; i--)
+            for (var i = this.groupBoxTerminy.Count - 1; i >= 0; i--)
             {
+                this.groupBoxTerminy[i].Controls.Remove(this.labelTerminyDatum[i]);
+                this.groupBoxTerminy[i].Controls.Remove(this.labelStatus[i]);
+                this.groupBoxTerminy[i].Controls.Remove(this.richTextBoxPoznamka[i]);
+                this.groupBoxTerminy[i].Controls.Remove(this.labelOdpoved[i]);
+                this.groupBoxTerminy[i].Controls.Remove(this.richTextBoxOdpoved[i]);
 
-                groupBoxTerminy[i].Controls.Remove(labelTerminyDatum[i]);
-                groupBoxTerminy[i].Controls.Remove(labelStatus[i]);
-                groupBoxTerminy[i].Controls.Remove(richTextBoxPoznamka[i]);
-                groupBoxTerminy[i].Controls.Remove(labelOdpoved[i]);
-                groupBoxTerminy[i].Controls.Remove(richTextBoxOdpoved[i]);
+                this.panelTerminy.Controls.Remove(this.groupBoxTerminy[i]);
 
-                panelTerminy.Controls.Remove(groupBoxTerminy[i]);
+                this.labelTerminyDatum[i].Dispose();
+                this.labelStatus[i].Dispose();
+                this.richTextBoxPoznamka[i].Dispose();
+                this.labelOdpoved[i].Dispose();
+                this.richTextBoxOdpoved[i].Dispose();
 
-                labelTerminyDatum[i].Dispose();
-                labelStatus[i].Dispose();
-                richTextBoxPoznamka[i].Dispose();
-                labelOdpoved[i].Dispose();
-                richTextBoxOdpoved[i].Dispose();
-
-                groupBoxTerminy[i].Dispose();
+                this.groupBoxTerminy[i].Dispose();
             }
 
-            Controls.Remove(panelTerminy);
-            panelTerminy.Dispose();
+            this.Controls.Remove(this.panelTerminy);
+            this.panelTerminy.Dispose();
         }
 
-        private void CheckBoxPoslatZadost_CheckedChanged(object sender, System.EventArgs e)
+        private void CheckBoxPoslatZadost_CheckedChanged(object sender, EventArgs e)
         {
-            if (CheckBoxPoslatZadost.Checked == true)
+            if (this.CheckBoxPoslatZadost.Checked == true)
             {
-                dateTimePickerNovyTerminUkonceni.Enabled = true;
-                labelNovaPoznamka.Enabled = true;
-                richTextBoxNovaPoznamka.Enabled = true;
-                ButtonZadost.Enabled = true;
+                this.dateTimePickerNovyTerminUkonceni.Enabled = true;
+                this.labelNovaPoznamka.Enabled = true;
+                this.richTextBoxNovaPoznamka.Enabled = true;
+                this.ButtonZadost.Enabled = true;
             }
             else
             {
-                dateTimePickerNovyTerminUkonceni.Enabled = false;
-                labelNovaPoznamka.Enabled = false;
-                richTextBoxNovaPoznamka.Enabled = false;
-                ButtonZadost.Enabled = false;
+                this.dateTimePickerNovyTerminUkonceni.Enabled = false;
+                this.labelNovaPoznamka.Enabled = false;
+                this.richTextBoxNovaPoznamka.Enabled = false;
+                this.ButtonZadost.Enabled = false;
             }
         }
 
         private void ButtonUlozit_MouseClick(object sender, MouseEventArgs e)
         {
-            UlozitPoznamky();
+            this.UlozitPoznamky();
         }
 
         private void UlozitPoznamky()
         {
-            foreach (var rtb in richTextBoxPoznamka)
+            foreach (var rtb in this.richTextBoxPoznamka)
             {
                 if (rtb.Enabled == true)
                 {
-                    foreach (DataRow radek in dtUkonceni.Rows)
+                    foreach (DataRow radek in this.dtUkonceni.Rows)
                     {
                         if (Convert.ToInt32(rtb.Tag) == Convert.ToInt32(radek["ukonceniAkceId"]))
                         {
                             UkonceniBodAPDataMapper.UpdateUkonceniBodAP(Convert.ToInt32(rtb.Tag), rtb.Text);
-                            ButtonUlozit.Enabled = false;
-                            zmenaPoznamky = false;
+                            this.ButtonUlozit.Enabled = false;
+                            this.zmenaPoznamky = false;
                         }
                     }
                 }
@@ -724,12 +729,12 @@ namespace LearActionPlans.Views
 
         private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e)
         {
-            Close();
+            this.Close();
         }
 
         private void FormPosunutiTerminuAkce_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (zmenaPoznamky == true)
+            if (this.zmenaPoznamky == true)
             {
                 DialogResult dialogResult;
 
@@ -738,11 +743,11 @@ namespace LearActionPlans.Views
                 if (dialogResult == DialogResult.Yes)
                 {
                     //kontrolaEfektivnosti_ == false &&  && (FormMain.VlastnikAP == true || FormMain.VlastnikAkce == true)
-                    if (opravitTermin_ == true)
+                    if (this.opravitTermin_ == true)
                     {
                         //zapíše bod AP do třídy
-                        UlozitPoznamky();
-                        zmenaPoznamky = false;
+                        this.UlozitPoznamky();
+                        this.zmenaPoznamky = false;
                     }
                 }
                 else if (dialogResult == DialogResult.No)

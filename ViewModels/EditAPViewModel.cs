@@ -140,7 +140,7 @@ namespace LearActionPlans.ViewModels
 
             var query = from z in zamestnanci
                         where z.Id == id
-                        select EditAPViewModel.Zamestnanec(z.Id, z.Prijmeni + " " + z.Jmeno);
+                        select Zamestnanec(z.Id, z.Prijmeni + " " + z.Jmeno);
 
             //where z.JeZamestnanec == true && z.Storno == false
 
@@ -151,7 +151,9 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
 
@@ -161,7 +163,7 @@ namespace LearActionPlans.ViewModels
 
             var query = from z in zamestnanci
                         orderby z.Prijmeni, z.Jmeno
-                        select EditAPViewModel.Zamestnanec(z.Id, z.Prijmeni + " " + z.Jmeno);
+                        select Zamestnanec(z.Id, z.Prijmeni + " " + z.Jmeno);
 
             //where z.JeZamestnanec == true && z.Storno == false
 
@@ -172,7 +174,9 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
 
@@ -182,7 +186,7 @@ namespace LearActionPlans.ViewModels
 
             var query = from p in projekty
                         where p.Id == id
-                        select EditAPViewModel.Projekt(p.Id, p.Nazev);
+                        select Projekt(p.Id, p.Nazev);
 
             if (query.Count() == 0)
             {
@@ -191,7 +195,9 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
 
@@ -201,7 +207,7 @@ namespace LearActionPlans.ViewModels
 
             var query = from p in projekty
                         orderby p.Nazev
-                        select EditAPViewModel.Projekt(p.Id, p.Nazev);
+                        select Projekt(p.Id, p.Nazev);
 
             //where p.Storno == false
 
@@ -212,7 +218,9 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
         public static IEnumerable<EditAPViewModel> GetZakaznikId(int id)
@@ -221,7 +229,7 @@ namespace LearActionPlans.ViewModels
 
             var query = from z in zakaznici
                         where z.Id == id
-                        select EditAPViewModel.Zakaznik(z.Id, z.Nazev);
+                        select Zakaznik(z.Id, z.Nazev);
 
             if (query.Count() == 0)
             {
@@ -230,7 +238,9 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
 
@@ -240,7 +250,7 @@ namespace LearActionPlans.ViewModels
 
             var query = from z in zakaznici
                         orderby z.Nazev
-                        select EditAPViewModel.Zakaznik(z.Id, z.Nazev);
+                        select Zakaznik(z.Id, z.Nazev);
 
             if (query.Count() == 0)
             {
@@ -249,7 +259,9 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
 

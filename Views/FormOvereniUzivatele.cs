@@ -14,7 +14,7 @@ namespace LearActionPlans.Views
         public bool Admin { get; set; }
         public FormOvereniUzivatele()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void FormOvereniUzivatele_Load(object sender, EventArgs e)
@@ -23,34 +23,38 @@ namespace LearActionPlans.Views
 
         private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e)
         {
-            Close();
+            this.Close();
         }
 
         private void ButtonOverit_MouseClick(object sender, MouseEventArgs e)
         {
-            Admin = false;
+            this.Admin = false;
 
             //to pak odstraním - začátek
             //UzivatelOvereny = true;
             //to pak odstraním - konec
 
             //ověření loginu v databázi
-            var zadavatelLogin = OvereniUzivateleViewModel.GetZadavatelLogin(textBoxLogin.Text).ToList();
+            var zadavatelLogin = OvereniUzivateleViewModel.GetZadavatelLogin(this.textBoxLogin.Text).ToList();
 
             if (zadavatelLogin.Count == 0)
+            {
                 MessageBox.Show("Login name not found.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);     //zadaný uživatel neexistuje
+            }
             else
             {
                 //to je Idčko, které budu prohledávat v zadavatel1, zadavatel2 a zadavateleAkci
                 //když ho najdu v zadavatel1, zadavatel2 - je to majitel AP
                 //když ho najdu v zadavateleAkci je to majitel akce
                 //idLoginUser IDčko zjištěné z databáze na základě loginu uživatele
-                IdLoginUser = zadavatelLogin[0].ZadavatelId;
+                this.IdLoginUser = zadavatelLogin[0].ZadavatelId;
                 if (zadavatelLogin[0].Admin == true)
-                    Admin = true;
+                {
+                    this.Admin = true;
+                }
 
                 //to pak odstraním - začátek
-                UzivatelOvereny = true;
+                this.UzivatelOvereny = true;
                 //to pak odstraním - konec
 
                 //bool isValid;

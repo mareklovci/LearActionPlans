@@ -31,17 +31,21 @@ namespace LearActionPlans.DataMappers
             if (reader.HasRows)
             {
                 while (reader.Read())
+                {
                     yield return ConstructKontrolaEfektivnostiAll(reader);
+                }
             }
             else
+            {
                 yield break;
+            }
         }
 
         private static KontrolaEfektivnosti ConstructKontrolaEfektivnostiAll(IDataRecord readerData)
         {
-            DateTime puvodniDatum = Convert.ToDateTime(readerData["KontrolaEfektivnosti"]);
-            DateTime odstranitDatum = Convert.ToDateTime(readerData["OdstranitDatum"]);
-            string poznamka = Convert.ToString(readerData["Poznamka"]);
+            var puvodniDatum = Convert.ToDateTime(readerData["KontrolaEfektivnosti"]);
+            var odstranitDatum = Convert.ToDateTime(readerData["OdstranitDatum"]);
+            var poznamka = Convert.ToString(readerData["Poznamka"]);
 
             return new KontrolaEfektivnosti(puvodniDatum, odstranitDatum, poznamka);
         }

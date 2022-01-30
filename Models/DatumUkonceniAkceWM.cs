@@ -14,8 +14,8 @@ namespace LearActionPlans.Models
         }
         public DatumUkonceniAkceWM(DateTime datumUkonceni, string poznamka)
         {
-            DatumUkonceni = datumUkonceni;
-            Poznamka = poznamka;
+            this.DatumUkonceni = datumUkonceni;
+            this.Poznamka = poznamka;
         }
     }
 }

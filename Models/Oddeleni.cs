@@ -8,9 +8,9 @@
 
         public Oddeleni(int oddeleniId, string nazev, byte stavObjektu)
         {
-            Id = oddeleniId;
-            Nazev = nazev;
-            StavObjektu = stavObjektu;
+            this.Id = oddeleniId;
+            this.Nazev = nazev;
+            this.StavObjektu = stavObjektu;
         }
     }
 }

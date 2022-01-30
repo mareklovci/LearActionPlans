@@ -96,7 +96,7 @@ namespace LearActionPlans.ViewModels
             var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
 
             var query = from z in zamestnanci
-                        select SeznamPozadavkuViewModel.Zamestnanec(z.Id, z.Prijmeni + " " + z.Jmeno, z.PrihlasovaciJmeno, z.StavObjektu);
+                        select Zamestnanec(z.Id, z.Prijmeni + " " + z.Jmeno, z.PrihlasovaciJmeno, z.StavObjektu);
 
             //where z.Storno is false
             //where z.Storno = false
@@ -118,7 +118,7 @@ namespace LearActionPlans.ViewModels
 
             var query = from o in oddeleni
                         where o.StavObjektu == 1
-                        select SeznamPozadavkuViewModel.Oddeleni(o.Id, o.Nazev);
+                        select Oddeleni(o.Id, o.Nazev);
 
             foreach (var q in query)
             {

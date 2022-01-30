@@ -16,12 +16,12 @@ namespace LearActionPlans.Views
 
         public FormDatumUkonceni(DateTime? datum, string poznamka)
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
             var podminkaDatum = datum == null;
             var podminkaPoznamka = poznamka == string.Empty;
-            dateTimePickerDatumUkonceni.Value = podminkaDatum ? DateTime.Now : Convert.ToDateTime(datum);
-            richTextBoxPoznamka.Text = podminkaPoznamka ? string.Empty : poznamka;
+            this.dateTimePickerDatumUkonceni.Value = podminkaDatum ? DateTime.Now : Convert.ToDateTime(datum);
+            this.richTextBoxPoznamka.Text = podminkaPoznamka ? string.Empty : poznamka;
         }
 
         private void FormDatumUkonceni_Load(object sender, EventArgs e)
@@ -30,17 +30,17 @@ namespace LearActionPlans.Views
 
         private void ButtonOk_MouseClick(object sender, MouseEventArgs e)
         {
-            ReturnValueDatum = dateTimePickerDatumUkonceni.Value;
-            var podminka = string.IsNullOrWhiteSpace(Convert.ToString(richTextBoxPoznamka.Text)) == true;
-            ReturnValuePoznamka = podminka ? string.Empty : richTextBoxPoznamka.Text;
+            this.ReturnValueDatum = this.dateTimePickerDatumUkonceni.Value;
+            var podminka = string.IsNullOrWhiteSpace(Convert.ToString(this.richTextBoxPoznamka.Text)) == true;
+            this.ReturnValuePoznamka = podminka ? string.Empty : this.richTextBoxPoznamka.Text;
 
-            DialogResult = DialogResult.OK;
-            Close();
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
 
         private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e)
         {
-            Close();
+            this.Close();
         }
     }
 }

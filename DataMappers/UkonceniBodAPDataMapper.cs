@@ -67,15 +67,19 @@ namespace LearActionPlans.DataMappers
             if (reader.HasRows)
             {
                 while (reader.Read())
+                {
                     yield return ConstructUkonceniAkceAll(reader);
+                }
             }
             else
+            {
                 yield break;
+            }
         }
 
         private static UkonceniBodAP ConstructUkonceniAkceAll(IDataRecord readerData)
         {
-            DateTime? kontrolaEfektivnosti = DatabaseReader.ConvertDateTime(readerData, "KontrolaEfektivnosti");
+            var kontrolaEfektivnosti = DatabaseReader.ConvertDateTime(readerData, "KontrolaEfektivnosti");
 
             return new UkonceniBodAP(kontrolaEfektivnosti);
         }
@@ -94,31 +98,35 @@ namespace LearActionPlans.DataMappers
             var reader = command.ExecuteReader();
 
             if (reader == null)
+            {
                 yield break;
+            }
 
             if (reader.HasRows)
             {
                 while (reader.Read())
+                {
                     yield return ConstructUkonceniBodAP(reader);
+                }
             }
         }
 
         private static UkonceniBodAP ConstructUkonceniBodAP(IDataRecord readerData)
         {
-            int id = Convert.ToInt32(readerData["UkonceniBodAPID"]);
-            int bodAPId = Convert.ToInt32(readerData["BodAPID"]);
-            DateTime ukonceniBodAP = Convert.ToDateTime(readerData["DatumUkonceni"]);
-            string poznamka = DatabaseReader.ConvertString(readerData, "Poznamka");
-            string odpoved = DatabaseReader.ConvertString(readerData, "Odpoved");
-            byte stavZadosti = Convert.ToByte(readerData["StavZadosti"]);
-            byte stavObjektu = Convert.ToByte(readerData["StavObjektu"]);
+            var id = Convert.ToInt32(readerData["UkonceniBodAPID"]);
+            var bodAPId = Convert.ToInt32(readerData["BodAPID"]);
+            var ukonceniBodAP = Convert.ToDateTime(readerData["DatumUkonceni"]);
+            var poznamka = DatabaseReader.ConvertString(readerData, "Poznamka");
+            var odpoved = DatabaseReader.ConvertString(readerData, "Odpoved");
+            var stavZadosti = Convert.ToByte(readerData["StavZadosti"]);
+            var stavObjektu = Convert.ToByte(readerData["StavObjektu"]);
 
             return new UkonceniBodAP(id, bodAPId, ukonceniBodAP, poznamka, odpoved, stavZadosti, stavObjektu, true);
         }
 
         public static int InsertUkonceniBodAP(int bodAPId, DateTime datumUkonceni, string poznamka)
         {
-            int id = 0;
+            var id = 0;
 
             using var connection = new SqlConnection(ConnectionString);
             connection.Open();
@@ -130,9 +138,13 @@ namespace LearActionPlans.DataMappers
             command.Parameters.AddWithValue("@bodAPId", bodAPId);
             command.Parameters.AddWithValue("@datumUkonceni", datumUkonceni);
             if (string.IsNullOrWhiteSpace(poznamka))
+            {
                 command.Parameters.AddWithValue("@poznamka", DBNull.Value);
+            }
             else
+            {
                 command.Parameters.AddWithValue("@poznamka", poznamka);
+            }
 
             command.Parameters.AddWithValue("@stavZadosti", 3);
             //if (FormMain.VlastnikAP == true)

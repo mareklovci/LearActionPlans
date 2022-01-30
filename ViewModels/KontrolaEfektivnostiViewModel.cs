@@ -31,7 +31,7 @@ namespace LearActionPlans.ViewModels
             var kontrolaEfektivnosti = KontrolaEfektivnostiDataMapper.GetKontrolaEfektivnostiBodAPId(bodAPId).ToList();
 
             var query = from kE in kontrolaEfektivnosti
-                        select KontrolaEfektivnostiViewModel.PuvodniTerminyEfektivnost(kE.PuvodniDatum, kE.OdstranitDatum, kE.Poznamka);
+                        select PuvodniTerminyEfektivnost(kE.PuvodniDatum, kE.OdstranitDatum, kE.Poznamka);
 
             if (query.Count() == 0)
             {
@@ -40,7 +40,9 @@ namespace LearActionPlans.ViewModels
             else
             {
                 foreach (var q in query)
+                {
                     yield return q;
+                }
             }
         }
 

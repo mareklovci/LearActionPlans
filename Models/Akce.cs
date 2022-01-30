@@ -16,9 +16,9 @@ namespace LearActionPlans.Models
 
         public Akce(int id, int bodAPId, byte stavObjektu)
         {
-            Id = id;
-            BodAPId = bodAPId;
-            StavObjektuAkce = stavObjektu;
+            this.Id = id;
+            this.BodAPId = bodAPId;
+            this.StavObjektuAkce = stavObjektu;
         }
 
         //public Akce(int id, byte zamitnutiTerminu, byte zmenaTerminu)

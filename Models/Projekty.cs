@@ -8,9 +8,9 @@
 
         public Projekty(int id, string nazev, byte stavObjektu)
         {
-            Id = id;
-            Nazev = nazev;
-            StavObjektu = stavObjektu;
+            this.Id = id;
+            this.Nazev = nazev;
+            this.StavObjektu = stavObjektu;
         }
     }
 }

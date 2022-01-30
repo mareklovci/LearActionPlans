@@ -29,47 +29,47 @@ namespace LearActionPlans.Models
 
         public AkcniPlany(int apId, byte znovuOtevrit, DateTime? uzavreniAP, string duvod)
         {
-            Id = apId;
-            ZnovuOtevrit = znovuOtevrit;
-            UzavreniAP = uzavreniAP;
-            DuvodZnovuotevreni = duvod;
+            this.Id = apId;
+            this.ZnovuOtevrit = znovuOtevrit;
+            this.UzavreniAP = uzavreniAP;
+            this.DuvodZnovuotevreni = duvod;
         }
 
         public AkcniPlany(int akcniPlanId, byte zmenaTerminu)
         {
-            Id = akcniPlanId;
-            ZmenaTerminu = zmenaTerminu;
+            this.Id = akcniPlanId;
+            this.ZmenaTerminu = zmenaTerminu;
         }
 
         public AkcniPlany()
         {
-            DatumZalozeni = DateTime.Now;
-            CisloAP = 0;
-            Zadavatel1Id = 0;
-            Zadavatel2Id = null;
-            Tema = null;
-            ProjektId = null;
+            this.DatumZalozeni = DateTime.Now;
+            this.CisloAP = 0;
+            this.Zadavatel1Id = 0;
+            this.Zadavatel2Id = null;
+            this.Tema = null;
+            this.ProjektId = null;
             //DatumUkonceni = DateTime.Now;
-            ZakaznikId = 0;
-            TypAP = 1;
+            this.ZakaznikId = 0;
+            this.TypAP = 1;
             //Poznamka = null;
-            StavObjektu = 1;
+            this.StavObjektu = 1;
         }
 
         public AkcniPlany(int id, DateTime datumZalozeni, int cisloAP, int zadavatel1Id, int? zadavatel2Id, string tema, int? projektId,
             int zakaznikId, byte typAP, byte stavObjektu, DateTime? datumUzavreni)
         {
-            Id = id;
-            DatumZalozeni = datumZalozeni;
-            CisloAP = cisloAP;
-            Zadavatel1Id = zadavatel1Id;
-            Zadavatel2Id = zadavatel2Id;
-            Tema = tema;
-            ZakaznikId = zakaznikId;
-            ProjektId = projektId;
-            TypAP = typAP;
-            StavObjektu = stavObjektu;
-            UzavreniAP = datumUzavreni;
+            this.Id = id;
+            this.DatumZalozeni = datumZalozeni;
+            this.CisloAP = cisloAP;
+            this.Zadavatel1Id = zadavatel1Id;
+            this.Zadavatel2Id = zadavatel2Id;
+            this.Tema = tema;
+            this.ZakaznikId = zakaznikId;
+            this.ProjektId = projektId;
+            this.TypAP = typAP;
+            this.StavObjektu = stavObjektu;
+            this.UzavreniAP = datumUzavreni;
         }
     }
 }

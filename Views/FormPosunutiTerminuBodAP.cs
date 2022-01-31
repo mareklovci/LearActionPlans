@@ -635,6 +635,7 @@ namespace LearActionPlans.Views
 
                     message.To.Add(new MailAddress("bartos.grammer@seznam.cz"));
 
+                    // tady se uloží email do tabulky EmailOdeslat a zavolá se aplikace pro odeslání emailu LaerEmailOdeslat
                     Helper.OdeslatEmail(smtp, message);
                 }
                 //----- odeslání požadavku -----------------------------------------------------------------------------------------------------

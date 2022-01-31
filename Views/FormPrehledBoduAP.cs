@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -242,6 +242,7 @@ namespace LearActionPlans.Views
         private void NacistDGV()
         {
             //nejdřív odstraním všechny řádky z dtBody
+            // poznámka
             if (this.dtBodyAP.Rows.Count > 0)
             {
                 for (var i = this.dtBodyAP.Rows.Count - 1; i >= 0; i--)

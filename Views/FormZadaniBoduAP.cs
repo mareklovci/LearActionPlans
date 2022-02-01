@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -590,13 +590,13 @@ namespace LearActionPlans.Views
             this.RichTextBoxNapravnaOpatreniWS.GotFocus -= this.RichTextBoxNapravnaOpatreniWSGotFocus;
         }
 
-        void TextBoxOdkazNaNormuGotFocus(object sender, EventArgs e) => SendKeys.Send("{tab}");
-        void TextBoxHodnoceniNeshodyGotFocus(object sender, EventArgs e) => SendKeys.Send("{tab}");
-        void RichTextBoxPopisProblemuGotFocus(object sender, EventArgs e) => SendKeys.Send("{tab}");
-        void RichTextBoxSkutecnaPricinaWMGotFocus(object sender, EventArgs e) => SendKeys.Send("{tab}");
-        void RichTextBoxNapravnaOpatreniWMGotFocus(object sender, EventArgs e) => SendKeys.Send("{tab}");
-        void RichTextBoxSkutecnaPricinaWSGotFocus(object sender, EventArgs e) => SendKeys.Send("{tab}");
-        void RichTextBoxNapravnaOpatreniWSGotFocus(object sender, EventArgs e) => SendKeys.Send("{tab}");
+        private void TextBoxOdkazNaNormuGotFocus(object sender, EventArgs e) => SendKeys.Send("{tab}");
+        private void TextBoxHodnoceniNeshodyGotFocus(object sender, EventArgs e) => SendKeys.Send("{tab}");
+        private void RichTextBoxPopisProblemuGotFocus(object sender, EventArgs e) => SendKeys.Send("{tab}");
+        private void RichTextBoxSkutecnaPricinaWMGotFocus(object sender, EventArgs e) => SendKeys.Send("{tab}");
+        private void RichTextBoxNapravnaOpatreniWMGotFocus(object sender, EventArgs e) => SendKeys.Send("{tab}");
+        private void RichTextBoxSkutecnaPricinaWSGotFocus(object sender, EventArgs e) => SendKeys.Send("{tab}");
+        private void RichTextBoxNapravnaOpatreniWSGotFocus(object sender, EventArgs e) => SendKeys.Send("{tab}");
 
         private void ButtonPriloha_MouseClick(object sender, MouseEventArgs e)
         {

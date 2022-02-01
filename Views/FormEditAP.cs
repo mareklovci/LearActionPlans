@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -118,7 +118,7 @@ namespace LearActionPlans.Views
                 this.richTextBoxDuvodZnovuOtevreni.Text = znovuOtevrit[0].DuvodZnovuotevreni;
             }
 
-            this.labelDatumUzavreni.Text = string.Empty;
+            this.labelDatumUzavreni.Text = "not closed";
             if (!(znovuOtevrit[0].UzavreniAP == null))
             {
                 this.labelDatumUzavreni.Text = Convert.ToDateTime(znovuOtevrit[0].UzavreniAP).ToShortDateString();
@@ -641,9 +641,6 @@ namespace LearActionPlans.Views
             }
         }
 
-        private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e)
-        {
-            this.Close();
-        }
+        private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e) => this.Close();
     }
 }

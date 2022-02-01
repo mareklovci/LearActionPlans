@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Linq;
 using System.Net;
@@ -38,9 +38,6 @@ namespace LearActionPlans.Views
             this.Close();
         }
 
-        private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e)
-        {
-            this.Close();
-        }
+        private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e) => this.Close();
     }
 }

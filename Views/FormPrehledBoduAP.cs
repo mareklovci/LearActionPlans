@@ -46,16 +46,19 @@ namespace LearActionPlans.Views
         {
             this.bindingSource.DataSource = this.dtBodyAP;
             this.DataGridViewBodyAP.DataSource = this.bindingSource;
+
             this.labelCisloAP.Text = this.akcniPlany_.CisloAPRok ?? "";
             this.labelZadavatel1Zadano.Text = this.akcniPlany_.Zadavatel1Jmeno ?? "";
             this.labelZadavatel2Zadano.Text =
                 this.akcniPlany_.Zadavatel2Jmeno ?? (this.akcniPlany_.Zadavatel2Jmeno = "");
             this.labelTemaAP.Text = this.akcniPlany_.Tema ?? "";
             this.labelProjektAP.Text = this.akcniPlany_.ProjektNazev ?? "";
+            this.labelDatumZahajeniAP.Text = this.akcniPlany_.DatumZalozeni == null ? "" : Convert.ToDateTime(this.akcniPlany_.DatumZalozeni).ToShortDateString();
             this.labelDatumUkonceniAP.Text = string.Empty;
             this.labelZakaznikAP.Text = this.akcniPlany_.ZakaznikNazev ?? "";
 
             var ukonceniAP = PrehledBoduAPViewModel.GetUkonceniAPId(this.akcniPlany_.Id);
+
             foreach (var u in ukonceniAP)
             {
                 this.labelDatumUkonceniAP.Text = u.DatumUkonceniAP.ToShortDateString();
@@ -69,23 +72,49 @@ namespace LearActionPlans.Views
             {
                 //tady se naplní prom bodyAP z databáze
                 var bodyAP_ = PrehledBoduAPViewModel.GetBodyIdAPAll(this.akcniPlany_.Id).ToList();
-                //int bodId = 0;
+                var odpOsoba2 = PrehledBoduAPViewModel.GetOdpovednaOsoba2().ToList();
+
                 var i = 0;
+                var datumUkonceni_ = (DateTime?)null;
                 foreach (var b in bodyAP_)
                 {
+                    var datumUkonceni = PrehledBoduAPViewModel.GetUkonceniBodAP(b.Id).ToList();
+                    datumUkonceni.Reverse();
+                    foreach (var du in datumUkonceni)
+                    {
+                        if (du.StavZadosti == 1 || du.StavZadosti == 4 || du.StavZadosti == 5)
+                        {
+                            datumUkonceni_ = du.DatumUkonceni;
+                            break;
+                        }
+                    }
+
+                    string odpovednaOsoba2;
+                    if (b.OdpovednaOsoba2Id == null)
+                    {
+                        odpovednaOsoba2 = string.Empty;
+                    }
+                    else
+                    {
+                        var id = Convert.ToInt32(b.OdpovednaOsoba2Id);
+                        var vyhledaneJmeno = odpOsoba2.Find(x => x.OdpovednaOsoba2Id == id);
+                        odpovednaOsoba2 = vyhledaneJmeno.OdpovednaOsoba2;
+                    }
+
                     bodyAP.Add(new BodAP(b.Id, b.IdAP, b.CisloBoduAP, b.DatumZalozeni, b.OdkazNaNormu,
                         b.HodnoceniNeshody, b.PopisProblemu,
                         b.SkutecnaPricinaWM, b.NapravnaOpatreniWM, b.SkutecnaPricinaWS, b.NapravnaOpatreniWS,
-                        b.OdpovednaOsoba1Id, b.OdpovednaOsoba2Id, b.OdpovednaOsoba1, b.KontrolaEfektivnosti,
+                        b.OdpovednaOsoba1Id, b.OdpovednaOsoba2Id, b.OdpovednaOsoba1, odpovednaOsoba2, b.KontrolaEfektivnosti,
                         b.OddeleniId, b.Oddeleni, b.Priloha,
                         b.ZamitnutiTerminu, b.ZmenaTerminu, b.ZnovuOtevrit, true, b.StavObjektuBodAP));
                     //tabulka pro DGV
                     this.dtBodyAP.Rows.Add(b.CisloBoduAP, b.OdkazNaNormu, b.HodnoceniNeshody, b.PopisProblemu,
-                        b.OdpovednaOsoba1, string.Empty, b.Oddeleni,
+                        b.OdpovednaOsoba1, odpovednaOsoba2, b.Oddeleni,
                         b.SkutecnaPricinaWM ?? string.Empty,
                         b.NapravnaOpatreniWM ?? string.Empty,
                         b.SkutecnaPricinaWS ?? string.Empty,
-                        b.NapravnaOpatreniWS ?? string.Empty, string.Empty,
+                        b.NapravnaOpatreniWS ?? string.Empty,
+                        datumUkonceni_ == null ? string.Empty : Convert.ToDateTime(datumUkonceni_).ToShortDateString(),
                         b.KontrolaEfektivnosti == null
                             ? string.Empty
                             : Convert.ToDateTime(b.KontrolaEfektivnosti).ToShortDateString(), b.ZnovuOtevrit);
@@ -260,7 +289,7 @@ namespace LearActionPlans.Views
                 bodyAP.Add(new BodAP(b.Id, b.IdAP, b.CisloBoduAP, b.DatumZalozeni, b.OdkazNaNormu, b.HodnoceniNeshody,
                     b.PopisProblemu,
                     b.SkutecnaPricinaWM, b.NapravnaOpatreniWM, b.SkutecnaPricinaWS, b.NapravnaOpatreniWS,
-                    b.OdpovednaOsoba1Id, b.OdpovednaOsoba2Id, b.OdpovednaOsoba1, b.KontrolaEfektivnosti, b.OddeleniId,
+                    b.OdpovednaOsoba1Id, b.OdpovednaOsoba2Id, b.OdpovednaOsoba1, b.OdpovednaOsoba2, b.KontrolaEfektivnosti, b.OddeleniId,
                     b.Oddeleni, b.Priloha,
                     b.ZamitnutiTerminu, b.ZmenaTerminu, b.ZnovuOtevrit, true, b.StavObjektuBodAP));
             }

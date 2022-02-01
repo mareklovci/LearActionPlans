@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
@@ -57,10 +57,9 @@ namespace LearActionPlans.DataMappers
             //command.Parameters.AddWithValue("@stavObjektuBodAP", 1);
             //command.Parameters.AddWithValue("@stavObjektuAkce", 1);
 
-            command.CommandText = $"SELECT KontrolaEfektivnosti FROM BodAP WHERE BodAP.AkcniPlanID = @apId AND BodAP.StavObjektu = @stavObjektuBodAP AND Akce.StavObjektu = @stavObjektuAkce";
+            command.CommandText = $"SELECT KontrolaEfektivnosti FROM BodAP WHERE BodAP.AkcniPlanID = @apId AND BodAP.StavObjektu = @stavObjektuBodAP";
             command.Parameters.AddWithValue("@apId", apId);
             command.Parameters.AddWithValue("@stavObjektuBodAP", 1);
-            command.Parameters.AddWithValue("@stavObjektuAkce", 1);
 
             var reader = command.ExecuteReader();
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace LearActionPlans.Models
@@ -19,6 +19,7 @@ namespace LearActionPlans.Models
         public int OdpovednaOsoba1Id { get; set; }
         public int? OdpovednaOsoba2Id { get; set; }
         public string OdpovednaOsoba1 { get; set; }
+        public string OdpovednaOsoba2 { get; set; }
         public DateTime? DatumUkonceni { get; set; }
         public string UkonceniPoznamka { get; set; }
         public List<UkonceniBodAP> UkonceniBodAP { get; set; }
@@ -45,18 +46,19 @@ namespace LearActionPlans.Models
             this.ZmenaTerminu = zmenaTerminu;
         }
 
-        public BodAP(int akcniPlanId, 
-            int cisloBoduAP, 
-            DateTime datumZalozeni, 
-            string odkazNaNormu, 
-            string hodnoceniNeshody, 
-            string popisProbemu, 
+        public BodAP(int akcniPlanId,
+            int cisloBoduAP,
+            DateTime datumZalozeni,
+            string odkazNaNormu,
+            string hodnoceniNeshody,
+            string popisProbemu,
             string skutecnaPricinaWM,
             string napravnaOpatreniWM,
             string skutecnaPricinaWS,
             string napravnaOpatreniWS,
             int odpovednaOsoba1Id,
             int? odpovednaOsoba2Id,
+            DateTime? datumUkonceni,
             DateTime? kontrolaEfektivnosti,
             int? oddeleniId,
             string priloha,
@@ -141,6 +143,7 @@ namespace LearActionPlans.Models
             int odpovednaOsoba1Id,
             int? odpovednaOsoba2Id,
             string odpovednaOsoba1,
+            string odpovednaOsoba2,
             DateTime? kontrolaEfektivnosti,
             int? oddeleniId,
             string oddeleni,
@@ -165,6 +168,7 @@ namespace LearActionPlans.Models
             this.OdpovednaOsoba1Id = odpovednaOsoba1Id;
             this.OdpovednaOsoba2Id = odpovednaOsoba2Id;
             this.OdpovednaOsoba1 = odpovednaOsoba1;
+            this.OdpovednaOsoba2 = odpovednaOsoba2;
             this.KontrolaEfektivnosti = kontrolaEfektivnosti;
             this.OddeleniId = oddeleniId;
             this.Oddeleni = oddeleni;

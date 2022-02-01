@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -29,6 +29,7 @@ namespace LearActionPlans.ViewModels
         public int OdpovednaOsoba1Id { get; set; }
         public int? OdpovednaOsoba2Id { get; set; }
         public string OdpovednaOsoba1 { get; set; }
+        public string OdpovednaOsoba2 { get; set; }
         public DateTime? KontrolaEfektivnosti { get; set; }
         public int? OddeleniId { get; set; }
         public string Oddeleni { get; set; }
@@ -45,6 +46,17 @@ namespace LearActionPlans.ViewModels
         public string Odpoved { get; set; }
         public byte StavZadosti { get; set; }
         public byte StavObjektuUkonceni { get; set; }
+
+        public static PrehledBoduAPViewModel NacistJmenoOdpOsoba2(int odpOsoba2Id, string odpOsoba2Jmeno)
+        {
+            var prehledBoduAPViewModel = new PrehledBoduAPViewModel
+            {
+                OdpovednaOsoba2Id = odpOsoba2Id,
+                OdpovednaOsoba2 = odpOsoba2Jmeno
+            };
+
+            return prehledBoduAPViewModel;
+        }
 
         public static PrehledBoduAPViewModel BodyAP(int id, int idAP, int cisloBoduAP, DateTime datumZalozeni, string odkazNaNormu,
             string hodnoceniNeshody, string popisProblemu,
@@ -170,6 +182,19 @@ namespace LearActionPlans.ViewModels
                         where u.APId == idAP
                         orderby u.Id descending
                         select UkonceniAP(u.Id, u.DatumUkonceni);
+
+            foreach (var q in query)
+            {
+                yield return q;
+            }
+        }
+
+        public static IEnumerable<PrehledBoduAPViewModel> GetOdpovednaOsoba2()
+        {
+            var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
+
+            var query = from zam in zamestnanci
+                        select NacistJmenoOdpOsoba2(zam.Id, zam.Prijmeni + " " + zam.Jmeno);
 
             foreach (var q in query)
             {

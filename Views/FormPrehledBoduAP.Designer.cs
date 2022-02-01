@@ -48,6 +48,8 @@ namespace LearActionPlans.Views
             this.labelZakaznikAP = new System.Windows.Forms.Label();
             this.ButtonOpravitBodAP = new System.Windows.Forms.Button();
             this.ButtonUlozit = new System.Windows.Forms.Button();
+            this.labelDatumZahajeni = new System.Windows.Forms.Label();
+            this.labelDatumZahajeniAP = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridViewBodyAP)).BeginInit();
             this.SuspendLayout();
             // 
@@ -55,7 +57,7 @@ namespace LearActionPlans.Views
             // 
             this.labelZakaznik.AutoSize = true;
             this.labelZakaznik.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.labelZakaznik.Location = new System.Drawing.Point(25, 170);
+            this.labelZakaznik.Location = new System.Drawing.Point(25, 195);
             this.labelZakaznik.Name = "labelZakaznik";
             this.labelZakaznik.Size = new System.Drawing.Size(72, 17);
             this.labelZakaznik.TabIndex = 19;
@@ -65,7 +67,7 @@ namespace LearActionPlans.Views
             // 
             this.labelDatumUkonceni.AutoSize = true;
             this.labelDatumUkonceni.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.labelDatumUkonceni.Location = new System.Drawing.Point(25, 145);
+            this.labelDatumUkonceni.Location = new System.Drawing.Point(25, 170);
             this.labelDatumUkonceni.Name = "labelDatumUkonceni";
             this.labelDatumUkonceni.Size = new System.Drawing.Size(69, 17);
             this.labelDatumUkonceni.TabIndex = 18;
@@ -147,16 +149,16 @@ namespace LearActionPlans.Views
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.DataGridViewBodyAP.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataGridViewBodyAP.Location = new System.Drawing.Point(15, 199);
+            this.DataGridViewBodyAP.Location = new System.Drawing.Point(15, 229);
             this.DataGridViewBodyAP.Name = "DataGridViewBodyAP";
-            this.DataGridViewBodyAP.Size = new System.Drawing.Size(1357, 650);
+            this.DataGridViewBodyAP.Size = new System.Drawing.Size(1357, 620);
             this.DataGridViewBodyAP.TabIndex = 22;
             // 
             // ButtonNovyBodAP
             // 
             this.ButtonNovyBodAP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonNovyBodAP.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.ButtonNovyBodAP.Location = new System.Drawing.Point(1019, 163);
+            this.ButtonNovyBodAP.Location = new System.Drawing.Point(1019, 193);
             this.ButtonNovyBodAP.Name = "ButtonNovyBodAP";
             this.ButtonNovyBodAP.Size = new System.Drawing.Size(110, 30);
             this.ButtonNovyBodAP.TabIndex = 23;
@@ -168,7 +170,7 @@ namespace LearActionPlans.Views
             // 
             this.ButtonZavrit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonZavrit.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.ButtonZavrit.Location = new System.Drawing.Point(1262, 163);
+            this.ButtonZavrit.Location = new System.Drawing.Point(1262, 193);
             this.ButtonZavrit.Name = "ButtonZavrit";
             this.ButtonZavrit.Size = new System.Drawing.Size(110, 30);
             this.ButtonZavrit.TabIndex = 24;
@@ -210,7 +212,7 @@ namespace LearActionPlans.Views
             // 
             this.labelDatumUkonceniAP.AutoSize = true;
             this.labelDatumUkonceniAP.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.labelDatumUkonceniAP.Location = new System.Drawing.Point(140, 145);
+            this.labelDatumUkonceniAP.Location = new System.Drawing.Point(140, 170);
             this.labelDatumUkonceniAP.Name = "labelDatumUkonceniAP";
             this.labelDatumUkonceniAP.Size = new System.Drawing.Size(108, 17);
             this.labelDatumUkonceniAP.TabIndex = 28;
@@ -220,7 +222,7 @@ namespace LearActionPlans.Views
             // 
             this.labelZakaznikAP.AutoSize = true;
             this.labelZakaznikAP.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.labelZakaznikAP.Location = new System.Drawing.Point(140, 170);
+            this.labelZakaznikAP.Location = new System.Drawing.Point(140, 195);
             this.labelZakaznikAP.Name = "labelZakaznikAP";
             this.labelZakaznikAP.Size = new System.Drawing.Size(63, 17);
             this.labelZakaznikAP.TabIndex = 29;
@@ -230,7 +232,7 @@ namespace LearActionPlans.Views
             // 
             this.ButtonOpravitBodAP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonOpravitBodAP.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.ButtonOpravitBodAP.Location = new System.Drawing.Point(1136, 163);
+            this.ButtonOpravitBodAP.Location = new System.Drawing.Point(1136, 193);
             this.ButtonOpravitBodAP.Name = "ButtonOpravitBodAP";
             this.ButtonOpravitBodAP.Size = new System.Drawing.Size(120, 30);
             this.ButtonOpravitBodAP.TabIndex = 30;
@@ -242,7 +244,7 @@ namespace LearActionPlans.Views
             // 
             this.ButtonUlozit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonUlozit.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.ButtonUlozit.Location = new System.Drawing.Point(893, 163);
+            this.ButtonUlozit.Location = new System.Drawing.Point(893, 193);
             this.ButtonUlozit.Name = "ButtonUlozit";
             this.ButtonUlozit.Size = new System.Drawing.Size(120, 30);
             this.ButtonUlozit.TabIndex = 31;
@@ -250,11 +252,33 @@ namespace LearActionPlans.Views
             this.ButtonUlozit.UseVisualStyleBackColor = true;
             this.ButtonUlozit.Visible = false;
             // 
+            // labelDatumZahajeni
+            // 
+            this.labelDatumZahajeni.AutoSize = true;
+            this.labelDatumZahajeni.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.labelDatumZahajeni.Location = new System.Drawing.Point(25, 145);
+            this.labelDatumZahajeni.Name = "labelDatumZahajeni";
+            this.labelDatumZahajeni.Size = new System.Drawing.Size(74, 17);
+            this.labelDatumZahajeni.TabIndex = 32;
+            this.labelDatumZahajeni.Text = "Start date:";
+            // 
+            // labelDatumZahajeniAP
+            // 
+            this.labelDatumZahajeniAP.AutoSize = true;
+            this.labelDatumZahajeniAP.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.labelDatumZahajeniAP.Location = new System.Drawing.Point(140, 145);
+            this.labelDatumZahajeniAP.Name = "labelDatumZahajeniAP";
+            this.labelDatumZahajeniAP.Size = new System.Drawing.Size(104, 17);
+            this.labelDatumZahajeniAP.TabIndex = 33;
+            this.labelDatumZahajeniAP.Text = "datum zahajeni";
+            // 
             // FormPrehledBoduAP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1384, 861);
+            this.Controls.Add(this.labelDatumZahajeniAP);
+            this.Controls.Add(this.labelDatumZahajeni);
             this.Controls.Add(this.ButtonUlozit);
             this.Controls.Add(this.ButtonOpravitBodAP);
             this.Controls.Add(this.labelZakaznikAP);
@@ -309,5 +333,7 @@ namespace LearActionPlans.Views
         private System.Windows.Forms.Label labelZakaznikAP;
         private System.Windows.Forms.Button ButtonOpravitBodAP;
         private System.Windows.Forms.Button ButtonUlozit;
+        private System.Windows.Forms.Label labelDatumZahajeni;
+        private System.Windows.Forms.Label labelDatumZahajeniAP;
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -380,6 +380,7 @@ namespace LearActionPlans.Views
                                 Convert.ToString(this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["ProjektNazev"]);
                         }
 
+                        this.akcniPlany.DatumZalozeni = Convert.ToDateTime(this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["DatumZalozeni"]);
                         this.akcniPlany.ZakaznikNazev =
                             Convert.ToString(this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["ZakaznikNazev"]);
 

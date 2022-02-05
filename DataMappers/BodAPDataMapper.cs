@@ -113,18 +113,19 @@ namespace LearActionPlans.DataMappers
             var odpovednaOsoba1Id = (int)readerData["OdpovednaOsoba1ID"];
             var odpovednaOsoba2Id = DatabaseReader.ConvertInteger(readerData, "OdpovednaOsoba2ID");
             var kontrolaEfektivnosti = DatabaseReader.ConvertDateTime(readerData, "KontrolaEfektivnosti");
-            var oddeleniId = DatabaseReader.ConvertInteger(readerData, "OddeleniID");
+            var oddeleniId = Convert.ToInt32(readerData["OddeleniID"]);
             var priloha = DatabaseReader.ConvertString(readerData, "Priloha");
             var zamitnutiTerminu = (byte)readerData["ZamitnutiTerminu"];
             var zmenaTerminu = (byte)readerData["ZmenaTerminu"];
 
-            //List<Akce> typAkce = new List<Akce>();
             var znovuOtevrit = (bool)readerData["ZnovuOtevrit"];
+            var emailOdeslan = (bool)readerData["EmailOdeslan"];
             var stavObjektu = (byte)readerData["StavObjektu"];
 
             return new BodAP(id, akcniPlanId, cisloBoduAP, datumZalozeni, odkazNaNormu, hodnoceniNeshody, popisProblemu,
-                skutecnaPricinaWM, napravnaOpatreniWM, skutecnaPricinaWS, napravnaOpatreniWS, odpovednaOsoba1Id, odpovednaOsoba2Id, kontrolaEfektivnosti, oddeleniId, priloha, zamitnutiTerminu, zmenaTerminu,
-                znovuOtevrit, true, stavObjektu);
+                skutecnaPricinaWM, napravnaOpatreniWM, skutecnaPricinaWS, napravnaOpatreniWS, odpovednaOsoba1Id, odpovednaOsoba2Id,
+                kontrolaEfektivnosti, oddeleniId, priloha, zamitnutiTerminu, zmenaTerminu,
+                znovuOtevrit, true, emailOdeslan, stavObjektu);
         }
 
         public static IEnumerable<UkonceniBodAP> GetUkonceniAkceZadost()

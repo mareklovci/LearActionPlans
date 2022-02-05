@@ -1,4 +1,4 @@
-﻿
+
 namespace LearActionPlans.Views
 {
     partial class FormPrehledBoduAP
@@ -47,9 +47,9 @@ namespace LearActionPlans.Views
             this.labelDatumUkonceniAP = new System.Windows.Forms.Label();
             this.labelZakaznikAP = new System.Windows.Forms.Label();
             this.ButtonOpravitBodAP = new System.Windows.Forms.Button();
-            this.ButtonUlozit = new System.Windows.Forms.Button();
             this.labelDatumZahajeni = new System.Windows.Forms.Label();
             this.labelDatumZahajeniAP = new System.Windows.Forms.Label();
+            this.ButtonOdeslatEmail = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridViewBodyAP)).BeginInit();
             this.SuspendLayout();
             // 
@@ -240,18 +240,6 @@ namespace LearActionPlans.Views
             this.ButtonOpravitBodAP.UseVisualStyleBackColor = true;
             this.ButtonOpravitBodAP.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonOpravitBodAP_MouseClick);
             // 
-            // ButtonUlozit
-            // 
-            this.ButtonUlozit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ButtonUlozit.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.ButtonUlozit.Location = new System.Drawing.Point(893, 193);
-            this.ButtonUlozit.Name = "ButtonUlozit";
-            this.ButtonUlozit.Size = new System.Drawing.Size(120, 30);
-            this.ButtonUlozit.TabIndex = 31;
-            this.ButtonUlozit.Text = "Save";
-            this.ButtonUlozit.UseVisualStyleBackColor = true;
-            this.ButtonUlozit.Visible = false;
-            // 
             // labelDatumZahajeni
             // 
             this.labelDatumZahajeni.AutoSize = true;
@@ -272,14 +260,26 @@ namespace LearActionPlans.Views
             this.labelDatumZahajeniAP.TabIndex = 33;
             this.labelDatumZahajeniAP.Text = "datum zahajeni";
             // 
+            // ButtonOdeslatEmail
+            // 
+            this.ButtonOdeslatEmail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ButtonOdeslatEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.ButtonOdeslatEmail.Location = new System.Drawing.Point(903, 193);
+            this.ButtonOdeslatEmail.Name = "ButtonOdeslatEmail";
+            this.ButtonOdeslatEmail.Size = new System.Drawing.Size(110, 30);
+            this.ButtonOdeslatEmail.TabIndex = 34;
+            this.ButtonOdeslatEmail.Text = "Send info";
+            this.ButtonOdeslatEmail.UseVisualStyleBackColor = true;
+            this.ButtonOdeslatEmail.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonOdeslatEmail_MouseClick);
+            // 
             // FormPrehledBoduAP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1384, 861);
+            this.Controls.Add(this.ButtonOdeslatEmail);
             this.Controls.Add(this.labelDatumZahajeniAP);
             this.Controls.Add(this.labelDatumZahajeni);
-            this.Controls.Add(this.ButtonUlozit);
             this.Controls.Add(this.ButtonOpravitBodAP);
             this.Controls.Add(this.labelZakaznikAP);
             this.Controls.Add(this.labelDatumUkonceniAP);
@@ -332,8 +332,8 @@ namespace LearActionPlans.Views
         private System.Windows.Forms.Label labelDatumUkonceniAP;
         private System.Windows.Forms.Label labelZakaznikAP;
         private System.Windows.Forms.Button ButtonOpravitBodAP;
-        private System.Windows.Forms.Button ButtonUlozit;
         private System.Windows.Forms.Label labelDatumZahajeni;
         private System.Windows.Forms.Label labelDatumZahajeniAP;
+        private System.Windows.Forms.Button ButtonOdeslatEmail;
     }
 }

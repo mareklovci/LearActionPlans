@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Collections.Generic;
@@ -50,7 +50,7 @@ namespace LearActionPlans.DataMappers
             return new Zamestnanci(id, jmeno, prijmeni, prihlasovaciJmeno, email, adminAP, oddeleniId, stavObjektu);
         }
 
-        public static IEnumerable<Zamestnanci> GetZadavatelId(int zadavatelId)
+        public static IEnumerable<Zamestnanci> GetOdpovednyPracovnikId(int odpovednyPracovnikId)
         {
             using var connection = new SqlConnection(ConnectionString);
             connection.Open();
@@ -58,8 +58,8 @@ namespace LearActionPlans.DataMappers
             using var command = connection.CreateCommand();
             command.CommandType = CommandType.Text;
 
-            command.CommandText = $"SELECT * FROM Zamestnanec WHERE ZamestnanecId = @zadavatelId";
-            command.Parameters.AddWithValue("@zadavatelId", zadavatelId);
+            command.CommandText = $"SELECT * FROM Zamestnanec WHERE ZamestnanecId = @odpovednyPracovnikId";
+            command.Parameters.AddWithValue("@odpovednyPracovnikId", odpovednyPracovnikId);
 
             var reader = command.ExecuteReader();
 
@@ -70,9 +70,27 @@ namespace LearActionPlans.DataMappers
 
             while (reader.Read())
             {
-                yield return ConstructZadavatel(reader);
+                yield return ConstructOdpovednyPracovnik(reader);
             }
         }
+        private static Zamestnanci ConstructOdpovednyPracovnik(IDataRecord reader)
+        {
+            var id = (int)reader["ZamestnanecID"];
+            var jmeno = (string)reader["Jmeno"];
+            var prijmeni = (string)reader["Prijmeni"];
+            var email = (string)reader["Email"];
+
+            return new Zamestnanci(id, jmeno, prijmeni, email);
+        }
+
+        //private static Zamestnanci ConstructZadavatel(IDataRecord reader)
+        //{
+        //    var id = (int)reader["ZamestnanecID"];
+        //    var prihlasovaciJmeno = (string)reader["PrihlasovaciJmeno"];
+        //    var admin = (bool)reader["AdminAP"];
+
+        //    return new Zamestnanci(id, prihlasovaciJmeno, admin);
+        //}
 
         public static IEnumerable<Zamestnanci> GetZadavatelLogin(string login)
         {

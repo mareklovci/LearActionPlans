@@ -245,11 +245,7 @@ namespace LearActionPlans.Views
                         FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OdpovednaOsoba2Id;
                 }
 
-                if (FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OddeleniId == null) { }
-                else
-                {
-                    this.ComboBoxOddeleni.SelectedValue = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OddeleniId;
-                }
+                this.ComboBoxOddeleni.SelectedValue = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OddeleniId;
 
                 if (FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Priloha == null) { }
 
@@ -264,10 +260,12 @@ namespace LearActionPlans.Views
                 {
                     var i = 0;
                     var copyBodAP = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].UkonceniBodAP.ToList();
+                    copyBodAP.Reverse();
                     foreach (var c in copyBodAP)
                     {
                         if (i == 0)
                         {
+                            // jestliže poslední záznam pro daný bod je žádost nebo nepotvrzení žádosti, tak je nastavím prom deadLineZadan na false
                             if (c.StavZadosti == 3 || c.StavZadosti == 6)
                             {
                                 this.deadLineZadan = false;
@@ -277,6 +275,7 @@ namespace LearActionPlans.Views
                         if (c.StavZadosti == 1 || c.StavZadosti == 4 || c.StavZadosti == 5)
                         {
                             this.labelDatumUkonceni.Text = c.DatumUkonceni.ToShortDateString();
+                            break;
                         }
 
                         i++;

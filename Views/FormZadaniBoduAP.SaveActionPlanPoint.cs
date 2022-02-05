@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -100,10 +100,6 @@ namespace LearActionPlans.Views
                     ? (int?)null
                     : Convert.ToInt32(this.ComboBoxOdpovednaOsoba2.SelectedValue);
 
-                var oddeleniId = Convert.ToInt32(this.ComboBoxOddeleni.SelectedValue) == 0
-                    ? (int?)null
-                    : Convert.ToInt32(this.ComboBoxOddeleni.SelectedValue);
-
                 //založí nový bod
                 FormPrehledBoduAP.bodyAP.Add(new BodAP(this.akcniPlany_.Id,
                     FormPrehledBoduAP.bodyAP.Count + 1,
@@ -113,7 +109,7 @@ namespace LearActionPlans.Views
                     this.RichTextBoxNapravnaOpatreniWS.Text,
                     Convert.ToInt32(this.ComboBoxOdpovednaOsoba1.SelectedValue),
                     odpovednaOsoba2Id, this.kontrolaEfektivnostiDatum,
-                    oddeleniId, this.priloha, this.datumUkonceni, this.poznamkaDatumUkonceni,
+                    Convert.ToInt32(this.ComboBoxOddeleni.SelectedValue), this.priloha, this.datumUkonceni, this.poznamkaDatumUkonceni,
                     reopen,
                     false,
                     1));

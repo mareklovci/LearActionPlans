@@ -1,4 +1,4 @@
-﻿namespace LearActionPlans.Models
+namespace LearActionPlans.Models
 {
     public class Zamestnanci : DatabaseTable
     {
@@ -16,6 +16,14 @@
             this.Id = id;
             this.PrihlasovaciJmeno = prihlasovaciJmeno;
             this.AdminAP = adminAP;
+        }
+
+        public Zamestnanci(int id, string jmeno, string prijmeni, string emailTo)
+        {
+            this.Id = id;
+            this.Jmeno = jmeno;
+            this.Prijmeni = prijmeni;
+            this.Email = emailTo;
         }
 
         public Zamestnanci(int id, string jmeno, string prijmeni, string prihlasovaciJmeno, byte stavObjektu)

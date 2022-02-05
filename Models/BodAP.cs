@@ -28,12 +28,13 @@ namespace LearActionPlans.Models
 
         //poznámka s odůvodněním odstranění
         public string KontrolaEfektivnostiOdstranit { get; set; }
-        public int? OddeleniId { get; set; }
+        public int OddeleniId { get; set; }
         public string Oddeleni { get; set; }
         public string Priloha { get; set; }
         public byte ZamitnutiTerminu { get; set; }
         public byte ZmenaTerminu { get; set; }
         public bool ZnovuOtevrit { get; set; }
+        public bool EmailOdeslan { get; set; }
         public bool BodUlozen { get; set; }
         public byte StavObjektu { get; set; }
 
@@ -46,43 +47,42 @@ namespace LearActionPlans.Models
             this.ZmenaTerminu = zmenaTerminu;
         }
 
-        public BodAP(int akcniPlanId,
-            int cisloBoduAP,
-            DateTime datumZalozeni,
-            string odkazNaNormu,
-            string hodnoceniNeshody,
-            string popisProbemu,
-            string skutecnaPricinaWM,
-            string napravnaOpatreniWM,
-            string skutecnaPricinaWS,
-            string napravnaOpatreniWS,
-            int odpovednaOsoba1Id,
-            int? odpovednaOsoba2Id,
-            DateTime? datumUkonceni,
-            DateTime? kontrolaEfektivnosti,
-            int? oddeleniId,
-            string priloha,
-            bool znovuOtevrit,
-            byte stavObjektu)
-        {
-            this.AkcniPlanId = akcniPlanId;
-            this.CisloBoduAP = cisloBoduAP;
-            this.DatumZalozeni = datumZalozeni;
-            this.OdkazNaNormu = odkazNaNormu;
-            this.HodnoceniNeshody = hodnoceniNeshody;
-            this.PopisProblemu = popisProbemu;
-            this.SkutecnaPricinaWM = skutecnaPricinaWM;
-            this.NapravnaOpatreniWM = napravnaOpatreniWM;
-            this.SkutecnaPricinaWS = skutecnaPricinaWS;
-            this.NapravnaOpatreniWS = napravnaOpatreniWS;
-            this.OdpovednaOsoba1Id = odpovednaOsoba1Id;
-            this.OdpovednaOsoba2Id = odpovednaOsoba2Id;
-            this.KontrolaEfektivnosti = kontrolaEfektivnosti;
-            this.OddeleniId = oddeleniId;
-            this.Priloha = priloha;
-            this.ZnovuOtevrit = znovuOtevrit;
-            this.StavObjektu = stavObjektu;
-        }
+        //public BodAP(int akcniPlanId,
+        //    int cisloBoduAP,
+        //    DateTime datumZalozeni,
+        //    string odkazNaNormu,
+        //    string hodnoceniNeshody,
+        //    string popisProbemu,
+        //    string skutecnaPricinaWM,
+        //    string napravnaOpatreniWM,
+        //    string skutecnaPricinaWS,
+        //    string napravnaOpatreniWS,
+        //    int odpovednaOsoba1Id,
+        //    int? odpovednaOsoba2Id,
+        //    DateTime? kontrolaEfektivnosti,
+        //    int oddeleniId,
+        //    string priloha,
+        //    bool znovuOtevrit,
+        //    byte stavObjektu)
+        //{
+        //    this.AkcniPlanId = akcniPlanId;
+        //    this.CisloBoduAP = cisloBoduAP;
+        //    this.DatumZalozeni = datumZalozeni;
+        //    this.OdkazNaNormu = odkazNaNormu;
+        //    this.HodnoceniNeshody = hodnoceniNeshody;
+        //    this.PopisProblemu = popisProbemu;
+        //    this.SkutecnaPricinaWM = skutecnaPricinaWM;
+        //    this.NapravnaOpatreniWM = napravnaOpatreniWM;
+        //    this.SkutecnaPricinaWS = skutecnaPricinaWS;
+        //    this.NapravnaOpatreniWS = napravnaOpatreniWS;
+        //    this.OdpovednaOsoba1Id = odpovednaOsoba1Id;
+        //    this.OdpovednaOsoba2Id = odpovednaOsoba2Id;
+        //    this.KontrolaEfektivnosti = kontrolaEfektivnosti;
+        //    this.OddeleniId = oddeleniId;
+        //    this.Priloha = priloha;
+        //    this.ZnovuOtevrit = znovuOtevrit;
+        //    this.StavObjektu = stavObjektu;
+        //}
 
         public BodAP(int id,
             int akcniPlanId,
@@ -98,12 +98,13 @@ namespace LearActionPlans.Models
             int odpovednaOsoba1Id,
             int? odpovednaOsoba2Id,
             DateTime? kontrolaEfektivnosti,
-            int? oddeleniId,
+            int oddeleniId,
             string priloha,
             byte zamitnutiTerminu,
             byte zmenaTerminu,
             bool znovuOtevrit,
             bool bodUlozen,
+            bool emailOdeslan,
             byte stavObjektu)
         {
             this.Id = id;
@@ -126,6 +127,7 @@ namespace LearActionPlans.Models
             this.ZmenaTerminu = zmenaTerminu;
             this.ZnovuOtevrit = znovuOtevrit;
             this.BodUlozen = bodUlozen;
+            this.EmailOdeslan = emailOdeslan;
             this.StavObjektu = stavObjektu;
         }
 
@@ -145,13 +147,14 @@ namespace LearActionPlans.Models
             string odpovednaOsoba1,
             string odpovednaOsoba2,
             DateTime? kontrolaEfektivnosti,
-            int? oddeleniId,
+            int oddeleniId,
             string oddeleni,
             string priloha,
             byte zamitnutiTerminu,
             byte zmenaTerminu,
             bool znovuOtevrit,
             bool bodUlozen,
+            bool emailOdeslan,
             byte stavObjektu)
         {
             this.Id = id;
@@ -177,49 +180,50 @@ namespace LearActionPlans.Models
             this.ZmenaTerminu = zmenaTerminu;
             this.ZnovuOtevrit = znovuOtevrit;
             this.BodUlozen = bodUlozen;
+            this.EmailOdeslan = emailOdeslan;
             this.StavObjektu = stavObjektu;
         }
 
-        public BodAP(int id,
-            int akcniPlanId,
-            int cisloBoduAP,
-            DateTime datumZalozeni,
-            string odkazNaNormu,
-            string hodnoceniNeshody,
-            string popisProblemu,
-            string skutecnaPricinaWM,
-            string napravnaOpatreniWM,
-            string skutecnaPricinaWS,
-            string napravnaOpatreniWS,
-            int odpovednaOsoba1Id,
-            int? odpovednaOsoba2Id,
-            DateTime? kontrolaEfektivnosti,
-            int? oddeleniId,
-            string priloha,
-            bool znovuOtevrit,
-            bool bodUlozen,
-            byte stavObjektu)
-        {
-            this.Id = id;
-            this.AkcniPlanId = akcniPlanId;
-            this.CisloBoduAP = cisloBoduAP;
-            this.DatumZalozeni = datumZalozeni;
-            this.OdkazNaNormu = odkazNaNormu;
-            this.HodnoceniNeshody = hodnoceniNeshody;
-            this.PopisProblemu = popisProblemu;
-            this.SkutecnaPricinaWM = skutecnaPricinaWM;
-            this.NapravnaOpatreniWM = napravnaOpatreniWM;
-            this.SkutecnaPricinaWS = skutecnaPricinaWS;
-            this.NapravnaOpatreniWS = napravnaOpatreniWS;
-            this.OdpovednaOsoba1Id = odpovednaOsoba1Id;
-            this.OdpovednaOsoba2Id = odpovednaOsoba2Id;
-            this.KontrolaEfektivnosti = kontrolaEfektivnosti;
-            this.OddeleniId = oddeleniId;
-            this.Priloha = priloha;
-            this.ZnovuOtevrit = znovuOtevrit;
-            this.BodUlozen = bodUlozen;
-            this.StavObjektu = stavObjektu;
-        }
+        //public BodAP(int id,
+        //    int akcniPlanId,
+        //    int cisloBoduAP,
+        //    DateTime datumZalozeni,
+        //    string odkazNaNormu,
+        //    string hodnoceniNeshody,
+        //    string popisProblemu,
+        //    string skutecnaPricinaWM,
+        //    string napravnaOpatreniWM,
+        //    string skutecnaPricinaWS,
+        //    string napravnaOpatreniWS,
+        //    int odpovednaOsoba1Id,
+        //    int? odpovednaOsoba2Id,
+        //    DateTime? kontrolaEfektivnosti,
+        //    int oddeleniId,
+        //    string priloha,
+        //    bool znovuOtevrit,
+        //    bool bodUlozen,
+        //    byte stavObjektu)
+        //{
+        //    this.Id = id;
+        //    this.AkcniPlanId = akcniPlanId;
+        //    this.CisloBoduAP = cisloBoduAP;
+        //    this.DatumZalozeni = datumZalozeni;
+        //    this.OdkazNaNormu = odkazNaNormu;
+        //    this.HodnoceniNeshody = hodnoceniNeshody;
+        //    this.PopisProblemu = popisProblemu;
+        //    this.SkutecnaPricinaWM = skutecnaPricinaWM;
+        //    this.NapravnaOpatreniWM = napravnaOpatreniWM;
+        //    this.SkutecnaPricinaWS = skutecnaPricinaWS;
+        //    this.NapravnaOpatreniWS = napravnaOpatreniWS;
+        //    this.OdpovednaOsoba1Id = odpovednaOsoba1Id;
+        //    this.OdpovednaOsoba2Id = odpovednaOsoba2Id;
+        //    this.KontrolaEfektivnosti = kontrolaEfektivnosti;
+        //    this.OddeleniId = oddeleniId;
+        //    this.Priloha = priloha;
+        //    this.ZnovuOtevrit = znovuOtevrit;
+        //    this.BodUlozen = bodUlozen;
+        //    this.StavObjektu = stavObjektu;
+        //}
 
         public BodAP(int akcniPlanId,
             int cisloBoduAP,
@@ -234,7 +238,7 @@ namespace LearActionPlans.Models
             int odpovednaOsoba1Id,
             int? odpovednaOsoba2Id,
             DateTime? kontrolaEfektivnosti,
-            int? oddeleniId,
+            int oddeleniId,
             string priloha,
             DateTime? datumUkonceni,
             string ukonceniPoznamka,

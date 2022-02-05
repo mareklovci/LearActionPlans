@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using LearActionPlans.Models;
@@ -42,10 +42,38 @@ namespace LearActionPlans.DataMappers
 
             command.Parameters.AddWithValue("@popisProblemu", bodAP.PopisProblemu);
 
-            command.Parameters.AddWithValue("@skutecnaPricinaWM", bodAP.SkutecnaPricinaWM);
-            command.Parameters.AddWithValue("@napravnaOpatreniWM", bodAP.NapravnaOpatreniWM);
-            command.Parameters.AddWithValue("@skutecnaPricinaWS", bodAP.SkutecnaPricinaWS);
-            command.Parameters.AddWithValue("@napravnaOpatreniWS", bodAP.NapravnaOpatreniWS);
+            if (string.IsNullOrEmpty(bodAP.SkutecnaPricinaWM))
+            {
+                command.Parameters.AddWithValue("@skutecnaPricinaWM", DBNull.Value);
+            }
+            else
+            {
+                command.Parameters.AddWithValue("@skutecnaPricinaWM", bodAP.SkutecnaPricinaWM);
+            }
+            if (string.IsNullOrEmpty(bodAP.NapravnaOpatreniWM))
+            {
+                command.Parameters.AddWithValue("@napravnaOpatreniWM", DBNull.Value);
+            }
+            else
+            {
+                command.Parameters.AddWithValue("@napravnaOpatreniWM", bodAP.NapravnaOpatreniWM);
+            }
+            if (string.IsNullOrEmpty(bodAP.SkutecnaPricinaWS))
+            {
+                command.Parameters.AddWithValue("@skutecnaPricinaWS", DBNull.Value);
+            }
+            else
+            {
+                command.Parameters.AddWithValue("@skutecnaPricinaWS", bodAP.SkutecnaPricinaWS);
+            }
+            if (string.IsNullOrEmpty(bodAP.NapravnaOpatreniWS))
+            {
+                command.Parameters.AddWithValue("@napravnaOpatreniWS", DBNull.Value);
+            }
+            else
+            {
+                command.Parameters.AddWithValue("@napravnaOpatreniWS", bodAP.NapravnaOpatreniWS);
+            }
 
             command.Parameters.AddWithValue("@odpovednaOsoba1Id", bodAP.OdpovednaOsoba1Id);
 

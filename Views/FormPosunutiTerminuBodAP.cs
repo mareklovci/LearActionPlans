@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -604,11 +604,11 @@ namespace LearActionPlans.Views
                     message.Body += htmlTdStartPozadi + @"<b>Last Deadline</b>" + htmlTdEndPozadi;
                     var posledniMoznyTermin = this.dateTimePickerNovyTerminUkonceni.MinDate;
                     posledniMoznyTermin = posledniMoznyTermin.AddDays(-1);
-                    message.Body += htmlTdStartPozadi + posledniMoznyTermin.ToShortDateString() + htmlTdEndPozadi;
+                    message.Body += htmlTdStartPozadi + @"<b>" + posledniMoznyTermin.ToShortDateString() + @"</b>" + htmlTdEndPozadi;
                     message.Body += htmlTrEnd;
                     message.Body += htmlTrStart;
                     message.Body += htmlTdStartPozadi + @"<b>New Deadline</b>" + htmlTdEndPozadi;
-                    message.Body += htmlTdStartPozadi + this.dateTimePickerNovyTerminUkonceni.Value.ToShortDateString() + htmlTdEndPozadi;
+                    message.Body += htmlTdStartPozadi + @"<b>" + this.dateTimePickerNovyTerminUkonceni.Value.ToShortDateString() + @"</b>"  + htmlTdEndPozadi;
                     message.Body += htmlTrEnd;
                     message.Body += htmlTrStart;
                     message.Body += htmlTdStartPozadi + @"<b>Note</b>" + htmlTdEndPozadi;
@@ -717,7 +717,7 @@ namespace LearActionPlans.Views
                 {
                     foreach (DataRow radek in this.dtUkonceni.Rows)
                     {
-                        if (Convert.ToInt32(rtb.Tag) == Convert.ToInt32(radek["ukonceniAkceId"]))
+                        if (Convert.ToInt32(rtb.Tag) == Convert.ToInt32(radek["UkonceniBodAPId"]))
                         {
                             UkonceniBodAPDataMapper.UpdateUkonceniBodAP(Convert.ToInt32(rtb.Tag), rtb.Text);
                             this.ButtonUlozit.Enabled = false;
@@ -728,10 +728,7 @@ namespace LearActionPlans.Views
             }
         }
 
-        private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e)
-        {
-            this.Close();
-        }
+        private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e) => this.Close();
 
         private void FormPosunutiTerminuAkce_FormClosing(object sender, FormClosingEventArgs e)
         {

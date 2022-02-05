@@ -31,14 +31,14 @@ namespace LearActionPlans.ViewModels
         public string OdpovednaOsoba1 { get; set; }
         public string OdpovednaOsoba2 { get; set; }
         public DateTime? KontrolaEfektivnosti { get; set; }
-        public int? OddeleniId { get; set; }
+        public int OddeleniId { get; set; }
         public string Oddeleni { get; set; }
         public string Priloha { get; set; }
         public byte ZamitnutiTerminu { get; set; }
         public byte ZmenaTerminu { get; set; }
         public bool ZnovuOtevrit { get; set; }
+        public bool EmailOdeslan { get; set; }
         public byte StavObjektuBodAP { get; set; }
-        //public List<UkonceniBodAP> UkonceniAkce { get; set; }
 
         //ukončení bod AP
         public DateTime DatumUkonceni { get; set; }
@@ -46,6 +46,11 @@ namespace LearActionPlans.ViewModels
         public string Odpoved { get; set; }
         public byte StavZadosti { get; set; }
         public byte StavObjektuUkonceni { get; set; }
+
+        // zaměstnanec
+        public string JmenoPracovnika { get; set; }
+        public string EmailOdpovednyPracovnik { get; set; }
+
 
         public static PrehledBoduAPViewModel NacistJmenoOdpOsoba2(int odpOsoba2Id, string odpOsoba2Jmeno)
         {
@@ -61,8 +66,8 @@ namespace LearActionPlans.ViewModels
         public static PrehledBoduAPViewModel BodyAP(int id, int idAP, int cisloBoduAP, DateTime datumZalozeni, string odkazNaNormu,
             string hodnoceniNeshody, string popisProblemu,
             string skutecnaPricinaWM, string napravnaOpatreniWM, string skutecnaPricinaWS, string napravnaOpatreniWS,
-            int odpovednaOsoba1Id, int? odpovednaOsoba2Id, string odpovednaOsoba1, DateTime? kontrolaEfektivnosti, int? oddeleniId, string oddeleni, string priloha,
-            byte zamitnutiTerminu, byte zmenaTerminu, bool znovuOtevrit, byte stavObjektuBodAP)
+            int odpovednaOsoba1Id, int? odpovednaOsoba2Id, string odpovednaOsoba1, DateTime? kontrolaEfektivnosti, int oddeleniId, string oddeleni, string priloha,
+            byte zamitnutiTerminu, byte zmenaTerminu, bool znovuOtevrit, bool emailOdeslan, byte stavObjektuBodAP)
         {
             var prehledBoduAPViewModel = new PrehledBoduAPViewModel
             {
@@ -87,6 +92,7 @@ namespace LearActionPlans.ViewModels
                 ZamitnutiTerminu = zamitnutiTerminu,
                 ZmenaTerminu = zmenaTerminu,
                 ZnovuOtevrit = znovuOtevrit,
+                EmailOdeslan = emailOdeslan,
                 StavObjektuBodAP = stavObjektuBodAP
             };
             return prehledBoduAPViewModel;
@@ -119,6 +125,17 @@ namespace LearActionPlans.ViewModels
             return prehledBoduAPViewModel;
         }
 
+        public static PrehledBoduAPViewModel OdpovednyPracovnik(string jmeno, string email)
+        {
+            var prehledBoduAPViewModel = new PrehledBoduAPViewModel
+            {
+                JmenoPracovnika = jmeno,
+                EmailOdpovednyPracovnik = email
+            };
+
+            return prehledBoduAPViewModel;
+        }
+
         public static IEnumerable<PrehledBoduAPViewModel> GetBodyIdAPAll(int idAP)
         {
             var bodyAP = BodAPDataMapper.GetBodyIdAP(idAP).ToList();
@@ -141,7 +158,7 @@ namespace LearActionPlans.ViewModels
                         select BodyAP(b.Id, b.AkcniPlanId, b.CisloBoduAP, b.DatumZalozeni, b.OdkazNaNormu, b.HodnoceniNeshody, b.PopisProblemu,
                         b.SkutecnaPricinaWM, b.NapravnaOpatreniWM, b.SkutecnaPricinaWS, b.NapravnaOpatreniWS,
                         b.OdpovednaOsoba1Id, b.OdpovednaOsoba2Id, subZam.Prijmeni + " " + subZam.Jmeno, b.KontrolaEfektivnosti, b.OddeleniId, subOdd.Nazev, b.Priloha,
-                        b.ZamitnutiTerminu, b.ZmenaTerminu, b.ZnovuOtevrit, b.StavObjektu);
+                        b.ZamitnutiTerminu, b.ZmenaTerminu, b.ZnovuOtevrit, b.EmailOdeslan, b.StavObjektu);
 
             foreach (var q in query)
             {
@@ -201,5 +218,24 @@ namespace LearActionPlans.ViewModels
                 yield return q;
             }
         }
+
+        public static IEnumerable<PrehledBoduAPViewModel> GetOdpovednyPracovnik(int idOdpPrac)
+        {
+            var odpPrac = ZamestnanciDataMapper.GetOdpovednyPracovnikId(idOdpPrac).ToList();
+
+            if (!odpPrac.Any())
+            {
+                yield break;
+            }
+
+            var query = from o in odpPrac
+                        select OdpovednyPracovnik(o.Prijmeni + " " + o.Jmeno, o.Email);
+
+            foreach (var q in query)
+            {
+                yield return q;
+            }
+        }
+
     }
 }

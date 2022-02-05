@@ -109,12 +109,12 @@ namespace LearActionPlans.Views
             // labelPopisProblemu
             // 
             this.labelPopisProblemu.AutoSize = true;
-            this.labelPopisProblemu.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.labelPopisProblemu.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
             this.labelPopisProblemu.Location = new System.Drawing.Point(545, 20);
             this.labelPopisProblemu.Name = "labelPopisProblemu";
-            this.labelPopisProblemu.Size = new System.Drawing.Size(167, 17);
+            this.labelPopisProblemu.Size = new System.Drawing.Size(203, 17);
             this.labelPopisProblemu.TabIndex = 39;
-            this.labelPopisProblemu.Text = "Decription of the problem";
+            this.labelPopisProblemu.Text = "Decription of the problem *";
             // 
             // labelHodnoceniNeshody
             // 
@@ -375,12 +375,12 @@ namespace LearActionPlans.Views
             // labelOdpovednaOsoba1
             // 
             this.labelOdpovednaOsoba1.AutoSize = true;
-            this.labelOdpovednaOsoba1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.labelOdpovednaOsoba1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
             this.labelOdpovednaOsoba1.Location = new System.Drawing.Point(20, 80);
             this.labelOdpovednaOsoba1.Name = "labelOdpovednaOsoba1";
-            this.labelOdpovednaOsoba1.Size = new System.Drawing.Size(171, 17);
+            this.labelOdpovednaOsoba1.Size = new System.Drawing.Size(205, 17);
             this.labelOdpovednaOsoba1.TabIndex = 67;
-            this.labelOdpovednaOsoba1.Text = "Responsible employee #1";
+            this.labelOdpovednaOsoba1.Text = "Responsible employee #1 *";
             // 
             // labelOdpovednaOsoba2
             // 
@@ -405,12 +405,12 @@ namespace LearActionPlans.Views
             // labelOddeleni
             // 
             this.labelOddeleni.AutoSize = true;
-            this.labelOddeleni.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.labelOddeleni.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
             this.labelOddeleni.Location = new System.Drawing.Point(20, 140);
             this.labelOddeleni.Name = "labelOddeleni";
-            this.labelOddeleni.Size = new System.Drawing.Size(82, 17);
+            this.labelOddeleni.Size = new System.Drawing.Size(103, 17);
             this.labelOddeleni.TabIndex = 70;
-            this.labelOddeleni.Text = "Department";
+            this.labelOddeleni.Text = "Department *";
             // 
             // ComboBoxOddeleni
             // 

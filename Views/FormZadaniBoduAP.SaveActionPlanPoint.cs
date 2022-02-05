@@ -14,19 +14,21 @@ namespace LearActionPlans.Views
             var ulozit = true;
 
             //nejdřív proběhne test na vyplnění položek
-            this.RichTextBoxPopisProblemu.BackColor = SystemColors.Window;
+            //this.RichTextBoxPopisProblemu.BackColor = SystemColors.Window;
 
             if (string.IsNullOrWhiteSpace(this.RichTextBoxPopisProblemu.Text))
             {
+                MessageBox.Show("You must fill in the Problem Description field.", "Notice", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
                 ulozit = false;
-                this.RichTextBoxPopisProblemu.BackColor = Color.Yellow;
+                //this.RichTextBoxPopisProblemu.BackColor = Color.Yellow;
             }
 
-            if (ulozit == false)
-            {
-                MessageBox.Show("The yellow cells must be filled.", "Notice", MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-            }
+            //if (ulozit == false)
+            //{
+            //    MessageBox.Show("The yellow cells must be filled.", "Notice", MessageBoxButtons.OK,
+            //        MessageBoxIcon.Information);
+            //}
 
             if (Convert.ToInt32(this.ComboBoxOdpovednaOsoba1.SelectedValue) == 0)
             {
@@ -40,16 +42,6 @@ namespace LearActionPlans.Views
                 ulozit = false;
                 MessageBox.Show("You must select a department.", "Notice", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
-            }
-
-            if (this.novyBodAP)
-            {
-                if (this.datumUkonceni == null)
-                {
-                    ulozit = false;
-                    MessageBox.Show("You must fill in the deadline.", "Notice", MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-                }
             }
 
             if (!ulozit)

@@ -85,14 +85,14 @@ namespace LearActionPlans.Views
                 this.ButtonNovyBodAP.Visible = false;
                 this.ButtonOdeslatEmail.Visible = false;
                 this.ButtonZavrit.Text = "Close";
-                this.ButtonOpravitBodAP.Text = "Display AP point";
+                this.ButtonOpravitBodAP.Text = "Display Point AP";
             }
             else
             {
                 this.ButtonNovyBodAP.Visible = true;
                 this.ButtonOdeslatEmail.Visible = true;
                 this.ButtonZavrit.Text = "Close";
-                this.ButtonOpravitBodAP.Text = "Edit AP point";
+                this.ButtonOpravitBodAP.Text = "Edit Point AP";
             }
 
             //tato část bude spuštěna z emailu
@@ -125,6 +125,7 @@ namespace LearActionPlans.Views
             {
                 var datumUkonceni = PrehledBoduAPViewModel.GetUkonceniBodAP(b.Id).ToList();
                 datumUkonceni.Reverse();
+                datumUkonceni_ = null;
                 foreach (var du in datumUkonceni)
                 {
                     if (du.StavZadosti == 1 || du.StavZadosti == 4 || du.StavZadosti == 5)
@@ -332,6 +333,7 @@ namespace LearActionPlans.Views
             {
                 var datumUkonceni = PrehledBoduAPViewModel.GetUkonceniBodAP(b.Id).ToList();
                 datumUkonceni.Reverse();
+                datumUkonceni_ = null;
                 foreach (var du in datumUkonceni)
                 {
                     if (du.StavZadosti == 1 || du.StavZadosti == 4 || du.StavZadosti == 5)
@@ -433,68 +435,115 @@ namespace LearActionPlans.Views
         private void ButtonOdeslatEmail_MouseClick(object sender, MouseEventArgs e)
         {
             var naselOdpPrac = false;
-            var emailyKOdeslani = new List<List<int>>();
-            var odeslaneEmaily = new List<List<int>>();
+            // seznam bodů AP pro jednoho odpovědného pracovníka
+            var emailyKOdeslani1 = new List<List<int>>();
+            var emailyKOdeslani2 = new List<List<int>>();
+            // pro jaké body AP bude nastaveno pro sloupec EmailOdeslan true
+            var odeslaneEmaily1 = new List<List<int>>();
 
             foreach (var b in bodyAP)
             {
                 if (b.EmailOdeslan == false)
                 {
-                    // založí první řadu
-                    if (emailyKOdeslani.Count == 0)
+                    // odpovědny 1
+                    if (emailyKOdeslani1.Count == 0)
                     {
-                        emailyKOdeslani.Add(new List<int>());
-                        emailyKOdeslani[0].Add(b.OdpovednaOsoba1Id);
-                        emailyKOdeslani[0].Add(b.CisloBoduAP);
+                        emailyKOdeslani1.Add(new List<int>());
+                        emailyKOdeslani1[0].Add(b.OdpovednaOsoba1Id);
+                        emailyKOdeslani1[0].Add(b.CisloBoduAP);
 
-                        odeslaneEmaily.Add(new List<int>());
-                        odeslaneEmaily[0].Add(b.Id);
+                        odeslaneEmaily1.Add(new List<int>());
+                        odeslaneEmaily1[0].Add(b.Id);
                     }
                     else
                     {
                         // odeslat email s informací o nových bodech
                         naselOdpPrac = false;
                         var j = 0;
-                        foreach (var jedenEmail in emailyKOdeslani)
+                        foreach (var jedenEmail in emailyKOdeslani1)
                         {
+                            // pro daného pracovníka přidá další bod AP
                             if (b.OdpovednaOsoba1Id == jedenEmail[0])
                             {
                                 naselOdpPrac = true;
                                 // bude přidán další bodAP do seznamu
                                 jedenEmail.Add(b.CisloBoduAP);
 
-                                odeslaneEmaily[j].Add(b.Id);
+                                odeslaneEmaily1[j].Add(b.Id);
                             }
                             j++;
                         }
                         if (naselOdpPrac == false)
                         {
                             // bude přidán další odpovědný pracovník do seznamu
-                            emailyKOdeslani.Add(new List<int>());
-                            var lastItem = emailyKOdeslani.Last();
+                            emailyKOdeslani1.Add(new List<int>());
+                            var lastItem = emailyKOdeslani1.Last();
 
                             lastItem.Add(b.OdpovednaOsoba1Id);
                             lastItem.Add(b.CisloBoduAP);
 
-                            odeslaneEmaily.Add(new List<int>());
-                            var lastItemOdeslaneEmaily = odeslaneEmaily.Last();
+                            odeslaneEmaily1.Add(new List<int>());
+                            var lastItemOdeslaneEmaily = odeslaneEmaily1.Last();
                             lastItemOdeslaneEmaily.Add(b.Id);
                         }
                     }
+
+                    // odpovědný 2
+                    if (emailyKOdeslani2.Count == 0)
+                    {
+                        if (!(b.OdpovednaOsoba2Id == null))
+                        {
+                            emailyKOdeslani2.Add(new List<int>());
+                            emailyKOdeslani2[0].Add(Convert.ToInt32(b.OdpovednaOsoba2Id));
+                            emailyKOdeslani2[0].Add(b.CisloBoduAP);
+                        }
+                    }
+                    else
+                    {
+                        if (!(b.OdpovednaOsoba2Id == null))
+                        {
+                            // odeslat email s informací o nových bodech
+                            naselOdpPrac = false;
+                            var j = 0;
+                            foreach (var jedenEmail in emailyKOdeslani2)
+                            {
+                                // pro daného pracovníka přidá další bod AP
+                                if (Convert.ToInt32(b.OdpovednaOsoba2Id) == jedenEmail[0])
+                                {
+                                    naselOdpPrac = true;
+                                    // bude přidán další bodAP do seznamu
+                                    jedenEmail.Add(b.CisloBoduAP);
+                                }
+                                j++;
+                            }
+                            if (naselOdpPrac == false)
+                            {
+                                // bude přidán další odpovědný pracovník do seznamu
+                                emailyKOdeslani2.Add(new List<int>());
+                                var lastItem = emailyKOdeslani2.Last();
+
+                                lastItem.Add(Convert.ToInt32(b.OdpovednaOsoba2Id));
+                                lastItem.Add(b.CisloBoduAP);
+                            }
+                        }
+                    }
+
                 }
             }
 
             // vytvořit email k odeslání
             var i = 0;
-            if (emailyKOdeslani.Count > 0)
+            if (emailyKOdeslani1.Count > 0)
             {
-                foreach (var jedenEmail in emailyKOdeslani)
+                foreach (var jedenEmail in emailyKOdeslani1)
                 {
                     // id odpovědného pracovníka
                     var emailTo = PrehledBoduAPViewModel.GetOdpovednyPracovnik(jedenEmail[0]).ToList();
-                    var emailOdpracPrac = Convert.ToString(emailTo[0].EmailOdpovednyPracovnik);
+                    var emailOdpovPrac = Convert.ToString(emailTo[0].EmailOdpovednyPracovnik);
 
                     var htmlText = @"<p>Action plan: " + this.akcniPlany_.CisloAPRok + @"</p>";
+                    htmlText += @"<p>Responsible #1:<br>";
+                    htmlText += emailTo[0].JmenoPracovnika + @"</p>";
                     htmlText += @"<p>Points AP: ";
 
                     var j = 0;
@@ -517,9 +566,46 @@ namespace LearActionPlans.Views
                     }
                     htmlText += @"</p>";
                     // uloží zprávu do tabulky OdeslatEmail
-                    OdeslatEmailDataMapper.InsertEmail(emailOdpracPrac, @"New points AP", htmlText, odeslaneEmaily[i]);
+                    OdeslatEmailDataMapper.InsertEmailOdpovedny1(emailOdpovPrac, @"New points AP", htmlText, odeslaneEmaily1[i]);
 
                     i++;
+                }
+            }
+
+            if (emailyKOdeslani2.Count > 0)
+            {
+                foreach (var jedenEmail in emailyKOdeslani2)
+                {
+                    // id odpovědného pracovníka
+                    var emailTo = PrehledBoduAPViewModel.GetOdpovednyPracovnik(jedenEmail[0]).ToList();
+                    var emailOdpovPrac = Convert.ToString(emailTo[0].EmailOdpovednyPracovnik);
+
+                    var htmlText = @"<p>Action plan: " + this.akcniPlany_.CisloAPRok + @"</p>";
+                    htmlText += @"<p>Responsible #2:<br>";
+                    htmlText += emailTo[0].JmenoPracovnika + @"</p>";
+                    htmlText += @"<p>Points AP: ";
+
+                    var j = 0;
+                    foreach (var bodyAP in jedenEmail)
+                    {
+                        if (j == 0)
+                        { }
+                        else
+                        {
+                            if (j >= 2)
+                            {
+                                htmlText += ", " + bodyAP;
+                            }
+                            else
+                            {
+                                htmlText += bodyAP;
+                            }
+                        }
+                        j++;
+                    }
+                    htmlText += @"</p>";
+                    // uloží zprávu do tabulky OdeslatEmail
+                    OdeslatEmailDataMapper.InsertEmailOdpovedny2(emailOdpovPrac, @"New points AP", htmlText);
                 }
             }
 

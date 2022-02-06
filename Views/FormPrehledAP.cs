@@ -110,7 +110,7 @@ namespace LearActionPlans.Views
                 cisloAPRok = this.cisloAPStr;
                 this.akcniPlany.CisloAPRok = cisloAPRok;
 
-                using var form = new FormPrehledBoduAP(false, this.akcniPlany, 2);
+                using var form = new FormPrehledBoduAP(false, this.akcniPlany, 2, -1);
                 var result = form.ShowDialog();
                 if (result == DialogResult.OK)
                 {
@@ -389,7 +389,7 @@ namespace LearActionPlans.Views
                             "Closed";
 
                         this.akcniPlany.APUzavren = apUzavren;
-                        using var form = new FormPrehledBoduAP(true, this.akcniPlany, 2);
+                        using var form = new FormPrehledBoduAP(true, this.akcniPlany, 2, -1);
                         var result = form.ShowDialog();
                         if (result == DialogResult.OK) { }
                     }

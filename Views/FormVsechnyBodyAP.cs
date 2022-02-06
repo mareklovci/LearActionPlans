@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+using System;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Reflection;
 
-using LearActionPlans.Models;
-using LearActionPlans.DataMappers;
 using LearActionPlans.ViewModels;
 using LearActionPlans.Utilities;
 
@@ -23,6 +19,8 @@ namespace LearActionPlans.Views
         private DataView dvBodyAP;
 
         private string Odpovedny1Filtr;
+        private string Odpovedny2Filtr;
+        private string OddeleniFiltr;
         private string PopisProblemuFiltr;
         private string PricinaFiltr;
 
@@ -49,28 +47,77 @@ namespace LearActionPlans.Views
 
             this.CreateColumns();
 
-            this.ZobrazitDGV();
+            //nastaví filtry na string.empty
+            this.InitFiltr();
+            this.ZobrazitDGV(string.Empty);
         }
 
-        private void ZobrazitDGV()
+        private void ZobrazitDGV(string filtr)
         {
+            var datumUkonceni_ = (DateTime?)null;
+            var i = 0;
+            //nejdřív odstraním všechny řádky z dtBody
+            if (this.dtBodyAP.Rows.Count > 0)
+            {
+                for (var j = this.dtBodyAP.Rows.Count - 1; j >= 0; j--)
+                {
+                    this.dtBodyAP.Rows.Remove(this.dtBodyAP.Rows[j]);
+                }
+
+                this.dtBodyAP.Rows.Clear();
+            }
+
             var bodyAP_ = VsechnyBodyAPViewModel.GetBodyAPAll().ToList();
+            var odpOsoba2 = VsechnyBodyAPViewModel.GetOdpovednaOsoba2().ToList();
 
             foreach (var b in bodyAP_)
             {
-                
+                var datumUkonceni = PrehledBoduAPViewModel.GetUkonceniBodAP(b.IdBodAP).ToList();
+                datumUkonceni.Reverse();
+                datumUkonceni_ = null;
+                foreach (var du in datumUkonceni)
+                {
+                    if (du.StavZadosti == 1 || du.StavZadosti == 4 || du.StavZadosti == 5)
+                    {
+                        datumUkonceni_ = du.DatumUkonceni;
+                        break;
+                    }
+                }
+
                 string cisloAPRok;
                 cisloAPRok = Convert.ToInt32(b.CisloAP).ToString("D3") + " / " + Convert.ToDateTime(b.DatumZalozeniAP).Year;
 
-                this.dtBodyAP.Rows.Add(new object[] { b.IdAP, b.CisloAP, cisloAPRok, b.DatumZalozeniAP, b.CisloBoduAP, b.OdkazNaNormu, b.HodnoceniNeshody, b.PopisProblemu, b.OdpovednaOsoba1, string.Empty, b.SkutecnaPricinaWM });
+                string odpovednaOsoba2;
+                if (b.OdpovednaOsoba2Id == null)
+                {
+                    odpovednaOsoba2 = string.Empty;
+                }
+                else
+                {
+                    var id = Convert.ToInt32(b.OdpovednaOsoba2Id);
+                    var vyhledaneJmeno = odpOsoba2.Find(x => x.OdpovednaOsoba2Id == id);
+                    odpovednaOsoba2 = vyhledaneJmeno.OdpovednaOsoba2;
+                }
+                
+                this.dtBodyAP.Rows.Add(new object[] { b.IdBodAP, b.IdAP, b.CisloAP, cisloAPRok, b.DatumZalozeniAP, b.CisloBoduAP,
+                    b.OdkazNaNormu, b.HodnoceniNeshody, b.PopisProblemu, b.OdpovednaOsoba1, odpovednaOsoba2, b.NazevOddeleni,
+                    b.SkutecnaPricinaWM, b.NapravnaOpatreniWM, b.SkutecnaPricinaWS, b.NapravnaOpatreniWS,
+                    datumUkonceni_ == null
+                        ? string.Empty
+                        : Convert.ToDateTime(datumUkonceni_).ToShortDateString(),
+                    b.KontrolaEfektivnosti == null
+                        ? string.Empty
+                        : Convert.ToDateTime(b.KontrolaEfektivnosti).ToShortDateString(),
+                    b.ZnovuOtevrit});
 
                 this.dvBodyAP = this.dtBodyAP.DefaultView;
                 //dvAP.RowFilter = string.Format("DatumZalozeniRok = {0}", DateTime.Now.Year);
-                //dvBodyAP.RowFilter = string.Empty;
             }
 
-            //nastaví filtry na string.empty
-            this.InitFiltr();
+            this.dvBodyAP.RowFilter = filtr;
+
+            // odebere handlery
+            this.OdebratHandlery();
 
             //naplní comboBoxy
             this.InitFiltryComboBox();
@@ -80,10 +127,26 @@ namespace LearActionPlans.Views
 
             this.PridatHandlery();
             this.ObarvitLabel();
+
+            // nastaví filtr pro dataview
+            //this.dvBodyAP.RowFilter = filtr;
+
+            i = 0;
+            foreach (DataRowView rowView in this.dvBodyAP)
+            {
+                var row = rowView.Row;
+                if (Convert.ToString(row["Efektivita"]) != string.Empty)
+                {
+                    this.DataGridViewBodyAP.Rows[i].DefaultCellStyle.BackColor = Color.LightGreen;
+                }
+                i++;
+            }
+            this.DataGridViewBodyAP.Refresh();
         }
 
         private void CreateColumns()
         {
+            this.dtBodyAP.Columns.Add(new DataColumn("BodAPId", typeof(int)));
             this.dtBodyAP.Columns.Add(new DataColumn("APId", typeof(int)));
             this.dtBodyAP.Columns.Add(new DataColumn("CisloAP", typeof(int)));
             this.dtBodyAP.Columns.Add(new DataColumn("CisloAPRok", typeof(string)));
@@ -107,16 +170,26 @@ namespace LearActionPlans.Views
             this.dtBodyAP.Columns.Add(new DataColumn("OdpovednyPracovnik1", typeof(string)));
             this.dtBodyAP.Columns.Add(new DataColumn("OdpovednyPracovnik2", typeof(string)));
 
-            this.dtBodyAP.Columns.Add(new DataColumn("TextBoxSkutecnaPricina", typeof(string)));
+            this.dtBodyAP.Columns.Add(new DataColumn("Oddeleni", typeof(string)));
+
+            this.dtBodyAP.Columns.Add(new DataColumn("WMPricina", typeof(string)));
+            this.dtBodyAP.Columns.Add(new DataColumn("WMOpatreni", typeof(string)));
+            this.dtBodyAP.Columns.Add(new DataColumn("WSPricina", typeof(string)));
+            this.dtBodyAP.Columns.Add(new DataColumn("WSOpatreni", typeof(string)));
+
+            this.dtBodyAP.Columns.Add(new DataColumn("DatumUkonceni", typeof(string)));
+            this.dtBodyAP.Columns.Add(new DataColumn("Efektivita", typeof(string)));
+
+            this.dtBodyAP.Columns.Add(new DataColumn("Reopen", typeof(bool)));
 
             this.DataGridViewBodyAP.Columns["CisloBodAP"].HeaderText = @"AP point number";
             this.DataGridViewBodyAP.Columns["CisloBodAP"].Width = 120;
 
             this.DataGridViewBodyAP.Columns["TextBoxOdkazNaNormu"].HeaderText = @"Standard chapter";
-            this.DataGridViewBodyAP.Columns["TextBoxOdkazNaNormu"].Width = 200;
+            this.DataGridViewBodyAP.Columns["TextBoxOdkazNaNormu"].Width = 140;
 
             this.DataGridViewBodyAP.Columns["TextBoxHodnoceniNeshody"].HeaderText = @"Evaluation";
-            this.DataGridViewBodyAP.Columns["TextBoxHodnoceniNeshody"].Width = 200;
+            this.DataGridViewBodyAP.Columns["TextBoxHodnoceniNeshody"].Width = 120;
 
             this.DataGridViewBodyAP.Columns["TextBoxPopisProblemu"].HeaderText = @"Description of the problem";
             this.DataGridViewBodyAP.Columns["TextBoxPopisProblemu"].Width = 200;
@@ -127,9 +200,31 @@ namespace LearActionPlans.Views
             this.DataGridViewBodyAP.Columns["OdpovednyPracovnik2"].HeaderText = @"Responsible #2";
             this.DataGridViewBodyAP.Columns["OdpovednyPracovnik2"].Width = 200;
 
-            this.DataGridViewBodyAP.Columns["TextBoxSkutecnaPricina"].HeaderText = @"Root cause";
-            this.DataGridViewBodyAP.Columns["TextBoxSkutecnaPricina"].Width = 200;
+            this.DataGridViewBodyAP.Columns["Oddeleni"].HeaderText = @"Department";
+            this.DataGridViewBodyAP.Columns["Oddeleni"].Width = 150;
 
+            this.DataGridViewBodyAP.Columns["WMPricina"].HeaderText = @"WM Root cause";
+            this.DataGridViewBodyAP.Columns["WMPricina"].Width = 200;
+
+            this.DataGridViewBodyAP.Columns["WMOpatreni"].HeaderText = @"WM Corrective action";
+            this.DataGridViewBodyAP.Columns["WMOpatreni"].Width = 200;
+
+            this.DataGridViewBodyAP.Columns["WSPricina"].HeaderText = @"WS Root cause";
+            this.DataGridViewBodyAP.Columns["WSPricina"].Width = 200;
+
+            this.DataGridViewBodyAP.Columns["WSOpatreni"].HeaderText = @"WS Corrective action";
+            this.DataGridViewBodyAP.Columns["WSOpatreni"].Width = 200;
+
+            this.DataGridViewBodyAP.Columns["DatumUkonceni"].HeaderText = @"Deadline";
+            this.DataGridViewBodyAP.Columns["DatumUkonceni"].Width = 100;
+
+            this.DataGridViewBodyAP.Columns["Efektivita"].HeaderText = @"Effectiveness";
+            this.DataGridViewBodyAP.Columns["Efektivita"].Width = 100;
+
+            this.DataGridViewBodyAP.Columns["Reopen"].HeaderText = @"After reopen";
+            this.DataGridViewBodyAP.Columns["Reopen"].Width = 110;
+
+            this.DataGridViewBodyAP.Columns["BodAPId"].Visible = false;
             this.DataGridViewBodyAP.Columns["APId"].Visible = false;
             this.DataGridViewBodyAP.Columns["CisloAP"].Visible = false;
             this.DataGridViewBodyAP.Columns["CisloAPRok"].Visible = false;
@@ -213,9 +308,8 @@ namespace LearActionPlans.Views
                         string cisloAPRok;
                         cisloAPRok = Convert.ToInt32(this.dvBodyAP[this.DataGridViewBodyAP.CurrentCell.RowIndex]["CisloAP"]).ToString("D3") + " / " + Convert.ToDateTime(this.dvBodyAP[this.DataGridViewBodyAP.CurrentCell.RowIndex]["DatumZalozeni"]).Year;
                         this.akcniPlany.CisloAPRok = cisloAPRok;
-                        //tada se ověří uživatel
-                        //volat FormOvereniUzivatele
-                        using var form = new FormPrehledBoduAP(true, this.akcniPlany, 2);
+                        using var form = new FormPrehledBoduAP(true, this.akcniPlany, 2,
+                            Convert.ToInt32(this.dvBodyAP[this.DataGridViewBodyAP.CurrentCell.RowIndex]["BodAPId"]));
                         var result = form.ShowDialog();
                         if (result == DialogResult.OK)
                         {
@@ -227,6 +321,19 @@ namespace LearActionPlans.Views
                             //podminkaPoznamka = poznamka == null;
                             //dtActionsWS.Rows[DataGridViewWSAkce.CurrentCell.RowIndex]["textBoxPoznamka"] = podminkaPoznamka ? null : Convert.ToString(poznamka);
                         }
+
+                        // zapamatuje si nastavení filtrů
+                        var filtr = this.dvBodyAP.RowFilter;
+                        //var filtrOdpovedny1 = this.Odpovedny1Filtr;
+                        //var filtrOdpovedny2 = this.Odpovedny2Filtr;
+                        //var filtrOddeleni = this.OddeleniFiltr;
+
+                        this.ZobrazitDGV(filtr);
+
+                        // znou nastaví filtry
+                        //this.Odpovedny1Filtr = filtrOdpovedny1;
+                        //this.Odpovedny2Filtr = filtrOdpovedny2;
+                        //this.OddeleniFiltr = filtrOddeleni;
                     }
                 }
             }
@@ -272,50 +379,15 @@ namespace LearActionPlans.Views
 
         }
 
-        private void InitFiltryComboBox()
-        {
-            this.FiltrOdpovedny1();
-            //FiltrPopisProblemu();
-        }
-
-        public void FiltrovatData()
-        {
-            if (this.dvBodyAP.Count == 0)
-            {
-                this.InitFiltr();
-                this.dvBodyAP.RowFilter = string.Empty;
-            }
-            else
-            {
-                this.dvBodyAP.RowFilter = string.Empty;
-                if (!string.IsNullOrEmpty(this.Odpovedny1Filtr))
-                {
-                    this.dvBodyAP.RowFilter = string.Format("OdpovednyPracovnik1 = '{0}'", this.Odpovedny1Filtr);
-                }
-
-                //if (!string.IsNullOrEmpty(TextBoxFiltrPopisProblemu.Text))
-                //{
-                //    dvBodyAP.RowFilter = string.Format("TextBoxPopisProblemu LIKE '%{0}%'", PopisProblemuFiltr);
-                //    //dvBodyAP.RowFilter = str;
-                //}
-                //else
-                //{
-                //    dvBodyAP.RowFilter += string.Format(" AND TextBoxPopisProblemu LIKE '%{0}%'", PopisProblemuFiltr);
-                //}
-
-            }
-        }
-
         private void InitFiltr()
         {
             this.Odpovedny1Filtr = string.Empty;
+            this.Odpovedny2Filtr = string.Empty;
+            this.OddeleniFiltr = string.Empty;
             //PopisProblemuFiltr = string.Empty;
         }
 
-        private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e)
-        {
-            this.Close();
-        }
+        private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e) => this.Close();
 
         private void FiltrOdpovedny1()
         {
@@ -359,6 +431,105 @@ namespace LearActionPlans.Views
                 this.Odpovedny1Filtr = this.ComboBoxOdpovedny1.GetItemText(this.ComboBoxOdpovedny1.SelectedItem);
             }
 
+            this.SetFilter();
+        }
+
+        private void FiltrOdpovedny2()
+        {
+            var dtOdpovedny = new DataTable();
+            dtOdpovedny.Columns.Add("Odpovedny");
+
+            var radek = dtOdpovedny.NewRow();
+            radek["Odpovedny"] = "(select all)";
+            dtOdpovedny.Rows.Add(radek);
+
+            for (var i = 0; i < this.dvBodyAP.Count; i++)
+            {
+                if (this.dvBodyAP[i]["OdpovednyPracovnik2"].ToString() == string.Empty) { }
+                else
+                {
+                    radek = dtOdpovedny.NewRow();
+                    var contains = dtOdpovedny.AsEnumerable().Any(vyhledanyRadek => this.dvBodyAP[i]["OdpovednyPracovnik2"].ToString() == vyhledanyRadek.Field<string>("Odpovedny"));
+                    if (contains == false)
+                    {
+                        radek["Odpovedny"] = this.dvBodyAP[i]["OdpovednyPracovnik2"];
+                        dtOdpovedny.Rows.Add(radek);
+                    }
+                }
+            }
+
+            var sortColumn = dtOdpovedny.Columns[0].ColumnName;
+            //setřídí položky podle abecedy
+            dtOdpovedny.DefaultView.Sort = sortColumn;
+            dtOdpovedny = dtOdpovedny.DefaultView.ToTable();
+
+            this.ComboBoxOdpovedny2.DataSource = dtOdpovedny;
+            this.ComboBoxOdpovedny2.DisplayMember = "Odpovedny";
+        }
+
+        private void ComboBoxOdpovedny2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.OdebratHandlery();
+
+            if (this.ComboBoxOdpovedny2.SelectedIndex == 0)
+            {
+                this.Odpovedny2Filtr = string.Empty;
+            }
+            else
+            {
+                this.Odpovedny2Filtr = this.ComboBoxOdpovedny2.GetItemText(this.ComboBoxOdpovedny2.SelectedItem);
+            }
+
+            this.SetFilter();
+        }
+
+        private void FiltrOddeleni()
+        {
+            var dtOddeleni = new DataTable();
+            dtOddeleni.Columns.Add("Oddeleni");
+
+            var radek = dtOddeleni.NewRow();
+            radek["Oddeleni"] = "(select all)";
+            dtOddeleni.Rows.Add(radek);
+
+            for (var i = 0; i < this.dvBodyAP.Count; i++)
+            {
+                radek = dtOddeleni.NewRow();
+                var contains = dtOddeleni.AsEnumerable().Any(vyhledanyRadek => this.dvBodyAP[i]["Oddeleni"].ToString() == vyhledanyRadek.Field<string>("Oddeleni"));
+                if (contains == false)
+                {
+                    radek["Oddeleni"] = this.dvBodyAP[i]["Oddeleni"];
+                    dtOddeleni.Rows.Add(radek);
+                }
+            }
+
+            var sortColumn = dtOddeleni.Columns[0].ColumnName;
+            //setřídí položky podle abecedy
+            dtOddeleni.DefaultView.Sort = sortColumn;
+            dtOddeleni = dtOddeleni.DefaultView.ToTable();
+
+            this.ComboBoxOddeleni.DataSource = dtOddeleni;
+            this.ComboBoxOddeleni.DisplayMember = "Oddeleni";
+        }
+
+        private void ComboBoxOddeleni_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.OdebratHandlery();
+
+            if (this.ComboBoxOddeleni.SelectedIndex == 0)
+            {
+                this.OddeleniFiltr = string.Empty;
+            }
+            else
+            {
+                this.OddeleniFiltr = this.ComboBoxOddeleni.GetItemText(this.ComboBoxOddeleni.SelectedItem);
+            }
+
+            this.SetFilter();
+        }
+
+        private void SetFilter()
+        {
             this.FiltrovatData();
 
             this.InitFiltryComboBox();
@@ -367,18 +538,80 @@ namespace LearActionPlans.Views
 
             this.PridatHandlery();
             this.ObarvitLabel();
+
+            var i = 0;
+            foreach (DataRowView rowView in this.dvBodyAP)
+            {
+                var row = rowView.Row;
+                if (Convert.ToString(row["Efektivita"]) != string.Empty)
+                {
+                    this.DataGridViewBodyAP.Rows[i].DefaultCellStyle.BackColor = Color.LightGreen;
+                }
+                i++;
+            }
+            this.DataGridViewBodyAP.Refresh();
         }
 
-        private void PridatHandlery()
+        public void FiltrovatData()
         {
-            this.ComboBoxOdpovedny1.SelectedIndexChanged += this.ComboBoxOdpovedny1_SelectedIndexChanged;
-            //ComboBoxOdpovedny2.SelectedIndexChanged += ComboBoxOdpovedny2_SelectedIndexChanged;
+            if (this.dvBodyAP.Count == 0)
+            {
+                this.InitFiltr();
+                this.dvBodyAP.RowFilter = string.Empty;
+            }
+            else
+            {
+                this.dvBodyAP.RowFilter = string.Empty;
+                if (!string.IsNullOrEmpty(this.Odpovedny1Filtr))
+                {
+                    this.dvBodyAP.RowFilter = string.Format("OdpovednyPracovnik1 = '{0}'", this.Odpovedny1Filtr);
+                }
+
+                if (!string.IsNullOrEmpty(this.Odpovedny2Filtr))
+                {
+                    if (this.dvBodyAP.RowFilter == string.Empty)
+                    {
+                        this.dvBodyAP.RowFilter = string.Format("OdpovednyPracovnik2 = '{0}'", this.Odpovedny2Filtr);
+                        //dvBodyAP.RowFilter = str;
+                    }
+                    else
+                    {
+                        this.dvBodyAP.RowFilter += string.Format(" AND OdpovednyPracovnik2 = '{0}'", this.Odpovedny2Filtr);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(this.OddeleniFiltr))
+                {
+                    if (this.dvBodyAP.RowFilter == string.Empty)
+                    {
+                        this.dvBodyAP.RowFilter = string.Format("Oddeleni = '{0}'", this.OddeleniFiltr);
+                        //dvBodyAP.RowFilter = str;
+                    }
+                    else
+                    {
+                        this.dvBodyAP.RowFilter += string.Format(" AND Oddeleni = '{0}'", this.OddeleniFiltr);
+                    }
+                }
+
+                //if (!string.IsNullOrEmpty(TextBoxFiltrPopisProblemu.Text))
+                //{
+                //    dvBodyAP.RowFilter = string.Format("TextBoxPopisProblemu LIKE '%{0}%'", PopisProblemuFiltr);
+                //    //dvBodyAP.RowFilter = str;
+                //}
+                //else
+                //{
+                //    dvBodyAP.RowFilter += string.Format(" AND TextBoxPopisProblemu LIKE '%{0}%'", PopisProblemuFiltr);
+                //}
+
+            }
         }
 
-        private void OdebratHandlery()
+        private void InitFiltryComboBox()
         {
-            this.ComboBoxOdpovedny1.SelectedIndexChanged -= this.ComboBoxOdpovedny1_SelectedIndexChanged;
-            //ComboBoxOdpovedny2.SelectedIndexChanged -= ComboBoxOdpovedny2_SelectedIndexChanged;
+            this.FiltrOdpovedny1();
+            this.FiltrOdpovedny2();
+            this.FiltrOddeleni();
+            //FiltrPopisProblemu();
         }
 
         private void NastavitVybranouPolozku()
@@ -392,10 +625,39 @@ namespace LearActionPlans.Views
                 this.ComboBoxOdpovedny1.SelectedIndex = this.ComboBoxOdpovedny1.FindStringExact(this.Odpovedny1Filtr);
             }
 
-            //if (Odpovedny2Filtr == string.Empty)
-            //    ComboBoxOdpovedny2.SelectedIndex = 0;
-            //else
-            //    ComboBoxOdpovedny2.SelectedIndex = ComboBoxOdpovedny2.FindStringExact(Odpovedny2Filtr);
+            if (this.Odpovedny2Filtr == string.Empty)
+            {
+                this.ComboBoxOdpovedny2.SelectedIndex = 0;
+            }
+            else
+            {
+                this.ComboBoxOdpovedny2.SelectedIndex = this.ComboBoxOdpovedny2.FindStringExact(this.Odpovedny2Filtr);
+            }
+
+            if (this.OddeleniFiltr == string.Empty)
+            {
+                this.ComboBoxOddeleni.SelectedIndex = 0;
+            }
+            else
+            {
+                this.ComboBoxOddeleni.SelectedIndex = this.ComboBoxOddeleni.FindStringExact(this.OddeleniFiltr);
+            }
+        }
+
+        private void PridatHandlery()
+        {
+            this.ComboBoxOdpovedny1.SelectedIndexChanged += this.ComboBoxOdpovedny1_SelectedIndexChanged;
+            this.ComboBoxOdpovedny2.SelectedIndexChanged += this.ComboBoxOdpovedny2_SelectedIndexChanged;
+            this.ComboBoxOddeleni.SelectedIndexChanged += this.ComboBoxOddeleni_SelectedIndexChanged;
+            //ComboBoxOdpovedny2.SelectedIndexChanged += ComboBoxOdpovedny2_SelectedIndexChanged;
+        }
+
+        private void OdebratHandlery()
+        {
+            this.ComboBoxOdpovedny1.SelectedIndexChanged -= this.ComboBoxOdpovedny1_SelectedIndexChanged;
+            this.ComboBoxOdpovedny2.SelectedIndexChanged -= this.ComboBoxOdpovedny2_SelectedIndexChanged;
+            this.ComboBoxOddeleni.SelectedIndexChanged -= this.ComboBoxOddeleni_SelectedIndexChanged;
+            //ComboBoxOdpovedny2.SelectedIndexChanged -= ComboBoxOdpovedny2_SelectedIndexChanged;
         }
 
         private void ObarvitLabel()
@@ -409,6 +671,23 @@ namespace LearActionPlans.Views
                 this.labelOdpovedny1.ForeColor = Color.Blue;
             }
 
+            if (this.Odpovedny2Filtr == string.Empty)
+            {
+                this.labelOdpovedny2.ForeColor = Color.Black;
+            }
+            else
+            {
+                this.labelOdpovedny2.ForeColor = Color.Blue;
+            }
+
+            if (this.OddeleniFiltr == string.Empty)
+            {
+                this.labelOddeleni.ForeColor = Color.Black;
+            }
+            else
+            {
+                this.labelOddeleni.ForeColor = Color.Blue;
+            }
             //if (Odpovedny2Filtr == string.Empty)
             //    labelOdpovedny2.ForeColor = Color.Black;
             //else

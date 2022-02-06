@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -429,7 +429,7 @@ namespace LearActionPlans.Views
             this.akcniPlan.Id = AkcniPlanyDataMapper.InsertAP(this.akcniPlan);
             //nastavím vlastníkAP na true, protože musí být editovány jednotlivé body
             //FormMain.VlastnikAP = true;
-            using var form = new FormPrehledBoduAP(true, this.akcniPlan, 1);
+            using var form = new FormPrehledBoduAP(true, this.akcniPlan, 1, -1);
             this.Hide();
             form.ShowDialog();
             //Close();

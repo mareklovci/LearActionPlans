@@ -31,8 +31,10 @@ namespace LearActionPlans.Views
         //3 - bude volání z formuláře FormVsechnyBodyAP
 
         private readonly bool spusteniBezParametru_;
+        private readonly int vybranyRadek_;
 
-        public FormPrehledBoduAP(bool spusteniBezParametru, FormNovyAkcniPlan.AkcniPlanTmp akcniPlany, byte volani)
+        // vybranyRadek - používá se při volbě z přehledu všech bodů AP, to abych zvýraznil vybraný bod k editaci
+        public FormPrehledBoduAP(bool spusteniBezParametru, FormNovyAkcniPlan.AkcniPlanTmp akcniPlany, byte volani, int vybranyRadek)
         {
             this.InitializeComponent();
             this.bindingSource = new BindingSource();
@@ -42,6 +44,7 @@ namespace LearActionPlans.Views
             this.spusteniBezParametru_ = spusteniBezParametru;
             this.akcniPlany_ = akcniPlany;
             this.volani_ = volani;
+            this.vybranyRadek_ = vybranyRadek;
         }
 
         private void FormNovyBodAP_Load(object sender, EventArgs e)
@@ -160,7 +163,9 @@ namespace LearActionPlans.Views
                     b.NapravnaOpatreniWM ?? string.Empty,
                     b.SkutecnaPricinaWS ?? string.Empty,
                     b.NapravnaOpatreniWS ?? string.Empty,
-                    datumUkonceni_ == null ? string.Empty : Convert.ToDateTime(datumUkonceni_).ToShortDateString(),
+                    datumUkonceni_ == null
+                        ? string.Empty
+                        : Convert.ToDateTime(datumUkonceni_).ToShortDateString(),
                     b.KontrolaEfektivnosti == null
                         ? string.Empty
                         : Convert.ToDateTime(b.KontrolaEfektivnosti).ToShortDateString(), b.ZnovuOtevrit);
@@ -196,11 +201,16 @@ namespace LearActionPlans.Views
             }
 
             i = 0;
+            // obarví se řídky, kde je již vyplněna daum efektivity
             foreach (var b in bodyAP_)
             {
                 if (b.KontrolaEfektivnosti != null)
                 {
                     this.DataGridViewBodyAP.Rows[i].DefaultCellStyle.BackColor = Color.LightGreen;
+                }
+                if (b.Id == this.vybranyRadek_)
+                {
+                    this.DataGridViewBodyAP.Rows[i].DefaultCellStyle.BackColor = Color.LightBlue;
                 }
                 i++;
             }
@@ -225,6 +235,8 @@ namespace LearActionPlans.Views
 
             this.dtBodyAP.Columns.Add(new DataColumn("DatumUkonceni", typeof(string)));
             this.dtBodyAP.Columns.Add(new DataColumn("Efektivita", typeof(string)));
+
+            this.dtBodyAP.Columns.Add(new DataColumn("Reopen", typeof(bool)));
 
             this.DataGridViewBodyAP.Columns["cisloBodAP"].HeaderText = @"AP point number";
             this.DataGridViewBodyAP.Columns["cisloBodAP"].Width = 120;
@@ -265,9 +277,8 @@ namespace LearActionPlans.Views
             this.DataGridViewBodyAP.Columns["Efektivita"].HeaderText = @"Effectiveness";
             this.DataGridViewBodyAP.Columns["Efektivita"].Width = 100;
 
-            this.dtBodyAP.Columns.Add(new DataColumn("reopen", typeof(bool)));
-            this.DataGridViewBodyAP.Columns["reopen"].HeaderText = @"After reopen";
-            this.DataGridViewBodyAP.Columns["reopen"].Width = 110;
+            this.DataGridViewBodyAP.Columns["Reopen"].HeaderText = @"After reopen";
+            this.DataGridViewBodyAP.Columns["Reopen"].Width = 110;
 
             this.DataGridViewBodyAP.MultiSelect = false;
             this.DataGridViewBodyAP.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
@@ -312,7 +323,6 @@ namespace LearActionPlans.Views
         private void NacistDGV()
         {
             //nejdřív odstraním všechny řádky z dtBody
-            // poznámka
             if (this.dtBodyAP.Rows.Count > 0)
             {
                 for (var i = this.dtBodyAP.Rows.Count - 1; i >= 0; i--)
@@ -395,6 +405,10 @@ namespace LearActionPlans.Views
                 if (b.KontrolaEfektivnosti != null)
                 {
                     this.DataGridViewBodyAP.Rows[j].DefaultCellStyle.BackColor = Color.LightGreen;
+                }
+                if (b.Id == this.vybranyRadek_)
+                {
+                    this.DataGridViewBodyAP.Rows[j].DefaultCellStyle.BackColor = Color.LightBlue;
                 }
                 if (b.EmailOdeslan == false)
                 {

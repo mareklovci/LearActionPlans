@@ -1,4 +1,4 @@
-﻿
+
 namespace LearActionPlans.Views
 {
     partial class FormVsechnyBodyAP
@@ -32,16 +32,18 @@ namespace LearActionPlans.Views
             this.ButtonZavrit = new System.Windows.Forms.Button();
             this.DataGridViewBodyAP = new System.Windows.Forms.DataGridView();
             this.groupBoxFiltry = new System.Windows.Forms.GroupBox();
+            this.ComboBoxOddeleni = new System.Windows.Forms.ComboBox();
+            this.labelOddeleni = new System.Windows.Forms.Label();
+            this.ComboBoxOdpovedny2 = new System.Windows.Forms.ComboBox();
+            this.labelOdpovedny2 = new System.Windows.Forms.Label();
+            this.labelOdpovedny1 = new System.Windows.Forms.Label();
+            this.ComboBoxOdpovedny1 = new System.Windows.Forms.ComboBox();
             this.ButtonFiltrPricina = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.labelPricina = new System.Windows.Forms.Label();
             this.ButtonFiltrPopisProblemu = new System.Windows.Forms.Button();
             this.TextBoxFiltrPopisProblemu = new System.Windows.Forms.TextBox();
             this.labelNadrizeni = new System.Windows.Forms.Label();
-            this.ComboBoxOdpovedny2 = new System.Windows.Forms.ComboBox();
-            this.labelOdpovedny2 = new System.Windows.Forms.Label();
-            this.labelOdpovedny1 = new System.Windows.Forms.Label();
-            this.ComboBoxOdpovedny1 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridViewBodyAP)).BeginInit();
             this.groupBoxFiltry.SuspendLayout();
             this.SuspendLayout();
@@ -50,7 +52,7 @@ namespace LearActionPlans.Views
             // 
             this.ButtonZavrit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonZavrit.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.ButtonZavrit.Location = new System.Drawing.Point(1262, 77);
+            this.ButtonZavrit.Location = new System.Drawing.Point(1262, 133);
             this.ButtonZavrit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.ButtonZavrit.Name = "ButtonZavrit";
             this.ButtonZavrit.Size = new System.Drawing.Size(110, 30);
@@ -75,6 +77,8 @@ namespace LearActionPlans.Views
             // 
             // groupBoxFiltry
             // 
+            this.groupBoxFiltry.Controls.Add(this.ComboBoxOddeleni);
+            this.groupBoxFiltry.Controls.Add(this.labelOddeleni);
             this.groupBoxFiltry.Controls.Add(this.ComboBoxOdpovedny2);
             this.groupBoxFiltry.Controls.Add(this.labelOdpovedny2);
             this.groupBoxFiltry.Controls.Add(this.labelOdpovedny1);
@@ -88,64 +92,30 @@ namespace LearActionPlans.Views
             this.groupBoxFiltry.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.groupBoxFiltry.Location = new System.Drawing.Point(15, 7);
             this.groupBoxFiltry.Name = "groupBoxFiltry";
-            this.groupBoxFiltry.Size = new System.Drawing.Size(700, 145);
+            this.groupBoxFiltry.Size = new System.Drawing.Size(1000, 145);
             this.groupBoxFiltry.TabIndex = 27;
             this.groupBoxFiltry.TabStop = false;
             this.groupBoxFiltry.Text = "Filters";
             // 
-            // ButtonFiltrPricina
+            // ComboBoxOddeleni
             // 
-            this.ButtonFiltrPricina.Location = new System.Drawing.Point(546, 100);
-            this.ButtonFiltrPricina.Name = "ButtonFiltrPricina";
-            this.ButtonFiltrPricina.Size = new System.Drawing.Size(110, 30);
-            this.ButtonFiltrPricina.TabIndex = 6;
-            this.ButtonFiltrPricina.Text = "Filtrovat";
-            this.ButtonFiltrPricina.UseVisualStyleBackColor = true;
-            this.ButtonFiltrPricina.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonFiltrPricina_MouseClick);
+            this.ComboBoxOddeleni.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ComboBoxOddeleni.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.ComboBoxOddeleni.FormattingEnabled = true;
+            this.ComboBoxOddeleni.Location = new System.Drawing.Point(300, 40);
+            this.ComboBoxOddeleni.Name = "ComboBoxOddeleni";
+            this.ComboBoxOddeleni.Size = new System.Drawing.Size(150, 25);
+            this.ComboBoxOddeleni.TabIndex = 21;
             // 
-            // textBox1
+            // labelOddeleni
             // 
-            this.textBox1.Location = new System.Drawing.Point(290, 100);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(250, 23);
-            this.textBox1.TabIndex = 5;
-            // 
-            // labelPricina
-            // 
-            this.labelPricina.AutoSize = true;
-            this.labelPricina.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.labelPricina.Location = new System.Drawing.Point(290, 80);
-            this.labelPricina.Name = "labelPricina";
-            this.labelPricina.Size = new System.Drawing.Size(80, 17);
-            this.labelPricina.TabIndex = 4;
-            this.labelPricina.Text = "Root cause";
-            // 
-            // ButtonFiltrPopisProblemu
-            // 
-            this.ButtonFiltrPopisProblemu.Location = new System.Drawing.Point(546, 40);
-            this.ButtonFiltrPopisProblemu.Name = "ButtonFiltrPopisProblemu";
-            this.ButtonFiltrPopisProblemu.Size = new System.Drawing.Size(110, 30);
-            this.ButtonFiltrPopisProblemu.TabIndex = 3;
-            this.ButtonFiltrPopisProblemu.Text = "Filtrovat";
-            this.ButtonFiltrPopisProblemu.UseVisualStyleBackColor = true;
-            this.ButtonFiltrPopisProblemu.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonFiltrPopisProblemu_MouseClick);
-            // 
-            // TextBoxFiltrPopisProblemu
-            // 
-            this.TextBoxFiltrPopisProblemu.Location = new System.Drawing.Point(290, 40);
-            this.TextBoxFiltrPopisProblemu.Name = "TextBoxFiltrPopisProblemu";
-            this.TextBoxFiltrPopisProblemu.Size = new System.Drawing.Size(250, 23);
-            this.TextBoxFiltrPopisProblemu.TabIndex = 2;
-            // 
-            // labelNadrizeni
-            // 
-            this.labelNadrizeni.AutoSize = true;
-            this.labelNadrizeni.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.labelNadrizeni.Location = new System.Drawing.Point(290, 20);
-            this.labelNadrizeni.Name = "labelNadrizeni";
-            this.labelNadrizeni.Size = new System.Drawing.Size(174, 17);
-            this.labelNadrizeni.TabIndex = 1;
-            this.labelNadrizeni.Text = "Description of the problem";
+            this.labelOddeleni.AutoSize = true;
+            this.labelOddeleni.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.labelOddeleni.Location = new System.Drawing.Point(300, 20);
+            this.labelOddeleni.Name = "labelOddeleni";
+            this.labelOddeleni.Size = new System.Drawing.Size(82, 17);
+            this.labelOddeleni.TabIndex = 20;
+            this.labelOddeleni.Text = "Department";
             // 
             // ComboBoxOdpovedny2
             // 
@@ -187,6 +157,60 @@ namespace LearActionPlans.Views
             this.ComboBoxOdpovedny1.Size = new System.Drawing.Size(250, 25);
             this.ComboBoxOdpovedny1.TabIndex = 16;
             // 
+            // ButtonFiltrPricina
+            // 
+            this.ButtonFiltrPricina.Location = new System.Drawing.Point(736, 100);
+            this.ButtonFiltrPricina.Name = "ButtonFiltrPricina";
+            this.ButtonFiltrPricina.Size = new System.Drawing.Size(110, 30);
+            this.ButtonFiltrPricina.TabIndex = 6;
+            this.ButtonFiltrPricina.Text = "Filtrovat";
+            this.ButtonFiltrPricina.UseVisualStyleBackColor = true;
+            this.ButtonFiltrPricina.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonFiltrPricina_MouseClick);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(480, 100);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(250, 23);
+            this.textBox1.TabIndex = 5;
+            // 
+            // labelPricina
+            // 
+            this.labelPricina.AutoSize = true;
+            this.labelPricina.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.labelPricina.Location = new System.Drawing.Point(480, 80);
+            this.labelPricina.Name = "labelPricina";
+            this.labelPricina.Size = new System.Drawing.Size(80, 17);
+            this.labelPricina.TabIndex = 4;
+            this.labelPricina.Text = "Root cause";
+            // 
+            // ButtonFiltrPopisProblemu
+            // 
+            this.ButtonFiltrPopisProblemu.Location = new System.Drawing.Point(736, 40);
+            this.ButtonFiltrPopisProblemu.Name = "ButtonFiltrPopisProblemu";
+            this.ButtonFiltrPopisProblemu.Size = new System.Drawing.Size(110, 30);
+            this.ButtonFiltrPopisProblemu.TabIndex = 3;
+            this.ButtonFiltrPopisProblemu.Text = "Filtrovat";
+            this.ButtonFiltrPopisProblemu.UseVisualStyleBackColor = true;
+            this.ButtonFiltrPopisProblemu.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonFiltrPopisProblemu_MouseClick);
+            // 
+            // TextBoxFiltrPopisProblemu
+            // 
+            this.TextBoxFiltrPopisProblemu.Location = new System.Drawing.Point(480, 40);
+            this.TextBoxFiltrPopisProblemu.Name = "TextBoxFiltrPopisProblemu";
+            this.TextBoxFiltrPopisProblemu.Size = new System.Drawing.Size(250, 23);
+            this.TextBoxFiltrPopisProblemu.TabIndex = 2;
+            // 
+            // labelNadrizeni
+            // 
+            this.labelNadrizeni.AutoSize = true;
+            this.labelNadrizeni.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.labelNadrizeni.Location = new System.Drawing.Point(480, 20);
+            this.labelNadrizeni.Name = "labelNadrizeni";
+            this.labelNadrizeni.Size = new System.Drawing.Size(174, 17);
+            this.labelNadrizeni.TabIndex = 1;
+            this.labelNadrizeni.Text = "Description of the problem";
+            // 
             // FormVsechnyBodyAP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
@@ -223,5 +247,7 @@ namespace LearActionPlans.Views
         private System.Windows.Forms.Label labelOdpovedny2;
         private System.Windows.Forms.Label labelOdpovedny1;
         private System.Windows.Forms.ComboBox ComboBoxOdpovedny1;
+        private System.Windows.Forms.ComboBox ComboBoxOddeleni;
+        private System.Windows.Forms.Label labelOddeleni;
     }
 }

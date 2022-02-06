@@ -305,7 +305,7 @@ namespace LearActionPlans.Views
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Points of the Action Plan";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPrehledBoduAP_FormClosing);
-            this.Load += new System.EventHandler(this.FormNovyBodAP_Load);
+            this.Load += new System.EventHandler(this.FormPrehledBoduAP_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DataGridViewBodyAP)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -47,7 +47,7 @@ namespace LearActionPlans.Views
             this.vybranyRadek_ = vybranyRadek;
         }
 
-        private void FormNovyBodAP_Load(object sender, EventArgs e)
+        private void FormPrehledBoduAP_Load(object sender, EventArgs e)
         {
             this.bindingSource.DataSource = this.dtBodyAP;
             this.DataGridViewBodyAP.DataSource = this.bindingSource;
@@ -73,6 +73,8 @@ namespace LearActionPlans.Views
             this.CreateColumns();
 
             //tento if je pro aktualizaci bodů AP
+            // 1 - volání z vytvoření nového AP, žádné body zatím nejsou vytvořeny, tak se nebude ani zobrazovat seznam bodů
+            // 2 - volání z přehledu AP i z přehledu bodů AP
             if (this.volani_ == 2)
             {
                 this.ZobrazeniDGV();
@@ -104,6 +106,7 @@ namespace LearActionPlans.Views
                 return;
             }
 
+            // tato část se vykoná, když bude program spuštěn z poštovního programu
             using var form = new FormZadaniBoduAP(this.labelCisloAP.Text, this.akcniPlany_,
                 this.DataGridViewBodyAP.CurrentCell.RowIndex, false);
 
@@ -111,7 +114,6 @@ namespace LearActionPlans.Views
             this.NacistDGV();
 
             //this.ButtonOdeslatEmail.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonOdeslatEmail_MouseClick);
-
         }
 
         private void ZobrazeniDGV()
@@ -561,7 +563,7 @@ namespace LearActionPlans.Views
                     htmlText += @"<p>Points AP: ";
 
                     var j = 0;
-                    foreach (var bodyAP in jedenEmail)
+                    foreach (var bodAkcniPlan in jedenEmail)
                     {
                         if (j == 0)
                         { }
@@ -569,11 +571,11 @@ namespace LearActionPlans.Views
                         {
                             if (j >= 2)
                             {
-                                htmlText += ", " + bodyAP;
+                                htmlText += ", " + bodAkcniPlan;
                             }
                             else
                             {
-                                htmlText += bodyAP;
+                                htmlText += bodAkcniPlan;
                             }
                         }
                         j++;

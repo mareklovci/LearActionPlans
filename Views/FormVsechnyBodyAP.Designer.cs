@@ -32,18 +32,17 @@ namespace LearActionPlans.Views
             this.ButtonZavrit = new System.Windows.Forms.Button();
             this.DataGridViewBodyAP = new System.Windows.Forms.DataGridView();
             this.groupBoxFiltry = new System.Windows.Forms.GroupBox();
+            this.ButtonFiltr = new System.Windows.Forms.Button();
             this.ComboBoxOddeleni = new System.Windows.Forms.ComboBox();
             this.labelOddeleni = new System.Windows.Forms.Label();
             this.ComboBoxOdpovedny2 = new System.Windows.Forms.ComboBox();
             this.labelOdpovedny2 = new System.Windows.Forms.Label();
             this.labelOdpovedny1 = new System.Windows.Forms.Label();
             this.ComboBoxOdpovedny1 = new System.Windows.Forms.ComboBox();
-            this.ButtonFiltrPricina = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.labelPricina = new System.Windows.Forms.Label();
-            this.ButtonFiltrPopisProblemu = new System.Windows.Forms.Button();
-            this.TextBoxFiltrPopisProblemu = new System.Windows.Forms.TextBox();
-            this.labelNadrizeni = new System.Windows.Forms.Label();
+            this.TextBoxOdkazNaNormu = new System.Windows.Forms.TextBox();
+            this.labelOdkazNaNormu = new System.Windows.Forms.Label();
+            this.TextBoxHodnoceniNeshody = new System.Windows.Forms.TextBox();
+            this.labelHodnoceniNeshody = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridViewBodyAP)).BeginInit();
             this.groupBoxFiltry.SuspendLayout();
             this.SuspendLayout();
@@ -77,18 +76,17 @@ namespace LearActionPlans.Views
             // 
             // groupBoxFiltry
             // 
+            this.groupBoxFiltry.Controls.Add(this.ButtonFiltr);
             this.groupBoxFiltry.Controls.Add(this.ComboBoxOddeleni);
             this.groupBoxFiltry.Controls.Add(this.labelOddeleni);
             this.groupBoxFiltry.Controls.Add(this.ComboBoxOdpovedny2);
             this.groupBoxFiltry.Controls.Add(this.labelOdpovedny2);
             this.groupBoxFiltry.Controls.Add(this.labelOdpovedny1);
             this.groupBoxFiltry.Controls.Add(this.ComboBoxOdpovedny1);
-            this.groupBoxFiltry.Controls.Add(this.ButtonFiltrPricina);
-            this.groupBoxFiltry.Controls.Add(this.textBox1);
-            this.groupBoxFiltry.Controls.Add(this.labelPricina);
-            this.groupBoxFiltry.Controls.Add(this.ButtonFiltrPopisProblemu);
-            this.groupBoxFiltry.Controls.Add(this.TextBoxFiltrPopisProblemu);
-            this.groupBoxFiltry.Controls.Add(this.labelNadrizeni);
+            this.groupBoxFiltry.Controls.Add(this.TextBoxOdkazNaNormu);
+            this.groupBoxFiltry.Controls.Add(this.labelOdkazNaNormu);
+            this.groupBoxFiltry.Controls.Add(this.TextBoxHodnoceniNeshody);
+            this.groupBoxFiltry.Controls.Add(this.labelHodnoceniNeshody);
             this.groupBoxFiltry.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.groupBoxFiltry.Location = new System.Drawing.Point(15, 7);
             this.groupBoxFiltry.Name = "groupBoxFiltry";
@@ -96,6 +94,16 @@ namespace LearActionPlans.Views
             this.groupBoxFiltry.TabIndex = 27;
             this.groupBoxFiltry.TabStop = false;
             this.groupBoxFiltry.Text = "Filters";
+            // 
+            // ButtonFiltr
+            // 
+            this.ButtonFiltr.Location = new System.Drawing.Point(870, 100);
+            this.ButtonFiltr.Name = "ButtonFiltr";
+            this.ButtonFiltr.Size = new System.Drawing.Size(110, 30);
+            this.ButtonFiltr.TabIndex = 22;
+            this.ButtonFiltr.Text = "Filter";
+            this.ButtonFiltr.UseVisualStyleBackColor = true;
+            this.ButtonFiltr.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonFiltr_MouseClick);
             // 
             // ComboBoxOddeleni
             // 
@@ -157,59 +165,39 @@ namespace LearActionPlans.Views
             this.ComboBoxOdpovedny1.Size = new System.Drawing.Size(250, 25);
             this.ComboBoxOdpovedny1.TabIndex = 16;
             // 
-            // ButtonFiltrPricina
+            // TextBoxOdkazNaNormu
             // 
-            this.ButtonFiltrPricina.Location = new System.Drawing.Point(736, 100);
-            this.ButtonFiltrPricina.Name = "ButtonFiltrPricina";
-            this.ButtonFiltrPricina.Size = new System.Drawing.Size(110, 30);
-            this.ButtonFiltrPricina.TabIndex = 6;
-            this.ButtonFiltrPricina.Text = "Filtrovat";
-            this.ButtonFiltrPricina.UseVisualStyleBackColor = true;
-            this.ButtonFiltrPricina.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonFiltrPricina_MouseClick);
+            this.TextBoxOdkazNaNormu.Location = new System.Drawing.Point(478, 40);
+            this.TextBoxOdkazNaNormu.Name = "TextBoxOdkazNaNormu";
+            this.TextBoxOdkazNaNormu.Size = new System.Drawing.Size(150, 23);
+            this.TextBoxOdkazNaNormu.TabIndex = 5;
             // 
-            // textBox1
+            // labelOdkazNaNormu
             // 
-            this.textBox1.Location = new System.Drawing.Point(480, 100);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(250, 23);
-            this.textBox1.TabIndex = 5;
+            this.labelOdkazNaNormu.AutoSize = true;
+            this.labelOdkazNaNormu.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.labelOdkazNaNormu.Location = new System.Drawing.Point(478, 20);
+            this.labelOdkazNaNormu.Name = "labelOdkazNaNormu";
+            this.labelOdkazNaNormu.Size = new System.Drawing.Size(118, 17);
+            this.labelOdkazNaNormu.TabIndex = 4;
+            this.labelOdkazNaNormu.Text = "Standard chapter";
             // 
-            // labelPricina
+            // TextBoxHodnoceniNeshody
             // 
-            this.labelPricina.AutoSize = true;
-            this.labelPricina.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.labelPricina.Location = new System.Drawing.Point(480, 80);
-            this.labelPricina.Name = "labelPricina";
-            this.labelPricina.Size = new System.Drawing.Size(80, 17);
-            this.labelPricina.TabIndex = 4;
-            this.labelPricina.Text = "Root cause";
+            this.TextBoxHodnoceniNeshody.Location = new System.Drawing.Point(478, 95);
+            this.TextBoxHodnoceniNeshody.Name = "TextBoxHodnoceniNeshody";
+            this.TextBoxHodnoceniNeshody.Size = new System.Drawing.Size(150, 23);
+            this.TextBoxHodnoceniNeshody.TabIndex = 2;
             // 
-            // ButtonFiltrPopisProblemu
+            // labelHodnoceniNeshody
             // 
-            this.ButtonFiltrPopisProblemu.Location = new System.Drawing.Point(736, 40);
-            this.ButtonFiltrPopisProblemu.Name = "ButtonFiltrPopisProblemu";
-            this.ButtonFiltrPopisProblemu.Size = new System.Drawing.Size(110, 30);
-            this.ButtonFiltrPopisProblemu.TabIndex = 3;
-            this.ButtonFiltrPopisProblemu.Text = "Filtrovat";
-            this.ButtonFiltrPopisProblemu.UseVisualStyleBackColor = true;
-            this.ButtonFiltrPopisProblemu.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonFiltrPopisProblemu_MouseClick);
-            // 
-            // TextBoxFiltrPopisProblemu
-            // 
-            this.TextBoxFiltrPopisProblemu.Location = new System.Drawing.Point(480, 40);
-            this.TextBoxFiltrPopisProblemu.Name = "TextBoxFiltrPopisProblemu";
-            this.TextBoxFiltrPopisProblemu.Size = new System.Drawing.Size(250, 23);
-            this.TextBoxFiltrPopisProblemu.TabIndex = 2;
-            // 
-            // labelNadrizeni
-            // 
-            this.labelNadrizeni.AutoSize = true;
-            this.labelNadrizeni.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.labelNadrizeni.Location = new System.Drawing.Point(480, 20);
-            this.labelNadrizeni.Name = "labelNadrizeni";
-            this.labelNadrizeni.Size = new System.Drawing.Size(174, 17);
-            this.labelNadrizeni.TabIndex = 1;
-            this.labelNadrizeni.Text = "Description of the problem";
+            this.labelHodnoceniNeshody.AutoSize = true;
+            this.labelHodnoceniNeshody.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.labelHodnoceniNeshody.Location = new System.Drawing.Point(478, 75);
+            this.labelHodnoceniNeshody.Name = "labelHodnoceniNeshody";
+            this.labelHodnoceniNeshody.Size = new System.Drawing.Size(74, 17);
+            this.labelHodnoceniNeshody.TabIndex = 1;
+            this.labelHodnoceniNeshody.Text = "Evaluation";
             // 
             // FormVsechnyBodyAP
             // 
@@ -237,17 +225,16 @@ namespace LearActionPlans.Views
         private System.Windows.Forms.Button ButtonZavrit;
         private System.Windows.Forms.DataGridView DataGridViewBodyAP;
         private System.Windows.Forms.GroupBox groupBoxFiltry;
-        private System.Windows.Forms.Label labelNadrizeni;
-        private System.Windows.Forms.TextBox TextBoxFiltrPopisProblemu;
-        private System.Windows.Forms.Button ButtonFiltrPopisProblemu;
-        private System.Windows.Forms.Button ButtonFiltrPricina;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label labelPricina;
+        private System.Windows.Forms.Label labelHodnoceniNeshody;
+        private System.Windows.Forms.TextBox TextBoxHodnoceniNeshody;
+        private System.Windows.Forms.TextBox TextBoxOdkazNaNormu;
+        private System.Windows.Forms.Label labelOdkazNaNormu;
         private System.Windows.Forms.ComboBox ComboBoxOdpovedny2;
         private System.Windows.Forms.Label labelOdpovedny2;
         private System.Windows.Forms.Label labelOdpovedny1;
         private System.Windows.Forms.ComboBox ComboBoxOdpovedny1;
         private System.Windows.Forms.ComboBox ComboBoxOddeleni;
         private System.Windows.Forms.Label labelOddeleni;
+        private System.Windows.Forms.Button ButtonFiltr;
     }
 }

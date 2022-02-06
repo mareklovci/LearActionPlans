@@ -21,7 +21,8 @@ namespace LearActionPlans.Views
         private string Odpovedny1Filtr;
         private string Odpovedny2Filtr;
         private string OddeleniFiltr;
-        private string PopisProblemuFiltr;
+        private string OdkazNaNormuFiltr;
+        private string HodnoceniNeshodyFiltr;
         private string PricinaFiltr;
 
         public FormVsechnyBodyAP()
@@ -339,44 +340,29 @@ namespace LearActionPlans.Views
             }
         }
 
-        private void ButtonFiltrPopisProblemu_MouseClick(object sender, MouseEventArgs e)
+        private void ButtonFiltr_MouseClick(object sender, MouseEventArgs e)
         {
-            //OdebratHandlery();
-            if (this.TextBoxFiltrPopisProblemu.Text == string.Empty)
+            this.OdebratHandlery();
+
+            if (this.TextBoxOdkazNaNormu.Text == string.Empty)
             {
-                this.PopisProblemuFiltr = string.Empty;
+                this.OdkazNaNormuFiltr = string.Empty;
             }
             else
             {
-                this.PopisProblemuFiltr = this.TextBoxFiltrPopisProblemu.Text;
+                this.OdkazNaNormuFiltr = this.TextBoxOdkazNaNormu.Text;
             }
-            //if (ComboBoxOdpovedny1.SelectedIndex == 0)
-            //{
-            //    Odpovedny1Filtr = string.Empty;
-            //}
-            //else
-            //{
-            //    Odpovedny1Filtr = ComboBoxOdpovedny1.GetItemText(ComboBoxOdpovedny1.SelectedItem);
-            //}
-            this.FiltrovatData();
 
-            //InitFiltryComboBox();
+            if (this.TextBoxHodnoceniNeshody.Text == string.Empty)
+            {
+                this.HodnoceniNeshodyFiltr = string.Empty;
+            }
+            else
+            {
+                this.HodnoceniNeshodyFiltr = this.TextBoxHodnoceniNeshody.Text;
+            }
 
-            //NastavitVybranouPolozku();
-
-            //PridatHandlery();
-            //ObarvitLabel();
-        }
-
-
-        private void ButtonFiltrPricina_MouseClick(object sender, MouseEventArgs e)
-        {
-
-        }
-
-        private void FiltrPopisProblemu()
-        {
-
+            this.SetFilter();
         }
 
         private void InitFiltr()
@@ -384,7 +370,8 @@ namespace LearActionPlans.Views
             this.Odpovedny1Filtr = string.Empty;
             this.Odpovedny2Filtr = string.Empty;
             this.OddeleniFiltr = string.Empty;
-            //PopisProblemuFiltr = string.Empty;
+            this.OdkazNaNormuFiltr = string.Empty;
+            this.HodnoceniNeshodyFiltr = string.Empty;
         }
 
         private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e) => this.Close();
@@ -572,7 +559,6 @@ namespace LearActionPlans.Views
                     if (this.dvBodyAP.RowFilter == string.Empty)
                     {
                         this.dvBodyAP.RowFilter = string.Format("OdpovednyPracovnik2 = '{0}'", this.Odpovedny2Filtr);
-                        //dvBodyAP.RowFilter = str;
                     }
                     else
                     {
@@ -585,7 +571,6 @@ namespace LearActionPlans.Views
                     if (this.dvBodyAP.RowFilter == string.Empty)
                     {
                         this.dvBodyAP.RowFilter = string.Format("Oddeleni = '{0}'", this.OddeleniFiltr);
-                        //dvBodyAP.RowFilter = str;
                     }
                     else
                     {
@@ -593,25 +578,38 @@ namespace LearActionPlans.Views
                     }
                 }
 
-                //if (!string.IsNullOrEmpty(TextBoxFiltrPopisProblemu.Text))
-                //{
-                //    dvBodyAP.RowFilter = string.Format("TextBoxPopisProblemu LIKE '%{0}%'", PopisProblemuFiltr);
-                //    //dvBodyAP.RowFilter = str;
-                //}
-                //else
-                //{
-                //    dvBodyAP.RowFilter += string.Format(" AND TextBoxPopisProblemu LIKE '%{0}%'", PopisProblemuFiltr);
-                //}
+                if (!string.IsNullOrEmpty(this.TextBoxOdkazNaNormu.Text))
+                {
+                    if (this.dvBodyAP.RowFilter == string.Empty)
+                    {
+                        this.dvBodyAP.RowFilter = string.Format("TextBoxOdkazNaNormu LIKE '%{0}%'", this.OdkazNaNormuFiltr);
+                    }
+                    else
+                    {
+                        this.dvBodyAP.RowFilter += string.Format(" AND TextBoxOdkazNaNormu LIKE '%{0}%'", this.OdkazNaNormuFiltr);
+                    }
+                }
 
+                if (!string.IsNullOrEmpty(this.TextBoxHodnoceniNeshody.Text))
+                {
+                    if (this.dvBodyAP.RowFilter == string.Empty)
+                    {
+                        this.dvBodyAP.RowFilter = string.Format("TextBoxHodnoceniNeshody LIKE '%{0}%'", this.HodnoceniNeshodyFiltr);
+                    }
+                    else
+                    {
+                        this.dvBodyAP.RowFilter += string.Format(" AND TextBoxHodnoceniNeshody LIKE '%{0}%'", this.HodnoceniNeshodyFiltr);
+                    }
+                }
             }
         }
 
         private void InitFiltryComboBox()
         {
+            // naplní comboboxy jedinečnýma položkama, ktaré odpovídají aktuálnímu filtrování
             this.FiltrOdpovedny1();
             this.FiltrOdpovedny2();
             this.FiltrOddeleni();
-            //FiltrPopisProblemu();
         }
 
         private void NastavitVybranouPolozku()
@@ -649,7 +647,6 @@ namespace LearActionPlans.Views
             this.ComboBoxOdpovedny1.SelectedIndexChanged += this.ComboBoxOdpovedny1_SelectedIndexChanged;
             this.ComboBoxOdpovedny2.SelectedIndexChanged += this.ComboBoxOdpovedny2_SelectedIndexChanged;
             this.ComboBoxOddeleni.SelectedIndexChanged += this.ComboBoxOddeleni_SelectedIndexChanged;
-            //ComboBoxOdpovedny2.SelectedIndexChanged += ComboBoxOdpovedny2_SelectedIndexChanged;
         }
 
         private void OdebratHandlery()
@@ -657,7 +654,6 @@ namespace LearActionPlans.Views
             this.ComboBoxOdpovedny1.SelectedIndexChanged -= this.ComboBoxOdpovedny1_SelectedIndexChanged;
             this.ComboBoxOdpovedny2.SelectedIndexChanged -= this.ComboBoxOdpovedny2_SelectedIndexChanged;
             this.ComboBoxOddeleni.SelectedIndexChanged -= this.ComboBoxOddeleni_SelectedIndexChanged;
-            //ComboBoxOdpovedny2.SelectedIndexChanged -= ComboBoxOdpovedny2_SelectedIndexChanged;
         }
 
         private void ObarvitLabel()
@@ -688,10 +684,24 @@ namespace LearActionPlans.Views
             {
                 this.labelOddeleni.ForeColor = Color.Blue;
             }
-            //if (Odpovedny2Filtr == string.Empty)
-            //    labelOdpovedny2.ForeColor = Color.Black;
-            //else
-            //    labelOdpovedny2.ForeColor = Color.Blue;
+
+            if (this.OdkazNaNormuFiltr == string.Empty)
+            {
+                this.labelOdkazNaNormu.ForeColor = Color.Black;
+            }
+            else
+            {
+                this.labelOdkazNaNormu.ForeColor = Color.Blue;
+            }
+
+            if (this.HodnoceniNeshodyFiltr == string.Empty)
+            {
+                this.labelHodnoceniNeshody.ForeColor = Color.Black;
+            }
+            else
+            {
+                this.labelHodnoceniNeshody.ForeColor = Color.Blue;
+            }
         }
     }
 }

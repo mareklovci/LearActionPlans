@@ -93,7 +93,7 @@ namespace LearActionPlans.ViewModels
 
         public static IEnumerable<SeznamPozadavkuViewModel> GetZamestnanciAll()
         {
-            var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
+            var zamestnanci = EmployeeRepository.GetZamestnanciAll().ToList();
 
             var query = from z in zamestnanci
                         select Zamestnanec(z.Id, z.Prijmeni + " " + z.Jmeno, z.PrihlasovaciJmeno, z.StavObjektu);

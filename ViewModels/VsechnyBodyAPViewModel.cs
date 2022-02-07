@@ -67,7 +67,7 @@ namespace LearActionPlans.ViewModels
         {
             var bodyAP = BodAPDataMapper.GetBodyAPAll().ToList();
             var akcniPlany = AkcniPlanyDataMapper.GetAPAll().ToList();
-            var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
+            var zamestnanci = EmployeeRepository.GetZamestnanciAll().ToList();
 
             if (bodyAP == null || bodyAP.Count() == 0 || akcniPlany == null || akcniPlany.Count() == 0)
             {
@@ -115,7 +115,7 @@ namespace LearActionPlans.ViewModels
         public static IEnumerable<VsechnyBodyAPViewModel> GetSelectedAP(int idAP)
         {
             var akcniPlany = AkcniPlanyDataMapper.GetAPId(idAP).ToList();
-            var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
+            var zamestnanci = EmployeeRepository.GetZamestnanciAll().ToList();
             var projekty = ProjektyDataMapper.GetProjektyAll().ToList();
             var zakaznici = ZakazniciDataMapper.GetZakazniciAll().ToList();
 

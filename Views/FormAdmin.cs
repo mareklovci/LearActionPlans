@@ -11,6 +11,8 @@ namespace LearActionPlans.Views
 {
     public partial class FormAdmin : Form
     {
+        private readonly EmployeeRepository employeeRepository;
+
         protected IList<Emploee> itemsEmploee = new BindingList<Emploee>();
 
         private Emploee selectedZamestnanec = null;
@@ -18,8 +20,10 @@ namespace LearActionPlans.Views
 
         private bool oldAdmin;
 
-        public FormAdmin()
+        public FormAdmin(EmployeeRepository employeeRepository)
         {
+            this.employeeRepository = employeeRepository;
+
             this.InitializeComponent();
 
             this.RadioButtonNovyZamestnanec.Checked = true;
@@ -340,7 +344,7 @@ namespace LearActionPlans.Views
 
                         if (this.RadioButtonNovyZamestnanec.Checked == true)
                         {
-                            ZamestnanciDataMapper.InsertZamestnanec(this.textBoxKrestniJmeno.Text, this.textBoxPrijmeni.Text, this.textBoxLogin.Text,
+                            this.employeeRepository.InsertZamestnanec(this.textBoxKrestniJmeno.Text, this.textBoxPrijmeni.Text, this.textBoxLogin.Text,
                                 Convert.ToInt32(this.comboBoxOddeleniZamestnanci.SelectedValue), this.textBoxEmail.Text, this.checkBoxAdmin.Checked,
                                 stav
                                 );
@@ -349,7 +353,7 @@ namespace LearActionPlans.Views
                         }
                         if (this.RadioButtonAktualizaceZamestnance.Checked == true)
                         {
-                            ZamestnanciDataMapper.UpdateZamestnanec(this.selectedZamestnanec.ZamestnanecId, this.textBoxKrestniJmeno.Text, this.textBoxPrijmeni.Text, this.textBoxLogin.Text,
+                            this.employeeRepository.UpdateZamestnanec(this.selectedZamestnanec.ZamestnanecId, this.textBoxKrestniJmeno.Text, this.textBoxPrijmeni.Text, this.textBoxLogin.Text,
                                 Convert.ToInt32(this.comboBoxOddeleniZamestnanci.SelectedValue), this.textBoxEmail.Text, this.checkBoxAdmin.Checked,
                                 stav
                                 );

@@ -1,26 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using LearActionPlans.Models;
+using LearActionPlans.Utilities;
+using Microsoft.Extensions.Options;
 
 namespace LearActionPlans.DataMappers
 {
-    public class AkceDataMapper
+    public class ActionRepository
     {
-        private static readonly string ConnectionString =
-            ConfigurationManager.ConnectionStrings["ActionPlansEntity"].ConnectionString;
+        private readonly ConnectionStringsOptions optionsMonitor;
+        private readonly string connectionString;
 
-        public static IEnumerable<Akce> GetAkceAll()
+        public ActionRepository(IOptionsMonitor<ConnectionStringsOptions> optionsMonitor)
         {
-            using var connection = new SqlConnection(ConnectionString);
+            this.optionsMonitor = optionsMonitor.CurrentValue;
+            this.connectionString = this.optionsMonitor.LearDataAll;
+        }
+
+        public IEnumerable<Akce> GetAkceAll()
+        {
+            using var connection = new SqlConnection(connectionString);
             connection.Open();
 
             using var command = connection.CreateCommand();
             command.CommandType = CommandType.Text;
 
-            command.CommandText = $"SELECT * FROM Akce WHERE StavObjektu = @stavObjektu";
+            command.CommandText = "SELECT * FROM Akce WHERE StavObjektu = @stavObjektu";
             command.Parameters.AddWithValue("@stavObjektu", 1);
 
             var reader = command.ExecuteReader();

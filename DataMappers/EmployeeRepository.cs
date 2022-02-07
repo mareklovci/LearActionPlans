@@ -1,21 +1,28 @@
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
 using System.Collections.Generic;
 using LearActionPlans.Models;
 using System;
 using System.Windows.Forms;
+using LearActionPlans.Utilities;
+using Microsoft.Extensions.Options;
 
 namespace LearActionPlans.DataMappers
 {
-    public static class ZamestnanciDataMapper
+    public class EmployeeRepository
     {
-        private static readonly string ConnectionString =
-            ConfigurationManager.ConnectionStrings["ActionPlansEntity"].ConnectionString;
+        private readonly ConnectionStringsOptions optionsMonitor;
+        private readonly string connectionString;
 
-        public static IEnumerable<Zamestnanci> GetZamestnanciAll()
+        public EmployeeRepository(IOptionsMonitor<ConnectionStringsOptions> optionsMonitor)
         {
-            using var connection = new SqlConnection(ConnectionString);
+            this.optionsMonitor = optionsMonitor.CurrentValue;
+            this.connectionString = this.optionsMonitor.LearDataAll;
+        }
+
+        public IEnumerable<Zamestnanci> GetZamestnanciAll()
+        {
+            using var connection = new SqlConnection(this.connectionString);
             connection.Open();
 
             using var command = connection.CreateCommand();
@@ -50,9 +57,9 @@ namespace LearActionPlans.DataMappers
             return new Zamestnanci(id, jmeno, prijmeni, prihlasovaciJmeno, email, adminAP, oddeleniId, stavObjektu);
         }
 
-        public static IEnumerable<Zamestnanci> GetOdpovednyPracovnikId(int odpovednyPracovnikId)
+        public IEnumerable<Zamestnanci> GetOdpovednyPracovnikId(int odpovednyPracovnikId)
         {
-            using var connection = new SqlConnection(ConnectionString);
+            using var connection = new SqlConnection(this.connectionString);
             connection.Open();
 
             using var command = connection.CreateCommand();
@@ -92,9 +99,9 @@ namespace LearActionPlans.DataMappers
         //    return new Zamestnanci(id, prihlasovaciJmeno, admin);
         //}
 
-        public static IEnumerable<Zamestnanci> GetZadavatelLogin(string login)
+        public IEnumerable<Zamestnanci> GetZadavatelLogin(string login)
         {
-            using var connection = new SqlConnection(ConnectionString);
+            using var connection = new SqlConnection(this.connectionString);
             connection.Open();
 
             using var command = connection.CreateCommand();
@@ -125,11 +132,11 @@ namespace LearActionPlans.DataMappers
             return new Zamestnanci(id, prihlasovaciJmeno, admin);
         }
 
-        public static bool InsertZamestnanec(string jmeno, string prijmeni, string prihlasovaciJmeno, int oddeleniId, string email, bool adminAP, byte stavObjektu)
+        public bool InsertZamestnanec(string jmeno, string prijmeni, string prihlasovaciJmeno, int oddeleniId, string email, bool adminAP, byte stavObjektu)
         {
             try
             {
-                using var connection = new SqlConnection(ConnectionString);
+                using var connection = new SqlConnection(this.connectionString);
                 connection.Open();
 
                 using var command = connection.CreateCommand();
@@ -149,7 +156,7 @@ namespace LearActionPlans.DataMappers
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //MessageBox.Show(ex.ToString());
                 //Došlo k problému při práci s databází.
@@ -159,11 +166,11 @@ namespace LearActionPlans.DataMappers
             }
         }
 
-        public static bool UpdateZamestnanec(int zamestnanecId, string jmeno, string prijmeni, string prihlasovaciJmeno, int oddeleniId, string email, bool adminAP, byte stavObjektu)
+        public bool UpdateZamestnanec(int zamestnanecId, string jmeno, string prijmeni, string prihlasovaciJmeno, int oddeleniId, string email, bool adminAP, byte stavObjektu)
         {
             try
             {
-                using var connection = new SqlConnection(ConnectionString);
+                using var connection = new SqlConnection(this.connectionString);
                 connection.Open();
 
                 using var command = connection.CreateCommand();
@@ -189,7 +196,7 @@ namespace LearActionPlans.DataMappers
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //MessageBox.Show(ex.ToString());
                 //Došlo k problému při práci s databází.

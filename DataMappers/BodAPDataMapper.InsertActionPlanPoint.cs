@@ -95,14 +95,7 @@ namespace LearActionPlans.DataMappers
                 command.Parameters.AddWithValue("@kontrolaEfektivnosti", bodAP.KontrolaEfektivnosti);
             }
 
-            if (bodAP.OddeleniId == null)
-            {
-                command.Parameters.AddWithValue("@oddeleniId", DBNull.Value);
-            }
-            else
-            {
-                command.Parameters.AddWithValue("@oddeleniId", bodAP.OddeleniId);
-            }
+            command.Parameters.AddWithValue("@oddeleniId", bodAP.OddeleniId);
 
             if (string.IsNullOrWhiteSpace(bodAP.Priloha))
             {

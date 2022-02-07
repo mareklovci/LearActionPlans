@@ -26,7 +26,7 @@ namespace LearActionPlans.ViewModels
 
         public static IEnumerable<DatumUkonceniViewModel> GetZamestnanec(int idZam)
         {
-            var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
+            var zamestnanci = EmployeeRepository.GetZamestnanciAll().ToList();
 
             var query = from z in zamestnanci
                         where z.Id == idZam

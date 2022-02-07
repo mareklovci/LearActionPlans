@@ -46,7 +46,7 @@ namespace LearActionPlans.DataMappers
 
                 connection.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Došlo k problému při práci s databází.
                 //MessageBox.Show(ex.ToString(), "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -75,7 +75,7 @@ namespace LearActionPlans.DataMappers
 
                 connection.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Došlo k problému při práci s databází.
                 //MessageBox.Show(ex.ToString(), "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);

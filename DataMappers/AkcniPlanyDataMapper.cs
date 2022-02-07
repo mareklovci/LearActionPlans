@@ -309,7 +309,7 @@ namespace LearActionPlans.DataMappers
                     commandDatum.ExecuteNonQuery();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Došlo k problému při práci s databází.
                 MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -354,7 +354,7 @@ namespace LearActionPlans.DataMappers
 
                 command.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Došlo k problému při práci s databází.
                 MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -408,7 +408,7 @@ namespace LearActionPlans.DataMappers
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Došlo k problému při práci s databází.
                 MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -430,7 +430,7 @@ namespace LearActionPlans.DataMappers
 
                 command.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Došlo k problému při práci s databází.
                 MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -452,10 +452,9 @@ namespace LearActionPlans.DataMappers
                 command.Parameters.AddWithValue("@znovuOtevrit", 0);
                 command.Parameters.AddWithValue("@duvodZnovuotevreni", duvod);
 
-
                 command.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Došlo k problému při práci s databází.
                 MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);

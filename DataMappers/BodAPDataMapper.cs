@@ -231,7 +231,7 @@ namespace LearActionPlans.DataMappers
                 }
                 connection.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Došlo k problému při práci s databází.
                 //MessageBox.Show(ex.ToString(), "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -307,14 +307,7 @@ namespace LearActionPlans.DataMappers
                 command.Parameters.AddWithValue("@kontrolaEfektivnosti", bodAP.KontrolaEfektivnosti);
             }
 
-            if (bodAP.OddeleniId == null)
-            {
-                command.Parameters.AddWithValue("@oddeleniId", DBNull.Value);
-            }
-            else
-            {
-                command.Parameters.AddWithValue("@oddeleniId", bodAP.OddeleniId);
-            }
+            command.Parameters.AddWithValue("@oddeleniId", bodAP.OddeleniId);
 
             if (string.IsNullOrWhiteSpace(bodAP.Priloha))
             {
@@ -347,7 +340,7 @@ namespace LearActionPlans.DataMappers
 
                 connection.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Došlo k problému při práci s databází.
                 //MessageBox.Show(ex.ToString(), "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -389,7 +382,7 @@ namespace LearActionPlans.DataMappers
 
                 connection.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Došlo k problému při práci s databází.
                 //MessageBox.Show(ex.ToString(), "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);

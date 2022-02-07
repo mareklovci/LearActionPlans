@@ -101,7 +101,7 @@ namespace LearActionPlans.ViewModels
 
         public static IEnumerable<EditAPViewModel> GetZamestnanecId(int id)
         {
-            var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
+            var zamestnanci = EmployeeRepository.GetZamestnanciAll().ToList();
 
             var query = zamestnanci.Where(z => z.Id == id).Select(z => Zamestnanec(z.Id, z.Prijmeni + " " + z.Jmeno))
                 .ToList();
@@ -119,7 +119,7 @@ namespace LearActionPlans.ViewModels
 
         public static IEnumerable<EditAPViewModel> GetZamestnanci()
         {
-            var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
+            var zamestnanci = EmployeeRepository.GetZamestnanciAll().ToList();
 
             var query = zamestnanci.OrderBy(z => z.Prijmeni)
                 .ThenBy(z => z.Jmeno)

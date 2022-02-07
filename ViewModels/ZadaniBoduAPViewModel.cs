@@ -92,7 +92,7 @@ namespace LearActionPlans.ViewModels
 
         public static IEnumerable<ZadaniBoduAPViewModel> GetZamestnanciAll()
         {
-            var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
+            var zamestnanci = EmployeeRepository.GetZamestnanciAll().ToList();
 
             var query = zamestnanci.Where(z => z.StavObjektu == 1)
                 .OrderBy(z => z.Prijmeni)

@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using System.Reflection;
 using LearActionPlans.ViewModels;
 using LearActionPlans.Utilities;
-using System.Collections.Generic;
 
 namespace LearActionPlans.Views
 {
@@ -25,7 +24,6 @@ namespace LearActionPlans.Views
         private string RokZalozeniFiltr;
         private string OtevreneUzavreneFiltr;
 
-        private readonly string[] args_;
         private readonly ArgumentOptions arguments;
 
         private string cisloAPStr;

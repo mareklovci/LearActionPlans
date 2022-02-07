@@ -24,7 +24,7 @@ namespace LearActionPlans.ViewModels
 
         public static IEnumerable<OvereniUzivateleViewModel> GetZadavatelLogin(string login)
         {
-            var zadavatel = ZamestnanciDataMapper.GetZadavatelLogin(login).ToList();
+            var zadavatel = EmployeeRepository.GetZadavatelLogin(login).ToList();
 
             var query = zadavatel.Select(z => Zadavatel(z.Id, z.PrihlasovaciJmeno, z.AdminAP)).ToList();
 

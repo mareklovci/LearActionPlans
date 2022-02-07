@@ -71,7 +71,7 @@ namespace LearActionPlans.ViewModels
         public static IEnumerable<PrehledAPViewModel> GetAPAll()
         {
             var akcniPlany = AkcniPlanyDataMapper.GetAPAll().ToList();
-            var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
+            var zamestnanci = EmployeeRepository.GetZamestnanciAll().ToList();
             var projekty = ProjektyDataMapper.GetProjektyAll().ToList();
             var zakaznici = ZakazniciDataMapper.GetZakazniciAll().ToList();
 
@@ -98,7 +98,7 @@ namespace LearActionPlans.ViewModels
 
         public static IEnumerable<PrehledAPViewModel> GetZadavatel2()
         {
-            var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
+            var zamestnanci = EmployeeRepository.GetZamestnanciAll().ToList();
 
             var query = from zam in zamestnanci
                         select new PrehledAPViewModel(zam.Id, zam.Prijmeni + " " + zam.Jmeno);

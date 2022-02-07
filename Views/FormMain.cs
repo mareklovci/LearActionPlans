@@ -6,36 +6,43 @@ namespace LearActionPlans.Views
 {
     public partial class FormMain : Form
     {
-        private ArgumentOptions arguments;
+        private readonly ArgumentOptions argumentOptions;
 
-        public FormMain(ArgumentOptions arguments)
+        private readonly FormPrehledAP formActionPlanOverview;
+        private readonly FormNovyAkcniPlan formNewActionPlan;
+        private readonly FormAdmin formAdmin;
+
+        public FormMain(ArgumentOptions argumentOptions,
+            FormPrehledAP formActionPlanOverview,
+            FormNovyAkcniPlan formNewActionPlan, FormAdmin formAdmin)
         {
+            // Arguments
+            this.argumentOptions = argumentOptions;
+
+            // Forms
+            this.formActionPlanOverview = formActionPlanOverview;
+            this.formNewActionPlan = formNewActionPlan;
+            this.formAdmin = formAdmin;
+
+            // Initialize
             this.InitializeComponent();
-            this.arguments = arguments;
         }
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            if (!this.arguments.RunWithoutParameters)
+            if (!this.argumentOptions.RunWithoutParameters)
             {
-                using var form = new FormPrehledAP(this.arguments);
-                form.ShowDialog();
+                this.formActionPlanOverview.ShowDialog();
             }
 
             this.ButtonAdmin.Enabled = true;
         }
 
-        private void ButtonNovyAkcniPlan_MouseClick(object sender, MouseEventArgs e)
-        {
-            using var form = new FormNovyAkcniPlan();
-            form.ShowDialog();
-        }
+        private void ButtonNewActionPlan_MouseClick(object sender, MouseEventArgs e) =>
+            this.formNewActionPlan.ShowDialog();
 
-        private void ButtonOpravaAkcnihoPlanu_MouseClick(object sender, MouseEventArgs e)
-        {
-            using var form = new FormPrehledAP(this.arguments);
-            form.ShowDialog();
-        }
+        private void ButtonFixActionPlan_MouseClick(object sender, MouseEventArgs e) =>
+            this.formActionPlanOverview.ShowDialog();
 
         private void ButtonVsechnyBodyAP_MouseClick(object sender, MouseEventArgs e)
         {
@@ -49,14 +56,7 @@ namespace LearActionPlans.Views
             form.ShowDialog();
         }
 
-        private void ButtonAdmin_MouseClick(object sender, MouseEventArgs e)
-        {
-            using var form = new FormAdmin();
-            var result = form.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-            }
-        }
+        private void ButtonAdmin_MouseClick(object sender, MouseEventArgs e) => this.formAdmin.ShowDialog();
 
         private void ButtonLogin_MouseClick(object sender, MouseEventArgs e) { }
     }

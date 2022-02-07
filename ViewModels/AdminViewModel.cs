@@ -7,6 +7,8 @@ namespace LearActionPlans.ViewModels
 {
     public class AdminViewModel
     {
+        private readonly EmployeeRepository employeeRepository;
+
         //Start Zaměstnanci
         public int ZamestnanecId { get; set; }
         public string Jmeno { get; set; }
@@ -15,23 +17,32 @@ namespace LearActionPlans.ViewModels
         public string Login { get; set; }
         public bool AdminAP { get; set; }
         public int OddeleniId_ { get; set; }
+
         public byte StavObjektu { get; set; }
         //End Zaměstannci
 
         //Start Projekty
         public int ProjektId { get; set; }
+
         public string NazevProjektu { get; set; }
         //End Projekty
 
         //Start Zákazníci
         public int ZakaznikId { get; set; }
+
         public string NazevZakaznika { get; set; }
         //End Projekty
 
         //Start Oddělení
         public int OddeleniId { get; set; }
+
         public string NazevOddeleni { get; set; }
         //End Projekty
+
+        private AdminViewModel(EmployeeRepository employeeRepository)
+        {
+            this.employeeRepository = employeeRepository;
+        }
 
         public static AdminViewModel Zamestnanec(int zamestnanecId, string jmeno, string prijmeni, string login, string email, bool adminAP, int oddeleniId, byte stavObjektu)
         {
@@ -88,43 +99,35 @@ namespace LearActionPlans.ViewModels
             return adminViewModel;
         }
 
-        public static IEnumerable<AdminViewModel> GetZamestnanci()
+        public IEnumerable<AdminViewModel> GetZamestnanci()
         {
-            var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
+            var employees = this.employeeRepository.GetZamestnanciAll().ToList();
 
-            var query = from z in zamestnanci
-                        orderby z.Prijmeni, z.Jmeno
-                        select Zamestnanec(z.Id, z.Jmeno, z.Prijmeni, z.PrihlasovaciJmeno, z.Email, z.AdminAP, z.OddeleniId, z.StavObjektu);
+            var query = employees.OrderBy(z => z.Prijmeni)
+                .ThenBy(z => z.Jmeno)
+                .Select(z => Zamestnanec(z.Id, z.Jmeno, z.Prijmeni, z.PrihlasovaciJmeno, z.Email, z.AdminAP,
+                    z.OddeleniId, z.StavObjektu)).ToList();
 
-            if (query.Count() == 0)
+            if (!query.Any())
             {
                 yield break;
             }
-            else
+
+            foreach (var q in query)
             {
-                foreach (var q in query)
-                {
-                    yield return q;
-                }
+                yield return q;
             }
         }
 
-        public static bool VybranyZamestnanec(string login)
+        public bool VybranyZamestnanec(string login)
         {
-            var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
+            var zamestnanci = this.employeeRepository.GetZamestnanciAll().ToList();
 
             var query = from z in zamestnanci
                         where z.PrihlasovaciJmeno == login
                         select Zamestnanec(z.Id, z.Jmeno, z.Prijmeni, z.PrihlasovaciJmeno, z.Email, z.AdminAP, z.OddeleniId, z.StavObjektu);
 
-            if (query.Count() == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return query.Count() != 0;
         }
 
         public static IEnumerable<AdminViewModel> GetOddeleni()
@@ -139,12 +142,10 @@ namespace LearActionPlans.ViewModels
             {
                 yield break;
             }
-            else
+
+            foreach (var q in query)
             {
-                foreach (var q in query)
-                {
-                    yield return q;
-                }
+                yield return q;
             }
         }
 
@@ -192,24 +193,20 @@ namespace LearActionPlans.ViewModels
             }
         }
 
-        public static IEnumerable<AdminViewModel> GetPocetAdmin()
+        public IEnumerable<AdminViewModel> GetPocetAdmin()
         {
-            var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
+            var zamestnanci = this.employeeRepository.GetZamestnanciAll().ToList();
 
-            var query = from z in zamestnanci
-                        where z.StavObjektu == 1 && z.AdminAP is true
-                        select Admin(z.Id);
+            var query = zamestnanci.Where(z => z.StavObjektu == 1 && z.AdminAP).Select(z => Admin(z.Id)).ToList();
 
-            if (query.Count() == 0)
+            if (!query.Any())
             {
                 yield break;
             }
-            else
+
+            foreach (var q in query)
             {
-                foreach (var q in query)
-                {
-                    yield return q;
-                }
+                yield return q;
             }
         }
     }

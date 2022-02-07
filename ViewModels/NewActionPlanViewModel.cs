@@ -33,7 +33,7 @@ namespace LearActionPlans.ViewModels
 
         public static IEnumerable<NewActionPlanViewModel> GetEmployees()
         {
-            var employees = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
+            var employees = EmployeeRepository.GetZamestnanciAll().ToList();
 
             var query = employees.Where(z => z.StavObjektu == 1)
                 .OrderBy(z => z.Prijmeni)

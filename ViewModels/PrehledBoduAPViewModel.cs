@@ -139,7 +139,7 @@ namespace LearActionPlans.ViewModels
         public static IEnumerable<PrehledBoduAPViewModel> GetBodyIdAPAll(int idAP)
         {
             var bodyAP = BodAPDataMapper.GetBodyIdAP(idAP).ToList();
-            var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
+            var zamestnanci = EmployeeRepository.GetZamestnanciAll().ToList();
             var oddeleni = OddeleniDataMapper.GetOddeleniAll();
 
             if (!bodyAP.Any())
@@ -208,7 +208,7 @@ namespace LearActionPlans.ViewModels
 
         public static IEnumerable<PrehledBoduAPViewModel> GetOdpovednaOsoba2()
         {
-            var zamestnanci = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
+            var zamestnanci = EmployeeRepository.GetZamestnanciAll().ToList();
 
             var query = from zam in zamestnanci
                         select NacistJmenoOdpOsoba2(zam.Id, zam.Prijmeni + " " + zam.Jmeno);
@@ -221,7 +221,7 @@ namespace LearActionPlans.ViewModels
 
         public static IEnumerable<PrehledBoduAPViewModel> GetOdpovednyPracovnik(int idOdpPrac)
         {
-            var odpPrac = ZamestnanciDataMapper.GetOdpovednyPracovnikId(idOdpPrac).ToList();
+            var odpPrac = EmployeeRepository.GetOdpovednyPracovnikId(idOdpPrac).ToList();
 
             if (!odpPrac.Any())
             {

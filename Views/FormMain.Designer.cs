@@ -46,7 +46,7 @@ namespace LearActionPlans.Views
             this.ButtonNovyAkcniPlan.TabIndex = 0;
             this.ButtonNovyAkcniPlan.Text = "New Action Plan";
             this.ButtonNovyAkcniPlan.UseVisualStyleBackColor = true;
-            this.ButtonNovyAkcniPlan.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonNovyAkcniPlan_MouseClick);
+            this.ButtonNovyAkcniPlan.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonNewActionPlan_MouseClick);
             // 
             // ButtonOpravaAkcnihoPlanu
             // 
@@ -57,7 +57,7 @@ namespace LearActionPlans.Views
             this.ButtonOpravaAkcnihoPlanu.TabIndex = 1;
             this.ButtonOpravaAkcnihoPlanu.Text = "Edit the Action Plan";
             this.ButtonOpravaAkcnihoPlanu.UseVisualStyleBackColor = true;
-            this.ButtonOpravaAkcnihoPlanu.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonOpravaAkcnihoPlanu_MouseClick);
+            this.ButtonOpravaAkcnihoPlanu.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonFixActionPlan_MouseClick);
             // 
             // ButtonVsechnyBodyAP
             // 

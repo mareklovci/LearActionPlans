@@ -71,7 +71,7 @@ namespace LearActionPlans.Views
             this.ButtonZavrit.Text = "Close";
             this.ButtonZavrit.UseVisualStyleBackColor = true;
             this.ButtonZavrit.Click += new System.EventHandler(this.ButtonZavrit_Click);
-            this.ButtonZavrit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonZavrit_MouseClick);
+            this.ButtonZavrit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonClose_MouseClick);
             // 
             // FormSeznamPozadavku
             // 

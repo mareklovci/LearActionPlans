@@ -12,6 +12,7 @@ namespace LearActionPlans
         /// Register Dependency Injection services
         /// </summary>
         /// <param name="services">ServiceCollection</param>
+        /// <param name="argumentOptions">Arguments to be registered and globally accessible</param>
         private static void ConfigureServices(IServiceCollection services, ArgumentOptions argumentOptions)
         {
             // Initialize Connection Strings
@@ -39,26 +40,39 @@ namespace LearActionPlans
             // Initialize Arguments
             services.AddSingleton(argumentOptions);
 
-            // Initialize Forms
+            // Initialize MVVM
+            RegisterForms(services);
+            RegisterRepositories(services);
+            RegisterViewModels(services);
+        }
+
+        private static void RegisterForms(IServiceCollection services)
+        {
             services.AddScoped<FormMain>();
             services.AddScoped<FormAdmin>();
-            // services.AddScoped<FormDatumUkonceni>();
-            // services.AddScoped<FormEditAP>();
-            // services.AddScoped<FormFiltry>();
-            // services.AddScoped<FormKontrolaEfektivnosti>();
+            services.AddScoped<FormDatumUkonceni>();
+            services.AddScoped<FormEditAP>();
+            services.AddScoped<FormKontrolaEfektivnosti>();
             services.AddScoped<FormNovyAkcniPlan>();
-            // services.AddScoped<FormOvereniUzivatele>();
-            // services.AddScoped<FormPosunutiTerminuBodAP>();
-            services.AddScoped<FormPrehledAP>();
-            // services.AddScoped<FormPrehledBoduAP>();
-            // services.AddScoped<FormPriloha>();
-            // services.AddScoped<FormSeznamPozadavku>();
-            // services.AddScoped<FormVsechnyBodyAP>();
-            // services.AddScoped<FormZadaniBoduAP>();
+            services.AddScoped<FormPosunutiTerminuBodAP>();
+            services.AddScoped<FormPrehledAp>();
+            services.AddScoped<FormPrehledBoduAP>();
+            services.AddScoped<FormAttachment>();
+            services.AddScoped<FormSeznamPozadavku>();
+            services.AddScoped<FormVsechnyBodyAP>();
+            services.AddScoped<FormZadaniBoduAP>();
+        }
 
-            // Initialize Repositories
+        private static void RegisterRepositories(IServiceCollection services)
+        {
             services.AddSingleton<ActionRepository>();
             services.AddSingleton<EmployeeRepository>();
+            services.AddSingleton<DepartmentRepository>();
+        }
+
+        private static void RegisterViewModels(IServiceCollection services)
+        {
+            // services.AddSingleton<AdminViewModel>();
         }
     }
 }

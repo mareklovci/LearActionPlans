@@ -7,17 +7,24 @@ using System.Text;
 
 using LearActionPlans.Models;
 using LearActionPlans.Utilities;
+using Microsoft.Extensions.Options;
 
 namespace LearActionPlans.DataMappers
 {
-    public class KontrolaEfektivnostiDataMapper
+    public class EffectivityControlRepository
     {
-        private static readonly string ConnectionString =
-            ConfigurationManager.ConnectionStrings["ActionPlansEntity"].ConnectionString;
+        private readonly ConnectionStringsOptions optionsMonitor;
+        private readonly string connectionString;
 
-        public static IEnumerable<KontrolaEfektivnosti> GetKontrolaEfektivnostiBodAPId(int bodAPId)
+        public EffectivityControlRepository(IOptionsMonitor<ConnectionStringsOptions> optionsMonitor)
         {
-            using var connection = new SqlConnection(ConnectionString);
+            this.optionsMonitor = optionsMonitor.CurrentValue;
+            this.connectionString = this.optionsMonitor.LearDataAll;
+        }
+
+        public IEnumerable<KontrolaEfektivnosti> GetKontrolaEfektivnostiBodAPId(int bodAPId)
+        {
+            using var connection = new SqlConnection(connectionString);
             connection.Open();
 
             using var command = connection.CreateCommand();
@@ -28,16 +35,14 @@ namespace LearActionPlans.DataMappers
 
             var reader = command.ExecuteReader();
 
-            if (reader.HasRows)
-            {
-                while (reader.Read())
-                {
-                    yield return ConstructKontrolaEfektivnostiAll(reader);
-                }
-            }
-            else
+            if (!reader.HasRows)
             {
                 yield break;
+            }
+
+            while (reader.Read())
+            {
+                yield return ConstructKontrolaEfektivnostiAll(reader);
             }
         }
 

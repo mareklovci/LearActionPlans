@@ -50,7 +50,7 @@ namespace LearActionPlans.DataMappers
             {
                 //Došlo k problému při práci s databází.
                 //MessageBox.Show(ex.ToString(), "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(@"Database problem.", @"Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -79,7 +79,7 @@ namespace LearActionPlans.DataMappers
             {
                 //Došlo k problému při práci s databází.
                 //MessageBox.Show(ex.ToString(), "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(@"Database problem.", @"Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

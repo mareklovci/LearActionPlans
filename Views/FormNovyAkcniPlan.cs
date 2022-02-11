@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using LearActionPlans.ViewModels;
-using LearActionPlans.Models;
 using LearActionPlans.DataMappers;
 
 namespace LearActionPlans.Views
 {
     public partial class FormNovyAkcniPlan : Form
     {
+        private readonly FormPrehledBoduAP formPrehledBoduAp;
+        private readonly EmployeeRepository employeeRepository;
         private AkcniPlanTmp akcniPlan;
         private int posledniCisloAP;
 
@@ -24,6 +20,7 @@ namespace LearActionPlans.Views
         private bool zakaznikPovolen;
 
         private bool ulozeniDat;
+
         public class AkcniPlanTmp
         {
             public int Id { get; set; }
@@ -46,8 +43,13 @@ namespace LearActionPlans.Views
             public string Poznamka { get; set; }
         }
 
-        public FormNovyAkcniPlan()
+        public FormNovyAkcniPlan(
+            FormPrehledBoduAP formPrehledBoduAp,
+            EmployeeRepository employeeRepository)
         {
+            this.formPrehledBoduAp = formPrehledBoduAp;
+            this.employeeRepository = employeeRepository;
+
             this.InitializeComponent();
             this.ulozeniDat = false;
 
@@ -71,7 +73,7 @@ namespace LearActionPlans.Views
             }
 
             //posledniCisloAP++;
-            this.labelCisloAPVygenerovat.Text = this.posledniCisloAP.ToString("D3") + " / " + DateTime.Now.Year.ToString();
+            this.labelCisloAPVygenerovat.Text = $@"{this.posledniCisloAP:D3} / DateTime.Now.Year";
             this.akcniPlan.CisloAPRok = this.labelCisloAPVygenerovat.Text;
 
             if (this.NaplnitComboBoxZamestnanec1a2() == false)
@@ -80,7 +82,8 @@ namespace LearActionPlans.Views
                 this.ComboBoxZadavatel2.Enabled = false;
                 //Nejsou dostupní žádní zaměstnanci.
                 //Zadání nového Akčního plánu bude ukončeno.
-                MessageBox.Show("No employees available." + (char)10 + "Entering a new Action plan will be completed.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($@"No employees available. \nEntering a new Action plan will be completed.",
+                    @"Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
             else
@@ -94,7 +97,8 @@ namespace LearActionPlans.Views
                 this.ComboBoxProjekty.Enabled = false;
                 //Nejsou dostupné žádné projekty.
                 //Zadání nového Akčního plánu bude ukončeno.
-                MessageBox.Show("No projects available." + (char)10 + "Entering a new Action plan will be completed.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($@"No projects available. \nEntering a new Action plan will be completed.",
+                    @"Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
             else
@@ -107,7 +111,8 @@ namespace LearActionPlans.Views
                 this.ComboBoxZakaznici.Enabled = false;
                 //Nejsou dostupní žádní zákazníci.
                 //Zadání nového Akčního plánu bude ukončeno.
-                MessageBox.Show("No customers available." + (char)10 + "Entering a new Action plan will be completed.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No customers available." + (char)10 + "Entering a new Action plan will be completed.",
+                    @"Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
             else
@@ -116,29 +121,14 @@ namespace LearActionPlans.Views
             }
 
             //tady se vytvoří event handlery
-            this.ComboBoxZadavatel1.SelectedIndexChanged +=
-            new EventHandler(this.ComboBoxZadavatel1_SelectedIndexChanged);
-
-            this.ComboBoxZadavatel2.SelectedIndexChanged +=
-            new EventHandler(this.ComboBoxZadavatel2_SelectedIndexChanged);
-
-            this.TextBoxTema.TextChanged +=
-            new EventHandler(this.TextBoxTema_TextChanged);
-
-            this.ComboBoxProjekty.SelectedIndexChanged +=
-            new EventHandler(this.ComboBoxProjekty_SelectedIndexChanged);
-
-            this.DateTimePickerDatumUkonceni.ValueChanged +=
-            new EventHandler(this.DateTimePickerDatumUkonceni_ValueChanged);
-
-            this.ComboBoxZakaznici.SelectedIndexChanged +=
-            new EventHandler(this.ComboBoxZakaznici_SelectedIndexChanged);
-
-            this.RadioButtonAudity.CheckedChanged +=
-            new EventHandler(this.RadioButtonAudity_CheckedChanged);
-
-            this.RadioButtonOstatni.CheckedChanged +=
-            new EventHandler(this.RadioButtonOstatni_CheckedChanged);
+            this.ComboBoxZadavatel1.SelectedIndexChanged += this.ComboBoxZadavatel1_SelectedIndexChanged;
+            this.ComboBoxZadavatel2.SelectedIndexChanged += this.ComboBoxZadavatel2_SelectedIndexChanged;
+            this.TextBoxTema.TextChanged += this.TextBoxTema_TextChanged;
+            this.ComboBoxProjekty.SelectedIndexChanged += this.ComboBoxProjekty_SelectedIndexChanged;
+            this.DateTimePickerDatumUkonceni.ValueChanged += this.DateTimePickerDatumUkonceni_ValueChanged;
+            this.ComboBoxZakaznici.SelectedIndexChanged += this.ComboBoxZakaznici_SelectedIndexChanged;
+            this.RadioButtonAudity.CheckedChanged += this.RadioButtonAudity_CheckedChanged;
+            this.RadioButtonOstatni.CheckedChanged += this.RadioButtonOstatni_CheckedChanged;
 
             this.akcniPlan.DatumUkonceni = this.DateTimePickerDatumUkonceni.Value;
 
@@ -164,40 +154,32 @@ namespace LearActionPlans.Views
 
         private bool NaplnitComboBoxZamestnanec1a2()
         {
-            var zamestnanci = NewActionPlanViewModel.GetEmployees().ToList();
+            var zamestnanci = this.employeeRepository.GetEmployeesOriginalViewModel().ToList();
 
             if (zamestnanci.Count == 0)
             {
                 return false;
             }
-            else
+
+            var zam1 = new List<Zam> {new Zam("(select employee)", 0)};
+
+            var zam2 = new List<Zam> {new Zam("(select employee)", 0)};
+
+            foreach (var z in zamestnanci)
             {
-                var zam1 = new List<Zam>
-                {
-                    new Zam("(select employee)", 0)
-                };
-
-                var zam2 = new List<Zam>
-                {
-                    new Zam("(select employee)", 0)
-                };
-
-                foreach (var z in zamestnanci)
-                {
-                    zam1.Add(new Zam(z.EmployeeName, z.EmployeeId));
-                    zam2.Add(new Zam(z.EmployeeName, z.EmployeeId));
-                }
-
-                this.ComboBoxZadavatel1.DataSource = zam1;
-                this.ComboBoxZadavatel2.DataSource = zam2;
-                this.ComboBoxZadavatel1.DisplayMember = "Jmeno";
-                this.ComboBoxZadavatel2.DisplayMember = "Jmeno";
-                this.ComboBoxZadavatel1.ValueMember = "ZamestnanecId";
-                this.ComboBoxZadavatel2.ValueMember = "ZamestnanecId";
-                this.ComboBoxZadavatel1.SelectedIndex = 0;
-                this.ComboBoxZadavatel2.SelectedIndex = 0;
-                return true;
+                zam1.Add(new Zam(z.Jmeno, z.Id));
+                zam2.Add(new Zam(z.Jmeno, z.Id));
             }
+
+            this.ComboBoxZadavatel1.DataSource = zam1;
+            this.ComboBoxZadavatel2.DataSource = zam2;
+            this.ComboBoxZadavatel1.DisplayMember = "Jmeno";
+            this.ComboBoxZadavatel2.DisplayMember = "Jmeno";
+            this.ComboBoxZadavatel1.ValueMember = "ZamestnanecId";
+            this.ComboBoxZadavatel2.ValueMember = "ZamestnanecId";
+            this.ComboBoxZadavatel1.SelectedIndex = 0;
+            this.ComboBoxZadavatel2.SelectedIndex = 0;
+            return true;
         }
 
         private class Proj
@@ -220,23 +202,16 @@ namespace LearActionPlans.Views
             {
                 return false;
             }
-            else
-            {
-                var proj = new List<Proj>
-                {
-                    new Proj("(select a project)", 0)
-                };
-                foreach (var p in projekty)
-                {
-                    proj.Add(new Proj(p.ProjectName, p.ProjectId));
-                }
 
-                this.ComboBoxProjekty.DataSource = proj;
-                this.ComboBoxProjekty.DisplayMember = "NazevProjektu";
-                this.ComboBoxProjekty.ValueMember = "ProjektId";
-                this.ComboBoxProjekty.SelectedIndex = 0;
-                return true;
-            }
+            var proj = new List<Proj> {new Proj("(select a project)", 0)};
+
+            proj.AddRange(projekty.Select(p => new Proj(p.ProjectName, p.ProjectId)));
+
+            this.ComboBoxProjekty.DataSource = proj;
+            this.ComboBoxProjekty.DisplayMember = "NazevProjektu";
+            this.ComboBoxProjekty.ValueMember = "ProjektId";
+            this.ComboBoxProjekty.SelectedIndex = 0;
+            return true;
         }
 
         private class Zak
@@ -259,24 +234,16 @@ namespace LearActionPlans.Views
             {
                 return false;
             }
-            else
-            {
-                var zak = new List<Zak>
-                {
-                    new Zak("(choose a customer)", 0)
-                };
-                //new Zak() { NazevZakaznika = "(choose a customer)", ZakaznikId = 0 }
-                foreach (var z in zakaznici)
-                {
-                    zak.Add(new Zak(z.CustomerName, z.CustomerId));
-                }
-                //zak.Add(new Zak() { NazevZakaznika = z.NazevZakaznika, ZakaznikId = z.ZakaznikId });
-                this.ComboBoxZakaznici.DataSource = zak;
-                this.ComboBoxZakaznici.DisplayMember = "NazevZakaznika";
-                this.ComboBoxZakaznici.ValueMember = "ZakaznikId";
-                this.ComboBoxZakaznici.SelectedIndex = 0;
-                return true;
-            }
+
+            var zak = new List<Zak> {new Zak("(choose a customer)", 0)};
+
+            zak.AddRange(zakaznici.Select(z => new Zak(z.CustomerName, z.CustomerId)));
+
+            this.ComboBoxZakaznici.DataSource = zak;
+            this.ComboBoxZakaznici.DisplayMember = "NazevZakaznika";
+            this.ComboBoxZakaznici.ValueMember = "ZakaznikId";
+            this.ComboBoxZakaznici.SelectedIndex = 0;
+            return true;
         }
 
         private void ComboBoxZadavatel1_SelectedIndexChanged(object sender, EventArgs e)
@@ -295,7 +262,7 @@ namespace LearActionPlans.Views
             }
 
             // kontrola, jsetli mohu zaktivnit talčítko pro uložení AP
-            if (this.zadavatel1Povolen == true && this.temaPovoleno == true && this.datumUkonceniPovolen == true && this.zakaznikPovolen == true)
+            if (this.zadavatel1Povolen && this.temaPovoleno && this.datumUkonceniPovolen && this.zakaznikPovolen)
             {
                 this.ButtonUlozit.Enabled = true;
             }
@@ -319,7 +286,7 @@ namespace LearActionPlans.Views
             }
 
             // kontrola, jestli mohu zaktivnit talčítko pro uložení AP
-            if (this.zadavatel1Povolen == true && this.temaPovoleno == true && this.datumUkonceniPovolen == true && this.zakaznikPovolen == true)
+            if (this.zadavatel1Povolen && this.temaPovoleno && this.datumUkonceniPovolen && this.zakaznikPovolen)
             {
                 this.ButtonUlozit.Enabled = true;
             }
@@ -343,7 +310,7 @@ namespace LearActionPlans.Views
             }
 
             // kontrola, jestli mohu zaktivnit talčítko pro uložení AP
-            if (this.zadavatel1Povolen == true && this.temaPovoleno == true && this.datumUkonceniPovolen == true && this.zakaznikPovolen == true)
+            if (this.zadavatel1Povolen && this.temaPovoleno && this.datumUkonceniPovolen && this.zakaznikPovolen)
             {
                 this.ButtonUlozit.Enabled = true;
             }
@@ -388,7 +355,7 @@ namespace LearActionPlans.Views
             }
 
             // kontrola, jsetli mohu zaktivnit talčítko pro uložení AP
-            if (this.zadavatel1Povolen == true && this.temaPovoleno == true && this.datumUkonceniPovolen == true && this.zakaznikPovolen == true)
+            if (this.zadavatel1Povolen && this.temaPovoleno && this.datumUkonceniPovolen && this.zakaznikPovolen)
             {
                 this.ButtonUlozit.Enabled = true;
             }
@@ -400,7 +367,7 @@ namespace LearActionPlans.Views
 
         private void RadioButtonAudity_CheckedChanged(object sender, EventArgs e)
         {
-            if (this.RadioButtonAudity.Checked == true)
+            if (this.RadioButtonAudity.Checked)
             {
                 this.akcniPlan.TypAP = 1;
             }
@@ -408,7 +375,7 @@ namespace LearActionPlans.Views
 
         private void RadioButtonOstatni_CheckedChanged(object sender, EventArgs e)
         {
-            if (this.RadioButtonOstatni.Checked == true)
+            if (this.RadioButtonOstatni.Checked)
             {
                 this.akcniPlan.TypAP = 2;
             }
@@ -429,45 +396,50 @@ namespace LearActionPlans.Views
             this.akcniPlan.Id = AkcniPlanyDataMapper.InsertAP(this.akcniPlan);
             //nastavím vlastníkAP na true, protože musí být editovány jednotlivé body
             //FormMain.VlastnikAP = true;
-            using var form = new FormPrehledBoduAP(true, this.akcniPlan, 1);
+            using var form = this.formPrehledBoduAp;
+            form.CreateFormPrehledBoduAP(true, this.akcniPlan, 1);
             this.Hide();
             form.ShowDialog();
-            //Close();
         }
 
         private void ZavritOkno()
         {
-            if (this.ulozeniDat == true)
+            if (this.ulozeniDat)
             {
                 this.UlozitAP();
             }
             else
             {
                 //byly založeny všechny údaje pro uložení dat
-                if (this.ButtonUlozit.Enabled == true)
+                if (!this.ButtonUlozit.Enabled)
                 {
-                    var dialogResult = MessageBox.Show("Do you want to create AP.", "Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    return;
+                }
 
-                    if (dialogResult == DialogResult.Yes)
-                    {
+                var dialogResult = MessageBox.Show(@"Do you want to create AP.", @"Notice", MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Information);
+
+                switch (dialogResult)
+                {
+                    case DialogResult.Yes:
                         this.UlozitAP();
-                        //Close();
-                    }
-                    else if (dialogResult == DialogResult.No)
-                    {
-                    }
+                        break;
+                    case DialogResult.No:
+                    case DialogResult.None:
+                    case DialogResult.OK:
+                    case DialogResult.Cancel:
+                    case DialogResult.Abort:
+                    case DialogResult.Retry:
+                    case DialogResult.Ignore:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
         }
 
-        private void FormNovyAkcniPlan_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            this.ZavritOkno();
-        }
+        private void FormNovyAkcniPlan_FormClosing(object sender, FormClosingEventArgs e) => this.ZavritOkno();
 
-        private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e)
-        {
-            this.Close();
-        }
+        private void ButtonClose_MouseClick(object sender, MouseEventArgs e) => this.Close();
     }
 }

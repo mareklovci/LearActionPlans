@@ -14,10 +14,10 @@ namespace LearActionPlans.Views
         public DateTime? ReturnValueDatum { get; set; }
         public string ReturnValuePoznamka { get; set; }
 
-        public FormDatumUkonceni(DateTime? datum, string poznamka)
-        {
-            this.InitializeComponent();
+        public FormDatumUkonceni() => this.InitializeComponent();
 
+        public void CreateFormDatumUkonceni(DateTime? datum, string poznamka)
+        {
             var podminkaDatum = datum == null;
             var podminkaPoznamka = poznamka == string.Empty;
             this.dateTimePickerDatumUkonceni.Value = podminkaDatum ? DateTime.Now : Convert.ToDateTime(datum);
@@ -31,7 +31,7 @@ namespace LearActionPlans.Views
         private void ButtonOk_MouseClick(object sender, MouseEventArgs e)
         {
             this.ReturnValueDatum = this.dateTimePickerDatumUkonceni.Value;
-            var podminka = string.IsNullOrWhiteSpace(Convert.ToString(this.richTextBoxPoznamka.Text)) == true;
+            var podminka = string.IsNullOrWhiteSpace(Convert.ToString(this.richTextBoxPoznamka.Text));
             this.ReturnValuePoznamka = podminka ? string.Empty : this.richTextBoxPoznamka.Text;
 
             this.DialogResult = DialogResult.OK;

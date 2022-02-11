@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using LearActionPlans.DataMappers;
 
-
 namespace LearActionPlans.ViewModels
 {
     public class EditAPViewModel

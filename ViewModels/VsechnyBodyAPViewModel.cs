@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using LearActionPlans.DataMappers;
-using LearActionPlans.Models;
 
 namespace LearActionPlans.ViewModels
 {
@@ -41,8 +39,10 @@ namespace LearActionPlans.ViewModels
         public string SkutecnaPricinaWM { get; set; }
         public byte StavObjektuBodAP { get; set; }
 
-        public static VsechnyBodyAPViewModel BodyAP(DateTime datumZalozeniAP, int cisloAP, int idBodAP, int idAP, int cisloBoduAP, DateTime datumZalozeni, string odkazNaNormu,
-            string hodnoceniNeshody, string popisProblemu, string odpovednaOsoba1, string skurecnaPricinaWM, byte stavObjektuBodAP)
+        public static VsechnyBodyAPViewModel BodyAP(DateTime datumZalozeniAP, int cisloAP, int idBodAP, int idAP,
+            int cisloBoduAP, DateTime datumZalozeni, string odkazNaNormu,
+            string hodnoceniNeshody, string popisProblemu, string odpovednaOsoba1, string skurecnaPricinaWM,
+            byte stavObjektuBodAP)
         {
             var vsechnyBodyAPViewModel = new VsechnyBodyAPViewModel
             {
@@ -69,22 +69,22 @@ namespace LearActionPlans.ViewModels
             var akcniPlany = AkcniPlanyDataMapper.GetAPAll().ToList();
             var zamestnanci = EmployeeRepository.GetZamestnanciAll().ToList();
 
-            if (bodyAP == null || bodyAP.Count() == 0 || akcniPlany == null || akcniPlany.Count() == 0)
+            if (!bodyAP.Any() || !akcniPlany.Any())
             {
                 yield break;
             }
 
             var query = from b in bodyAP
-                        join ap in akcniPlany
-                            on b.AkcniPlanId equals ap.Id into gAP
-                        from subAP in gAP.DefaultIfEmpty()
-                        join zam in zamestnanci
-                            on b.OdpovednaOsoba1Id equals zam.Id into gZam
-                        from subZam in gZam.DefaultIfEmpty()
-
-                        orderby b.AkcniPlanId, b.CisloBoduAP
-                        select BodyAP(subAP.DatumZalozeni, subAP.CisloAP, b.Id, b.AkcniPlanId, b.CisloBoduAP, b.DatumZalozeni, b.OdkazNaNormu, b.HodnoceniNeshody, 
-                        b.PopisProblemu, subZam.Prijmeni + " " + subZam.Jmeno,  b.SkutecnaPricinaWM, b.StavObjektu);
+                join ap in akcniPlany
+                    on b.AkcniPlanId equals ap.Id into gAP
+                from subAP in gAP.DefaultIfEmpty()
+                join zam in zamestnanci
+                    on b.OdpovednaOsoba1Id equals zam.Id into gZam
+                from subZam in gZam.DefaultIfEmpty()
+                orderby b.AkcniPlanId, b.CisloBoduAP
+                select BodyAP(subAP.DatumZalozeni, subAP.CisloAP, b.Id, b.AkcniPlanId, b.CisloBoduAP, b.DatumZalozeni,
+                    b.OdkazNaNormu, b.HodnoceniNeshody,
+                    b.PopisProblemu, subZam.Prijmeni + " " + subZam.Jmeno, b.SkutecnaPricinaWM, b.StavObjektu);
 
             foreach (var q in query)
             {
@@ -120,25 +120,23 @@ namespace LearActionPlans.ViewModels
             var zakaznici = ZakazniciDataMapper.GetZakazniciAll().ToList();
 
             var query = from ap in akcniPlany
-                        join zam in zamestnanci
-                            on ap.Zadavatel1Id equals zam.Id into gZam
-                        from subZam in gZam.DefaultIfEmpty()
-                        join pro in projekty
-                            on ap.ProjektId equals pro.Id into gPro
-                        from subPro in gPro.DefaultIfEmpty()
-                        join zak in zakaznici
-                            on ap.ZakaznikId equals zak.Id into gZak
-                        from subZak in gZak.DefaultIfEmpty()
-                        select AP(ap.Zadavatel1Id, ap?.Zadavatel2Id, subZam.Prijmeni + " " + subZam.Jmeno, ap.Tema, ap?.ProjektId,
-                            subPro?.Nazev ?? string.Empty, ap.ZakaznikId, subZak.Nazev, ap.TypAP, ap.StavObjektu);
-
-            //where z.Storno = false
+                join zam in zamestnanci
+                    on ap.Zadavatel1Id equals zam.Id into gZam
+                from subZam in gZam.DefaultIfEmpty()
+                join pro in projekty
+                    on ap.ProjektId equals pro.Id into gPro
+                from subPro in gPro.DefaultIfEmpty()
+                join zak in zakaznici
+                    on ap.ZakaznikId equals zak.Id into gZak
+                from subZak in gZak.DefaultIfEmpty()
+                select AP(ap.Zadavatel1Id, ap?.Zadavatel2Id, subZam.Prijmeni + " " + subZam.Jmeno, ap.Tema,
+                    ap?.ProjektId,
+                    subPro?.Nazev ?? string.Empty, ap.ZakaznikId, subZak.Nazev, ap.TypAP, ap.StavObjektu);
 
             foreach (var q in query)
             {
                 yield return q;
             }
         }
-
     }
 }

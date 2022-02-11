@@ -73,7 +73,7 @@ namespace LearActionPlans.Views
             this.ButtonZavrit.TabIndex = 2;
             this.ButtonZavrit.Text = "Close";
             this.ButtonZavrit.UseVisualStyleBackColor = true;
-            this.ButtonZavrit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonZavrit_MouseClick);
+            this.ButtonZavrit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonClose_MouseClick);
             // 
             // labelDatumEfektivnosti
             // 

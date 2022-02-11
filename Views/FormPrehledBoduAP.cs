@@ -13,8 +13,11 @@ namespace LearActionPlans.Views
 {
     public partial class FormPrehledBoduAP : Form
     {
+        private readonly FormZadaniBoduAP formZadaniBoduAp;
+        private readonly EmployeeRepository employeeRepository;
+
         //při volání konstruktoru vytvořím novou prom jako readonly, protože ji nastavím při volání konstruktoru a pak už její hodnoty neměním
-        private readonly FormNovyAkcniPlan.AkcniPlanTmp akcniPlany_;
+        private FormNovyAkcniPlan.AkcniPlanTmp akcniPlany_;
 
         //tady udržuji všechny informace o bodech AP
         public static List<BodAP> bodyAP;
@@ -22,19 +25,29 @@ namespace LearActionPlans.Views
         //do této proměnné uložím pouze hodnoty, které se zobrazí v DGV
         private DataTable dtBodyAP;
 
-        private readonly BindingSource bindingSource;
+        private BindingSource bindingSource;
         //public static bool UlozitBodyAP { get; set; }
 
-        private readonly byte volani_;
+        private byte volani_;
         //1 - založení nového AP
         //2 - aktualizace již vytvořeného AP
         //3 - bude volání z formuláře FormVsechnyBodyAP
 
-        private readonly bool spusteniBezParametru_;
+        private bool spusteniBezParametru_;
 
-        public FormPrehledBoduAP(bool spusteniBezParametru, FormNovyAkcniPlan.AkcniPlanTmp akcniPlany, byte volani)
+        public FormPrehledBoduAP(
+            FormZadaniBoduAP formZadaniBoduAp,
+            EmployeeRepository employeeRepository)
         {
+            this.formZadaniBoduAp = formZadaniBoduAp;
+            this.employeeRepository = employeeRepository;
+
             this.InitializeComponent();
+        }
+
+        public void CreateFormPrehledBoduAP(bool spusteniBezParametru, FormNovyAkcniPlan.AkcniPlanTmp akcniPlany,
+            byte volani)
+        {
             this.bindingSource = new BindingSource();
             bodyAP = new List<BodAP>();
             this.dtBodyAP = new DataTable();
@@ -55,7 +68,7 @@ namespace LearActionPlans.Views
                 this.akcniPlany_.Zadavatel2Jmeno ?? (this.akcniPlany_.Zadavatel2Jmeno = "");
             this.labelTemaAP.Text = this.akcniPlany_.Tema ?? "";
             this.labelProjektAP.Text = this.akcniPlany_.ProjektNazev ?? "";
-            this.labelDatumZahajeniAP.Text = this.akcniPlany_.DatumZalozeni == null ? "" : Convert.ToDateTime(this.akcniPlany_.DatumZalozeni).ToShortDateString();
+            this.labelDatumZahajeniAP.Text = Convert.ToDateTime(this.akcniPlany_.DatumZalozeni).ToShortDateString();
             this.labelDatumUkonceniAP.Text = string.Empty;
             this.labelZakaznikAP.Text = this.akcniPlany_.ZakaznikNazev ?? "";
 
@@ -80,7 +93,7 @@ namespace LearActionPlans.Views
                 this.ButtonOpravitBodAP.Enabled = false;
             }
 
-            if (this.akcniPlany_.APUzavren == true)
+            if (this.akcniPlany_.APUzavren)
             {
                 this.ButtonNovyBodAP.Visible = false;
                 this.ButtonOdeslatEmail.Visible = false;
@@ -101,7 +114,8 @@ namespace LearActionPlans.Views
                 return;
             }
 
-            using var form = new FormZadaniBoduAP(this.labelCisloAP.Text, this.akcniPlany_,
+            using var form = this.formZadaniBoduAp;
+            form.CreateFormZadaniBoduAP(this.labelCisloAP.Text, this.akcniPlany_,
                 this.DataGridViewBodyAP.CurrentCell.RowIndex, false);
 
             form.ShowDialog();
@@ -118,7 +132,7 @@ namespace LearActionPlans.Views
             var odpOsoba2 = PrehledBoduAPViewModel.GetOdpovednaOsoba2().ToList();
 
             var i = 0;
-            var datumUkonceni_ = (DateTime?)null;
+            DateTime? datumUkonceni_;
             var aktivovatTlacitkoOdeslatEmail = false;
 
             foreach (var b in bodyAP_)
@@ -128,11 +142,13 @@ namespace LearActionPlans.Views
                 datumUkonceni_ = null;
                 foreach (var du in datumUkonceni)
                 {
-                    if (du.StavZadosti == 1 || du.StavZadosti == 4 || du.StavZadosti == 5)
+                    if (du.StavZadosti != 1 && du.StavZadosti != 4 && du.StavZadosti != 5)
                     {
-                        datumUkonceni_ = du.DatumUkonceni;
-                        break;
+                        continue;
                     }
+
+                    datumUkonceni_ = du.DatumUkonceni;
+                    break;
                 }
 
                 string odpovednaOsoba2;
@@ -186,14 +202,7 @@ namespace LearActionPlans.Views
                 i++;
             }
 
-            if (aktivovatTlacitkoOdeslatEmail == true)
-            {
-                this.ButtonOdeslatEmail.Enabled = true;
-            }
-            else
-            {
-                this.ButtonOdeslatEmail.Enabled = false;
-            }
+            this.ButtonOdeslatEmail.Enabled = aktivovatTlacitkoOdeslatEmail;
 
             i = 0;
             foreach (var b in bodyAP_)
@@ -291,7 +300,8 @@ namespace LearActionPlans.Views
         {
             var cisloRadkyDGV = -1;
 
-            using var form = new FormZadaniBoduAP(this.labelCisloAP.Text, this.akcniPlany_, cisloRadkyDGV, true);
+            using var form = this.formZadaniBoduAp;
+            form.CreateFormZadaniBoduAP(this.labelCisloAP.Text, this.akcniPlany_, cisloRadkyDGV, true);
             form.ShowDialog();
             this.NacistDGV();
         }
@@ -303,7 +313,8 @@ namespace LearActionPlans.Views
                 return;
             }
 
-            using var form = new FormZadaniBoduAP(this.labelCisloAP.Text, this.akcniPlany_,
+            using var form = this.formZadaniBoduAp;
+            form.CreateFormZadaniBoduAP(this.labelCisloAP.Text, this.akcniPlany_,
                 this.DataGridViewBodyAP.CurrentCell.RowIndex, false);
             form.ShowDialog();
             this.NacistDGV();
@@ -327,7 +338,7 @@ namespace LearActionPlans.Views
             var bodyAP_ = PrehledBoduAPViewModel.GetBodyIdAPAll(this.akcniPlany_.Id).ToList();
             var odpOsoba2 = PrehledBoduAPViewModel.GetOdpovednaOsoba2().ToList();
 
-            var datumUkonceni_ = (DateTime?)null;
+            DateTime? datumUkonceni_;
             var j = 0;
             foreach (var b in bodyAP_)
             {
@@ -336,11 +347,13 @@ namespace LearActionPlans.Views
                 datumUkonceni_ = null;
                 foreach (var du in datumUkonceni)
                 {
-                    if (du.StavZadosti == 1 || du.StavZadosti == 4 || du.StavZadosti == 5)
+                    if (du.StavZadosti != 1 && du.StavZadosti != 4 && du.StavZadosti != 5)
                     {
-                        datumUkonceni_ = du.DatumUkonceni;
-                        break;
+                        continue;
                     }
+
+                    datumUkonceni_ = du.DatumUkonceni;
+                    break;
                 }
 
                 string odpovednaOsoba2;
@@ -403,27 +416,7 @@ namespace LearActionPlans.Views
                 j++;
             }
 
-            if (aktivovatTlacitkoOdeslatEmail == true)
-            {
-                this.ButtonOdeslatEmail.Enabled = true;
-            }
-            else
-            {
-                this.ButtonOdeslatEmail.Enabled = false;
-            }
-
-            //pak naplním tabulku znovu
-            //foreach (var b in bodyAP)
-            //{
-            //    this.dtBodyAP.Rows.Add(b.CisloBoduAP, b.OdkazNaNormu, b.HodnoceniNeshody, b.PopisProblemu,
-            //        b.OdpovednaOsoba1, string.Empty, b.Oddeleni, b.SkutecnaPricinaWM ?? string.Empty,
-            //        b.NapravnaOpatreniWM ?? string.Empty, b.SkutecnaPricinaWS ?? string.Empty,
-            //        b.NapravnaOpatreniWS ?? string.Empty,
-            //        datumUkonceni_ == null ? string.Empty : Convert.ToDateTime(datumUkonceni_).ToShortDateString(),
-            //        b.KontrolaEfektivnosti == null
-            //            ? string.Empty
-            //            : Convert.ToDateTime(b.KontrolaEfektivnosti).ToShortDateString(), b.ZnovuOtevrit);
-            //}
+            this.ButtonOdeslatEmail.Enabled = aktivovatTlacitkoOdeslatEmail;
 
             this.ButtonOpravitBodAP.Enabled = this.DataGridViewBodyAP.Rows.Count >= 1;
         }
@@ -434,7 +427,7 @@ namespace LearActionPlans.Views
 
         private void ButtonOdeslatEmail_MouseClick(object sender, MouseEventArgs e)
         {
-            var naselOdpPrac = false;
+            bool naselOdpPrac;
             // seznam bodů AP pro jednoho odpovědného pracovníka
             var emailyKOdeslani1 = new List<List<int>>();
             var emailyKOdeslani2 = new List<List<int>>();
@@ -443,91 +436,99 @@ namespace LearActionPlans.Views
 
             foreach (var b in bodyAP)
             {
-                if (b.EmailOdeslan == false)
+                if (b.EmailOdeslan)
                 {
-                    // odpovědny 1
-                    if (emailyKOdeslani1.Count == 0)
+                    continue;
+                }
+
+                // odpovědny 1
+                if (emailyKOdeslani1.Count == 0)
+                {
+                    emailyKOdeslani1.Add(new List<int>());
+                    emailyKOdeslani1[0].Add(b.OdpovednaOsoba1Id);
+                    emailyKOdeslani1[0].Add(b.CisloBoduAP);
+
+                    odeslaneEmaily1.Add(new List<int>());
+                    odeslaneEmaily1[0].Add(b.Id);
+                }
+                else
+                {
+                    // odeslat email s informací o nových bodech
+                    naselOdpPrac = false;
+                    var j = 0;
+                    foreach (var jedenEmail in emailyKOdeslani1)
                     {
+                        // pro daného pracovníka přidá další bod AP
+                        if (b.OdpovednaOsoba1Id == jedenEmail[0])
+                        {
+                            naselOdpPrac = true;
+                            // bude přidán další bodAP do seznamu
+                            jedenEmail.Add(b.CisloBoduAP);
+
+                            odeslaneEmaily1[j].Add(b.Id);
+                        }
+                        j++;
+                    }
+                    if (naselOdpPrac == false)
+                    {
+                        // bude přidán další odpovědný pracovník do seznamu
                         emailyKOdeslani1.Add(new List<int>());
-                        emailyKOdeslani1[0].Add(b.OdpovednaOsoba1Id);
-                        emailyKOdeslani1[0].Add(b.CisloBoduAP);
+                        var lastItem = emailyKOdeslani1.Last();
+
+                        lastItem.Add(b.OdpovednaOsoba1Id);
+                        lastItem.Add(b.CisloBoduAP);
 
                         odeslaneEmaily1.Add(new List<int>());
-                        odeslaneEmaily1[0].Add(b.Id);
+                        var lastItemOdeslaneEmaily = odeslaneEmaily1.Last();
+                        lastItemOdeslaneEmaily.Add(b.Id);
                     }
-                    else
+                }
+
+                // odpovědný 2
+                if (emailyKOdeslani2.Count == 0)
+                {
+                    if (b.OdpovednaOsoba2Id == null)
                     {
-                        // odeslat email s informací o nových bodech
-                        naselOdpPrac = false;
-                        var j = 0;
-                        foreach (var jedenEmail in emailyKOdeslani1)
-                        {
-                            // pro daného pracovníka přidá další bod AP
-                            if (b.OdpovednaOsoba1Id == jedenEmail[0])
-                            {
-                                naselOdpPrac = true;
-                                // bude přidán další bodAP do seznamu
-                                jedenEmail.Add(b.CisloBoduAP);
-
-                                odeslaneEmaily1[j].Add(b.Id);
-                            }
-                            j++;
-                        }
-                        if (naselOdpPrac == false)
-                        {
-                            // bude přidán další odpovědný pracovník do seznamu
-                            emailyKOdeslani1.Add(new List<int>());
-                            var lastItem = emailyKOdeslani1.Last();
-
-                            lastItem.Add(b.OdpovednaOsoba1Id);
-                            lastItem.Add(b.CisloBoduAP);
-
-                            odeslaneEmaily1.Add(new List<int>());
-                            var lastItemOdeslaneEmaily = odeslaneEmaily1.Last();
-                            lastItemOdeslaneEmaily.Add(b.Id);
-                        }
+                        continue;
                     }
 
-                    // odpovědný 2
-                    if (emailyKOdeslani2.Count == 0)
+                    emailyKOdeslani2.Add(new List<int>());
+                    emailyKOdeslani2[0].Add(Convert.ToInt32(b.OdpovednaOsoba2Id));
+                    emailyKOdeslani2[0].Add(b.CisloBoduAP);
+                }
+                else
+                {
+                    if (b.OdpovednaOsoba2Id == null)
                     {
-                        if (!(b.OdpovednaOsoba2Id == null))
-                        {
-                            emailyKOdeslani2.Add(new List<int>());
-                            emailyKOdeslani2[0].Add(Convert.ToInt32(b.OdpovednaOsoba2Id));
-                            emailyKOdeslani2[0].Add(b.CisloBoduAP);
-                        }
+                        continue;
                     }
-                    else
+
+                    // odeslat email s informací o nových bodech
+                    naselOdpPrac = false;
+                    var j = 0;
+                    foreach (var jedenEmail in emailyKOdeslani2)
                     {
-                        if (!(b.OdpovednaOsoba2Id == null))
+                        // pro daného pracovníka přidá další bod AP
+                        if (Convert.ToInt32(b.OdpovednaOsoba2Id) == jedenEmail[0])
                         {
-                            // odeslat email s informací o nových bodech
-                            naselOdpPrac = false;
-                            var j = 0;
-                            foreach (var jedenEmail in emailyKOdeslani2)
-                            {
-                                // pro daného pracovníka přidá další bod AP
-                                if (Convert.ToInt32(b.OdpovednaOsoba2Id) == jedenEmail[0])
-                                {
-                                    naselOdpPrac = true;
-                                    // bude přidán další bodAP do seznamu
-                                    jedenEmail.Add(b.CisloBoduAP);
-                                }
-                                j++;
-                            }
-                            if (naselOdpPrac == false)
-                            {
-                                // bude přidán další odpovědný pracovník do seznamu
-                                emailyKOdeslani2.Add(new List<int>());
-                                var lastItem = emailyKOdeslani2.Last();
-
-                                lastItem.Add(Convert.ToInt32(b.OdpovednaOsoba2Id));
-                                lastItem.Add(b.CisloBoduAP);
-                            }
+                            naselOdpPrac = true;
+                            // bude přidán další bodAP do seznamu
+                            jedenEmail.Add(b.CisloBoduAP);
                         }
+                        j++;
                     }
 
+                    if (naselOdpPrac)
+                    {
+                        continue;
+                    }
+
+                    // bude přidán další odpovědný pracovník do seznamu
+                    emailyKOdeslani2.Add(new List<int>());
+                    var lastItem = emailyKOdeslani2.Last();
+
+                    lastItem.Add(Convert.ToInt32(b.OdpovednaOsoba2Id));
+                    lastItem.Add(b.CisloBoduAP);
                 }
             }
 
@@ -538,20 +539,18 @@ namespace LearActionPlans.Views
                 foreach (var jedenEmail in emailyKOdeslani1)
                 {
                     // id odpovědného pracovníka
-                    var emailTo = PrehledBoduAPViewModel.GetOdpovednyPracovnik(jedenEmail[0]).ToList();
-                    var emailOdpovPrac = Convert.ToString(emailTo[0].EmailOdpovednyPracovnik);
+                    var emailTo = this.employeeRepository.GetOdpovednyPracovnikId(jedenEmail[0]).FirstOrDefault();
+                    var emailOdpovPrac = Convert.ToString(emailTo?.Email);
 
                     var htmlText = @"<p>Action plan: " + this.akcniPlany_.CisloAPRok + @"</p>";
                     htmlText += @"<p>Responsible #1:<br>";
-                    htmlText += emailTo[0].JmenoPracovnika + @"</p>";
+                    htmlText += emailTo?.Jmeno + @"</p>";
                     htmlText += @"<p>Points AP: ";
 
                     var j = 0;
                     foreach (var bodyAP in jedenEmail)
                     {
-                        if (j == 0)
-                        { }
-                        else
+                        if (j != 0)
                         {
                             if (j >= 2)
                             {
@@ -562,6 +561,7 @@ namespace LearActionPlans.Views
                                 htmlText += bodyAP;
                             }
                         }
+
                         j++;
                     }
                     htmlText += @"</p>";
@@ -588,9 +588,7 @@ namespace LearActionPlans.Views
                     var j = 0;
                     foreach (var bodyAP in jedenEmail)
                     {
-                        if (j == 0)
-                        { }
-                        else
+                        if (j != 0)
                         {
                             if (j >= 2)
                             {
@@ -601,6 +599,7 @@ namespace LearActionPlans.Views
                                 htmlText += bodyAP;
                             }
                         }
+
                         j++;
                     }
                     htmlText += @"</p>";
@@ -610,13 +609,7 @@ namespace LearActionPlans.Views
             }
 
             this.NacistDGV();
-
             // spustí se externí aplikace pro odeslání emailů
         }
-
-        //private void ButtonOdeslatEmail_MouseClick(object sender, MouseEventArgs e)
-        //{
-        //    MessageBox.Show(@"Poznámka", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //}
     }
 }

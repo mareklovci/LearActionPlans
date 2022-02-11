@@ -247,7 +247,7 @@ namespace LearActionPlans.Views
             this.ButtonZavrit.TabIndex = 19;
             this.ButtonZavrit.Text = "Cancel";
             this.ButtonZavrit.UseVisualStyleBackColor = true;
-            this.ButtonZavrit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonZavrit_MouseClick);
+            this.ButtonZavrit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonClose_MouseClick);
             // 
             // FormNovyAkcniPlan
             // 

@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Collections.Generic;
 using LearActionPlans.Models;
 using System;
+using System.Linq;
 using System.Windows.Forms;
 using LearActionPlans.Utilities;
 using Microsoft.Extensions.Options;
@@ -80,6 +81,7 @@ namespace LearActionPlans.DataMappers
                 yield return ConstructOdpovednyPracovnik(reader);
             }
         }
+
         private static Zamestnanci ConstructOdpovednyPracovnik(IDataRecord reader)
         {
             var id = (int)reader["ZamestnanecID"];
@@ -89,15 +91,6 @@ namespace LearActionPlans.DataMappers
 
             return new Zamestnanci(id, jmeno, prijmeni, email);
         }
-
-        //private static Zamestnanci ConstructZadavatel(IDataRecord reader)
-        //{
-        //    var id = (int)reader["ZamestnanecID"];
-        //    var prihlasovaciJmeno = (string)reader["PrihlasovaciJmeno"];
-        //    var admin = (bool)reader["AdminAP"];
-
-        //    return new Zamestnanci(id, prihlasovaciJmeno, admin);
-        //}
 
         public IEnumerable<Zamestnanci> GetZadavatelLogin(string login)
         {
@@ -132,7 +125,8 @@ namespace LearActionPlans.DataMappers
             return new Zamestnanci(id, prihlasovaciJmeno, admin);
         }
 
-        public bool InsertZamestnanec(string jmeno, string prijmeni, string prihlasovaciJmeno, int oddeleniId, string email, bool adminAP, byte stavObjektu)
+        public bool InsertZamestnanec(string jmeno, string prijmeni, string prihlasovaciJmeno, int oddeleniId,
+            string email, bool adminAP, byte stavObjektu)
         {
             try
             {
@@ -141,8 +135,9 @@ namespace LearActionPlans.DataMappers
 
                 using var command = connection.CreateCommand();
                 command.CommandType = CommandType.Text;
-                command.CommandText = $"INSERT INTO Zamestnanec (Jmeno, Prijmeni, PrihlasovaciJmeno, OddeleniID, Email, AdminAP, StavObjektu)" +
-                                      $" VALUES (@jmeno, @prijmeni, @prihlasovaciJmeno, @oddeleniId, @email, @adminAP, @stavObjektu)";
+                command.CommandText =
+                    $"INSERT INTO Zamestnanec (Jmeno, Prijmeni, PrihlasovaciJmeno, OddeleniID, Email, AdminAP, StavObjektu)" +
+                    $" VALUES (@jmeno, @prijmeni, @prihlasovaciJmeno, @oddeleniId, @email, @adminAP, @stavObjektu)";
 
                 command.Parameters.AddWithValue("@jmeno", jmeno);
                 command.Parameters.AddWithValue("@prijmeni", prijmeni);
@@ -160,13 +155,14 @@ namespace LearActionPlans.DataMappers
             {
                 //MessageBox.Show(ex.ToString());
                 //Došlo k problému při práci s databází.
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(@"Database problem.", @"Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 return false;
             }
         }
 
-        public bool UpdateZamestnanec(int zamestnanecId, string jmeno, string prijmeni, string prihlasovaciJmeno, int oddeleniId, string email, bool adminAP, byte stavObjektu)
+        public bool UpdateZamestnanec(int zamestnanecId, string jmeno, string prijmeni, string prihlasovaciJmeno,
+            int oddeleniId, string email, bool adminAP, byte stavObjektu)
         {
             try
             {
@@ -200,10 +196,54 @@ namespace LearActionPlans.DataMappers
             {
                 //MessageBox.Show(ex.ToString());
                 //Došlo k problému při práci s databází.
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(@"Database problem.", @"Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 return false;
             }
         }
+
+        public IEnumerable<Zamestnanci> GetEmployeesOriginalViewModel()
+        {
+            var query = this.GetZamestnanciAll().OrderBy(z => z.Prijmeni)
+                .ThenBy(z => z.Jmeno)
+                .ToList();
+
+            if (!query.Any())
+            {
+                yield break;
+            }
+
+            foreach (var q in query)
+            {
+                yield return q;
+            }
+        }
+
+        public bool VybranyZamestnanec(string login)
+        {
+            var zamestnanci = this.GetZamestnanciAll().ToList();
+            var query = zamestnanci.Where(z => z.PrihlasovaciJmeno == login);
+            return query.Count() != 0;
+        }
+
+        public IEnumerable<Zamestnanci> GetPocetAdmin()
+        {
+            var zamestnanci = this.GetZamestnanciAll().ToList();
+
+            var query = zamestnanci.Where(z => z.StavObjektu == 1 && z.AdminAP).ToList();
+
+            if (!query.Any())
+            {
+                yield break;
+            }
+
+            foreach (var q in query)
+            {
+                yield return q;
+            }
+        }
+
+        public Zamestnanci GetZamestnanecFromViewModel(int idZam) =>
+            this.GetZamestnanciAll().FirstOrDefault(z => z.Id == idZam);
     }
 }

@@ -213,7 +213,7 @@ namespace LearActionPlans.DataMappers
             {
                 MessageBox.Show(ex.ToString());
                 //Problém s databází.
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(@"Database problem.", @"Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             return -1;
@@ -312,7 +312,7 @@ namespace LearActionPlans.DataMappers
             catch (Exception)
             {
                 //Došlo k problému při práci s databází.
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(@"Database problem.", @"Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return 0;
             }
             return idZaznamu;
@@ -357,7 +357,7 @@ namespace LearActionPlans.DataMappers
             catch (Exception)
             {
                 // Došlo k problému při práci s databází.
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(@"Database problem.", @"Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -411,7 +411,7 @@ namespace LearActionPlans.DataMappers
             catch (Exception)
             {
                 // Došlo k problému při práci s databází.
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(@"Database problem.", @"Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -433,7 +433,7 @@ namespace LearActionPlans.DataMappers
             catch (Exception)
             {
                 //Došlo k problému při práci s databází.
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(@"Database problem.", @"Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -457,7 +457,7 @@ namespace LearActionPlans.DataMappers
             catch (Exception)
             {
                 //Došlo k problému při práci s databází.
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(@"Database problem.", @"Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

@@ -74,7 +74,7 @@ namespace LearActionPlans.Views
             this.ButtonZavrit.TabIndex = 0;
             this.ButtonZavrit.Text = "Close";
             this.ButtonZavrit.UseVisualStyleBackColor = true;
-            this.ButtonZavrit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonZavrit_MouseClick);
+            this.ButtonZavrit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonClose_MouseClick);
             // 
             // labelOdpovedny1
             // 
@@ -165,7 +165,7 @@ namespace LearActionPlans.Views
             this.ButtonUlozit.TabIndex = 9;
             this.ButtonUlozit.Text = "Save";
             this.ButtonUlozit.UseVisualStyleBackColor = true;
-            this.ButtonUlozit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonUlozit_MouseClick);
+            this.ButtonUlozit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonSave_MouseClick);
             // 
             // labelCisloAP
             // 

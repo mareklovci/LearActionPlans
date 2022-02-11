@@ -3,15 +3,22 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using LearActionPlans.DataMappers;
 using LearActionPlans.ViewModels;
 
 namespace LearActionPlans.Views
 {
     public partial class FormZadaniBoduAP : Form
     {
-        private readonly FormNovyAkcniPlan.AkcniPlanTmp akcniPlany_;
+        private readonly FormPosunutiTerminuBodAP formPosunutiTerminuBodAp;
+        private readonly FormAttachment formAttachment;
+        private readonly FormKontrolaEfektivnosti formKontrolaEfektivnosti;
+        private readonly FormDatumUkonceni formDatumUkonceni;
+        private readonly EmployeeRepository employeeRepository;
+        private readonly DepartmentRepository departmentRepository;
+        private FormNovyAkcniPlan.AkcniPlanTmp akcniPlany_;
 
-        private readonly string cisloAPStr_;
+        private string cisloAPStr_;
         private DataTable dtActionsWM;
         private DataTable dtActionsWS;
 
@@ -31,10 +38,32 @@ namespace LearActionPlans.Views
         private string poznamkaDatumUkonceni;
         private bool deadLineZadan;
 
-        public FormZadaniBoduAP(string cisloAPStr, FormNovyAkcniPlan.AkcniPlanTmp akcniPlany, int cisloRadkyDGV,
+        public FormZadaniBoduAP(
+            FormPosunutiTerminuBodAP formPosunutiTerminuBodAp,
+            FormAttachment formAttachment,
+            FormKontrolaEfektivnosti formKontrolaEfektivnosti,
+            FormDatumUkonceni formDatumUkonceni,
+            EmployeeRepository employeeRepository,
+            DepartmentRepository departmentRepository)
+        {
+            // Inject Forms
+            this.formPosunutiTerminuBodAp = formPosunutiTerminuBodAp;
+            this.formAttachment = formAttachment;
+            this.formKontrolaEfektivnosti = formKontrolaEfektivnosti;
+            this.formDatumUkonceni = formDatumUkonceni;
+
+            // Inject Repositories
+            this.employeeRepository = employeeRepository;
+            this.departmentRepository = departmentRepository;
+
+            // Initialize
+            this.InitializeComponent();
+        }
+
+        public void CreateFormZadaniBoduAP(string cisloAPStr, FormNovyAkcniPlan.AkcniPlanTmp akcniPlany,
+            int cisloRadkyDGV,
             bool novyBod)
         {
-            this.InitializeComponent();
             this.dtActionsWM = new DataTable();
             this.dtActionsWS = new DataTable();
 
@@ -59,7 +88,7 @@ namespace LearActionPlans.Views
                 //Nejsou dostupní žádní zaměstnanci.
                 //Zadání nového Akčního plánu bude ukončeno.
                 MessageBox.Show("No employees available." + (char)10 + "Entering a new Action plan will be completed.",
-                    "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    @"Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
             else
@@ -74,7 +103,7 @@ namespace LearActionPlans.Views
                 //Nejsou dostupné žádné projekty.
                 //Zadání nového Akčního plánu bude ukončeno.
                 MessageBox.Show(
-                    "No departments available." + (char)10 + "Entering a new Action plan will be completed.", "Notice",
+                    "No departments available." + (char)10 + "Entering a new Action plan will be completed.", @"Notice",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
@@ -149,7 +178,7 @@ namespace LearActionPlans.Views
 
         private bool NaplnitComboBoxZamestnanec1a2()
         {
-            var zamestnanci = ZadaniBoduAPViewModel.GetZamestnanciAll().ToList();
+            var zamestnanci = this.employeeRepository.GetEmployeesOriginalViewModel().ToList();
 
             if (zamestnanci.Count == 0)
             {
@@ -162,16 +191,16 @@ namespace LearActionPlans.Views
 
             foreach (var z in zamestnanci)
             {
-                zam1.Add(new Zam(z.Jmeno, z.ZamestnanecId));
-                zam2.Add(new Zam(z.Jmeno, z.ZamestnanecId));
+                zam1.Add(new Zam(z.Jmeno, z.Id));
+                zam2.Add(new Zam(z.Jmeno, z.Id));
             }
 
             this.ComboBoxOdpovednaOsoba1.DataSource = zam1;
             this.ComboBoxOdpovednaOsoba2.DataSource = zam2;
             this.ComboBoxOdpovednaOsoba1.DisplayMember = "Jmeno";
             this.ComboBoxOdpovednaOsoba2.DisplayMember = "Jmeno";
-            this.ComboBoxOdpovednaOsoba1.ValueMember = "ZamestnanecId";
-            this.ComboBoxOdpovednaOsoba2.ValueMember = "ZamestnanecId";
+            this.ComboBoxOdpovednaOsoba1.ValueMember = "Id";
+            this.ComboBoxOdpovednaOsoba2.ValueMember = "Id";
             this.ComboBoxOdpovednaOsoba1.SelectedIndex = 0;
             this.ComboBoxOdpovednaOsoba2.SelectedIndex = 0;
             return true;
@@ -191,7 +220,7 @@ namespace LearActionPlans.Views
 
         private bool NaplnitComboBoxOddeleni()
         {
-            var oddeleni = ZadaniBoduAPViewModel.GetOddeleniAll().ToList();
+            var oddeleni = this.departmentRepository.GetOddeleniOriginallyViewModel().ToList();
 
             if (oddeleni.Count == 0)
             {
@@ -199,11 +228,11 @@ namespace LearActionPlans.Views
             }
 
             var odd = new List<Oddeleni> {new Oddeleni("(select a department)", 0)};
-            odd.AddRange(oddeleni.Select(o => new Oddeleni(o.Nazev, o.OddeleniId_)));
+            odd.AddRange(oddeleni.Select(o => new Oddeleni(o.Nazev, o.Id)));
 
             this.ComboBoxOddeleni.DataSource = odd;
             this.ComboBoxOddeleni.DisplayMember = "NazevOddeleni";
-            this.ComboBoxOddeleni.ValueMember = "OddeleniId";
+            this.ComboBoxOddeleni.ValueMember = "Id";
             this.ComboBoxOddeleni.SelectedIndex = 0;
             return true;
         }
@@ -211,20 +240,20 @@ namespace LearActionPlans.Views
         private bool TestZamOdd()
         {
             //pokud nebudou zaměstnanci nebo oddělení vrátím false a nemohu pokračovat dál
-            var zam = ZadaniBoduAPViewModel.GetZamestnanciAll().ToList();
+            var zam = this.employeeRepository.GetEmployeesOriginalViewModel().ToList();
             if (zam[0] == null)
             {
-                MessageBox.Show("No Employees available.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(@"No Employees available.", @"Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return false;
             }
 
-            var oddeleni = ZadaniBoduAPViewModel.GetOddeleniAll().ToList();
+            var oddeleni = this.departmentRepository.GetOddeleniOriginallyViewModel().ToList();
             if (oddeleni[0] != null)
             {
                 return true;
             }
 
-            MessageBox.Show("No Departments are available.", "Notice", MessageBoxButtons.OK,
+            MessageBox.Show(@"No Departments are available.", @"Notice", MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
             return false;
         }
@@ -261,6 +290,7 @@ namespace LearActionPlans.Views
                     var i = 0;
                     var copyBodAP = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].UkonceniBodAP.ToList();
                     copyBodAP.Reverse();
+
                     foreach (var c in copyBodAP)
                     {
                         if (i == 0)
@@ -352,7 +382,7 @@ namespace LearActionPlans.Views
 
             if (this.ComboBoxOdpovednaOsoba1.SelectedIndex == 0)
             {
-                MessageBox.Show("A responsible employee must be selected.", "Notice", MessageBoxButtons.OK,
+                MessageBox.Show(@"A responsible employee must be selected.", @"Notice", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
             }
         }
@@ -364,7 +394,7 @@ namespace LearActionPlans.Views
 
             if (this.ComboBoxOddeleni.SelectedIndex == 0)
             {
-                MessageBox.Show("A department must be selected.", "Notice", MessageBoxButtons.OK,
+                MessageBox.Show(@"A department must be selected.", @"Notice", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
             }
         }
@@ -414,21 +444,22 @@ namespace LearActionPlans.Views
                     !(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti == null);
                 var opravitTermin = !(this.akcniPlany_.APUzavren || kontrolaEfektivnosti);
 
-                using var form = new FormPosunutiTerminuBodAP(opravitTermin, this.cisloAPStr_, this.cisloRadkyDGVBody);
-                var result = form.ShowDialog();
+                this.formPosunutiTerminuBodAp.CreateFormPosunutiTerminuBodAP(opravitTermin, this.cisloAPStr_,
+                    this.cisloRadkyDGVBody);
+                var result = this.formPosunutiTerminuBodAp.ShowDialog();
                 if (result == DialogResult.OK) { }
             }
             else
             {
-                using var form = new FormDatumUkonceni(this.datumUkonceni, this.poznamkaDatumUkonceni);
-                var result = form.ShowDialog();
+                this.formDatumUkonceni.CreateFormDatumUkonceni(this.datumUkonceni, this.poznamkaDatumUkonceni);
+                var result = this.formDatumUkonceni.ShowDialog();
                 if (result != DialogResult.OK)
                 {
                     return;
                 }
 
-                this.datumUkonceni = form.ReturnValueDatum;
-                this.poznamkaDatumUkonceni = form.ReturnValuePoznamka;
+                this.datumUkonceni = this.formDatumUkonceni.ReturnValueDatum;
+                this.poznamkaDatumUkonceni = this.formDatumUkonceni.ReturnValuePoznamka;
                 this.labelDatumUkonceni.Text = Convert.ToDateTime(this.datumUkonceni).ToShortDateString();
                 this.deadLineZadan = true;
                 this.changedDGV = true;
@@ -443,11 +474,7 @@ namespace LearActionPlans.Views
 
             if (this.novyBodAP)
             {
-                if (this.kontrolaEfektivnostiDatum == null)
-                {
-                    kontrolaEfektivnosti = false;
-                }
-                else
+                if (this.kontrolaEfektivnostiDatum != null)
                 {
                     datumKontrolEfekt = this.kontrolaEfektivnostiDatum;
                 }
@@ -457,30 +484,26 @@ namespace LearActionPlans.Views
                 //není zadána kontrola efektivnosti
 
                 bodAPId = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id;
-                if (FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti == null)
-                {
-                    kontrolaEfektivnosti = false;
-                }
-                else
+                if (FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti != null)
                 {
                     datumKontrolEfekt = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti;
                     kontrolaEfektivnosti = true;
                 }
             }
 
-            using var form = new FormKontrolaEfektivnosti(this.novyBodAP, this.akcniPlany_.APUzavren,
+            this.formKontrolaEfektivnosti.CreateFormKontrolaEfektivnosti(this.novyBodAP, this.akcniPlany_.APUzavren,
                 this.deadLineZadan, bodAPId, kontrolaEfektivnosti, datumKontrolEfekt);
-            //var result = form.ShowDialog();
-            form.ShowDialog();
-            var result = form.ReturnValuePotvrdit;
+            this.formKontrolaEfektivnosti.ShowDialog();
+
+            var result = this.formKontrolaEfektivnosti.ReturnValuePotvrdit;
             if (!result)
             {
                 return;
             }
 
-            var datumKontrolaEfektivnosti = form.ReturnValueDatum;
-            var poznamka = form.ReturnValuePoznamka;
-            var puvodniDatum = form.ReturnValuePuvodniDatum;
+            var datumKontrolaEfektivnosti = this.formKontrolaEfektivnosti.ReturnValueDatum;
+            var poznamka = this.formKontrolaEfektivnosti.ReturnValuePoznamka;
+            var puvodniDatum = this.formKontrolaEfektivnosti.ReturnValuePuvodniDatum;
             if (this.novyBodAP)
             {
                 if (datumKontrolaEfektivnosti == null)
@@ -610,14 +633,14 @@ namespace LearActionPlans.Views
                 readOnly = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti != null;
             }
 
-            using var form = new FormPriloha(this.novyBodAP, readOnly, attachment, this.cisloRadkyDGVBody);
-            var result = form.ShowDialog();
+            this.formAttachment.CreateFormAttachment(this.novyBodAP, readOnly, attachment, this.cisloRadkyDGVBody);
+            var result = this.formAttachment.ShowDialog();
 
             switch (result)
             {
                 case DialogResult.OK:
                 {
-                    this.DoOkAction(form);
+                    this.DoOkAction(this.formAttachment);
                     break;
                 }
                 case DialogResult.Abort:
@@ -637,7 +660,7 @@ namespace LearActionPlans.Views
             }
         }
 
-        private void DoOkAction(FormPriloha form)
+        private void DoOkAction(FormAttachment form)
         {
             if (this.novyBodAP)
             {
@@ -726,10 +749,8 @@ namespace LearActionPlans.Views
                 return;
             }
 
-            DialogResult dialogResult;
-
-            dialogResult = MessageBox.Show("You want to save your changes.", "Notice", MessageBoxButtons.YesNoCancel,
-                MessageBoxIcon.Information);
+            var dialogResult = MessageBox.Show(@"You want to save your changes.", @"Notice",
+                MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
 
             switch (dialogResult)
             {

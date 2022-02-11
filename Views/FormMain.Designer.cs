@@ -68,7 +68,7 @@ namespace LearActionPlans.Views
             this.ButtonVsechnyBodyAP.TabIndex = 2;
             this.ButtonVsechnyBodyAP.Text = "All AP Points";
             this.ButtonVsechnyBodyAP.UseVisualStyleBackColor = true;
-            this.ButtonVsechnyBodyAP.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonVsechnyBodyAP_MouseClick);
+            this.ButtonVsechnyBodyAP.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonActionPlanPoints_MouseClick);
             // 
             // ButtonSeznamZadosti
             // 
@@ -80,7 +80,7 @@ namespace LearActionPlans.Views
             this.ButtonSeznamZadosti.Text = "List of Requests";
             this.ButtonSeznamZadosti.UseVisualStyleBackColor = true;
             this.ButtonSeznamZadosti.Visible = false;
-            this.ButtonSeznamZadosti.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonSeznamZadosti_MouseClick);
+            this.ButtonSeznamZadosti.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonRequirements_MouseClick);
             // 
             // ButtonAdmin
             // 

@@ -1,27 +1,26 @@
 ﻿using LearActionPlans.DataMappers;
-using LearActionPlans.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace LearActionPlans.Views
 {
     public partial class FormKontrolaEfektivnosti : Form
     {
+        private readonly EffectivityControlRepository effectivityControlRepository;
         public DateTime? ReturnValuePuvodniDatum { get; set; }
         public DateTime? ReturnValueDatum { get; set; }
         public string ReturnValuePoznamka { get; set; }
         public bool ReturnValuePotvrdit { get; set; }
 
-        private readonly int bodAPId_;
-        private readonly bool kontrolaEfektivnosti_;
+        private int bodApId;
+        private bool kontrolaEfektivnosti;
         private bool apUzavren_;
-        private readonly bool novyBodAP_;
+        private bool novyBodAp;
         private bool deadLineZadan_;
 
-        private readonly DateTime? datum_;
+        private DateTime? datum;
 
         private List<GroupBox> groupBoxPuvodniTerminy;
         private List<Label> labelOdstraneno;
@@ -30,42 +29,12 @@ namespace LearActionPlans.Views
         private List<Label> labelPuvodniTerminyDatum;
         private List<RichTextBox> richTextBoxPoznamka;
 
-        public FormKontrolaEfektivnosti(bool novyBodAP, bool apUzavren, bool deadLineZadan, int bodAPId, bool kontrolaEfektivnosti, DateTime? datum)
+        public FormKontrolaEfektivnosti(
+            EffectivityControlRepository effectivityControlRepository)
         {
+            this.effectivityControlRepository = effectivityControlRepository;
+
             this.InitializeComponent();
-            var podminkaDatum = datum == null;
-
-            this.novyBodAP_ = novyBodAP;
-            this.bodAPId_ = bodAPId;
-            this.kontrolaEfektivnosti_ = kontrolaEfektivnosti;
-            this.apUzavren_ = apUzavren;
-            this.deadLineZadan_ = deadLineZadan;
-            this.datum_ = datum;
-            //vlastnikAP_ = vlastnikAP;
-            //vlastnikAkce_ = vlastnikAkce;
-
-            this.dateTimePickerKontrolaEfektivnosti.Value = podminkaDatum ? DateTime.Now : Convert.ToDateTime(datum);
-
-            this.groupBoxPuvodniTerminy = new List<GroupBox>();
-            this.labelOdstraneno = new List<Label>();
-            this.labelOdstranenoDatum = new List<Label>();
-            this.labelPuvodniTerminy = new List<Label>();
-            this.labelPuvodniTerminyDatum = new List<Label>();
-            this.richTextBoxPoznamka = new List<RichTextBox>();
-        }
-
-        private void FormKontrolaEfektivnosti_Load(object sender, EventArgs e)
-        {
-            this.InitFormLoad();
-
-            if (this.novyBodAP_ == true)
-            {
-                this.ButtonNoveDatum.Text = "OK";
-            }
-            else
-            {
-                this.ButtonNoveDatum.Text = "Save";
-            }
         }
 
         private void InitFormLoad()
@@ -74,22 +43,23 @@ namespace LearActionPlans.Views
             this.dateTimePickerKontrolaEfektivnosti.Visible = true;
             this.labelDatumEfektivnosti.Visible = false;
 
-            if (this.kontrolaEfektivnosti_ == true)
+            switch (this.kontrolaEfektivnosti)
             {
-                //datum efektivnosti je zadáno
-                this.labelDatumEfektivnosti.Text = Convert.ToDateTime(this.datum_).ToShortDateString();
-                this.labelDatumEfektivnosti.Visible = true;
-            }
-            if (this.kontrolaEfektivnosti_ == false)
-            {
-                this.labelDatumEfektivnosti.Visible = false;
+                case true:
+                    //datum efektivnosti je zadáno
+                    this.labelDatumEfektivnosti.Text = Convert.ToDateTime(this.datum).ToShortDateString();
+                    this.labelDatumEfektivnosti.Visible = true;
+                    break;
+                case false:
+                    this.labelDatumEfektivnosti.Visible = false;
+                    break;
             }
 
             //efektivita není zadána a AP není uzavřen, deadLine bodu AP je nastaven
             //nemohu jenom odstranit
             if (this.apUzavren_ == false)
             {
-                if (this.deadLineZadan_ == true && this.kontrolaEfektivnosti_ == false)
+                if (this.deadLineZadan_ && this.kontrolaEfektivnosti == false)
                 {
                     this.groupBoxNovaKontrolaEfektivnosti.Visible = true;
                     this.groupBoxOdstranitEfektivitu.Visible = false;
@@ -97,7 +67,7 @@ namespace LearActionPlans.Views
 
                 //efektivita je zadána a bod AP má deadLine
                 //mohu jenom odstranit
-                if (this.kontrolaEfektivnosti_ == true)
+                if (this.kontrolaEfektivnosti)
                 {
                     this.groupBoxNovaKontrolaEfektivnosti.Visible = false;
                     this.groupBoxOdstranitEfektivitu.Location = new Point(20, 80);
@@ -106,42 +76,30 @@ namespace LearActionPlans.Views
             }
 
             //při uzavření AP nebo u bodu AP není zadán deadLine už nemohu editovat
-            if (this.apUzavren_ == true || this.deadLineZadan_ == false)
+            if (this.apUzavren_ || this.deadLineZadan_ == false)
             {
                 this.groupBoxNovaKontrolaEfektivnosti.Visible = false;
                 this.groupBoxOdstranitEfektivitu.Visible = false;
             }
-            //if (FormMain.VlastnikAP == false && FormMain.VlastnikAkce == false)
-            //{
-            //    //nezobrazí se nic
-            //    groupBoxNovaKontrolaEfektivnosti.Visible = false;
-            //    groupBoxOdstranitEfektivitu.Visible = false;
-
-            //    //ButtonOk.Visible = false;
-            //    //ButtonNoveDatum.Visible = false;
-            //    //ButtonOdstranitDatum.Visible = false;
-            //    //richTextBoxPoznamkaOdstranitDatum.Visible = false;
-            //    //dateTimePickerKontrolaEfektivnosti.Visible = false;
-            //}
 
             this.panelPuvodniDatumy.HorizontalScroll.Enabled = false;
             this.panelPuvodniDatumy.HorizontalScroll.Visible = false;
             this.panelPuvodniDatumy.HorizontalScroll.Maximum = 0;
 
             //zobrazení původních termínů kontrol efektivity
-            var efektivita = KontrolaEfektivnostiViewModel.PuvodniTerminyEfektivnost(Convert.ToInt32(this.bodAPId_)).ToList();
+            var efektivita = this.effectivityControlRepository.GetKontrolaEfektivnostiBodAPId(Convert.ToInt32(this.bodApId));
 
             var i = 0;
             foreach (var ef in efektivita)
             {
-                this.groupBoxPuvodniTerminy.Add(new GroupBox()
+                this.groupBoxPuvodniTerminy.Add(new GroupBox
                 {
                     Name = "groupBoxPuvodniTerminy" + i + 1,
                     Location = new Point(10, 10 + (i * 130)),
                     Size = new Size(420, 130),
-                    Text = (i + 1).ToString() + ". term",
+                    Text = $@"{i + 1}. term"
                 });
-                this.labelPuvodniTerminy.Add(new Label()
+                this.labelPuvodniTerminy.Add(new Label
                 {
                     Name = "labelPuvodniTerminy" + i + 1,
                     Location = new Point(10, 20),
@@ -149,7 +107,7 @@ namespace LearActionPlans.Views
                     Text = @"The original date",
                     ForeColor = Color.Black
                 });
-                this.labelPuvodniTerminyDatum.Add(new Label()
+                this.labelPuvodniTerminyDatum.Add(new Label
                 {
                     Name = "labelPuvodniTerminyDatum" + i + 1,
                     Location = new Point(10, 40),
@@ -157,7 +115,7 @@ namespace LearActionPlans.Views
                     Text = ef.PuvodniDatum.ToShortDateString(),
                     ForeColor = Color.Black
                 });
-                this.labelOdstraneno.Add(new Label()
+                this.labelOdstraneno.Add(new Label
                 {
                     Name = "labelOdstraneno" + i + 1,
                     Location = new Point(150, 20),
@@ -170,7 +128,7 @@ namespace LearActionPlans.Views
                     Name = "labelOdstranenoDatum" + i + 1,
                     Location = new Point(150, 40),
                     AutoSize = true,
-                    Text = ef.DatumOdstraneni.ToShortDateString(),
+                    Text = ef.OdstranitDatum.ToShortDateString(),
                     ForeColor = Color.Black
                 });
                 this.richTextBoxPoznamka.Add(new RichTextBox()
@@ -202,9 +160,36 @@ namespace LearActionPlans.Views
             this.ReturnValuePotvrdit = false;
         }
 
+        public void CreateFormKontrolaEfektivnosti(bool novyBodAP, bool apUzavren, bool deadLineZadan, int bodAPId, bool kontrolaEfektivnosti, DateTime? datum)
+        {
+            var podminkaDatum = datum == null;
+
+            this.novyBodAp = novyBodAP;
+            this.bodApId = bodAPId;
+            this.kontrolaEfektivnosti = kontrolaEfektivnosti;
+            this.apUzavren_ = apUzavren;
+            this.deadLineZadan_ = deadLineZadan;
+            this.datum = datum;
+
+            this.dateTimePickerKontrolaEfektivnosti.Value = podminkaDatum ? DateTime.Now : Convert.ToDateTime(datum);
+
+            this.groupBoxPuvodniTerminy = new List<GroupBox>();
+            this.labelOdstraneno = new List<Label>();
+            this.labelOdstranenoDatum = new List<Label>();
+            this.labelPuvodniTerminy = new List<Label>();
+            this.labelPuvodniTerminyDatum = new List<Label>();
+            this.richTextBoxPoznamka = new List<RichTextBox>();
+        }
+
+        private void FormKontrolaEfektivnosti_Load(object sender, EventArgs e)
+        {
+            this.InitFormLoad();
+            this.ButtonNoveDatum.Text = this.novyBodAp ? "OK" : "Save";
+        }
+
         private void ButtonNoveDatum_MouseClick(object sender, MouseEventArgs e)
         {
-            var dialogResult = MessageBox.Show("You really want to create effectiveness.", "Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            var dialogResult = MessageBox.Show(@"You really want to create effectiveness.", @"Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
             if (dialogResult == DialogResult.Yes)
             {
@@ -215,9 +200,9 @@ namespace LearActionPlans.Views
                 this.ReturnValuePuvodniDatum = null;
                 this.ReturnValuePoznamka = string.Empty;
 
-                if (this.novyBodAP_ == false)
+                if (this.novyBodAp == false)
                 {
-                    BodAPDataMapper.UpdateKontrolaEfektivity(this.bodAPId_, Convert.ToDateTime(this.dateTimePickerKontrolaEfektivnosti.Value));
+                    BodAPDataMapper.UpdateKontrolaEfektivity(this.bodApId, Convert.ToDateTime(this.dateTimePickerKontrolaEfektivnosti.Value));
                 }
 
                 //znovu načíst hodnoty
@@ -230,38 +215,36 @@ namespace LearActionPlans.Views
 
         private void ButtonOdstranitDatum_MouseClick(object sender, MouseEventArgs e)
         {
-            var dialogResult = MessageBox.Show("You really want to cancel effectiveness.", "Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            var dialogResult = MessageBox.Show(@"You really want to cancel effectiveness.", @"Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
-            if (dialogResult == DialogResult.Yes)
+            if (dialogResult != DialogResult.Yes)
             {
-                if (this.richTextBoxPoznamkaOdstranitDatum.Text == string.Empty)
-                {
-                    MessageBox.Show("You must fill out a note.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    this.labelDatumEfektivnosti.Text = string.Empty;
-                    //ButtonOk.Enabled = true;
+                return;
+            }
 
-                    //ButtonNoveDatum.Visible = true;
-                    this.ButtonOdstranitDatum.Enabled = false;
-                    this.richTextBoxPoznamkaOdstranitDatum.Enabled = false;
+            if (this.richTextBoxPoznamkaOdstranitDatum.Text == string.Empty)
+            {
+                MessageBox.Show(@"You must fill out a note.", @"Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                this.labelDatumEfektivnosti.Text = string.Empty;
+                //ButtonOk.Enabled = true;
 
-                    this.ReturnValueDatum = null;
-                    this.ReturnValuePuvodniDatum = this.dateTimePickerKontrolaEfektivnosti.Value;
-                    this.ReturnValuePoznamka = this.richTextBoxPoznamkaOdstranitDatum.Text;
+                //ButtonNoveDatum.Visible = true;
+                this.ButtonOdstranitDatum.Enabled = false;
+                this.richTextBoxPoznamkaOdstranitDatum.Enabled = false;
 
-                    BodAPDataMapper.RemoveKontrolaEfektivity(this.bodAPId_, this.datum_, this.richTextBoxPoznamkaOdstranitDatum.Text);
+                this.ReturnValueDatum = null;
+                this.ReturnValuePuvodniDatum = this.dateTimePickerKontrolaEfektivnosti.Value;
+                this.ReturnValuePoznamka = this.richTextBoxPoznamkaOdstranitDatum.Text;
 
-                    //vyprázdní panel pro původní efektivitu
-                    //RemoveControls();
+                BodAPDataMapper.RemoveKontrolaEfektivity(this.bodApId, this.datum, this.richTextBoxPoznamkaOdstranitDatum.Text);
 
-                    //znovu načíst hodnoty
-                    //InitFormLoad();
-                    this.ReturnValuePotvrdit = true;
-                    //DialogResult = DialogResult.OK;
-                    this.Close();
-                }
+                //znovu načíst hodnoty
+                //InitFormLoad();
+                this.ReturnValuePotvrdit = true;
+                this.Close();
             }
         }
 
@@ -294,9 +277,6 @@ namespace LearActionPlans.Views
             this.richTextBoxPoznamka = new List<RichTextBox>();
         }
 
-        private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e)
-        {
-            this.Close();
-        }
+        private void ButtonClose_MouseClick(object sender, MouseEventArgs e) => this.Close();
     }
 }

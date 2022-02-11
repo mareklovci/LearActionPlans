@@ -1,7 +1,7 @@
 ﻿
 namespace LearActionPlans.Views
 {
-    partial class FormPriloha
+    partial class FormAttachment
     {
         /// <summary>
         /// Required designer variable.
@@ -36,58 +36,58 @@ namespace LearActionPlans.Views
             this.ButtonPotvrdit = new System.Windows.Forms.Button();
             this.richTextBoxPridanaSlozka = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
-            // 
+            //
             // ButtonOdstranitSlozku
-            // 
+            //
             this.ButtonOdstranitSlozku.Location = new System.Drawing.Point(178, 169);
             this.ButtonOdstranitSlozku.Name = "ButtonOdstranitSlozku";
             this.ButtonOdstranitSlozku.Size = new System.Drawing.Size(110, 30);
             this.ButtonOdstranitSlozku.TabIndex = 0;
             this.ButtonOdstranitSlozku.Text = "Remove folder";
             this.ButtonOdstranitSlozku.UseVisualStyleBackColor = true;
-            this.ButtonOdstranitSlozku.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonOdstranitSlozku_MouseClick);
-            // 
+            this.ButtonOdstranitSlozku.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonDeleteFolder_MouseClick);
+            //
             // ButtonZavrit
-            // 
+            //
             this.ButtonZavrit.Location = new System.Drawing.Point(412, 169);
             this.ButtonZavrit.Name = "ButtonZavrit";
             this.ButtonZavrit.Size = new System.Drawing.Size(110, 30);
             this.ButtonZavrit.TabIndex = 1;
             this.ButtonZavrit.Text = "Close";
             this.ButtonZavrit.UseVisualStyleBackColor = true;
-            this.ButtonZavrit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonZavrit_MouseClick);
-            // 
+            this.ButtonZavrit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonClose_MouseClick);
+            //
             // ButtonPridatSlozku
-            // 
+            //
             this.ButtonPridatSlozku.Location = new System.Drawing.Point(62, 169);
             this.ButtonPridatSlozku.Name = "ButtonPridatSlozku";
             this.ButtonPridatSlozku.Size = new System.Drawing.Size(110, 30);
             this.ButtonPridatSlozku.TabIndex = 3;
             this.ButtonPridatSlozku.Text = "Add folder";
             this.ButtonPridatSlozku.UseVisualStyleBackColor = true;
-            this.ButtonPridatSlozku.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonPridatSlozku_MouseClick);
-            // 
+            this.ButtonPridatSlozku.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonAddFolder_MouseClick);
+            //
             // labelSlozka
-            // 
+            //
             this.labelSlozka.AutoSize = true;
             this.labelSlozka.Location = new System.Drawing.Point(20, 25);
             this.labelSlozka.Name = "labelSlozka";
             this.labelSlozka.Size = new System.Drawing.Size(87, 17);
             this.labelSlozka.TabIndex = 4;
             this.labelSlozka.Text = "Folder name";
-            // 
+            //
             // ButtonPotvrdit
-            // 
+            //
             this.ButtonPotvrdit.Location = new System.Drawing.Point(294, 169);
             this.ButtonPotvrdit.Name = "ButtonPotvrdit";
             this.ButtonPotvrdit.Size = new System.Drawing.Size(110, 30);
             this.ButtonPotvrdit.TabIndex = 5;
             this.ButtonPotvrdit.Text = "OK";
             this.ButtonPotvrdit.UseVisualStyleBackColor = true;
-            this.ButtonPotvrdit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonPotvrdit_MouseClick);
-            // 
+            this.ButtonPotvrdit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonConfirm_MouseClick);
+            //
             // richTextBoxPridanaSlozka
-            // 
+            //
             this.richTextBoxPridanaSlozka.BackColor = System.Drawing.SystemColors.Control;
             this.richTextBoxPridanaSlozka.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.richTextBoxPridanaSlozka.Location = new System.Drawing.Point(23, 45);
@@ -95,9 +95,9 @@ namespace LearActionPlans.Views
             this.richTextBoxPridanaSlozka.Size = new System.Drawing.Size(490, 80);
             this.richTextBoxPridanaSlozka.TabIndex = 6;
             this.richTextBoxPridanaSlozka.Text = "";
-            // 
+            //
             // FormPriloha
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(534, 211);
@@ -111,15 +111,14 @@ namespace LearActionPlans.Views
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(550, 250);
             this.MinimumSize = new System.Drawing.Size(550, 250);
-            this.Name = "FormPriloha";
+            this.Name = "FormAttachment";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Attachment";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPriloha_FormClosing);
-            this.Load += new System.EventHandler(this.FormPriloha_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAttachment_FormClosing);
+            this.Load += new System.EventHandler(this.FormAttachment_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion

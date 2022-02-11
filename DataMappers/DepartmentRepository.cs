@@ -1,25 +1,32 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
 using System.Collections.Generic;
+using System.Linq;
 using LearActionPlans.Models;
+using LearActionPlans.Utilities;
+using Microsoft.Extensions.Options;
 
 namespace LearActionPlans.DataMappers
 {
-    public static class OddeleniDataMapper
+    public class DepartmentRepository
     {
-        private static readonly string ConnectionString =
-            ConfigurationManager.ConnectionStrings["ActionPlansEntity"].ConnectionString;
+        private readonly ConnectionStringsOptions optionsMonitor;
+        private readonly string connectionString;
 
-        public static IEnumerable<Oddeleni> GetOddeleniAll()
+        public DepartmentRepository(IOptionsMonitor<ConnectionStringsOptions> optionsMonitor)
         {
-            using var connection = new SqlConnection(ConnectionString);
+            this.optionsMonitor = optionsMonitor.CurrentValue;
+            this.connectionString = this.optionsMonitor.LearDataAll;
+        }
+
+        public IEnumerable<Oddeleni> GetOddeleniAll()
+        {
+            using var connection = new SqlConnection(this.connectionString);
             connection.Open();
 
             using var command = connection.CreateCommand();
             command.CommandType = CommandType.Text;
 
-            //command.CommandText = $"SELECT akcniPlan_Id, MAX(cisloAP) AS maxCislo FROM AkcniPlany WHERE rok = @rok GROUP BY akcniPlan_Id";
             command.CommandText = $"SELECT * FROM Oddeleni";
 
             var reader = command.ExecuteReader();
@@ -35,16 +42,6 @@ namespace LearActionPlans.DataMappers
             {
                 yield return null;
             }
-
-            //try
-            //{
-            //}
-            //catch (Exception ex)
-            //{
-            //    //MessageBox.Show(ex.ToString());
-            //    //Problém s databází.
-            //    MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //}
         }
 
         private static Oddeleni ConstructOddeleniAll(IDataRecord readerData)
@@ -56,5 +53,21 @@ namespace LearActionPlans.DataMappers
             return new Oddeleni(id, nazev, stavObjektu);
         }
 
+        public IEnumerable<Oddeleni> GetOddeleniOriginallyViewModel()
+        {
+            var oddeleni = this.GetOddeleniAll().ToList();
+
+            var query = oddeleni.OrderBy(o => o.Nazev).ToList();
+
+            if (!query.Any())
+            {
+                yield break;
+            }
+
+            foreach (var q in query)
+            {
+                yield return q;
+            }
+        }
     }
 }

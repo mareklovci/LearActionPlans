@@ -8,13 +8,18 @@ namespace LearActionPlans.Views
     {
         private readonly ArgumentOptions argumentOptions;
 
-        private readonly FormPrehledAP formActionPlanOverview;
+        private readonly FormPrehledAp formActionPlanOverview;
         private readonly FormNovyAkcniPlan formNewActionPlan;
         private readonly FormAdmin formAdmin;
+        private readonly FormVsechnyBodyAP formActionPlanPoints;
+        private readonly FormSeznamPozadavku formRequirements;
 
         public FormMain(ArgumentOptions argumentOptions,
-            FormPrehledAP formActionPlanOverview,
-            FormNovyAkcniPlan formNewActionPlan, FormAdmin formAdmin)
+            FormPrehledAp formActionPlanOverview,
+            FormNovyAkcniPlan formNewActionPlan,
+            FormAdmin formAdmin,
+            FormVsechnyBodyAP formActionPlanPoints,
+            FormSeznamPozadavku formRequirements)
         {
             // Arguments
             this.argumentOptions = argumentOptions;
@@ -23,6 +28,8 @@ namespace LearActionPlans.Views
             this.formActionPlanOverview = formActionPlanOverview;
             this.formNewActionPlan = formNewActionPlan;
             this.formAdmin = formAdmin;
+            this.formActionPlanPoints = formActionPlanPoints;
+            this.formRequirements = formRequirements;
 
             // Initialize
             this.InitializeComponent();
@@ -44,19 +51,14 @@ namespace LearActionPlans.Views
         private void ButtonFixActionPlan_MouseClick(object sender, MouseEventArgs e) =>
             this.formActionPlanOverview.ShowDialog();
 
-        private void ButtonVsechnyBodyAP_MouseClick(object sender, MouseEventArgs e)
-        {
-            using var form = new FormVsechnyBodyAP();
-            form.ShowDialog();
-        }
+        private void ButtonActionPlanPoints_MouseClick(object sender, MouseEventArgs e) =>
+            this.formActionPlanPoints.ShowDialog();
 
-        private void ButtonSeznamZadosti_MouseClick(object sender, MouseEventArgs e)
-        {
-            using var form = new FormSeznamPozadavku();
-            form.ShowDialog();
-        }
+        private void ButtonRequirements_MouseClick(object sender, MouseEventArgs e) =>
+            this.formRequirements.ShowDialog();
 
-        private void ButtonAdmin_MouseClick(object sender, MouseEventArgs e) => this.formAdmin.ShowDialog();
+        private void ButtonAdmin_MouseClick(object sender, MouseEventArgs e) =>
+            this.formAdmin.ShowDialog();
 
         private void ButtonLogin_MouseClick(object sender, MouseEventArgs e) { }
     }

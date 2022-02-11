@@ -31,26 +31,6 @@ namespace LearActionPlans.ViewModels
             return actionPlanViewModel;
         }
 
-        public static IEnumerable<NewActionPlanViewModel> GetEmployees()
-        {
-            var employees = EmployeeRepository.GetZamestnanciAll().ToList();
-
-            var query = employees.Where(z => z.StavObjektu == 1)
-                .OrderBy(z => z.Prijmeni)
-                .ThenBy(z => z.Jmeno)
-                .Select(z => Employee(z.Id, z.Prijmeni + " " + z.Jmeno)).ToList();
-
-            if (!query.Any())
-            {
-                yield break;
-            }
-
-            foreach (var q in query)
-            {
-                yield return q;
-            }
-        }
-
         public static IEnumerable<NewActionPlanViewModel> GetProjects()
         {
             var projects = ProjektyDataMapper.GetProjektyAll().ToList();

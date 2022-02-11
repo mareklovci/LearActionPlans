@@ -1,7 +1,7 @@
 ﻿
 namespace LearActionPlans.Views
 {
-    partial class FormPrehledAP
+    partial class FormPrehledAp
     {
         /// <summary>
         /// Required designer variable.
@@ -75,7 +75,7 @@ namespace LearActionPlans.Views
             this.ButtonZavrit.TabIndex = 3;
             this.ButtonZavrit.Text = "Close";
             this.ButtonZavrit.UseVisualStyleBackColor = true;
-            this.ButtonZavrit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonZavrit_MouseClick);
+            this.ButtonZavrit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonClose_MouseClick);
             // 
             // ComboBoxRoky
             // 
@@ -242,7 +242,7 @@ namespace LearActionPlans.Views
             this.Controls.Add(this.DataGridViewAP);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.MinimumSize = new System.Drawing.Size(1350, 800);
-            this.Name = "FormPrehledAP";
+            this.Name = "FormPrehledAp";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Action plans";

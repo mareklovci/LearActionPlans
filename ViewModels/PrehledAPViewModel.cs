@@ -26,26 +26,11 @@ namespace LearActionPlans.ViewModels
         public byte StavObjektu { get; set; }
         public DateTime? DatumUzavreni { get; set; }
 
-        //bodAP
-        public int BodAPId { get; set; }
-
-        //Akce
-        public int AkceAPId { get; set; }
-        public int Zadavatel1IdAkce { get; set; }
-        public int? Zadavatel2IdAkce { get; set; }
-
 
         public PrehledAPViewModel(int zad2Id, string zadavatel2Jmeno)
         {
             this.Zadavatel2Id = zad2Id;
             this.Zadavatel2 = zadavatel2Jmeno;
-        }
-
-        public PrehledAPViewModel(int akceAPId, int zadavatel1IdAkce, int? zadavatel2IdAkce)
-        {
-            this.AkceAPId = akceAPId;
-            this.Zadavatel1IdAkce = zadavatel1IdAkce;
-            this.Zadavatel2IdAkce = zadavatel2IdAkce;
         }
 
         public PrehledAPViewModel(int id, DateTime datumZalozeni, int cisloAP, int zadavatel1Id, int? zadavatel2Id,
@@ -102,26 +87,6 @@ namespace LearActionPlans.ViewModels
 
             var query = from zam in zamestnanci
                         select new PrehledAPViewModel(zam.Id, zam.Prijmeni + " " + zam.Jmeno);
-
-            foreach (var q in query)
-            {
-                yield return q;
-            }
-        }
-
-        public PrehledAPViewModel(int bodAPId) => this.BodAPId = bodAPId;
-
-        public static IEnumerable<PrehledAPViewModel> GetBodyAPId(int idAP)
-        {
-            var bodyAP = BodAPDataMapper.GetBodyIdAP(idAP).ToList();
-
-            if (!bodyAP.Any())
-            {
-                yield break;
-            }
-
-            var query = from b in bodyAP
-                        select new PrehledAPViewModel(b.Id);
 
             foreach (var q in query)
             {

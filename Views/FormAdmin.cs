@@ -1,28 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
-
 using LearActionPlans.DataMappers;
-using LearActionPlans.ViewModels;
+using LearActionPlans.Models;
 
 namespace LearActionPlans.Views
 {
     public partial class FormAdmin : Form
     {
         private readonly EmployeeRepository employeeRepository;
+        private readonly DepartmentRepository departmentRepository;
 
-        protected IList<Emploee> itemsEmploee = new BindingList<Emploee>();
-
-        private Emploee selectedZamestnanec = null;
+        private Emploee selectedZamestnanec;
         private Oddeleni selectedOddeleni = null;
 
         private bool oldAdmin;
 
-        public FormAdmin(EmployeeRepository employeeRepository)
+        public FormAdmin(
+            EmployeeRepository employeeRepository,
+            DepartmentRepository departmentRepository)
         {
             this.employeeRepository = employeeRepository;
+            this.departmentRepository = departmentRepository;
 
             this.InitializeComponent();
 
@@ -32,8 +32,8 @@ namespace LearActionPlans.Views
 
         private void FormAdmin_Load(object sender, EventArgs e)
         {
-            //init zaměstnanci
             this.NaplnitComboBoxZamestnanci();
+
             if (this.RadioButtonNovyZamestnanec.Checked)
             {
                 this.labelSeznamZamestnancu.Enabled = false;
@@ -46,14 +46,12 @@ namespace LearActionPlans.Views
             }
 
             this.NaplnitComboBoxOddeleni();
-
-            //init zaměstnanci
         }
 
         public class Oddeleni
         {
-            public int OddeleniId { get; set; }
-            public string Nazev { get; set; }
+            private int OddeleniId { get; }
+            private string Nazev { get; }
 
             public Oddeleni(int oddeleniId, string nazev)
             {
@@ -62,130 +60,90 @@ namespace LearActionPlans.Views
             }
         }
 
-        public class Emploee
+        private void NaplnitComboBoxOddeleni()
         {
-            public string CeleJmeno { get; set; }
-            public string Jmeno { get; set; }
-            public string Prijmeni { get; set; }
-            public int ZamestnanecId { get; set; }
-            public string Email { get; set; }
-            public string Login { get; set; }
-            public bool AdminAP { get; set; }
-            public int OddeleniId { get; set; }
-            public byte StavObjektu { get; set; }
-
-            public Emploee(string celeJmeno, string jmeno, string  prijmeni, int zamestnanecId, string login, string email, bool adminAP, int oddeleniId, byte stavObjektu)
-            {
-                this.CeleJmeno = celeJmeno;
-                this.Jmeno = jmeno;
-                this.Prijmeni = prijmeni;
-                this.ZamestnanecId = zamestnanecId;
-                this.Login = login;
-                this.Email = email;
-                this.AdminAP = adminAP;
-                this.OddeleniId = oddeleniId;
-                this.StavObjektu = stavObjektu;
-            }
-        }
-
-        private bool NaplnitComboBoxOddeleni()
-        {
-            var oddeleni = AdminViewModel.GetOddeleni().ToList();
+            var oddeleni = this.departmentRepository.GetOddeleniOriginallyViewModel().ToList();
 
             if (oddeleni.Count == 0)
             {
-                return false;
+                return;
             }
-            else
-            {
-                var odd = new List<Oddeleni>
-                {
-                    new Oddeleni(0, "(select department)")
-                };
 
-                foreach (var o in oddeleni)
-                {
-                    odd.Add(new Oddeleni(o.OddeleniId, o.NazevOddeleni));
-                }
+            var odd = new List<Oddeleni> {new Oddeleni(0, "(select department)")};
+            odd.AddRange(oddeleni.Select(o => new Oddeleni(o.Id, o.Nazev)));
 
-                this.comboBoxOddeleniZamestnanci.DataSource = odd;
-                this.comboBoxOddeleniZamestnanci.DisplayMember = "Nazev";
-                this.comboBoxOddeleniZamestnanci.ValueMember = "OddeleniId";
-                this.comboBoxOddeleniZamestnanci.SelectedIndex = 0;
-                return true;
-            }
+            this.comboBoxOddeleniZamestnanci.DataSource = odd;
+            this.comboBoxOddeleniZamestnanci.DisplayMember = "Nazev";
+            this.comboBoxOddeleniZamestnanci.ValueMember = "OddeleniId";
+            this.comboBoxOddeleniZamestnanci.SelectedIndex = 0;
         }
 
-        private bool NaplnitComboBoxZamestnanci()
+        private void NaplnitComboBoxZamestnanci()
         {
-            var zamestnanci = AdminViewModel.GetZamestnanci().ToList();
+            var zamestnanci = this.employeeRepository.GetEmployeesOriginalViewModel().ToList();
 
             if (zamestnanci.Count == 0)
             {
-                return false;
+                return;
             }
-            else
-            {
-                var zam = new List<Emploee>
-                {
-                    new Emploee("(select employee)", null, null, 0, null, null, false, 0, 0)
-                };
 
-                foreach (var z in zamestnanci)
-                {
-                    zam.Add(new Emploee(z.Prijmeni + " " + z.Jmeno, z.Jmeno, z.Prijmeni, z.ZamestnanecId, z.Login, z.Email, z.AdminAP, z.OddeleniId, z.StavObjektu));
-                }
+            var zam = new List<Emploee> {new Emploee("(select employee)", null, null, 0, null, null, false, 0, 0)};
 
-                this.ComboBoxZamestnanci.DataSource = zam;
-                this.ComboBoxZamestnanci.DisplayMember = "CeleJmeno";
-                this.ComboBoxZamestnanci.ValueMember = "ZamestnanecId";
-                this.ComboBoxZamestnanci.SelectedIndex = 0;
-                return true;
-            }
+            zam.AddRange(zamestnanci.Select(z => new Emploee(z.Prijmeni + " " + z.Jmeno, z.Jmeno, z.Prijmeni,
+                z.Id, z.PrihlasovaciJmeno, z.Email, z.AdminAP, z.OddeleniId, z.StavObjektu)));
+
+            this.ComboBoxZamestnanci.DataSource = zam;
+            this.ComboBoxZamestnanci.DisplayMember = "CeleJmeno";
+            this.ComboBoxZamestnanci.ValueMember = "ZamestnanecId";
+            this.ComboBoxZamestnanci.SelectedIndex = 0;
         }
 
         private void RadioButtonNovyZamestnanec_CheckedChanged(object sender, EventArgs e)
         {
-            if (this.RadioButtonNovyZamestnanec.Checked == true)
+            if (!this.RadioButtonNovyZamestnanec.Checked)
             {
-                this.labelSeznamZamestnancu.Enabled = false;
-                this.ComboBoxZamestnanci.SelectedValue = 0;
-                this.ComboBoxZamestnanci.Enabled = false;
-                this.comboBoxOddeleniZamestnanci.SelectedValue = 0;
-
-                this.radioButtonAktivni.Checked = false;
-                this.radioButtonNeaktivni.Checked = false;
-                this.radioButtonOdstranen.Checked = false;
-
-                this.checkBoxAdmin.Checked = false;
-
-                this.textBoxKrestniJmeno.Text = string.Empty;
-                this.textBoxPrijmeni.Text = string.Empty;
-                this.textBoxLogin.Text = string.Empty;
-                this.textBoxEmail.Text = string.Empty;
+                return;
             }
+
+            this.labelSeznamZamestnancu.Enabled = false;
+            this.ComboBoxZamestnanci.SelectedValue = 0;
+            this.ComboBoxZamestnanci.Enabled = false;
+            this.comboBoxOddeleniZamestnanci.SelectedValue = 0;
+
+            this.radioButtonAktivni.Checked = false;
+            this.radioButtonNeaktivni.Checked = false;
+            this.radioButtonOdstranen.Checked = false;
+
+            this.checkBoxAdmin.Checked = false;
+
+            this.textBoxKrestniJmeno.Text = string.Empty;
+            this.textBoxPrijmeni.Text = string.Empty;
+            this.textBoxLogin.Text = string.Empty;
+            this.textBoxEmail.Text = string.Empty;
         }
 
         private void RadioButtonAktualizaceZamestnance_CheckedChanged(object sender, EventArgs e)
         {
-            if (this.RadioButtonAktualizaceZamestnance.Checked == true)
+            if (!this.RadioButtonAktualizaceZamestnance.Checked)
             {
-                this.labelSeznamZamestnancu.Enabled = true;
-                this.ComboBoxZamestnanci.SelectedValue = 0;
-                this.ComboBoxZamestnanci.Enabled = true;
-                this.comboBoxOddeleniZamestnanci.SelectedValue = 0;
-
-                this.radioButtonAktivni.Checked = false;
-                this.radioButtonNeaktivni.Checked = false;
-                this.radioButtonOdstranen.Checked = false;
-
-                this.checkBoxAdmin.Checked = false;
-
-                this.textBoxKrestniJmeno.Text = string.Empty;
-                this.textBoxPrijmeni.Text = string.Empty;
-                this.textBoxLogin.Text = string.Empty;
-                this.textBoxEmail.Text = string.Empty;
+                return;
             }
+
+            this.labelSeznamZamestnancu.Enabled = true;
+            this.ComboBoxZamestnanci.SelectedValue = 0;
+            this.ComboBoxZamestnanci.Enabled = true;
+            this.comboBoxOddeleniZamestnanci.SelectedValue = 0;
+
+            this.radioButtonAktivni.Checked = false;
+            this.radioButtonNeaktivni.Checked = false;
+            this.radioButtonOdstranen.Checked = false;
+
+            this.checkBoxAdmin.Checked = false;
+
+            this.textBoxKrestniJmeno.Text = string.Empty;
+            this.textBoxPrijmeni.Text = string.Empty;
+            this.textBoxLogin.Text = string.Empty;
+            this.textBoxEmail.Text = string.Empty;
         }
 
         private void ComboBoxZamestnanci_SelectedIndexChanged(object sender, EventArgs e)
@@ -214,42 +172,31 @@ namespace LearActionPlans.Views
                     this.oldAdmin = true;
                 }
 
-                if (this.selectedZamestnanec.StavObjektu == 0)
+                switch (this.selectedZamestnanec.StavObjektu)
                 {
-                    this.radioButtonAktivni.Checked = false;
-                    this.radioButtonNeaktivni.Checked = false;
-                    this.radioButtonOdstranen.Checked = false;
-                }
-                else if (this.selectedZamestnanec.StavObjektu == 1)
-                {
-                    this.radioButtonAktivni.Checked = true;
-                    this.radioButtonNeaktivni.Checked = false;
-                    this.radioButtonOdstranen.Checked = false;
-                }
-                else if (this.selectedZamestnanec.StavObjektu == 2)
-                {
-                    this.radioButtonAktivni.Checked = false;
-                    this.radioButtonNeaktivni.Checked = true;
-                    this.radioButtonOdstranen.Checked = false;
-                }
-                else if (this.selectedZamestnanec.StavObjektu == 3)
-                {
-                    this.radioButtonAktivni.Checked = false;
-                    this.radioButtonNeaktivni.Checked = false;
-                    this.radioButtonOdstranen.Checked = true;
+                    case 0:
+                        this.radioButtonAktivni.Checked = false;
+                        this.radioButtonNeaktivni.Checked = false;
+                        this.radioButtonOdstranen.Checked = false;
+                        break;
+                    case 1:
+                        this.radioButtonAktivni.Checked = true;
+                        this.radioButtonNeaktivni.Checked = false;
+                        this.radioButtonOdstranen.Checked = false;
+                        break;
+                    case 2:
+                        this.radioButtonAktivni.Checked = false;
+                        this.radioButtonNeaktivni.Checked = true;
+                        this.radioButtonOdstranen.Checked = false;
+                        break;
+                    case 3:
+                        this.radioButtonAktivni.Checked = false;
+                        this.radioButtonNeaktivni.Checked = false;
+                        this.radioButtonOdstranen.Checked = true;
+                        break;
                 }
 
                 this.comboBoxOddeleniZamestnanci.SelectedValue = this.selectedZamestnanec.OddeleniId;
-                //if (combo.SelectedIndex == 0)
-                //{
-                //    emailDopravce1 = null;
-                //    emailDopravce = false;
-                //}
-                //else
-                //{
-                //    emailDopravce1 = selectedDopravce.Email1.ToString();
-                //    emailDopravce = true;
-                //}
             }
         }
 
@@ -259,32 +206,39 @@ namespace LearActionPlans.Views
 
             if (this.textBoxKrestniJmeno.Text == string.Empty)
             {
-                MessageBox.Show("You must fill in the item 'First nam'.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(@"You must fill in the item 'First name'.", @"Notice", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
                 ulozit = false;
             }
             else if (this.textBoxPrijmeni.Text == string.Empty)
             {
-                MessageBox.Show("You must fill in the item 'Last name'.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(@"You must fill in the item 'Last name'.", @"Notice", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
                 ulozit = false;
             }
             else if (this.textBoxLogin.Text == string.Empty)
             {
-                MessageBox.Show("You must fill in the item 'Login name'.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(@"You must fill in the item 'Login name'.", @"Notice", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
                 ulozit = false;
             }
             else if (this.textBoxEmail.Text == string.Empty)
             {
-                MessageBox.Show("You must fill in the item 'Email'.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(@"You must fill in the item 'Email'.", @"Notice", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
                 ulozit = false;
             }
-            else if (this.radioButtonAktivni.Checked == false && this.radioButtonNeaktivni.Checked == false && this.radioButtonOdstranen.Checked == false)
+            else if (this.radioButtonAktivni.Checked == false && this.radioButtonNeaktivni.Checked == false &&
+                     this.radioButtonOdstranen.Checked == false)
             {
-                MessageBox.Show("You must fill in the item 'State'.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(@"You must fill in the item 'State'.", @"Notice", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
                 ulozit = false;
             }
             else if (Convert.ToInt16(this.comboBoxOddeleniZamestnanci.SelectedValue) == 0)
             {
-                MessageBox.Show("You must fill in the item 'Department'.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(@"You must fill in the item 'Department'.", @"Notice", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
                 ulozit = false;
             }
             else
@@ -299,91 +253,104 @@ namespace LearActionPlans.Views
         {
             byte stav = 0;
 
-            if (this.KontrolaZamestnance() == false) { }
+            if (!this.KontrolaZamestnance())
+            {
+                return;
+            }
+
+            var pokracovat = true;
+
+            if (((this.radioButtonNeaktivni.Checked || this.radioButtonOdstranen.Checked) && this.oldAdmin) ||
+                (this.checkBoxAdmin.Checked == false && this.oldAdmin))
+            {
+                //pokud nyní bude v databázi jeden admin, nemohu ho odebrat, protože je jediný
+                var pocetAdmin = this.employeeRepository.GetPocetAdmin();
+
+                if (pocetAdmin.Count() <= 1)
+                {
+                    //nelze odstranit admina, protože je poslední
+                    // Vybraný zaměstnanec je poslední admin.
+                    // Nejdřív vytvořte nového.
+                    MessageBox.Show(
+                        @"The selected employee is the last admin." + (char)10 + @"Create a new one first.", @"Notice",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    pokracovat = false;
+                }
+            }
+
+            //nejdřív kontrola, jestli ukládám nového zaměstnance, který již v databázi existuje
+            //kontrola login name
+            if (!pokracovat)
+            {
+                return;
+            }
+
+            if (this.employeeRepository.VybranyZamestnanec(this.textBoxLogin.Text) == false)
+            {
+                MessageBox.Show(@"The new employee already exists.", @"Notice", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
             else
             {
-                var pokracovat = true;
-                if (((this.radioButtonNeaktivni.Checked == true || this.radioButtonOdstranen.Checked == true) && this.oldAdmin == true) || (this.checkBoxAdmin.Checked == false && this.oldAdmin == true))
+                if (this.radioButtonAktivni.Checked)
                 {
-                    //pokud nyní bude v databázi jeden admin, nemohu ho odebrat, protože je jediný
-                    var pocetAdmin = AdminViewModel.GetPocetAdmin();
-
-                    if (pocetAdmin.Count() <= 1)
-                    {
-                        //nelze odstranit admina, protože je poslední
-                        // Vybraný zaměstnanec je poslední admin.
-                        // Nejdřív vytvořte nového.
-                        MessageBox.Show("The selected employee is the last admin." + (char)10 + "Create a new one first.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        pokracovat = false;
-                    }
+                    stav = 1;
                 }
-                //nejdřív kontrola, jestli ukládám nového zaměstnance, který již v databázi existuje
-                //kontrola login name
-                if (pokracovat == true)
+
+                if (this.radioButtonNeaktivni.Checked)
                 {
-                    if (AdminViewModel.VybranyZamestnanec(this.textBoxLogin.Text) == false)
-                    {
-                        MessageBox.Show("The new employee already exists.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    else
-                    {
-                        if (this.radioButtonAktivni.Checked == true)
-                        {
-                            stav = 1;
-                        }
-
-                        if (this.radioButtonNeaktivni.Checked == true)
-                        {
-                            stav = 2;
-                        }
-
-                        if (this.radioButtonOdstranen.Checked == true)
-                        {
-                            stav = 3;
-                        }
-
-                        if (this.RadioButtonNovyZamestnanec.Checked == true)
-                        {
-                            this.employeeRepository.InsertZamestnanec(this.textBoxKrestniJmeno.Text, this.textBoxPrijmeni.Text, this.textBoxLogin.Text,
-                                Convert.ToInt32(this.comboBoxOddeleniZamestnanci.SelectedValue), this.textBoxEmail.Text, this.checkBoxAdmin.Checked,
-                                stav
-                                );
-
-                            MessageBox.Show("A new employee has been saved.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        if (this.RadioButtonAktualizaceZamestnance.Checked == true)
-                        {
-                            this.employeeRepository.UpdateZamestnanec(this.selectedZamestnanec.ZamestnanecId, this.textBoxKrestniJmeno.Text, this.textBoxPrijmeni.Text, this.textBoxLogin.Text,
-                                Convert.ToInt32(this.comboBoxOddeleniZamestnanci.SelectedValue), this.textBoxEmail.Text, this.checkBoxAdmin.Checked,
-                                stav
-                                );
-
-                            MessageBox.Show("The selected employee has been saved.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-
-                        this.NaplnitComboBoxZamestnanci();
-
-                        this.ComboBoxZamestnanci.SelectedValue = 0;
-                        this.comboBoxOddeleniZamestnanci.SelectedValue = 0;
-
-                        this.radioButtonAktivni.Checked = false;
-                        this.radioButtonNeaktivni.Checked = false;
-                        this.radioButtonOdstranen.Checked = false;
-
-                        this.checkBoxAdmin.Checked = false;
-
-                        this.textBoxKrestniJmeno.Text = string.Empty;
-                        this.textBoxPrijmeni.Text = string.Empty;
-                        this.textBoxLogin.Text = string.Empty;
-                        this.textBoxEmail.Text = string.Empty;
-                    }
+                    stav = 2;
                 }
+
+                if (this.radioButtonOdstranen.Checked)
+                {
+                    stav = 3;
+                }
+
+                if (this.RadioButtonNovyZamestnanec.Checked)
+                {
+                    this.employeeRepository.InsertZamestnanec(this.textBoxKrestniJmeno.Text,
+                        this.textBoxPrijmeni.Text, this.textBoxLogin.Text,
+                        Convert.ToInt32(this.comboBoxOddeleniZamestnanci.SelectedValue), this.textBoxEmail.Text,
+                        this.checkBoxAdmin.Checked,
+                        stav
+                    );
+
+                    MessageBox.Show(@"A new employee has been saved.", @"Notice", MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+
+                if (this.RadioButtonAktualizaceZamestnance.Checked)
+                {
+                    this.employeeRepository.UpdateZamestnanec(this.selectedZamestnanec.ZamestnanecId,
+                        this.textBoxKrestniJmeno.Text, this.textBoxPrijmeni.Text, this.textBoxLogin.Text,
+                        Convert.ToInt32(this.comboBoxOddeleniZamestnanci.SelectedValue), this.textBoxEmail.Text,
+                        this.checkBoxAdmin.Checked,
+                        stav
+                    );
+
+                    MessageBox.Show(@"The selected employee has been saved.", @"Notice", MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+
+                this.NaplnitComboBoxZamestnanci();
+
+                this.ComboBoxZamestnanci.SelectedValue = 0;
+                this.comboBoxOddeleniZamestnanci.SelectedValue = 0;
+
+                this.radioButtonAktivni.Checked = false;
+                this.radioButtonNeaktivni.Checked = false;
+                this.radioButtonOdstranen.Checked = false;
+
+                this.checkBoxAdmin.Checked = false;
+
+                this.textBoxKrestniJmeno.Text = string.Empty;
+                this.textBoxPrijmeni.Text = string.Empty;
+                this.textBoxLogin.Text = string.Empty;
+                this.textBoxEmail.Text = string.Empty;
             }
         }
 
-        private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e)
-        {
-            this.Close();
-        }
+        private void ButtonClose_MouseClick(object sender, MouseEventArgs e) => this.Close();
     }
 }

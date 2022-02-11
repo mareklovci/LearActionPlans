@@ -18,7 +18,7 @@ namespace LearActionPlans.Views
 
             if (string.IsNullOrWhiteSpace(this.RichTextBoxPopisProblemu.Text))
             {
-                MessageBox.Show("You must fill in the Problem Description field.", "Notice", MessageBoxButtons.OK,
+                MessageBox.Show(@"You must fill in the Problem Description field.", @"Notice", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
                 ulozit = false;
                 //this.RichTextBoxPopisProblemu.BackColor = Color.Yellow;
@@ -33,14 +33,14 @@ namespace LearActionPlans.Views
             if (Convert.ToInt32(this.ComboBoxOdpovednaOsoba1.SelectedValue) == 0)
             {
                 ulozit = false;
-                MessageBox.Show("You must select a responsible employee #1.", "Notice", MessageBoxButtons.OK,
+                MessageBox.Show(@"You must select a responsible employee #1.", @"Notice", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
             }
 
             if (Convert.ToInt32(this.ComboBoxOddeleni.SelectedValue) == 0)
             {
                 ulozit = false;
-                MessageBox.Show("You must select a department.", "Notice", MessageBoxButtons.OK,
+                MessageBox.Show(@"You must select a department.", @"Notice", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
             }
 

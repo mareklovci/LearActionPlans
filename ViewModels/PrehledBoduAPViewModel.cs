@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using LearActionPlans.DataMappers;
-using LearActionPlans.Models;
 
 namespace LearActionPlans.ViewModels
 {
@@ -52,7 +50,7 @@ namespace LearActionPlans.ViewModels
         public string EmailOdpovednyPracovnik { get; set; }
 
 
-        public static PrehledBoduAPViewModel NacistJmenoOdpOsoba2(int odpOsoba2Id, string odpOsoba2Jmeno)
+        private static PrehledBoduAPViewModel NacistJmenoOdpOsoba2(int odpOsoba2Id, string odpOsoba2Jmeno)
         {
             var prehledBoduAPViewModel = new PrehledBoduAPViewModel
             {
@@ -63,7 +61,7 @@ namespace LearActionPlans.ViewModels
             return prehledBoduAPViewModel;
         }
 
-        public static PrehledBoduAPViewModel BodyAP(int id, int idAP, int cisloBoduAP, DateTime datumZalozeni, string odkazNaNormu,
+        private static PrehledBoduAPViewModel BodyAP(int id, int idAP, int cisloBoduAP, DateTime datumZalozeni, string odkazNaNormu,
             string hodnoceniNeshody, string popisProblemu,
             string skutecnaPricinaWM, string napravnaOpatreniWM, string skutecnaPricinaWS, string napravnaOpatreniWS,
             int odpovednaOsoba1Id, int? odpovednaOsoba2Id, string odpovednaOsoba1, DateTime? kontrolaEfektivnosti, int oddeleniId, string oddeleni, string priloha,
@@ -98,7 +96,7 @@ namespace LearActionPlans.ViewModels
             return prehledBoduAPViewModel;
         }
 
-        public static PrehledBoduAPViewModel UkonceniBodAP(int id, int bodAPId, DateTime datumUkonceni, string poznamka, string odpoved, byte stavZadosti, byte stavObjektuUkonceni)
+        private static PrehledBoduAPViewModel UkonceniBodAP(int id, int bodAPId, DateTime datumUkonceni, string poznamka, string odpoved, byte stavZadosti, byte stavObjektuUkonceni)
         {
             var prehledBoduAPViewModel = new PrehledBoduAPViewModel
             {
@@ -114,7 +112,7 @@ namespace LearActionPlans.ViewModels
             return prehledBoduAPViewModel;
         }
 
-        public static PrehledBoduAPViewModel UkonceniAP(int id, DateTime datumUkonceniAP)
+        private static PrehledBoduAPViewModel UkonceniAP(int id, DateTime datumUkonceniAP)
         {
             var prehledBoduAPViewModel = new PrehledBoduAPViewModel
             {
@@ -125,7 +123,7 @@ namespace LearActionPlans.ViewModels
             return prehledBoduAPViewModel;
         }
 
-        public static PrehledBoduAPViewModel OdpovednyPracovnik(string jmeno, string email)
+        private static PrehledBoduAPViewModel OdpovednyPracovnik(string jmeno, string email)
         {
             var prehledBoduAPViewModel = new PrehledBoduAPViewModel
             {
@@ -140,7 +138,7 @@ namespace LearActionPlans.ViewModels
         {
             var bodyAP = BodAPDataMapper.GetBodyIdAP(idAP).ToList();
             var zamestnanci = EmployeeRepository.GetZamestnanciAll().ToList();
-            var oddeleni = OddeleniDataMapper.GetOddeleniAll();
+            var oddeleni = DepartmentRepository.GetOddeleniAll();
 
             if (!bodyAP.Any())
             {

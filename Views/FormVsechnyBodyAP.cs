@@ -15,6 +15,7 @@ namespace LearActionPlans.Views
 {
     public partial class FormVsechnyBodyAP : Form
     {
+        private readonly FormPrehledBoduAP formPrehledBoduAp;
         FormNovyAkcniPlan.AkcniPlanTmp akcniPlany;
 
         private readonly BindingSource bindingSource;
@@ -25,8 +26,10 @@ namespace LearActionPlans.Views
         private string PopisProblemuFiltr;
         private string PricinaFiltr;
 
-        public FormVsechnyBodyAP()
+        public FormVsechnyBodyAP(FormPrehledBoduAP formPrehledBoduAp)
         {
+            this.formPrehledBoduAp = formPrehledBoduAp;
+
             this.InitializeComponent();
             this.bindingSource = new BindingSource();
             this.dtBodyAP = new DataTable();
@@ -220,7 +223,8 @@ namespace LearActionPlans.Views
                         this.akcniPlany.CisloAPRok = cisloAPRok;
                         //tada se ověří uživatel
                         //volat FormOvereniUzivatele
-                        using var form = new FormPrehledBoduAP(true, this.akcniPlany, 2);
+                        using var form = this.formPrehledBoduAp;
+                        form.CreateFormPrehledBoduAP(true, this.akcniPlany, 2);
                         var result = form.ShowDialog();
                         if (result == DialogResult.OK)
                         {

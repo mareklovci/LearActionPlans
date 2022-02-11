@@ -15,6 +15,24 @@ namespace LearActionPlans
         /// <param name="argumentOptions">Arguments to be registered and globally accessible</param>
         private static void ConfigureServices(IServiceCollection services, ArgumentOptions argumentOptions)
         {
+            // Initialize Configuration
+            RegisterOptions(services);
+
+            // Initialize Arguments
+            services.AddSingleton(argumentOptions);
+
+            // Initialize MVVM
+            RegisterForms(services);
+            RegisterRepositories(services);
+            RegisterViewModels(services);
+        }
+
+        /// <summary>
+        /// Register Configuration Options we got from the JSON Settings File
+        /// </summary>
+        /// <param name="services">ServiceCollection</param>
+        private static void RegisterOptions(IServiceCollection services)
+        {
             // Initialize Connection Strings
             var connectionStringsOptions = new ConnectionStringsOptions();
             config.GetSection(ConfigOptions.ConnectionStrings).Bind(connectionStringsOptions);
@@ -31,19 +49,8 @@ namespace LearActionPlans
             var privilegesOptions = new PrivilegesOptions();
             config.GetSection(ConfigOptions.Privileges).Bind(privilegesOptions);
 
-            // Initialize Configuration
-            services.AddSingleton(connectionStringsOptions);
-            services.AddSingleton(componentsOptions);
-            services.AddSingleton(smtpOptions);
-            services.AddSingleton(privilegesOptions);
-
-            // Initialize Arguments
-            services.AddSingleton(argumentOptions);
-
-            // Initialize MVVM
-            RegisterForms(services);
-            RegisterRepositories(services);
-            RegisterViewModels(services);
+            // Add options into the services
+            services.AddOptions();
         }
 
         private static void RegisterForms(IServiceCollection services)
@@ -68,6 +75,7 @@ namespace LearActionPlans
             services.AddSingleton<ActionRepository>();
             services.AddSingleton<EmployeeRepository>();
             services.AddSingleton<DepartmentRepository>();
+            services.AddSingleton<EffectivityControlRepository>();
         }
 
         private static void RegisterViewModels(IServiceCollection services)

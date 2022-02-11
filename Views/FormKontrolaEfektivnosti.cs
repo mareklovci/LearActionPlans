@@ -1,4 +1,4 @@
-﻿using LearActionPlans.DataMappers;
+using LearActionPlans.DataMappers;
 using LearActionPlans.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -60,7 +60,18 @@ namespace LearActionPlans.Views
 
             if (this.novyBodAP_ == true)
             {
+                if (this.datum_ == null)
+                {
+                    this.dateTimePickerKontrolaEfektivnosti.Value = DateTime.Now;
+                }
+                else
+                {
+                    // při vytváření nového bodu si musím pamatovat původně zadané datum efektivnosti
+                    this.dateTimePickerKontrolaEfektivnosti.Value = Convert.ToDateTime(this.datum_);
+                }
+
                 this.ButtonNoveDatum.Text = "OK";
+
             }
             else
             {

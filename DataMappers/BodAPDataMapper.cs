@@ -27,6 +27,11 @@ namespace LearActionPlans.DataMappers
 
             var reader = command.ExecuteReader();
 
+            if (!reader.HasRows)
+            {
+                yield break;
+            }
+
             if (reader.HasRows)
             {
                 while (reader.Read())

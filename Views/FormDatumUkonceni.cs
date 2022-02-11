@@ -1,11 +1,5 @@
 using System;
-using System.Data;
-using System.Linq;
-using System.Net;
-using System.Net.Mail;
 using System.Windows.Forms;
-
-using LearActionPlans.ViewModels;
 
 namespace LearActionPlans.Views
 {

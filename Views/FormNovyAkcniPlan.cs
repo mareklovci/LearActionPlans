@@ -24,6 +24,8 @@ namespace LearActionPlans.Views
         private bool zakaznikPovolen;
 
         private bool ulozeniDat;
+
+        private int APId;
         public class AkcniPlanTmp
         {
             public int Id { get; set; }
@@ -58,6 +60,8 @@ namespace LearActionPlans.Views
             this.zakaznikPovolen = false;
 
             this.ButtonUlozit.Enabled = false;
+
+            this.APId = 0;
         }
 
         private void FormNovyAkcniPlan_Load(object sender, EventArgs e)
@@ -65,12 +69,25 @@ namespace LearActionPlans.Views
             //tady zjistím poslední obsazené číslo Akčního plánu
             this.posledniCisloAP = NewActionPlanViewModel.GetLastActionPlanNumber(DateTime.Now.Year);
             //když bude posledniCisloAP = -1, došlo k problému při práci s databází a zadání AP se ukončí
+            if (this.posledniCisloAP == 0)
+            {
+                // založení nového AP v novém roce
+                this.posledniCisloAP = 1;
+                this.APId = AkcniPlanyDataMapper.InsertNewAP(this.posledniCisloAP);
+            }
+            if (this.posledniCisloAP > 0)
+            {
+                this.posledniCisloAP++;
+                this.APId = AkcniPlanyDataMapper.InsertNewAP(this.posledniCisloAP);
+            }
             if (this.posledniCisloAP == -1)
             {
+                // došlo k chybě při zjištění posledního číslo AP
+                // program bude ukončen
+                MessageBox.Show("The program will finish.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
 
-            //posledniCisloAP++;
             this.labelCisloAPVygenerovat.Text = this.posledniCisloAP.ToString("D3") + " / " + DateTime.Now.Year.ToString();
             this.akcniPlan.CisloAPRok = this.labelCisloAPVygenerovat.Text;
 

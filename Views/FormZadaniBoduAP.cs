@@ -16,6 +16,7 @@ namespace LearActionPlans.Views
         private DataTable dtActionsWS;
 
         private bool novyBodAP;
+        private bool bodAPUlozen;
 
         private int cisloRadkyDGVBody;
 
@@ -43,6 +44,7 @@ namespace LearActionPlans.Views
 
             this.cisloRadkyDGVBody = cisloRadkyDGV;
             this.novyBodAP = novyBod;
+            this.bodAPUlozen = false;
 
             this.kontrolaEfektivnostiDatum = null;
             this.priloha = string.Empty;
@@ -238,7 +240,8 @@ namespace LearActionPlans.Views
                 this.RichTextBoxPopisProblemu.Text = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].PopisProblemu;
                 this.ComboBoxOdpovednaOsoba1.SelectedValue =
                     FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OdpovednaOsoba1Id;
-                if (FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OdpovednaOsoba2Id == null) { }
+                if (FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OdpovednaOsoba2Id == null)
+                { }
                 else
                 {
                     this.ComboBoxOdpovednaOsoba2.SelectedValue =
@@ -247,7 +250,8 @@ namespace LearActionPlans.Views
 
                 this.ComboBoxOddeleni.SelectedValue = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OddeleniId;
 
-                if (FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Priloha == null) { }
+                if (FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Priloha == null)
+                { }
 
                 this.labelDatumUkonceni.Text = string.Empty;
                 this.labelEfektivita.Text = string.Empty;
@@ -282,13 +286,25 @@ namespace LearActionPlans.Views
                     }
                 }
 
-                if (FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti == null) { }
+                if (this.deadLineZadan == false)
+                {
+                    this.ButtonKontrolaEfektivnosti.Enabled = false;
+                }
                 else
                 {
-                    this.labelEfektivita.Text = Convert
-                        .ToDateTime(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti)
-                        .ToShortDateString();
-                    this.ZablokovatPole();
+                    if (FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti == null)
+                    {
+                        this.ButtonKontrolaEfektivnosti.Enabled = true;
+                    }
+                    else
+                    {
+                        this.ButtonKontrolaEfektivnosti.Enabled = true;
+                        this.labelEfektivita.Text = Convert
+                            .ToDateTime(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti)
+                            .ToShortDateString();
+                        this.kontrolaEfektivnostiDatum = Convert.ToDateTime(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti);
+                        this.ZablokovatPole();
+                    }
                 }
 
                 this.RichTextBoxSkutecnaPricinaWM.Text =
@@ -299,6 +315,10 @@ namespace LearActionPlans.Views
                     FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].SkutecnaPricinaWS;
                 this.RichTextBoxNapravnaOpatreniWS.Text =
                     FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].NapravnaOpatreniWS;
+            }
+            else
+            {
+                this.ButtonKontrolaEfektivnosti.Enabled = false;
             }
 
 
@@ -311,6 +331,7 @@ namespace LearActionPlans.Views
             this.UlozitBodAP();
             this.ButtonUlozit.Enabled = false;
             this.changedDGV = false;
+            this.bodAPUlozen = true;
         }
 
         private void ButtonNovaAkce_MouseClick(object sender, MouseEventArgs e)
@@ -369,7 +390,6 @@ namespace LearActionPlans.Views
             }
         }
 
-
         private void RichTextBoxPopisProblemu_TextChanged(object sender, EventArgs e)
         {
             this.ButtonUlozit.Enabled = true;
@@ -408,17 +428,8 @@ namespace LearActionPlans.Views
 
         private void ButtonTerminUkonceni_MouseClick(object sender, MouseEventArgs e)
         {
-            if (this.novyBodAP == false)
-            {
-                var kontrolaEfektivnosti =
-                    !(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti == null);
-                var opravitTermin = !(this.akcniPlany_.APUzavren || kontrolaEfektivnosti);
-
-                using var form = new FormPosunutiTerminuBodAP(opravitTermin, this.cisloAPStr_, this.cisloRadkyDGVBody);
-                var result = form.ShowDialog();
-                if (result == DialogResult.OK) { }
-            }
-            else
+            // (this.cisloRadkyDGVBody > -1 ? (FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].UkonceniBodAP == null ? true : false) : false)
+            if (this.novyBodAP == true || (this.cisloRadkyDGVBody > -1 && FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].UkonceniBodAP == null))
             {
                 using var form = new FormDatumUkonceni(this.datumUkonceni, this.poznamkaDatumUkonceni);
                 var result = form.ShowDialog();
@@ -432,12 +443,26 @@ namespace LearActionPlans.Views
                 this.labelDatumUkonceni.Text = Convert.ToDateTime(this.datumUkonceni).ToShortDateString();
                 this.deadLineZadan = true;
                 this.changedDGV = true;
+                // bylo zadáno datum ukončení, tak bude povolena možnost zadat také fatu efektivity
+                this.ButtonKontrolaEfektivnosti.Enabled = true;
+            }
+            else
+            {
+                // bude false, když není zadaná kontrola efektivnosti
+                var kontrolaEfektivnosti =
+                    !(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti == null);
+                var opravitTermin = !(this.akcniPlany_.APUzavren || kontrolaEfektivnosti);
+
+                using var form = new FormPosunutiTerminuBodAP(opravitTermin, this.cisloAPStr_, this.cisloRadkyDGVBody);
+                var result = form.ShowDialog();
+                if (result == DialogResult.OK)
+                { }
             }
         }
 
         private void ButtonKontrolaEfektivnosti_MouseClick(object sender, MouseEventArgs e)
         {
-            var kontrolaEfektivnosti = false;
+            var kontrolaEfektivnostiUlozena = false;
             var bodAPId = 0;
             DateTime? datumKontrolEfekt = null;
 
@@ -445,7 +470,7 @@ namespace LearActionPlans.Views
             {
                 if (this.kontrolaEfektivnostiDatum == null)
                 {
-                    kontrolaEfektivnosti = false;
+                    kontrolaEfektivnostiUlozena = false;
                 }
                 else
                 {
@@ -455,21 +480,20 @@ namespace LearActionPlans.Views
             else
             {
                 //není zadána kontrola efektivnosti
-
                 bodAPId = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id;
-                if (FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti == null)
-                {
-                    kontrolaEfektivnosti = false;
-                }
-                else
+                if (FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti != null)
+                //{
+                //    kontrolaEfektivnosti = false;
+                //}
+                //else
                 {
                     datumKontrolEfekt = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti;
-                    kontrolaEfektivnosti = true;
+                    kontrolaEfektivnostiUlozena = true;
                 }
             }
 
             using var form = new FormKontrolaEfektivnosti(this.novyBodAP, this.akcniPlany_.APUzavren,
-                this.deadLineZadan, bodAPId, kontrolaEfektivnosti, datumKontrolEfekt);
+                this.deadLineZadan, bodAPId, kontrolaEfektivnostiUlozena, datumKontrolEfekt);
             //var result = form.ShowDialog();
             form.ShowDialog();
             var result = form.ReturnValuePotvrdit;
@@ -485,11 +509,13 @@ namespace LearActionPlans.Views
             {
                 if (datumKontrolaEfektivnosti == null)
                 {
+                    // datum efektivity bylo odstraněno
                     this.kontrolaEfektivnostiDatum = null;
                     this.labelEfektivita.Text = string.Empty;
                 }
                 else
                 {
+                    // zapamtuji si datum pro efektivitu
                     this.kontrolaEfektivnostiDatum = datumKontrolaEfektivnosti;
                     this.labelEfektivita.Text = Convert.ToDateTime(datumKontrolaEfektivnosti).ToShortDateString();
                 }

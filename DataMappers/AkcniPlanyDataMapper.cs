@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
@@ -32,11 +32,6 @@ namespace LearActionPlans.DataMappers
                 yield break;
             }
 
-            if (!reader.HasRows)
-            {
-                yield break;
-            }
-
             while (reader.Read())
             {
                 yield return ConstructAllAP(reader);
@@ -56,11 +51,6 @@ namespace LearActionPlans.DataMappers
             command.Parameters.AddWithValue("@apId", id);
 
             var reader = command.ExecuteReader();
-
-            if (!reader.HasRows)
-            {
-                yield break;
-            }
 
             if (!reader.HasRows)
             {
@@ -144,70 +134,85 @@ namespace LearActionPlans.DataMappers
         {
             try
             {
-                using var connection = new SqlConnection(ConnectionString);
-                connection.Open();
-
-                using var command = connection.CreateCommand();
-                command.CommandType = CommandType.Text;
-
-                command.CommandText = $"SELECT TOP 1 CisloAP FROM AkcniPlan WHERE YEAR(DatumZalozeni) = @rok";
-                command.Parameters.AddWithValue("@rok", rok);
-
-                var reader = command.ExecuteReader();
-
-                if (reader.HasRows)
+                using (var connection = new SqlConnection(ConnectionString))
                 {
-                    using var connectionUniqueNumber = new SqlConnection(ConnectionString);
-                    if (connectionUniqueNumber.State == ConnectionState.Closed)
+                    connection.Open();
+
+                    using (var command = connection.CreateCommand())
                     {
-                        connectionUniqueNumber.Open();
+                        command.CommandType = CommandType.Text;
+
+                        // vyhledá poslední číslo v daném roce
+                        command.CommandText = $"SELECT  TOP 1 CisloAP FROM AkcniPlan WHERE YEAR(DatumZalozeni) = @rok ORDER BY CisloAP DESC";
+                        command.Parameters.AddWithValue("@rok", rok);
+
+                        var reader = command.ExecuteReader();
+
+                        if (!reader.HasRows)
+                        {
+                            return 0;
+                        }
+
+                        var posledniCisloAP_ = -1;
+                        while (reader.Read())
+                        {
+                            var posledniCisloAP = ConstructZiskatPosledniCisloAP(reader);
+                            posledniCisloAP_ = Convert.ToInt32(posledniCisloAP);
+                        }
+                        // tady se uloží nový AP s novým číslem a prázdnýma položkama
+                        return posledniCisloAP_;
+                        //using var connectionUniqueNumber = new SqlConnection(ConnectionString);
+                        //if (connectionUniqueNumber.State == ConnectionState.Closed)
+                        //{
+                        //    connectionUniqueNumber.Open();
+                        //}
+
+                        //using var commandUniqueNumber = connectionUniqueNumber.CreateCommand();
+                        //commandUniqueNumber.CommandType = CommandType.Text;
+                        //commandUniqueNumber.CommandText = $"SELECT NEXT VALUE FOR dbo.NumberAP";
+                        //var valSeq = (int)commandUniqueNumber.ExecuteScalar();
+
+                        //connectionUniqueNumber.Close();
+
+                        //return valSeq;
                     }
-
-                    using var commandUniqueNumber = connectionUniqueNumber.CreateCommand();
-                    commandUniqueNumber.CommandType = CommandType.Text;
-                    commandUniqueNumber.CommandText = $"SELECT NEXT VALUE FOR dbo.NumberAP";
-                    var valSeq = (int)commandUniqueNumber.ExecuteScalar();
-
-                    connectionUniqueNumber.Close();
-
-                    return valSeq;
                 }
 
                 //když nenajde číslo AP jedna, tak zresetuje čítač
-                using (var connectionResetNumber = new SqlConnection(ConnectionString))
-                {
-                    if (connectionResetNumber.State == ConnectionState.Closed)
-                    {
-                        connectionResetNumber.Open();
-                    }
+                //using (var connectionResetNumber = new SqlConnection(ConnectionString))
+                //{
+                //    if (connectionResetNumber.State == ConnectionState.Closed)
+                //    {
+                //        connectionResetNumber.Open();
+                //    }
 
-                    using (var commandResetNumber = connectionResetNumber.CreateCommand())
-                    {
-                        commandResetNumber.CommandType = CommandType.Text;
-                        commandResetNumber.CommandText = $"ALTER SEQUENCE NumberAP RESTART WITH 1";
-                        commandResetNumber.ExecuteScalar();
+                //    using (var commandResetNumber = connectionResetNumber.CreateCommand())
+                //    {
+                //        commandResetNumber.CommandType = CommandType.Text;
+                //        commandResetNumber.CommandText = $"ALTER SEQUENCE NumberAP RESTART WITH 1";
+                //        commandResetNumber.ExecuteScalar();
 
-                        connectionResetNumber.Close();
-                    }
-                }
+                //        connectionResetNumber.Close();
+                //    }
+                //}
 
-                using (var connectionUniqueNumber = new SqlConnection(ConnectionString))
-                {
-                    if (connectionUniqueNumber.State == ConnectionState.Closed)
-                    {
-                        connectionUniqueNumber.Open();
-                    }
+                //using (var connectionUniqueNumber = new SqlConnection(ConnectionString))
+                //{
+                //    if (connectionUniqueNumber.State == ConnectionState.Closed)
+                //    {
+                //        connectionUniqueNumber.Open();
+                //    }
 
-                    using (var commandUniqueNumber = connectionUniqueNumber.CreateCommand())
-                    {
-                        commandUniqueNumber.CommandType = CommandType.Text;
-                        commandUniqueNumber.CommandText = $"SELECT NEXT VALUE FOR dbo.NumberAP";
-                        var valSeq = (int)commandUniqueNumber.ExecuteScalar();
+                //    using (var commandUniqueNumber = connectionUniqueNumber.CreateCommand())
+                //    {
+                //        commandUniqueNumber.CommandType = CommandType.Text;
+                //        commandUniqueNumber.CommandText = $"SELECT NEXT VALUE FOR dbo.NumberAP";
+                //        var valSeq = (int)commandUniqueNumber.ExecuteScalar();
 
-                        connectionUniqueNumber.Close();
-                        return valSeq;
-                    }
-                }
+                //        connectionUniqueNumber.Close();
+                //        return valSeq;
+                //    }
+                //}
             }
             catch (Exception ex)
             {
@@ -217,6 +222,13 @@ namespace LearActionPlans.DataMappers
             }
 
             return -1;
+        }
+
+        private static int ConstructZiskatPosledniCisloAP(IDataRecord readerData)
+        {
+            var cisloAP = Convert.ToInt32(readerData["CisloAP"]);
+
+            return cisloAP;
         }
 
         private static AkcniPlany ConstructAllAP(IDataRecord readerData)
@@ -242,6 +254,47 @@ namespace LearActionPlans.DataMappers
 
             return noveCisloAP;
         }
+
+        public static int InsertNewAP(int cisloAP)
+        {
+            var idZaznamu = 0;
+
+            try
+            {
+                using var connection = new SqlConnection(ConnectionString);
+                connection.Open();
+
+                using var command = connection.CreateCommand();
+                command.CommandType = CommandType.Text;
+                command.CommandText = $"INSERT INTO AkcniPlan (DatumZalozeni, CisloAP, Zadavatel1ID, Zadavatel2ID, Tema, ProjektID, ZakaznikID, TypAP, ZmenaTerminu, UzavreniAP, ZnovuOtevrit, DuvodZnovuotevreni, StavObjektu)" +
+                                      $"output INSERTED.AkcniPlanID VALUES" +
+                                      $"(@datumZalozeni, @cisloAP, @zadavatel1Id, @zadavatel2Id, @tema, @projektId, @zakaznikId, @typAP, @zmenaTerminu, @uzavreniAP, @znovuOtevrit, @duvodZnovuotevreni, @stavObjektu)";
+                command.Parameters.AddWithValue("@datumZalozeni", DateTime.Now);
+                command.Parameters.AddWithValue("@cisloAP", cisloAP);
+                //command.Parameters.AddWithValue("@rok", akcniPlany.Rok);
+                command.Parameters.AddWithValue("@zadavatel1Id", -1);
+                command.Parameters.AddWithValue("@zadavatel2Id", -1);
+                command.Parameters.AddWithValue("@tema", string.Empty);
+                command.Parameters.AddWithValue("@projektId", DBNull.Value);
+                command.Parameters.AddWithValue("@zakaznikId", -1);
+                command.Parameters.AddWithValue("@typAP", 0);
+                command.Parameters.AddWithValue("@ZmenaTerminu", 0);
+                command.Parameters.AddWithValue("@UzavreniAP", DBNull.Value);
+                command.Parameters.AddWithValue("@ZnovuOtevrit", 0);
+                command.Parameters.AddWithValue("@DuvodZnovuotevreni", DBNull.Value);
+                command.Parameters.AddWithValue("@stavObjektu", 2);
+
+                idZaznamu = Convert.ToInt32(command.ExecuteScalar());
+            }
+            catch (Exception ex)
+            {
+                //Došlo k problému při práci s databází.
+                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return 0;
+            }
+            return idZaznamu;
+        }
+
 
         public static int InsertAP(FormNovyAkcniPlan.AkcniPlanTmp akcniPlany)
         {

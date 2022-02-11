@@ -1,5 +1,4 @@
 using System;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using LearActionPlans.DataMappers;
@@ -18,7 +17,7 @@ namespace LearActionPlans.Views
 
             if (string.IsNullOrWhiteSpace(this.RichTextBoxPopisProblemu.Text))
             {
-                MessageBox.Show("You must fill in the Problem Description field.", "Notice", MessageBoxButtons.OK,
+                MessageBox.Show("You must fill in the Problem description field.", "Notice", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
                 ulozit = false;
                 //this.RichTextBoxPopisProblemu.BackColor = Color.Yellow;
@@ -33,14 +32,14 @@ namespace LearActionPlans.Views
             if (Convert.ToInt32(this.ComboBoxOdpovednaOsoba1.SelectedValue) == 0)
             {
                 ulozit = false;
-                MessageBox.Show("You must select a responsible employee #1.", "Notice", MessageBoxButtons.OK,
+                MessageBox.Show("You must select a Responsible employee #1.", "Notice", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
             }
 
             if (Convert.ToInt32(this.ComboBoxOddeleni.SelectedValue) == 0)
             {
                 ulozit = false;
-                MessageBox.Show("You must select a department.", "Notice", MessageBoxButtons.OK,
+                MessageBox.Show("You must select a Department.", "Notice", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
             }
 
@@ -54,7 +53,29 @@ namespace LearActionPlans.Views
             //proměnnou  ulozitBodAP asi potřebovat nebudu
             BodAP ulozitBodAP;
 
-            if (this.novyBodAP == false)
+            if (this.novyBodAP == true)
+            {
+                var odpovednaOsoba2Id = Convert.ToInt32(this.ComboBoxOdpovednaOsoba2.SelectedValue) == 0
+                    ? (int?)null
+                    : Convert.ToInt32(this.ComboBoxOdpovednaOsoba2.SelectedValue);
+
+                //založí nový bod
+                FormPrehledBoduAP.bodyAP.Add(new BodAP(this.akcniPlany_.Id,
+                    FormPrehledBoduAP.bodyAP.Count + 1,
+                    DateTime.Now, this.TextBoxOdkazNaNormu.Text, this.TextBoxHodnoceniNeshody.Text,
+                    this.RichTextBoxPopisProblemu.Text, this.RichTextBoxSkutecnaPricinaWM.Text,
+                    this.RichTextBoxNapravnaOpatreniWM.Text, this.RichTextBoxSkutecnaPricinaWS.Text,
+                    this.RichTextBoxNapravnaOpatreniWS.Text,
+                    Convert.ToInt32(this.ComboBoxOdpovednaOsoba1.SelectedValue),
+                    odpovednaOsoba2Id, this.kontrolaEfektivnostiDatum,
+                    Convert.ToInt32(this.ComboBoxOddeleni.SelectedValue), this.priloha, this.datumUkonceni, this.poznamkaDatumUkonceni,
+                    reopen,
+                    false,
+                    1));
+
+                ulozitBodAP = FormPrehledBoduAP.bodyAP.Last();
+            }
+            else
             {
                 //aktualizace stávajícího bodu
                 ulozitBodAP = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody];
@@ -86,33 +107,11 @@ namespace LearActionPlans.Views
                     ? null
                     : this.RichTextBoxNapravnaOpatreniWS.Text;
             }
-            else
-            {
-                var odpovednaOsoba2Id = Convert.ToInt32(this.ComboBoxOdpovednaOsoba2.SelectedValue) == 0
-                    ? (int?)null
-                    : Convert.ToInt32(this.ComboBoxOdpovednaOsoba2.SelectedValue);
-
-                //založí nový bod
-                FormPrehledBoduAP.bodyAP.Add(new BodAP(this.akcniPlany_.Id,
-                    FormPrehledBoduAP.bodyAP.Count + 1,
-                    DateTime.Now, this.TextBoxOdkazNaNormu.Text, this.TextBoxHodnoceniNeshody.Text,
-                    this.RichTextBoxPopisProblemu.Text, this.RichTextBoxSkutecnaPricinaWM.Text,
-                    this.RichTextBoxNapravnaOpatreniWM.Text, this.RichTextBoxSkutecnaPricinaWS.Text,
-                    this.RichTextBoxNapravnaOpatreniWS.Text,
-                    Convert.ToInt32(this.ComboBoxOdpovednaOsoba1.SelectedValue),
-                    odpovednaOsoba2Id, this.kontrolaEfektivnostiDatum,
-                    Convert.ToInt32(this.ComboBoxOddeleni.SelectedValue), this.priloha, this.datumUkonceni, this.poznamkaDatumUkonceni,
-                    reopen,
-                    false,
-                    1));
-
-                ulozitBodAP = FormPrehledBoduAP.bodyAP.Last();
-            }
 
             //vytvoření nebo aktualizace nového bodu
             var bodAPId = BodAPDataMapper.InsertUpdateBodAP(ulozitBodAP);
 
-            //při uložení nového bodu je přepsána rpměnná novyBodAP na false, protože dále mohu editovat tento bod jako již uložený
+            //při uložení nového bodu je přepsána proměnná novyBodAP na false, protože dále mohu editovat tento bod jako již uložený
             if (this.novyBodAP)
             {
                 this.novyBodAP = false;

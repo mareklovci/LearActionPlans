@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace LearActionPlans.Models
 {
@@ -26,6 +26,8 @@ namespace LearActionPlans.Models
         public string DuvodZnovuotevreni { get; set; }
         public byte StavObjektu { get; set; }
         //public DateTime? DatumUzavreni { get; set; }
+
+        public AkcniPlany(int cisloAP) => this.CisloAP = cisloAP;
 
         public AkcniPlany(int apId, byte znovuOtevrit, DateTime? uzavreniAP, string duvod)
         {

@@ -1,4 +1,4 @@
-﻿
+
 namespace LearActionPlans.Views
 {
     partial class FormPosunutiTerminuBodAP
@@ -133,7 +133,7 @@ namespace LearActionPlans.Views
             this.ButtonUlozit.UseVisualStyleBackColor = true;
             this.ButtonUlozit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonUlozit_MouseClick);
             // 
-            // FormPosunutiTerminuAkce
+            // FormPosunutiTerminuBodAP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -144,12 +144,12 @@ namespace LearActionPlans.Views
             this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.MaximumSize = new System.Drawing.Size(1160, 950);
             this.MinimumSize = new System.Drawing.Size(1160, 700);
-            this.Name = "FormPosunutiTerminuAkce";
+            this.Name = "FormPosunutiTerminuBodAP";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Overview of deadlines";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPosunutiTerminuAkce_FormClosing);
-            this.Load += new System.EventHandler(this.FormPosunutiTerminuAkce_Load);
+            this.Load += new System.EventHandler(this.FormPosunutiTerminuBodAP_Load);
             this.groupBoxZadost.ResumeLayout(false);
             this.groupBoxZadost.PerformLayout();
             this.ResumeLayout(false);

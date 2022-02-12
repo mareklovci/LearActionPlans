@@ -198,5 +198,38 @@ namespace LearActionPlans.DataMappers
                 return false;
             }
         }
+
+        public static IEnumerable<Zamestnanci> GetZadavatelEmail(int zadavatelId)
+        {
+            using var connection = new SqlConnection(ConnectionString);
+            connection.Open();
+
+            using var command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+
+            command.CommandText = $"SELECT * FROM Zamestnanec WHERE ZamestnanecID = @zamestnanecId";
+            command.Parameters.AddWithValue("@zamestnanecId", zadavatelId);
+
+            var reader = command.ExecuteReader();
+
+            if (!reader.HasRows)
+            {
+                yield break;
+            }
+
+            while (reader.Read())
+            {
+                yield return ConstructZadavatelEmail(reader);
+            }
+        }
+
+        private static Zamestnanci ConstructZadavatelEmail(IDataRecord reader)
+        {
+            var id = (int)reader["ZamestnanecID"];
+            var email = (string)reader["Email"];
+
+            return new Zamestnanci(id, email);
+        }
+
     }
 }

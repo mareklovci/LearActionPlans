@@ -82,5 +82,34 @@ namespace LearActionPlans.DataMappers
                 MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
+        public static void UlozitEmailNovyBodAP(string emailTo, string predmet, string zprava)
+        {
+            try
+            {
+                using var connection = new SqlConnection(ConnectionString);
+                connection.Open();
+
+                using (var commandAkce = connection.CreateCommand())
+                {
+                    commandAkce.CommandType = CommandType.Text;
+                    commandAkce.CommandText = $"INSERT INTO OdeslatEmail (EmailKomu, Predmet, Zprava) " +
+                                              $"VALUES (@emailKomu, @predmet, @zprava)";
+                    commandAkce.Parameters.AddWithValue("@emailKomu", emailTo);
+                    commandAkce.Parameters.AddWithValue("@predmet", predmet);
+                    commandAkce.Parameters.AddWithValue("@zprava", zprava);
+
+                    commandAkce.ExecuteNonQuery();
+                }
+
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                //Došlo k problému při práci s databází.
+                //MessageBox.Show(ex.ToString(), "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
     }
 }

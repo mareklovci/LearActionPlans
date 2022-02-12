@@ -11,6 +11,12 @@ namespace LearActionPlans.Models
         public int OddeleniId { get; set; }
         public byte StavObjektu { get; set; }
 
+        public Zamestnanci(int id, string email)
+        {
+            this.Id = id;
+            this.Email = email;
+        }
+
         public Zamestnanci(int id, string prihlasovaciJmeno, bool adminAP)
         {
             this.Id = id;

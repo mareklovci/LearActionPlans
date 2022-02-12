@@ -15,6 +15,8 @@ namespace LearActionPlans.Views
         private DataTable dtActionsWM;
         private DataTable dtActionsWS;
 
+        private readonly bool spusteniBezParametru;
+
         private bool novyBodAP;
         private bool bodAPUlozen;
 
@@ -32,12 +34,14 @@ namespace LearActionPlans.Views
         private string poznamkaDatumUkonceni;
         private bool deadLineZadan;
 
-        public FormZadaniBoduAP(string cisloAPStr, FormNovyAkcniPlan.AkcniPlanTmp akcniPlany, int cisloRadkyDGV,
+        public FormZadaniBoduAP(bool spusteniBezParametru, string cisloAPStr, FormNovyAkcniPlan.AkcniPlanTmp akcniPlany, int cisloRadkyDGV,
             bool novyBod)
         {
             this.InitializeComponent();
             this.dtActionsWM = new DataTable();
             this.dtActionsWS = new DataTable();
+
+            this.spusteniBezParametru = spusteniBezParametru;
 
             this.cisloAPStr_ = cisloAPStr;
             this.akcniPlany_ = akcniPlany;
@@ -428,36 +432,40 @@ namespace LearActionPlans.Views
 
         private void ButtonTerminUkonceni_MouseClick(object sender, MouseEventArgs e)
         {
-            // (this.cisloRadkyDGVBody > -1 ? (FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].UkonceniBodAP == null ? true : false) : false)
-            if (this.novyBodAP == true || (this.cisloRadkyDGVBody > -1 && FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].UkonceniBodAP == null))
+            if (this.spusteniBezParametru == false)
             {
-                using var form = new FormDatumUkonceni(this.datumUkonceni, this.poznamkaDatumUkonceni);
-                var result = form.ShowDialog();
-                if (result != DialogResult.OK)
+                // (this.cisloRadkyDGVBody > -1 ? (FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].UkonceniBodAP == null ? true : false) : false)
+                if (this.novyBodAP == true || (this.cisloRadkyDGVBody > -1 && FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].UkonceniBodAP == null))
                 {
-                    return;
+                    using var form = new FormDatumUkonceni(this.datumUkonceni, this.poznamkaDatumUkonceni);
+                    var result = form.ShowDialog();
+                    if (result != DialogResult.OK)
+                    {
+                        return;
+                    }
+
+                    this.datumUkonceni = form.ReturnValueDatum;
+                    this.poznamkaDatumUkonceni = form.ReturnValuePoznamka;
+                    this.labelDatumUkonceni.Text = Convert.ToDateTime(this.datumUkonceni).ToShortDateString();
+                    this.deadLineZadan = true;
+                    this.changedDGV = true;
+                    // bylo zadáno datum ukončení, tak bude povolena možnost zadat také fatu efektivity
+                    this.ButtonKontrolaEfektivnosti.Enabled = true;
                 }
+                else
+                {
+                    // bude false, když není zadaná kontrola efektivnosti
+                    var kontrolaEfektivnosti =
+                        !(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti == null);
+                    var opravitTermin = !(this.akcniPlany_.APUzavren || kontrolaEfektivnosti);
 
-                this.datumUkonceni = form.ReturnValueDatum;
-                this.poznamkaDatumUkonceni = form.ReturnValuePoznamka;
-                this.labelDatumUkonceni.Text = Convert.ToDateTime(this.datumUkonceni).ToShortDateString();
-                this.deadLineZadan = true;
-                this.changedDGV = true;
-                // bylo zadáno datum ukončení, tak bude povolena možnost zadat také fatu efektivity
-                this.ButtonKontrolaEfektivnosti.Enabled = true;
+                    using var form = new FormPosunutiTerminuBodAP(this.spusteniBezParametru, opravitTermin, this.cisloAPStr_, this.cisloRadkyDGVBody, this.akcniPlany_.Zadavatel1Id, this.akcniPlany_.Zadavatel2Id);
+                    var result = form.ShowDialog();
+                    if (result == DialogResult.OK)
+                    { }
+                }
             }
-            else
-            {
-                // bude false, když není zadaná kontrola efektivnosti
-                var kontrolaEfektivnosti =
-                    !(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti == null);
-                var opravitTermin = !(this.akcniPlany_.APUzavren || kontrolaEfektivnosti);
 
-                using var form = new FormPosunutiTerminuBodAP(opravitTermin, this.cisloAPStr_, this.cisloRadkyDGVBody);
-                var result = form.ShowDialog();
-                if (result == DialogResult.OK)
-                { }
-            }
         }
 
         private void ButtonKontrolaEfektivnosti_MouseClick(object sender, MouseEventArgs e)

@@ -30,7 +30,7 @@ namespace LearActionPlans.Views
         //2 - aktualizace již vytvořeného AP
         //3 - bude volání z formuláře FormVsechnyBodyAP
 
-        private readonly bool spusteniBezParametru_;
+        private readonly bool spusteniBezParametru;
         private readonly int vybranyRadek_;
 
         // vybranyRadek - používá se při volbě z přehledu všech bodů AP, to abych zvýraznil vybraný bod k editaci
@@ -41,7 +41,7 @@ namespace LearActionPlans.Views
             bodyAP = new List<BodAP>();
             this.dtBodyAP = new DataTable();
 
-            this.spusteniBezParametru_ = spusteniBezParametru;
+            this.spusteniBezParametru = spusteniBezParametru;
             this.akcniPlany_ = akcniPlany;
             this.volani_ = volani;
             this.vybranyRadek_ = vybranyRadek;
@@ -101,13 +101,13 @@ namespace LearActionPlans.Views
             }
 
             //tato část bude spuštěna z emailu
-            if (this.spusteniBezParametru_)
+            if (this.spusteniBezParametru)
             {
                 return;
             }
 
             // tato část se vykoná, když bude program spuštěn z poštovního programu
-            using var form = new FormZadaniBoduAP(this.labelCisloAP.Text, this.akcniPlany_,
+            using var form = new FormZadaniBoduAP(this.spusteniBezParametru, this.labelCisloAP.Text, this.akcniPlany_,
                 this.DataGridViewBodyAP.CurrentCell.RowIndex, false);
 
             form.ShowDialog();
@@ -304,7 +304,7 @@ namespace LearActionPlans.Views
         {
             var cisloRadkyDGV = -1;
 
-            using var form = new FormZadaniBoduAP(this.labelCisloAP.Text, this.akcniPlany_, cisloRadkyDGV, true);
+            using var form = new FormZadaniBoduAP(this.spusteniBezParametru, this.labelCisloAP.Text, this.akcniPlany_, cisloRadkyDGV, true);
             form.ShowDialog();
             this.NacistDGV();
         }
@@ -316,7 +316,7 @@ namespace LearActionPlans.Views
                 return;
             }
 
-            using var form = new FormZadaniBoduAP(this.labelCisloAP.Text, this.akcniPlany_,
+            using var form = new FormZadaniBoduAP(this.spusteniBezParametru, this.labelCisloAP.Text, this.akcniPlany_,
                 this.DataGridViewBodyAP.CurrentCell.RowIndex, false);
             form.ShowDialog();
             this.NacistDGV();

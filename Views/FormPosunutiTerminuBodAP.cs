@@ -21,6 +21,13 @@ namespace LearActionPlans.Views
         private readonly int apId;
         private readonly int bodAPId;
 
+        private readonly bool spusteniBezParametru;
+
+        private readonly int zadavatel1Id_;
+        private readonly int? zadavatel2Id_;
+        private string zadavatel1Email;
+        private string zadavatel2Email;
+
         private Panel panelTerminy;
         private Label labelZamTer;
         private Label labelZmenyTer;
@@ -63,11 +70,13 @@ namespace LearActionPlans.Views
         }
 
         //public FormPosunutiTerminuBodAP(bool opravitTermin, string cisloAPStr, int cisloRadkyDGV, DataRow action)
-        public FormPosunutiTerminuBodAP(bool opravitTermin, string cisloAPStr, int cisloRadkyDGV)
+        public FormPosunutiTerminuBodAP(bool spusteniBezParametru, bool opravitTermin, string cisloAPStr, int cisloRadkyDGV, int zadavatel1Id, int? zadavatel2Id)
         {
             //bool kontrolaEfektivnosti,
             this.InitializeComponent();
             //kontrolaEfektivnosti_ = kontrolaEfektivnosti;
+
+            this.spusteniBezParametru = spusteniBezParametru;
 
             //vlastnikAP_ = vlastnikAP;
             //vlastnikAkce_ = vlastnikAkce;
@@ -82,6 +91,9 @@ namespace LearActionPlans.Views
             this.cisloAPStr_ = cisloAPStr;
             this.apId = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].AkcniPlanId;
             this.bodAPId = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id;
+            this.zadavatel1Id_ = zadavatel1Id;
+            this.zadavatel2Id_ = zadavatel2Id;
+
             this.InitControls();
         }
 
@@ -99,7 +111,7 @@ namespace LearActionPlans.Views
             this.ukonceni = new List<PosunutiTerminuBodAPViewModel>();
         }
 
-        private void FormPosunutiTerminuAkce_Load(object sender, EventArgs e)
+        private void FormPosunutiTerminuBodAP_Load(object sender, EventArgs e)
         {
             //kontrolaEfektivnosti_ == false &&  && (FormMain.VlastnikAP == true || FormMain.VlastnikAkce == true)
             if (this.opravitTermin_ == true)
@@ -122,7 +134,21 @@ namespace LearActionPlans.Views
             //    ButtonZadost.Text = "Request for a new Deadline";
 
             this.VytvoritObsahPanelu();
+
+            // získat emaily odpovědných pracovníků za daný AP
+            var zadavatel1Email_ = PosunutiTerminuBodAPViewModel.GetEmailOdpovednyPracovnik(this.zadavatel1Id_).ToList();
+            this.zadavatel1Email = zadavatel1Email_[0].Email;
+
+            if (this.zadavatel2Id_ != null)
+            {
+                var zadavatel2Email_ = PosunutiTerminuBodAPViewModel.GetEmailOdpovednyPracovnik(Convert.ToInt32(this.zadavatel2Id_)).ToList();
+                this.zadavatel2Email = zadavatel2Email_[0].Email;
+            }
         }
+
+        //private void FormPosunutiTerminuAkce_Load(object sender, EventArgs e)
+        //{
+        //}
 
         private void VytvoritObsahPanelu()
         {
@@ -487,10 +513,6 @@ namespace LearActionPlans.Views
                 //UkonceniBodAPDataMapper.UpdateAkceZmenaTerminu(Convert.ToInt32(action_["akceId"]), zmenaTerminu_);
                 UkonceniBodAPDataMapper.UpdateBodAPZmenaTerminu(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id, this.zmenaTerminu_);
 
-                //if (FormMain.VlastnikAkce == true)
-                //{
-                //}
-
                 //----- odeslání požadavku -----------------------------------------------------------------------------------------------------
                 //var zam = DatumUkonceniViewModel.GetZamestnanec(Convert.ToInt32(action_["comboBoxOdpovednaOsoba1Id"])).ToList();
                 var zam = DatumUkonceniViewModel.GetZamestnanec(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OdpovednaOsoba1Id).ToList();
@@ -507,138 +529,18 @@ namespace LearActionPlans.Views
                     odpovedny2 = zam[0].Prijmeni + " " + zam[0].Jmeno;
                 }
 
-                using (var message = new MailMessage())
-                {
-                    //MailMessage message = new MailMessage();
-                    var smtp = new SmtpClient
-                    {
-                        UseDefaultCredentials = false,
-                        Credentials = new NetworkCredential("bartos.grammer@seznam.cz", "stepan12"),
-                        //Credentials = new NetworkCredential("LSCEurope@grammer.com", "Grammer123"),
-                        DeliveryMethod = SmtpDeliveryMethod.Network,
-                        Port = 25,
-                        Host = "smtp.seznam.cz",
-                        //Host = "smtp.grammer.com",
-                        EnableSsl = false
-                    };
-                    //zajistí zobrazení češtiny v emailu
-                    message.BodyEncoding = System.Text.Encoding.UTF8;
-                    message.From = new MailAddress("bartos.grammer@seznam.cz");
-                    message.Subject = string.Format(@"Request for a new Deadline");
-                    message.IsBodyHtml = true;
-
-                    var htmlTableStart = "<table style=\"border-collapse:collapse; text-align:left; font-family:Arial, Helvetica, Sans-serif;\" >";
-                    var htmlTableEnd = "</table>";
-
-                    //string htmlHeaderRowStart = "<tr style=\"background-color:#6FA1D2; color:#ffffff;\">";
-                    //string htmlHeaderRowEnd = "</tr>";
-
-                    var htmlTrStart = "<tr style=\"color:#555555;\">";
-                    var htmlTrEnd = "</tr>";
-
-                    var htmlTdStartFirstColumn = "<td style=\" border-color:#5c87b2; border-style:solid; border-width:thin; padding:5px; width:300px\">";
-                    var htmlTdEndFirstColumn = "</td>";
-
-                    var htmlTdStartSecondColumn = "<td style=\" border-color:#5c87b2; border-style:solid; border-width:thin; padding:5px; width:450px\">";
-                    var htmlTdEndSecondColumn = "</td>";
-
-                    var htmlTdStart = "<td style='border-color:#5c87b2; border-style:solid; border-width:thin; padding:5px;'>";
-                    var htmlTdEnd = "</td>";
-
-                    var htmlTdStartPozadi = "<td style=\" border-color:#5c87b2; border-style:solid; border-width:thin; padding:5px; background-color:#e1e1ff;\">";
-                    var htmlTdEndPozadi = "</td>";
-
-                    message.Body += htmlTableStart;
-                    message.Body += htmlTrStart;
-                    message.Body += htmlTdStartFirstColumn + @"<b>AP</b>" + htmlTdEndFirstColumn;
-                    message.Body += htmlTdStartSecondColumn + this.cisloAPStr_ + htmlTdEndSecondColumn;
-                    message.Body += htmlTrEnd;
-                    message.Body += htmlTrStart;
-                    message.Body += htmlTdStart + @"<b>Point AP</b>" + htmlTdEnd;
-                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].CisloBoduAP.ToString() + htmlTdEnd;
-                    message.Body += htmlTrEnd;
-                    message.Body += htmlTrStart;
-                    message.Body += htmlTdStart + @"<b> &nbsp; &nbsp; Standard chapter</b>" + htmlTdEnd;
-                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OdkazNaNormu + htmlTdEnd;
-                    message.Body += htmlTrEnd;
-                    message.Body += htmlTrStart;
-                    message.Body += htmlTdStart + @"<b> &nbsp; &nbsp; Evaluation</b>" + htmlTdEnd;
-                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].HodnoceniNeshody + htmlTdEnd;
-                    message.Body += htmlTrEnd;
-                    message.Body += htmlTrStart;
-                    message.Body += htmlTdStart + @"<b> &nbsp; &nbsp; Description of the problem</b>" + htmlTdEnd;
-                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].PopisProblemu + htmlTdEnd;
-                    message.Body += htmlTrEnd;
-
-                    message.Body += htmlTrStart;
-                    message.Body += htmlTdStart + @"<b>Why made</b>" + htmlTdEnd;
-                    message.Body += htmlTdStart + "" + htmlTdEnd;
-                    message.Body += htmlTrEnd;
-
-                    message.Body += htmlTrStart;
-                    message.Body += htmlTdStart + @"<b> &nbsp; &nbsp; Root cause</b>" + htmlTdEnd;
-                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].SkutecnaPricinaWM + htmlTdEnd;
-                    message.Body += htmlTrEnd;
-
-                    message.Body += htmlTrStart;
-                    message.Body += htmlTdStart + @"<b> &nbsp; &nbsp; Corrective action" + htmlTdEnd;
-                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].NapravnaOpatreniWM + htmlTdEnd;
-                    message.Body += htmlTrEnd;
-
-                    message.Body += htmlTrStart;
-                    message.Body += htmlTdStart + @"<b>Why shipped</b>" + htmlTdEnd;
-                    message.Body += htmlTdStart + "" + htmlTdEnd;
-                    message.Body += htmlTrEnd;
-
-                    message.Body += htmlTrStart;
-                    message.Body += htmlTdStart + @"<b> &nbsp; &nbsp; Root cause</b>" + htmlTdEnd;
-                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].SkutecnaPricinaWS + htmlTdEnd;
-                    message.Body += htmlTrEnd;
-
-                    message.Body += htmlTrStart;
-                    message.Body += htmlTdStart + @"<b> &nbsp; &nbsp; Corrective action</b>" + htmlTdEnd;
-                    message.Body += htmlTdStart + FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].NapravnaOpatreniWS + htmlTdEnd;
-                    message.Body += htmlTrEnd;
-
-                    message.Body += htmlTrStart;
-                    message.Body += htmlTdStartPozadi + @"<b>Last Deadline</b>" + htmlTdEndPozadi;
-                    var posledniMoznyTermin = this.dateTimePickerNovyTerminUkonceni.MinDate;
-                    posledniMoznyTermin = posledniMoznyTermin.AddDays(-1);
-                    message.Body += htmlTdStartPozadi + @"<b>" + posledniMoznyTermin.ToShortDateString() + @"</b>" + htmlTdEndPozadi;
-                    message.Body += htmlTrEnd;
-                    message.Body += htmlTrStart;
-                    message.Body += htmlTdStartPozadi + @"<b>New Deadline</b>" + htmlTdEndPozadi;
-                    message.Body += htmlTdStartPozadi + @"<b>" + this.dateTimePickerNovyTerminUkonceni.Value.ToShortDateString() + @"</b>"  + htmlTdEndPozadi;
-                    message.Body += htmlTrEnd;
-                    message.Body += htmlTrStart;
-                    message.Body += htmlTdStartPozadi + @"<b>Note</b>" + htmlTdEndPozadi;
-                    //action_["textBoxPoznamka"]
-                    message.Body += htmlTdStartPozadi + this.richTextBoxNovaPoznamka.Text + htmlTdEndPozadi;
-                    message.Body += htmlTrEnd;
-
-                    message.Body += htmlTrStart;
-                    message.Body += htmlTdStart + @"<b>Responsible #1</b>" + htmlTdEnd;
-                    message.Body += htmlTdStart + odpovedny1 + htmlTdEnd;
-                    message.Body += htmlTrEnd;
-                    message.Body += htmlTrStart;
-                    message.Body += htmlTdStart + @"<b>Responsible #2</b>" + htmlTdEnd;
-                    message.Body += htmlTdStart + odpovedny2 + htmlTdEnd;
-                    message.Body += htmlTrEnd;
-                    message.Body += htmlTableEnd;
-                    //message.Body += "<a href=javascript:runProgram()>Odkaz</a>";
-                    //Process the request - vyřídit žádost
-
-                    //message.Body += string.Format(@"<p style='font-family:Arial, Helvetica, Sans-serif; font-size:150 %; '><a href='LearAPConfirmation:?{0}&{1}&{2}&{3}&{4}&{5}' type='application/octet-stream'>Process the request</a></p>", cisloAPStr_, apId, bodAPId, Convert.ToInt32(action_["akceId"]), idZadost, FormMain.VlastnikIdAkce);
-                    //message.Body += string.Format(@"<p style='font-family:Arial, Helvetica, Sans-serif; font-size:150 %; '><a href='LearAPConfirmation:?{0}&{1}&{2}&{3}&{4}&{5}' type='application/octet-stream'>Process the request</a></p>", cisloAPStr_, apId, bodAPId, Convert.ToInt32(action_["akceId"]), idZadost, Convert.ToInt32(action_["comboBoxOdpovednaOsoba1Id"]));
-                    //odebrán čtvrtý parametr
-                    message.Body += string.Format(@"<p style='font-family:Arial, Helvetica, Sans-serif; font-size:150 %; '><a href='LearAPConfirmation:?{0}&{1}&{2}&{3}&{4}' type='application/octet-stream'>Process the request</a></p>", this.cisloAPStr_, this.apId, this.bodAPId, idZadost, FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OdpovednaOsoba1Id);
-
-                    message.To.Add(new MailAddress("bartos.grammer@seznam.cz"));
-
-                    // tady se uloží email do tabulky EmailOdeslat a zavolá se aplikace pro odeslání emailu LaerEmailOdeslat
-                    Helper.OdeslatEmail(smtp, message);
-                }
-                //----- odeslání požadavku -----------------------------------------------------------------------------------------------------
+                Helper.VytvoritEmail(this.zadavatel1Email,
+                    this.zadavatel2Email, 
+                    FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody],
+                    this.cisloAPStr_,
+                    this.dateTimePickerNovyTerminUkonceni.MinDate,
+                    this.dateTimePickerNovyTerminUkonceni.Value,
+                    odpovedny1,
+                    odpovedny2,
+                    this.richTextBoxNovaPoznamka.Text,
+                    this.apId,
+                    this.bodAPId,
+                    idZadost);
 
                 //odstraní vytvořené objekty z panelu
                 this.RemoveControl();
@@ -704,10 +606,7 @@ namespace LearActionPlans.Views
             }
         }
 
-        private void ButtonUlozit_MouseClick(object sender, MouseEventArgs e)
-        {
-            this.UlozitPoznamky();
-        }
+        private void ButtonUlozit_MouseClick(object sender, MouseEventArgs e) => this.UlozitPoznamky();
 
         private void UlozitPoznamky()
         {

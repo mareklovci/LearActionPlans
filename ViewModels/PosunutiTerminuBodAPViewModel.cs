@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LearActionPlans.DataMappers;
@@ -20,6 +20,8 @@ namespace LearActionPlans.ViewModels
         public string Odpoved { get; set; }
         public byte StavZadosti { get; set; }
         public byte StavObjektu { get; set; }
+
+        public string Email { get; set; }
 
         public static PosunutiTerminuBodAPViewModel UkonceniBodAP(int ukonceniBodAPId, int bodAPId, DateTime datumUkonceni, string poznamka, string odpoved, byte stavZadosti, byte stavObjektu)
         {
@@ -111,5 +113,34 @@ namespace LearActionPlans.ViewModels
                 yield return q;
             }
         }
+
+        public static PosunutiTerminuBodAPViewModel EmailOdpovednyPracovnik(string email)
+        {
+            var posunutiTerminuAkceViewModel = new PosunutiTerminuBodAPViewModel
+            {
+                Email = email
+            };
+
+            return posunutiTerminuAkceViewModel;
+        }
+
+        public static IEnumerable<PosunutiTerminuBodAPViewModel> GetEmailOdpovednyPracovnik(int zadavatelId)
+        {
+            var email = ZamestnanciDataMapper.GetZadavatelEmail(zadavatelId).ToList();
+
+            var query = email.Where(e => e.Id == zadavatelId)
+                .Select(e => EmailOdpovednyPracovnik(e.Email)).ToList();
+
+            if (!query.Any())
+            {
+                yield break;
+            }
+
+            foreach (var q in query)
+            {
+                yield return q;
+            }
+        }
+
     }
 }

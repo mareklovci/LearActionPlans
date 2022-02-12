@@ -16,7 +16,7 @@ namespace LearActionPlans.Views
         private DataTable dtAP;
         private DataView dvAP;
 
-        FormNovyAkcniPlan.AkcniPlanTmp akcniPlany;
+        private FormNovyAkcniPlan.AkcniPlanTmp akcniPlany;
 
         private string Odpovedny1Filtr;
         private string Odpovedny2Filtr;
@@ -109,7 +109,7 @@ namespace LearActionPlans.Views
                 //cisloAPRok = Convert.ToInt32(dvAP[DataGridViewAP.CurrentCell.RowIndex]["CisloAP"]).ToString("D3") + " / " + Convert.ToDateTime(dvAP[DataGridViewAP.CurrentCell.RowIndex]["DatumZalozeni"]).Year;
                 cisloAPRok = this.cisloAPStr;
                 this.akcniPlany.CisloAPRok = cisloAPRok;
-
+                this.akcniPlany.Zadavatel1Id = this.vlastnikAkceId;
                 using var form = new FormPrehledBoduAP(false, this.akcniPlany, 2, -1);
                 var result = form.ShowDialog();
                 if (result == DialogResult.OK)
@@ -357,6 +357,10 @@ namespace LearActionPlans.Views
                         this.akcniPlany.CisloAPRok = cisloAPRok;
                         this.akcniPlany.Zadavatel1Jmeno =
                             Convert.ToString(this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["Zadavatel1Jmeno"]);
+
+                        this.akcniPlany.Zadavatel1Id = Convert.ToInt32(
+                                    this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["Zadavatel1Id"]);
+
                         if (this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["Zadavatel1Jmeno"] == null)
                         {
                             this.akcniPlany.Zadavatel2Jmeno = null;
@@ -366,7 +370,10 @@ namespace LearActionPlans.Views
                             this.akcniPlany.Zadavatel2Jmeno =
                                 Convert.ToString(
                                     this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["Zadavatel2Jmeno"]);
+                            this.akcniPlany.Zadavatel2Id = Convert.ToInt32(
+                                        this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["Zadavatel2Id"]);
                         }
+
 
                         this.akcniPlany.Tema =
                             Convert.ToString(this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["Tema"]);

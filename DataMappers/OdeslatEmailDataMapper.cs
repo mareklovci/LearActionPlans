@@ -19,19 +19,20 @@ namespace LearActionPlans.DataMappers
                 using var connection = new SqlConnection(ConnectionString);
                 connection.Open();
 
-                using (var commandAkce = connection.CreateCommand())
+                using (var command = connection.CreateCommand())
                 {
-                    commandAkce.CommandType = CommandType.Text;
-                    commandAkce.CommandText = $"INSERT INTO OdeslatEmail (EmailKomu, Predmet, Zprava) " +
+                    command.CommandType = CommandType.Text;
+                    command.CommandText = $"INSERT INTO OdeslatEmail (EmailKomu, Predmet, Zprava) " +
                                               $"VALUES (@emailKomu, @predmet, @zprava)";
-                    commandAkce.Parameters.AddWithValue("@emailKomu", emailTo);
-                    commandAkce.Parameters.AddWithValue("@predmet", predmet);
-                    commandAkce.Parameters.AddWithValue("@zprava", zprava);
+                    command.Parameters.AddWithValue("@emailKomu", emailTo);
+                    command.Parameters.AddWithValue("@predmet", predmet);
+                    command.Parameters.AddWithValue("@zprava", zprava);
 
-                    commandAkce.ExecuteNonQuery();
+                    command.ExecuteNonQuery();
                 }
 
                 // body AP, které byly odeslány, byly nastaveny jako odeslané
+                // to odstraním, sloupec EmailOdeslan je zbytečný
                 foreach (var jedenBodAP in odeslaneEmailyProBody)
                 {
                     using var command = connection.CreateCommand();
@@ -83,8 +84,10 @@ namespace LearActionPlans.DataMappers
             }
         }
 
-        public static void UlozitEmailNovyBodAP(string emailTo, string predmet, string zprava)
+        public static byte UlozitEmail(string emailTo, string predmet, string zprava)
         {
+            byte exitCode = 0;
+
             try
             {
                 using var connection = new SqlConnection(ConnectionString);
@@ -100,6 +103,7 @@ namespace LearActionPlans.DataMappers
                     commandAkce.Parameters.AddWithValue("@zprava", zprava);
 
                     commandAkce.ExecuteNonQuery();
+                    exitCode = 1;
                 }
 
                 connection.Close();
@@ -109,7 +113,10 @@ namespace LearActionPlans.DataMappers
                 //Došlo k problému při práci s databází.
                 //MessageBox.Show(ex.ToString(), "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                exitCode = 2;
             }
+
+            return exitCode;
         }
     }
 }

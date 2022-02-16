@@ -529,7 +529,7 @@ namespace LearActionPlans.Views
                     odpovedny2 = zam[0].Prijmeni + " " + zam[0].Jmeno;
                 }
 
-                Helper.VytvoritEmail(this.zadavatel1Email,
+                Helper.EmailPosunutíTerminuBodAP(this.zadavatel1Email,
                     this.zadavatel2Email, 
                     FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody],
                     this.cisloAPStr_,

@@ -59,7 +59,7 @@ namespace LearActionPlans.Utilities
             key.Close();
         }
 
-        public static void VytvoritEmail(string zadavatel1Email,
+        public static void EmailPosunutíTerminuBodAP(string zadavatel1Email,
             string zadavatel2Email,
             BodAP bodAP,
             string cisloAPStr,
@@ -116,7 +116,7 @@ namespace LearActionPlans.Utilities
             var htmlTdStartPozadi = "<td style=\" border-color:#5c87b2; border-style:solid; border-width:thin; padding:5px; background-color:#e1e1ff;\">";
             var htmlTdEndPozadi = "</td>";
 
-            string zprava = htmlTableStart;
+            var zprava = htmlTableStart;
             zprava += htmlTrStart;
             zprava += htmlTdStartFirstColumn + @"<b>AP</b>" + htmlTdEndFirstColumn;
             zprava += htmlTdStartSecondColumn + cisloAPStr + htmlTdEndSecondColumn;
@@ -208,35 +208,37 @@ namespace LearActionPlans.Utilities
             // uložit do tabulky EmailOdelat
             var predmet = @"Request for a new Deadline";
 
-            OdeslatEmailDataMapper.UlozitEmailNovyBodAP(zadavatel1Email, predmet, zprava);
+            var exitCode = OdeslatEmailDataMapper.UlozitEmail(zadavatel1Email, predmet, zprava);
 
-            // spustit externí program pro odeslání emailů
-            // Prepare the process to run
-            using (var proc = Process.Start("C:\\Users\\pc\\source\\repos\\LearSendEmail\\bin\\Release\\netcoreapp3.1\\LearSendEmail.exe"))
+            if (exitCode == 1)
             {
-                proc.WaitForExit();
-
-                // Retrieve the app's exit code
-                var exitCode = proc.ExitCode;
+                // spustit externí program pro odeslání emailů
+                OdeslatEmail();
             }
-            //var start = new ProcessStartInfo
+            // Prepare the process to run
+            //using (var proc = Process.Start("C:\\Users\\pc\\source\\repos\\LearSendEmail\\bin\\Release\\netcoreapp3.1\\LearSendEmail.exe"))
             //{
-            //    // Enter in the command line arguments, everything you would enter after the executable name itself
-            //    //Arguments = arguments,
-            //    // Enter the executable to run, including the complete path
-            //    FileName = "C:\\Users\\pc\\source\\repos\\LearSendEmail\\bin\\Release\\netcoreapp3.1\\LearSendEmail.exe",
-            //    // Do you want to show a console window?
-            //    WindowStyle = ProcessWindowStyle.Hidden,
-            //    CreateNoWindow = true
-            //};
-            //int exitCode;
+            //    proc.WaitForExit();
 
-            //ZapsatEmail(zadavatel1Email, predmet, message.Body);
+            //    // Retrieve the app's exit code
+            //    var exitCode = proc.ExitCode;
+            //}
         }
 
-        //private static void ZapsatEmail(string emailKomu, string predemet, string zprava)
-        //{
-        //    OdeslatEmailDataMapper.UlozitEmailNovyBodAP(emailKomu, predemet, zprava);
-        //}
+        public static void OdeslatEmail()
+        {
+            using (var myProcess = new Process())
+            {
+                myProcess.StartInfo.UseShellExecute = false;
+                // You can start any process, HelloWorld is a do-nothing example.
+                myProcess.StartInfo.FileName = "C:\\Users\\pc\\source\\repos\\LearSendEmail\\bin\\Release\\netcoreapp3.1\\LearSendEmail.exe";
+                myProcess.StartInfo.CreateNoWindow = true;
+                myProcess.Start();
+                // This code assumes the process you are starting will terminate itself.
+                // Given that it is started without a window so you cannot terminate it
+                // on the desktop, it must terminate itself or you can do it programmatically
+                // from this application using the Kill method.
+            }
+        }
     }
 }

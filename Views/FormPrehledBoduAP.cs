@@ -4,10 +4,12 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 using LearActionPlans.Models;
 using LearActionPlans.DataMappers;
 using LearActionPlans.ViewModels;
+using LearActionPlans.Utilities;
 
 namespace LearActionPlans.Views
 {
@@ -133,7 +135,7 @@ namespace LearActionPlans.Views
                 datumUkonceni_ = null;
                 foreach (var du in datumUkonceni)
                 {
-                    if (du.StavZadosti == 1 || du.StavZadosti == 4 || du.StavZadosti == 5)
+                    if (du.StavZadosti == 1 || du.StavZadosti == 2 || du.StavZadosti == 4 || du.StavZadosti == 5)
                     {
                         datumUkonceni_ = du.DatumUkonceni;
                         break;
@@ -348,7 +350,7 @@ namespace LearActionPlans.Views
                 datumUkonceni_ = null;
                 foreach (var du in datumUkonceni)
                 {
-                    if (du.StavZadosti == 1 || du.StavZadosti == 4 || du.StavZadosti == 5)
+                    if (du.StavZadosti == 1 || du.StavZadosti == 2 || du.StavZadosti == 4 || du.StavZadosti == 5)
                     {
                         datumUkonceni_ = du.DatumUkonceni;
                         break;
@@ -623,16 +625,15 @@ namespace LearActionPlans.Views
                     // uloží zprávu do tabulky OdeslatEmail
                     OdeslatEmailDataMapper.InsertEmailOdpovedny2(emailOdpovPrac, @"New points AP", htmlText);
                 }
+
+
+                // tady odešlu emaily o založení nových bodů
+                Helper.OdeslatEmail();
+
+                this.NacistDGV();
+
+                // spustí se externí aplikace pro odeslání emailů
             }
-
-            this.NacistDGV();
-
-            // spustí se externí aplikace pro odeslání emailů
         }
-
-        //private void ButtonOdeslatEmail_MouseClick(object sender, MouseEventArgs e)
-        //{
-        //    MessageBox.Show(@"Poznámka", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //}
     }
 }

@@ -141,6 +141,5 @@ namespace LearActionPlans.ViewModels
                 yield return q;
             }
         }
-
     }
 }

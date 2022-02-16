@@ -230,6 +230,5 @@ namespace LearActionPlans.DataMappers
 
             return new Zamestnanci(id, email);
         }
-
     }
 }

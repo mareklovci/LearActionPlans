@@ -12,8 +12,8 @@ namespace LearActionPlans.Views
         private readonly FormNovyAkcniPlan.AkcniPlanTmp akcniPlany_;
 
         private readonly string cisloAPStr_;
-        private DataTable dtActionsWM;
-        private DataTable dtActionsWS;
+        //private DataTable dtActionsWM;
+        //private DataTable dtActionsWS;
 
         private readonly bool spusteniBezParametru;
 
@@ -22,8 +22,8 @@ namespace LearActionPlans.Views
 
         private int cisloRadkyDGVBody;
 
-        private readonly BindingSource _bindingSourceWM = new BindingSource();
-        private readonly BindingSource _bindingSourceWS = new BindingSource();
+        //private readonly BindingSource _bindingSourceWM = new BindingSource();
+        //private readonly BindingSource _bindingSourceWS = new BindingSource();
 
         private bool changedDGV;
 
@@ -38,8 +38,8 @@ namespace LearActionPlans.Views
             bool novyBod)
         {
             this.InitializeComponent();
-            this.dtActionsWM = new DataTable();
-            this.dtActionsWS = new DataTable();
+            //this.dtActionsWM = new DataTable();
+            //this.dtActionsWS = new DataTable();
 
             this.spusteniBezParametru = spusteniBezParametru;
 
@@ -92,11 +92,11 @@ namespace LearActionPlans.Views
             this.labelDatumUkonceni.Text = string.Empty;
             this.labelEfektivita.Text = string.Empty;
 
-            this._bindingSourceWM.DataSource = this.dtActionsWM;
-            this.DataGridViewWMAkce.DataSource = this._bindingSourceWM;
+            //this._bindingSourceWM.DataSource = this.dtActionsWM;
+            //this.DataGridViewWMAkce.DataSource = this._bindingSourceWM;
 
-            this._bindingSourceWS.DataSource = this.dtActionsWS;
-            this.DataGridViewWSAkce.DataSource = this._bindingSourceWS;
+            //this._bindingSourceWS.DataSource = this.dtActionsWS;
+            //this.DataGridViewWSAkce.DataSource = this._bindingSourceWS;
 
             this.deadLineZadan = true;
 
@@ -274,13 +274,14 @@ namespace LearActionPlans.Views
                         if (i == 0)
                         {
                             // jestliže poslední záznam pro daný bod je žádost nebo nepotvrzení žádosti, tak je nastavím prom deadLineZadan na false
+                            // tedy deadline není zadán
                             if (c.StavZadosti == 3 || c.StavZadosti == 6)
                             {
                                 this.deadLineZadan = false;
                             }
                         }
 
-                        if (c.StavZadosti == 1 || c.StavZadosti == 4 || c.StavZadosti == 5)
+                        if (c.StavZadosti == 1 || c.StavZadosti == 2 || c.StavZadosti == 4 || c.StavZadosti == 5)
                         {
                             this.labelDatumUkonceni.Text = c.DatumUkonceni.ToShortDateString();
                             break;
@@ -338,37 +339,37 @@ namespace LearActionPlans.Views
             this.bodAPUlozen = true;
         }
 
-        private void ButtonNovaAkce_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (this.TabControlAkce.SelectedTab == this.TabControlAkce.TabPages["tabPageWM"]) //your specific tabname
-            {
-                this.dtActionsWM.Rows.Add(string.Empty, 0, 0, null, null, null, null, null, 0, string.Empty, null, 0,
-                    false);
-                this.ButtonOdstranitAkci.Enabled = this.DataGridViewWMAkce.Rows.Count > 0;
-            }
+        //private void ButtonNovaAkce_MouseClick(object sender, MouseEventArgs e)
+        //{
+        //    //if (this.TabControlAkce.SelectedTab == this.TabControlAkce.TabPages["tabPageWM"]) //your specific tabname
+        //    //{
+        //    //    this.dtActionsWM.Rows.Add(string.Empty, 0, 0, null, null, null, null, null, 0, string.Empty, null, 0,
+        //    //        false);
+        //    //    this.ButtonOdstranitAkci.Enabled = this.DataGridViewWMAkce.Rows.Count > 0;
+        //    //}
 
-            if (this.TabControlAkce.SelectedTab == this.TabControlAkce.TabPages["tabPageWS"]) //your specific tabname
-            {
-                this.dtActionsWS.Rows.Add(string.Empty, 0, 0, null, null, null, null, null, 0, string.Empty, null, 0,
-                    false);
-                this.ButtonOdstranitAkci.Enabled = this.DataGridViewWSAkce.Rows.Count > 0;
-            }
+        //    //if (this.TabControlAkce.SelectedTab == this.TabControlAkce.TabPages["tabPageWS"]) //your specific tabname
+        //    //{
+        //    //    this.dtActionsWS.Rows.Add(string.Empty, 0, 0, null, null, null, null, null, 0, string.Empty, null, 0,
+        //    //        false);
+        //    //    this.ButtonOdstranitAkci.Enabled = this.DataGridViewWSAkce.Rows.Count > 0;
+        //    //}
 
-            this.ButtonUlozit.Enabled = true;
-        }
+        //    this.ButtonUlozit.Enabled = true;
+        //}
 
-        private void TabControlAkce_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (this.TabControlAkce.SelectedTab == this.TabControlAkce.TabPages["tabPageWM"])
-            {
-                this.ButtonOdstranitAkci.Enabled = this.DataGridViewWMAkce.Rows.Count > 0;
-            }
+        //private void TabControlAkce_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    if (this.TabControlAkce.SelectedTab == this.TabControlAkce.TabPages["tabPageWM"])
+        //    {
+        //        this.ButtonOdstranitAkci.Enabled = this.DataGridViewWMAkce.Rows.Count > 0;
+        //    }
 
-            if (this.TabControlAkce.SelectedTab == this.TabControlAkce.TabPages["tabPageWS"])
-            {
-                this.ButtonOdstranitAkci.Enabled = this.DataGridViewWSAkce.Rows.Count > 0;
-            }
-        }
+        //    if (this.TabControlAkce.SelectedTab == this.TabControlAkce.TabPages["tabPageWS"])
+        //    {
+        //        this.ButtonOdstranitAkci.Enabled = this.DataGridViewWSAkce.Rows.Count > 0;
+        //    }
+        //}
 
         private void ComboBoxOdpovednaOsoba1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -432,7 +433,7 @@ namespace LearActionPlans.Views
 
         private void ButtonTerminUkonceni_MouseClick(object sender, MouseEventArgs e)
         {
-            if (this.spusteniBezParametru == false)
+            if (this.spusteniBezParametru == true)
             {
                 // (this.cisloRadkyDGVBody > -1 ? (FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].UkonceniBodAP == null ? true : false) : false)
                 if (this.novyBodAP == true || (this.cisloRadkyDGVBody > -1 && FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].UkonceniBodAP == null))

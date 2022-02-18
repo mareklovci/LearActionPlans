@@ -1,12 +1,13 @@
-﻿using System.Data;
-using System.Data.SqlClient;
+﻿using System.Collections.Generic;
 using System.Configuration;
-using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using LearActionPlans.Interfaces;
 using LearActionPlans.Models;
 
-namespace LearActionPlans.DataMappers
+namespace LearActionPlans.Repositories
 {
-    public static class ZakazniciDataMapper
+    public class CustomerRepository : IGenericRepository<Zakaznici>
     {
         private static readonly string ConnectionString =
             ConfigurationManager.ConnectionStrings["ActionPlansEntity"].ConnectionString;
@@ -42,5 +43,17 @@ namespace LearActionPlans.DataMappers
 
             return new Zakaznici(id, nazev, stavObjektu);
         }
+
+        public IEnumerable<Zakaznici> GetAll() => throw new System.NotImplementedException();
+
+        public Zakaznici GetById(int id) => throw new System.NotImplementedException();
+
+        public void Insert(Zakaznici obj) => throw new System.NotImplementedException();
+
+        public void Update(Zakaznici obj) => throw new System.NotImplementedException();
+
+        public void Delete(int id) => throw new System.NotImplementedException();
+
+        public void Save() => throw new System.NotImplementedException();
     }
 }

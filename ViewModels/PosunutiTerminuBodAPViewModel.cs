@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LearActionPlans.DataMappers;
+using LearActionPlans.Repositories;
 
 namespace LearActionPlans.ViewModels
 {
@@ -61,7 +61,7 @@ namespace LearActionPlans.ViewModels
 
         public static IEnumerable<PosunutiTerminuBodAPViewModel> GetUkonceniBodAP(int bodAPId)
         {
-            var ukonceni = UkonceniBodAPDataMapper.GetUkonceniBodAPId(bodAPId).ToList();
+            var ukonceni = ActionPlanPointDeadlineRepository.GetUkonceniBodAPId(bodAPId).ToList();
 
             var query = ukonceni.Select(u => UkonceniBodAP(u.Id, u.BodAPId, u.DatumUkonceni, u.Poznamka, u.Odpoved,
                 u.StavZadosti, u.StavObjektuUkonceni)).ToList();
@@ -96,7 +96,7 @@ namespace LearActionPlans.ViewModels
 
         public static IEnumerable<PosunutiTerminuBodAPViewModel> GetZavritPrvniTermin(int bodAPId)
         {
-            var ukonceni = UkonceniBodAPDataMapper.GetUkonceniBodAPId(bodAPId).ToList();
+            var ukonceni = ActionPlanPointDeadlineRepository.GetUkonceniBodAPId(bodAPId).ToList();
 
             var query = ukonceni.Where(u => u.BodAPId == bodAPId && u.StavZadosti == 1)
                 .Select(u => ZavritPrvniTermin(u.Id)).ToList();

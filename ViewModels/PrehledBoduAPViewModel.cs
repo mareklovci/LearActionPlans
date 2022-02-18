@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LearActionPlans.DataMappers;
+using LearActionPlans.Repositories;
 
 namespace LearActionPlans.ViewModels
 {
@@ -48,18 +48,6 @@ namespace LearActionPlans.ViewModels
         // zaměstnanec
         public string JmenoPracovnika { get; set; }
         public string EmailOdpovednyPracovnik { get; set; }
-
-
-        private static PrehledBoduAPViewModel NacistJmenoOdpOsoba2(int odpOsoba2Id, string odpOsoba2Jmeno)
-        {
-            var prehledBoduAPViewModel = new PrehledBoduAPViewModel
-            {
-                OdpovednaOsoba2Id = odpOsoba2Id,
-                OdpovednaOsoba2 = odpOsoba2Jmeno
-            };
-
-            return prehledBoduAPViewModel;
-        }
 
         private static PrehledBoduAPViewModel BodyAP(int id, int idAP, int cisloBoduAP, DateTime datumZalozeni, string odkazNaNormu,
             string hodnoceniNeshody, string popisProblemu,
@@ -118,17 +106,6 @@ namespace LearActionPlans.ViewModels
             {
                 Id = id,
                 DatumUkonceniAP = datumUkonceniAP
-            };
-
-            return prehledBoduAPViewModel;
-        }
-
-        private static PrehledBoduAPViewModel OdpovednyPracovnik(string jmeno, string email)
-        {
-            var prehledBoduAPViewModel = new PrehledBoduAPViewModel
-            {
-                JmenoPracovnika = jmeno,
-                EmailOdpovednyPracovnik = email
             };
 
             return prehledBoduAPViewModel;
@@ -203,37 +180,5 @@ namespace LearActionPlans.ViewModels
                 yield return q;
             }
         }
-
-        public static IEnumerable<PrehledBoduAPViewModel> GetOdpovednaOsoba2()
-        {
-            var zamestnanci = EmployeeRepository.GetZamestnanciAll().ToList();
-
-            var query = from zam in zamestnanci
-                        select NacistJmenoOdpOsoba2(zam.Id, zam.Prijmeni + " " + zam.Jmeno);
-
-            foreach (var q in query)
-            {
-                yield return q;
-            }
-        }
-
-        public static IEnumerable<PrehledBoduAPViewModel> GetOdpovednyPracovnik(int idOdpPrac)
-        {
-            var odpPrac = EmployeeRepository.GetOdpovednyPracovnikId(idOdpPrac).ToList();
-
-            if (!odpPrac.Any())
-            {
-                yield break;
-            }
-
-            var query = from o in odpPrac
-                        select OdpovednyPracovnik(o.Prijmeni + " " + o.Jmeno, o.Email);
-
-            foreach (var q in query)
-            {
-                yield return q;
-            }
-        }
-
     }
 }

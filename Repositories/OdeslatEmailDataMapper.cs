@@ -5,9 +5,9 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
-namespace LearActionPlans.DataMappers
+namespace LearActionPlans.Repositories
 {
-    public static partial class OdeslatEmailDataMapper
+    public static class OdeslatEmailDataMapper
     {
         private static readonly string ConnectionString =
             ConfigurationManager.ConnectionStrings["ActionPlansEntity"].ConnectionString;

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 
 using LearActionPlans.Models;
-using LearActionPlans.DataMappers;
+using LearActionPlans.Repositories;
 using LearActionPlans.ViewModels;
 
 namespace LearActionPlans.Views
@@ -129,7 +129,7 @@ namespace LearActionPlans.Views
         {
             //tady se naplní prom bodyAP z databáze
             var bodyAP_ = PrehledBoduAPViewModel.GetBodyIdAPAll(this.akcniPlany_.Id).ToList();
-            var odpOsoba2 = PrehledBoduAPViewModel.GetOdpovednaOsoba2().ToList();
+            var odpOsoba2 = this.employeeRepository.GetZamestnanciAll().ToList();
 
             var i = 0;
             DateTime? datumUkonceni_;
@@ -159,8 +159,8 @@ namespace LearActionPlans.Views
                 else
                 {
                     var id = Convert.ToInt32(b.OdpovednaOsoba2Id);
-                    var vyhledaneJmeno = odpOsoba2.Find(x => x.OdpovednaOsoba2Id == id);
-                    odpovednaOsoba2 = vyhledaneJmeno.OdpovednaOsoba2;
+                    var vyhledaneJmeno = odpOsoba2.Find(x => x.Id == id);
+                    odpovednaOsoba2 = vyhledaneJmeno.Jmeno;
                 }
 
                 bodyAP.Add(new BodAP(b.Id, b.IdAP, b.CisloBoduAP, b.DatumZalozeni, b.OdkazNaNormu,
@@ -336,7 +336,7 @@ namespace LearActionPlans.Views
             }
 
             var bodyAP_ = PrehledBoduAPViewModel.GetBodyIdAPAll(this.akcniPlany_.Id).ToList();
-            var odpOsoba2 = PrehledBoduAPViewModel.GetOdpovednaOsoba2().ToList();
+            var odpOsoba2 = this.employeeRepository.GetZamestnanciAll().ToList();
 
             DateTime? datumUkonceni_;
             var j = 0;
@@ -364,8 +364,8 @@ namespace LearActionPlans.Views
                 else
                 {
                     var id = Convert.ToInt32(b.OdpovednaOsoba2Id);
-                    var vyhledaneJmeno = odpOsoba2.Find(x => x.OdpovednaOsoba2Id == id);
-                    odpovednaOsoba2 = vyhledaneJmeno.OdpovednaOsoba2;
+                    var vyhledaneJmeno = odpOsoba2.Find(x => x.Id == id);
+                    odpovednaOsoba2 = vyhledaneJmeno.Jmeno;
                 }
 
                 bodyAP.Add(new BodAP(b.Id, b.IdAP, b.CisloBoduAP, b.DatumZalozeni, b.OdkazNaNormu, b.HodnoceniNeshody,
@@ -383,8 +383,6 @@ namespace LearActionPlans.Views
                     b.KontrolaEfektivnosti == null
                         ? string.Empty
                         : Convert.ToDateTime(b.KontrolaEfektivnosti).ToShortDateString(), b.ZnovuOtevrit);
-
-                //var ukonceniBodAP = PrehledBoduAPViewModel.GetUkonceniBodAP(b.Id).ToList();
 
                 if (datumUkonceni.Count != 0)
                 {
@@ -577,12 +575,12 @@ namespace LearActionPlans.Views
                 foreach (var jedenEmail in emailyKOdeslani2)
                 {
                     // id odpovědného pracovníka
-                    var emailTo = PrehledBoduAPViewModel.GetOdpovednyPracovnik(jedenEmail[0]).ToList();
-                    var emailOdpovPrac = Convert.ToString(emailTo[0].EmailOdpovednyPracovnik);
+                    var emailTo = this.employeeRepository.GetOdpovednyPracovnikId(jedenEmail[0]).FirstOrDefault();
+                    var emailOdpovPrac = Convert.ToString(emailTo?.Email);
 
                     var htmlText = @"<p>Action plan: " + this.akcniPlany_.CisloAPRok + @"</p>";
                     htmlText += @"<p>Responsible #2:<br>";
-                    htmlText += emailTo[0].JmenoPracovnika + @"</p>";
+                    htmlText += emailTo?.Jmeno + @"</p>";
                     htmlText += @"<p>Points AP: ";
 
                     var j = 0;

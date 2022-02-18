@@ -8,13 +8,14 @@ using System.Net.Mail;
 using System.Windows.Forms;
 
 using LearActionPlans.ViewModels;
-using LearActionPlans.DataMappers;
+using LearActionPlans.Repositories;
 using LearActionPlans.Utilities;
 
 namespace LearActionPlans.Views
 {
     public partial class FormPosunutiTerminuBodAP : Form
     {
+        private readonly ActionPlanPointDeadlineRepository actionPlanPointDeadlineRepository;
         private readonly EmployeeRepository employeeRepository;
 
         //private readonly DataRow action_;
@@ -54,8 +55,10 @@ namespace LearActionPlans.Views
         private readonly string[] zadost = { "first term", "first term closed", "request", "new deadline confirmed", "new deadline changed", "new deadline reject" };
         //private readonly bool kontrolaEfektivnosti_;
 
-        public FormPosunutiTerminuBodAP(EmployeeRepository employeeRepository)
+        public FormPosunutiTerminuBodAP(ActionPlanPointDeadlineRepository actionPlanPointDeadlineRepository,
+            EmployeeRepository employeeRepository)
         {
+            this.actionPlanPointDeadlineRepository = actionPlanPointDeadlineRepository;
             this.employeeRepository = employeeRepository;
 
             this.InitializeComponent();
@@ -92,7 +95,7 @@ namespace LearActionPlans.Views
         private void FormPosunutiTerminuAkce_Load(object sender, EventArgs e)
         {
             //kontrolaEfektivnosti_ == false &&  && (FormMain.VlastnikAP == true || FormMain.VlastnikAkce == true)
-            if (this.opravitTermin_ == true)
+            if (this.opravitTermin_)
             {
                 this.ButtonUlozit.Visible = true;
                 this.ButtonZavrit.Text = "Close";
@@ -120,7 +123,7 @@ namespace LearActionPlans.Views
 
             //to je proto aby zareagoval handler
             //kontrolaEfektivnosti_ == false &&  && (FormMain.VlastnikAP == true || FormMain.VlastnikAkce == true)
-            if (this.opravitTermin_ == true)
+            if (this.opravitTermin_)
             {
                 this.CheckBoxPoslatZadost.Checked = true;
                 this.CheckBoxPoslatZadost.Checked = false;
@@ -163,7 +166,7 @@ namespace LearActionPlans.Views
                 zmenaTerminu = a.ZmenaTerminu;
                 this.zmenaTerminu_ = zmenaTerminu;
                 //kontrolaEfektivnosti_ == false &&  && (FormMain.VlastnikAP == true || FormMain.VlastnikAkce == true)
-                if (this.opravitTermin_ == true)
+                if (this.opravitTermin_)
                 {
                     //FormMain.VlastnikAP == true &&
                     if (zmenaTerminu == 0)
@@ -443,13 +446,13 @@ namespace LearActionPlans.Views
                 if (prvniTermin.Count > 0)
                 {
                     //provede se jenom při první změně termínu
-                    UkonceniBodAPDataMapper.UpdatePrvniTermin(Convert.ToInt32(prvniTermin[0].UkonceniBodAPId));
+                    this.actionPlanPointDeadlineRepository.UpdatePrvniTermin(Convert.ToInt32(prvniTermin[0].UkonceniBodAPId));
                 }
                 //nejdřív založím nový termín
-                idZadost = UkonceniBodAPDataMapper.InsertUkonceniBodAP(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id, this.dateTimePickerNovyTerminUkonceni.Value, this.richTextBoxNovaPoznamka.Text);
+                idZadost = this.actionPlanPointDeadlineRepository.InsertUkonceniBodAP(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id, this.dateTimePickerNovyTerminUkonceni.Value, this.richTextBoxNovaPoznamka.Text);
 
                 //snížení počtu možných změn termínů dané akce
-                UkonceniBodAPDataMapper.UpdateBodAPZmenaTerminu(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id, this.zmenaTerminu_);
+                this.actionPlanPointDeadlineRepository.UpdateBodAPZmenaTerminu(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id, this.zmenaTerminu_);
 
                 //----- odeslání požadavku -----------------------------------------------------------------------------------------------------
                 var zamId = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OdpovednaOsoba1Id;
@@ -647,7 +650,7 @@ namespace LearActionPlans.Views
 
         private void CheckBoxPoslatZadost_CheckedChanged(object sender, EventArgs e)
         {
-            if (this.CheckBoxPoslatZadost.Checked == true)
+            if (this.CheckBoxPoslatZadost.Checked)
             {
                 this.dateTimePickerNovyTerminUkonceni.Enabled = true;
                 this.labelNovaPoznamka.Enabled = true;
@@ -663,26 +666,27 @@ namespace LearActionPlans.Views
             }
         }
 
-        private void ButtonUlozit_MouseClick(object sender, MouseEventArgs e)
-        {
-            this.UlozitPoznamky();
-        }
+        private void ButtonSave_MouseClick(object sender, MouseEventArgs e) => this.UlozitPoznamky();
 
         private void UlozitPoznamky()
         {
             foreach (var rtb in this.richTextBoxPoznamka)
             {
-                if (rtb.Enabled == true)
+                if (!rtb.Enabled)
                 {
-                    foreach (DataRow radek in this.dtUkonceni.Rows)
+                    continue;
+                }
+
+                foreach (DataRow radek in this.dtUkonceni.Rows)
+                {
+                    if (Convert.ToInt32(rtb.Tag) != Convert.ToInt32(radek["UkonceniBodAPId"]))
                     {
-                        if (Convert.ToInt32(rtb.Tag) == Convert.ToInt32(radek["UkonceniBodAPId"]))
-                        {
-                            UkonceniBodAPDataMapper.UpdateUkonceniBodAP(Convert.ToInt32(rtb.Tag), rtb.Text);
-                            this.ButtonUlozit.Enabled = false;
-                            this.zmenaPoznamky = false;
-                        }
+                        continue;
                     }
+
+                    this.actionPlanPointDeadlineRepository.UpdateUkonceniBodAP(Convert.ToInt32(rtb.Tag), rtb.Text);
+                    this.ButtonUlozit.Enabled = false;
+                    this.zmenaPoznamky = false;
                 }
             }
         }
@@ -691,31 +695,36 @@ namespace LearActionPlans.Views
 
         private void FormPosunutiTerminuAkce_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (this.zmenaPoznamky == true)
+            if (!this.zmenaPoznamky)
             {
-                DialogResult dialogResult;
+                return;
+            }
 
-                dialogResult = MessageBox.Show(@"You want to save your changes.", @"Notice", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
+            var dialogResult = MessageBox.Show(@"You want to save your changes.", @"Notice",
+                MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
 
-                if (dialogResult == DialogResult.Yes)
-                {
-                    //kontrolaEfektivnosti_ == false &&  && (FormMain.VlastnikAP == true || FormMain.VlastnikAkce == true)
-                    if (this.opravitTermin_ == true)
-                    {
-                        //zapíše bod AP do třídy
-                        this.UlozitPoznamky();
-                        this.zmenaPoznamky = false;
-                    }
-                }
-                else if (dialogResult == DialogResult.No)
-                {
-                    ;
-                }
-                else if (dialogResult == DialogResult.Cancel)
-                {
+            switch (dialogResult)
+            {
+                case DialogResult.Yes when !this.opravitTermin_:
+                    return;
+                //zapíše bod AP do třídy
+                case DialogResult.Yes:
+                    this.UlozitPoznamky();
+                    this.zmenaPoznamky = false;
+                    break;
+                case DialogResult.Cancel:
                     //nic se dít nebude
                     e.Cancel = true;
-                }
+                    break;
+                case DialogResult.No:
+                case DialogResult.None:
+                case DialogResult.OK:
+                case DialogResult.Abort:
+                case DialogResult.Retry:
+                case DialogResult.Ignore:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }

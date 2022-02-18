@@ -47,6 +47,12 @@
     <Compile Update="Program.ArgumentHandler.cs">
       <DependentUpon>Program.cs</DependentUpon>
     </Compile>
+    <Compile Update="Repositories\BodAPDataMapper.InsertActionPlanPoint.cs">
+      <DependentUpon>BodAPDataMapper.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Repositories\ActionPlanRepository.Extensions.cs">
+      <DependentUpon>ActionPlanRepository.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <PropertyGroup>

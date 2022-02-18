@@ -1,36 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Text;
-
 using LearActionPlans.Models;
 using LearActionPlans.Utilities;
 using Microsoft.Extensions.Options;
 
-namespace LearActionPlans.DataMappers
+namespace LearActionPlans.Repositories
 {
     public class EffectivityControlRepository
     {
-        private readonly ConnectionStringsOptions optionsMonitor;
         private readonly string connectionString;
 
-        public EffectivityControlRepository(IOptionsMonitor<ConnectionStringsOptions> optionsMonitor)
-        {
-            this.optionsMonitor = optionsMonitor.CurrentValue;
-            this.connectionString = this.optionsMonitor.LearDataAll;
-        }
+        public EffectivityControlRepository(IOptionsMonitor<ConnectionStringsOptions> optionsMonitor) =>
+            this.connectionString = optionsMonitor.CurrentValue.LearDataAll;
 
         public IEnumerable<KontrolaEfektivnosti> GetKontrolaEfektivnostiBodAPId(int bodAPId)
         {
-            using var connection = new SqlConnection(connectionString);
+            using var connection = new SqlConnection(this.connectionString);
             connection.Open();
 
             using var command = connection.CreateCommand();
             command.CommandType = CommandType.Text;
 
-            command.CommandText = $"SELECT * FROM OdstranitKontrolaEfektivnosti WHERE BodAPID = @bodAPId ORDER BY OdstranitKontrolaEfektivnostiID";
+            command.CommandText =
+                $"SELECT * FROM OdstranitKontrolaEfektivnosti WHERE BodAPID = @bodAPId ORDER BY OdstranitKontrolaEfektivnostiID";
             command.Parameters.AddWithValue("@bodAPId", bodAPId);
 
             var reader = command.ExecuteReader();

@@ -1,57 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
 using System.Windows.Forms;
-using System.Collections.Generic;
-
 using LearActionPlans.Models;
-using LearActionPlans.Views;
 using LearActionPlans.Utilities;
+using LearActionPlans.Views;
 
-namespace LearActionPlans.DataMappers
+namespace LearActionPlans.Repositories
 {
-    public static class AkcniPlanyDataMapper
+    public partial class ActionPlanRepository
     {
-        private static readonly string ConnectionString =
-            ConfigurationManager.ConnectionStrings["ActionPlansEntity"].ConnectionString;
-
-        public static IEnumerable<AkcniPlany> GetAPAll()
+        public IEnumerable<AkcniPlany> GetAPId(int id)
         {
-            using var connection = new SqlConnection(ConnectionString);
-            connection.Open();
-
-            using var command = connection.CreateCommand();
-            command.CommandType = CommandType.Text;
-            command.CommandText = $"SELECT * FROM AkcniPlan ORDER BY DatumZalozeni, CisloAP";
-
-            var reader = command.ExecuteReader();
-
-            if (!reader.HasRows)
-            {
-                yield break;
-            }
-
-            if (!reader.HasRows)
-            {
-                yield break;
-            }
-
-            while (reader.Read())
-            {
-                yield return ConstructAllAP(reader);
-            }
-        }
-
-        public static IEnumerable<AkcniPlany> GetAPId(int id)
-        {
-            using var connection = new SqlConnection(ConnectionString);
+            using var connection = new SqlConnection(this.connectionString);
             connection.Open();
 
             using var command = connection.CreateCommand();
             command.CommandType = CommandType.Text;
 
-            //command.CommandText = $"SELECT akcniPlan_Id, MAX(cisloAP) AS maxCislo FROM AkcniPlany WHERE rok = @rok GROUP BY akcniPlan_Id";
             command.CommandText = $"SELECT * FROM AkcniPlan WHERE AkcniPlanID = @apId";
             command.Parameters.AddWithValue("@apId", id);
 
@@ -73,9 +40,9 @@ namespace LearActionPlans.DataMappers
             }
         }
 
-        public static IEnumerable<AkcniPlany> GetPocetTerminuAP(int id)
+        public IEnumerable<AkcniPlany> GetPocetTerminuAP(int id)
         {
-            using var connection = new SqlConnection(ConnectionString);
+            using var connection = new SqlConnection(this.connectionString);
             connection.Open();
 
             using var command = connection.CreateCommand();
@@ -94,11 +61,11 @@ namespace LearActionPlans.DataMappers
 
             while (reader.Read())
             {
-                yield return ConstructZmenaTerminuAP(reader);
+                yield return this.ConstructZmenaTerminuAP(reader);
             }
         }
 
-        private static AkcniPlany ConstructZmenaTerminuAP(IDataRecord readerData)
+        private AkcniPlany ConstructZmenaTerminuAP(IDataRecord readerData)
         {
             var id = Convert.ToInt32(readerData["AkcniPlanID"]);
             var zmenaTerminuAP = Convert.ToByte(readerData["ZmenaTerminu"]);
@@ -106,15 +73,16 @@ namespace LearActionPlans.DataMappers
             return new AkcniPlany(id, zmenaTerminuAP);
         }
 
-        public static IEnumerable<AkcniPlany> GetZnovuOtevritAP(int id)
+        public IEnumerable<AkcniPlany> GetZnovuOtevritAP(int id)
         {
-            using var connection = new SqlConnection(ConnectionString);
+            using var connection = new SqlConnection(this.connectionString);
             connection.Open();
 
             using var command = connection.CreateCommand();
             command.CommandType = CommandType.Text;
 
-            command.CommandText = $"SELECT AkcniPlanID, UzavreniAP, ZnovuOtevrit, DuvodZnovuotevreni FROM AkcniPlan WHERE AkcniPlanID = @apId";
+            command.CommandText =
+                $"SELECT AkcniPlanID, UzavreniAP, ZnovuOtevrit, DuvodZnovuotevreni FROM AkcniPlan WHERE AkcniPlanID = @apId";
             command.Parameters.AddWithValue("@apId", id);
 
             var reader = command.ExecuteReader();
@@ -126,11 +94,11 @@ namespace LearActionPlans.DataMappers
 
             while (reader.Read())
             {
-                yield return ConstructZnovuOtevreniAP(reader);
+                yield return this.ConstructZnovuOtevreniAP(reader);
             }
         }
 
-        private static AkcniPlany ConstructZnovuOtevreniAP(IDataRecord readerData)
+        private AkcniPlany ConstructZnovuOtevreniAP(IDataRecord readerData)
         {
             var id = Convert.ToInt32(readerData["AkcniPlanID"]);
             var znovuOtevritAP = Convert.ToByte(readerData["ZnovuOtevrit"]);
@@ -140,11 +108,11 @@ namespace LearActionPlans.DataMappers
             return new AkcniPlany(id, znovuOtevritAP, uzavreniAP, duvod);
         }
 
-        public static int GetPosledniCisloAP(int rok)
+        public int GetPosledniCisloAP(int rok)
         {
             try
             {
-                using var connection = new SqlConnection(ConnectionString);
+                using var connection = new SqlConnection(this.connectionString);
                 connection.Open();
 
                 using var command = connection.CreateCommand();
@@ -157,7 +125,7 @@ namespace LearActionPlans.DataMappers
 
                 if (reader.HasRows)
                 {
-                    using var connectionUniqueNumber = new SqlConnection(ConnectionString);
+                    using var connectionUniqueNumber = new SqlConnection(this.connectionString);
                     if (connectionUniqueNumber.State == ConnectionState.Closed)
                     {
                         connectionUniqueNumber.Open();
@@ -174,7 +142,7 @@ namespace LearActionPlans.DataMappers
                 }
 
                 //když nenajde číslo AP jedna, tak zresetuje čítač
-                using (var connectionResetNumber = new SqlConnection(ConnectionString))
+                using (var connectionResetNumber = new SqlConnection(this.connectionString))
                 {
                     if (connectionResetNumber.State == ConnectionState.Closed)
                     {
@@ -191,7 +159,7 @@ namespace LearActionPlans.DataMappers
                     }
                 }
 
-                using (var connectionUniqueNumber = new SqlConnection(ConnectionString))
+                using (var connectionUniqueNumber = new SqlConnection(this.connectionString))
                 {
                     if (connectionUniqueNumber.State == ConnectionState.Closed)
                     {
@@ -233,33 +201,27 @@ namespace LearActionPlans.DataMappers
             var stavObjektu = Convert.ToByte(readerData["StavObjektu"]);
             var uzavreniAP = DatabaseReader.ConvertDateTime(readerData, "UzavreniAP");
 
-            return new AkcniPlany(id, datumZalozeni, cisloAP, zadavatel1Id, zadavatel2Id, tema, projektId, zakaznikId, typAP, stavObjektu, uzavreniAP);
+            return new AkcniPlany(id, datumZalozeni, cisloAP, zadavatel1Id, zadavatel2Id, tema, projektId, zakaznikId,
+                typAP, stavObjektu, uzavreniAP);
         }
 
-        private static int ConstructPosledniCisloAP(IDataRecord readerData)
+        public int InsertAP(FormNovyAkcniPlan.AkcniPlanTmp akcniPlany)
         {
-            var noveCisloAP = (int)readerData["CisloAP"];
-
-            return noveCisloAP;
-        }
-
-        public static int InsertAP(FormNovyAkcniPlan.AkcniPlanTmp akcniPlany)
-        {
-            var idZaznamu = 0;
+            int idZaznamu;
 
             try
             {
-                using var connection = new SqlConnection(ConnectionString);
+                using var connection = new SqlConnection(this.connectionString);
                 connection.Open();
 
                 using var command = connection.CreateCommand();
                 command.CommandType = CommandType.Text;
-                command.CommandText = $"INSERT INTO AkcniPlan (DatumZalozeni, CisloAP, Zadavatel1ID, Zadavatel2ID, Tema, ProjektID, ZakaznikID, TypAP, ZmenaTerminu, UzavreniAP, ZnovuOtevrit, DuvodZnovuotevreni, StavObjektu)" +
-                                      $"output INSERTED.AkcniPlanID VALUES" +
-                                      $"(@datumZalozeni, @cisloAP, @zadavatel1Id, @zadavatel2Id, @tema, @projektId, @zakaznikId, @typAP, @zmenaTerminu, @uzavreniAP, @znovuOtevrit, @duvodZnovuotevreni, @stavObjektu)";
+                command.CommandText =
+                    $"INSERT INTO AkcniPlan (DatumZalozeni, CisloAP, Zadavatel1ID, Zadavatel2ID, Tema, ProjektID, ZakaznikID, TypAP, ZmenaTerminu, UzavreniAP, ZnovuOtevrit, DuvodZnovuotevreni, StavObjektu)" +
+                    $"output INSERTED.AkcniPlanID VALUES" +
+                    $"(@datumZalozeni, @cisloAP, @zadavatel1Id, @zadavatel2Id, @tema, @projektId, @zakaznikId, @typAP, @zmenaTerminu, @uzavreniAP, @znovuOtevrit, @duvodZnovuotevreni, @stavObjektu)";
                 command.Parameters.AddWithValue("@datumZalozeni", DateTime.Now);
                 command.Parameters.AddWithValue("@cisloAP", akcniPlany.CisloAP);
-                //command.Parameters.AddWithValue("@rok", akcniPlany.Rok);
                 command.Parameters.AddWithValue("@zadavatel1Id", akcniPlany.Zadavatel1Id);
                 if (akcniPlany.Zadavatel2Id == null)
                 {
@@ -294,7 +256,8 @@ namespace LearActionPlans.DataMappers
                 {
                     using var commandDatum = connection.CreateCommand();
                     commandDatum.CommandType = CommandType.Text;
-                    commandDatum.CommandText = $"INSERT INTO UkonceniAP (AkcniPlanID, DatumUkonceni, Poznamka) VALUES (@akcniPlanId, @datumUkonceni, @poznamka)";
+                    commandDatum.CommandText =
+                        $"INSERT INTO UkonceniAP (AkcniPlanID, DatumUkonceni, Poznamka) VALUES (@akcniPlanId, @datumUkonceni, @poznamka)";
                     commandDatum.Parameters.AddWithValue("@akcniPlanId", idZaznamu);
                     commandDatum.Parameters.AddWithValue("@datumUkonceni", akcniPlany.DatumUkonceni);
                     if (akcniPlany.Poznamka == null)
@@ -315,20 +278,23 @@ namespace LearActionPlans.DataMappers
                 MessageBox.Show(@"Database problem.", @"Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return 0;
             }
+
             return idZaznamu;
         }
 
-        public static void UpdateAP(int akcniPlanID, int zadavatel1ID, int? zadavatel2ID, string tema, int? projektID, int zakaznikID)
+        public void UpdateAP(int akcniPlanID, int zadavatel1ID, int? zadavatel2ID, string tema, int? projektID,
+            int zakaznikID)
         {
             try
             {
-                using var connection = new SqlConnection(ConnectionString);
+                using var connection = new SqlConnection(this.connectionString);
                 connection.Open();
 
                 using var command = connection.CreateCommand();
                 command.CommandType = CommandType.Text;
-                command.CommandText = $"UPDATE AkcniPlan SET Zadavatel1ID = @zadavatel1ID, Zadavatel2ID = @zadavatel2ID," +
-                                      $" Tema = @tema, ZakaznikId = @zakaznikID, ProjektID = @projektID WHERE AkcniPlanID = @akcniPlanID";
+                command.CommandText =
+                    $"UPDATE AkcniPlan SET Zadavatel1ID = @zadavatel1ID, Zadavatel2ID = @zadavatel2ID," +
+                    $" Tema = @tema, ZakaznikId = @zakaznikID, ProjektID = @projektID WHERE AkcniPlanID = @akcniPlanID";
 
                 command.Parameters.AddWithValue("@akcniPlanID", akcniPlanID);
                 command.Parameters.AddWithValue("@zadavatel1ID", zadavatel1ID);
@@ -361,11 +327,11 @@ namespace LearActionPlans.DataMappers
             }
         }
 
-        public static void ZmenaTerminuAP(int apId, int zmenaTerminu, DateTime datumUkonceni, string poznamka)
+        public void ZmenaTerminuAP(int apId, int zmenaTerminu, DateTime datumUkonceni, string poznamka)
         {
             try
             {
-                using (var connection = new SqlConnection(ConnectionString))
+                using (var connection = new SqlConnection(this.connectionString))
                 {
                     connection.Open();
 
@@ -373,7 +339,7 @@ namespace LearActionPlans.DataMappers
                     {
                         command.CommandType = CommandType.Text;
                         command.CommandText = $"INSERT INTO UkonceniAP (AkcniPlanID, DatumUkonceni, Poznamka)" +
-                            $" VALUES (@akcniPlanId, @datumUkonceni, @poznamka)";
+                                              $" VALUES (@akcniPlanId, @datumUkonceni, @poznamka)";
 
                         command.Parameters.AddWithValue("@akcniPlanID", apId);
                         command.Parameters.AddWithValue("@datumUkonceni", datumUkonceni);
@@ -389,7 +355,8 @@ namespace LearActionPlans.DataMappers
                         command.ExecuteNonQuery();
                     }
                 }
-                using (var connection = new SqlConnection(ConnectionString))
+
+                using (var connection = new SqlConnection(this.connectionString))
                 {
                     connection.Open();
 
@@ -397,9 +364,10 @@ namespace LearActionPlans.DataMappers
                     {
                         command.CommandType = CommandType.Text;
                         command.CommandText = $"INSERT INTO UkonceniAP (AkcniPlanID, DatumUkonceni, Poznamka)" +
-                            $" VALUES" +
-                            $"(@akcniPlanId, @datumZalozeni, @poznamka)";
-                        command.CommandText = $"UPDATE AkcniPlan SET ZmenaTerminu = @zmenaTerminu WHERE AkcniPlanID = @akcniPlanID";
+                                              $" VALUES" +
+                                              $"(@akcniPlanId, @datumZalozeni, @poznamka)";
+                        command.CommandText =
+                            $"UPDATE AkcniPlan SET ZmenaTerminu = @zmenaTerminu WHERE AkcniPlanID = @akcniPlanID";
 
                         command.Parameters.AddWithValue("@akcniPlanID", apId);
                         command.Parameters.AddWithValue("@zmenaTerminu", zmenaTerminu);
@@ -415,11 +383,11 @@ namespace LearActionPlans.DataMappers
             }
         }
 
-        public static void UpdateUkonceniAP(int apId)
+        public void UpdateUkonceniAP(int apId)
         {
             try
             {
-                using var connection = new SqlConnection(ConnectionString);
+                using var connection = new SqlConnection(this.connectionString);
                 connection.Open();
 
                 using var command = connection.CreateCommand();
@@ -437,15 +405,16 @@ namespace LearActionPlans.DataMappers
             }
         }
 
-        public static void UpdateZnovuOtevritAP(int apId, string duvod)
+        public void UpdateZnovuOtevritAP(int apId, string duvod)
         {
             try
             {
-                using var connection = new SqlConnection(ConnectionString);
+                using var connection = new SqlConnection(this.connectionString);
                 connection.Open();
 
                 using var command = connection.CreateCommand();
-                command.CommandText = $"UPDATE AkcniPlan SET UzavreniAP = @uzavreniAP, ZnovuOtevrit = @znovuOtevrit, DuvodZnovuotevreni = @duvodZnovuotevreni WHERE AkcniPlanID = @akcniPlanID";
+                command.CommandText =
+                    @"UPDATE AkcniPlan SET UzavreniAP = @uzavreniAP, ZnovuOtevrit = @znovuOtevrit, DuvodZnovuotevreni = @duvodZnovuotevreni WHERE AkcniPlanID = @akcniPlanID";
 
                 command.Parameters.AddWithValue("@akcniPlanID", apId);
                 command.Parameters.AddWithValue("@uzavreniAP", DBNull.Value);

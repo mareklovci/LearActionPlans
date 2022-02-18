@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Reflection;
+using LearActionPlans.Repositories;
 using LearActionPlans.ViewModels;
 using LearActionPlans.Utilities;
 using Microsoft.Extensions.Options;
@@ -15,7 +16,8 @@ namespace LearActionPlans.Views
     {
         private readonly ArgumentOptions arguments;
         private readonly FormPrehledBoduAP formPrehledBoduAp;
-        private readonly FormEditAP formEditAp;
+        private readonly FormEditActionPlan formEditActionPlan;
+        private readonly EmployeeRepository employeeRepository;
 
         private readonly BindingSource bindingSourceAp;
         private DataTable dtAp;
@@ -35,12 +37,20 @@ namespace LearActionPlans.Views
 
         public FormPrehledAp(IOptionsMonitor<ArgumentOptions> optionsMonitor,
             FormPrehledBoduAP formPrehledBoduAp,
-            FormEditAP formEditAp)
+            FormEditActionPlan formEditActionPlan,
+            EmployeeRepository employeeRepository)
         {
-            this.formPrehledBoduAp = formPrehledBoduAp;
-            this.formEditAp = formEditAp;
+            // Arguments
             this.arguments = optionsMonitor.CurrentValue;
 
+            // Forms
+            this.formPrehledBoduAp = formPrehledBoduAp;
+            this.formEditActionPlan = formEditActionPlan;
+
+            // Repositories
+            this.employeeRepository = employeeRepository;
+
+            // Initialize
             this.InitializeComponent();
 
             this.cisloApStr = this.arguments.ActionPlanNumber;
@@ -237,7 +247,7 @@ namespace LearActionPlans.Views
         private bool ZobrazitDgv()
         {
             var ap = PrehledAPViewModel.GetAPAll().ToList();
-            var zad2 = PrehledAPViewModel.GetZadavatel2().ToList();
+            var zad2 = this.employeeRepository.GetZamestnanciAll().ToList();
 
             //pokud počet záznamů bude roven 0, namohu naplnit filtry
             if (ap.Count <= 0)
@@ -263,8 +273,8 @@ namespace LearActionPlans.Views
                 else
                 {
                     var id = Convert.ToInt32(row["Zadavatel2Id"]);
-                    var vyhledaneJmeno = zad2.Find(x => x.Zadavatel2Id == id);
-                    zadavatel2 = vyhledaneJmeno?.Zadavatel2;
+                    var vyhledaneJmeno = zad2.Find(x => x.Id == id);
+                    zadavatel2 = vyhledaneJmeno?.Jmeno;
                 }
 
                 var typAP = string.Empty;
@@ -866,7 +876,7 @@ namespace LearActionPlans.Views
         {
             var currentIndexDGV = this.DataGridViewAP.CurrentCell.RowIndex;
 
-            using (var form = this.formEditAp)
+            using (var form = this.formEditActionPlan)
             {
                 form.CreateFormEditAp(Convert.ToInt32(this.dvAp[currentIndexDGV]["APId"]),
                     Convert.ToString(this.dvAp[currentIndexDGV]["CisloAPRok"]),

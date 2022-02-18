@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using LearActionPlans.DataMappers;
+using LearActionPlans.Repositories;
 using LearActionPlans.ViewModels;
 
 namespace LearActionPlans.Views

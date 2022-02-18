@@ -1,10 +1,10 @@
-﻿using System.Data;
-using System.Data.SqlClient;
+﻿using System.Collections.Generic;
 using System.Configuration;
-using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using LearActionPlans.Models;
 
-namespace LearActionPlans.DataMappers
+namespace LearActionPlans.Repositories
 {
     public static class ProjektyDataMapper
     {

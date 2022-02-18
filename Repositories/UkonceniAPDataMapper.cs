@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Text;
-
 using LearActionPlans.Models;
-using LearActionPlans.Utilities;
 
-namespace LearActionPlans.DataMappers
+namespace LearActionPlans.Repositories
 {
     public static class UkonceniAPDataMapper
     {

@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using LearActionPlans.DataMappers;
+using LearActionPlans.Repositories;
 using LearActionPlans.Utilities;
 
 namespace LearActionPlans.Views

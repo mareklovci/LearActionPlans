@@ -131,7 +131,7 @@ namespace LearActionPlans.Views
             this.ButtonUlozit.TabIndex = 25;
             this.ButtonUlozit.Text = "Save";
             this.ButtonUlozit.UseVisualStyleBackColor = true;
-            this.ButtonUlozit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonUlozit_MouseClick);
+            this.ButtonUlozit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonSave_MouseClick);
             // 
             // FormPosunutiTerminuAkce
             // 

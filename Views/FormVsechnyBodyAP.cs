@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Reflection;
-using LearActionPlans.Models;
-using LearActionPlans.DataMappers;
 using LearActionPlans.ViewModels;
 using LearActionPlans.Utilities;
 
@@ -23,14 +19,16 @@ namespace LearActionPlans.Views
         private DataView dvBodyAP;
 
         private string Odpovedny1Filtr;
-        private string PopisProblemuFiltr;
         private string PricinaFiltr;
 
         public FormVsechnyBodyAP(FormPrehledBoduAP formPrehledBoduAp)
         {
+            // Forms
             this.formPrehledBoduAp = formPrehledBoduAp;
 
+            // Initialize
             this.InitializeComponent();
+
             this.bindingSource = new BindingSource();
             this.dtBodyAP = new DataTable();
         }
@@ -46,7 +44,7 @@ namespace LearActionPlans.Views
                 var dgvType = this.DataGridViewBodyAP.GetType();
                 var pi = dgvType.GetProperty("DoubleBuffered",
                     BindingFlags.Instance | BindingFlags.NonPublic);
-                pi.SetValue(this.DataGridViewBodyAP, true, null);
+                pi?.SetValue(this.DataGridViewBodyAP, true, null);
             }
 
             this.CreateColumns();
@@ -60,26 +58,19 @@ namespace LearActionPlans.Views
 
             foreach (var b in bodyAP_)
             {
-                string cisloAPRok;
-                cisloAPRok = Convert.ToInt32(b.CisloAP).ToString("D3") + " / " +
-                             Convert.ToDateTime(b.DatumZalozeniAP).Year;
+                var cisloAPRok = $"{Convert.ToInt32(b.CisloAP):D3} / {Convert.ToDateTime(b.DatumZalozeniAP).Year}";
 
-                this.dtBodyAP.Rows.Add(new object[]
-                {
-                    b.IdAP, b.CisloAP, cisloAPRok, b.DatumZalozeniAP, b.CisloBoduAP, b.OdkazNaNormu,
-                    b.HodnoceniNeshody, b.PopisProblemu, b.OdpovednaOsoba1, string.Empty, b.SkutecnaPricinaWM
-                });
+                this.dtBodyAP.Rows.Add(b.IdAP, b.CisloAP, cisloAPRok, b.DatumZalozeniAP, b.CisloBoduAP, b.OdkazNaNormu,
+                    b.HodnoceniNeshody, b.PopisProblemu, b.OdpovednaOsoba1, string.Empty, b.SkutecnaPricinaWM);
 
                 this.dvBodyAP = this.dtBodyAP.DefaultView;
-                //dvAP.RowFilter = string.Format("DatumZalozeniRok = {0}", DateTime.Now.Year);
-                //dvBodyAP.RowFilter = string.Empty;
             }
 
             //nastaví filtry na string.empty
             this.InitFilter();
 
             //naplní comboBoxy
-            this.InitFiltryComboBox();
+            this.InitFiltersComboBox();
 
             //v comboBoxech nastaví vybrané položky
             this.NastavitVybranouPolozku();
@@ -160,9 +151,6 @@ namespace LearActionPlans.Views
                 //column.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.0F, GraphicsUnit.Pixel);
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
-
-            //DataGridViewBodyAP.DefaultCellStyle.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular);
-            //DataGridViewBodyAP.ColumnHeadersDefaultCellStyle.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular);
         }
 
         private void DataGridViewBodyAP_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -202,14 +190,8 @@ namespace LearActionPlans.Views
                             this.akcniPlany.Zadavatel2Jmeno = zadavatel2;
 
                             this.akcniPlany.Tema = Convert.ToString(row["Tema"]);
-                            if (row["ProjektId"] == null)
-                            {
-                                this.akcniPlany.ProjektNazev = null;
-                            }
-                            else
-                            {
-                                this.akcniPlany.ProjektNazev = Convert.ToString(row["Projekt"]);
-                            }
+                            this.akcniPlany.ProjektNazev =
+                                row["ProjektId"] == null ? null : Convert.ToString(row["Projekt"]);
 
                             this.akcniPlany.ZakaznikNazev = Convert.ToString(row["Zakaznik"]);
                         }
@@ -221,72 +203,24 @@ namespace LearActionPlans.Views
                             Convert.ToDateTime(
                                 this.dvBodyAP[this.DataGridViewBodyAP.CurrentCell.RowIndex]["DatumZalozeni"]).Year;
                         this.akcniPlany.CisloAPRok = cisloAPRok;
+
                         //tada se ověří uživatel
                         //volat FormOvereniUzivatele
                         using var form = this.formPrehledBoduAp;
                         form.CreateFormPrehledBoduAP(true, this.akcniPlany, 2);
-                        var result = form.ShowDialog();
-                        if (result == DialogResult.OK)
-                        {
-                            //string dateString = form.ReturnValueDatum;
-                            //string poznamka = form.ReturnValuePoznamka;
-
-                            //dtActionsWS.Rows[DataGridViewWSAkce.CurrentCell.RowIndex]["textBoxDatumUkonceni"] = Convert.ToDateTime(dateString);
-                            //changedDGV = true;
-                            //podminkaPoznamka = poznamka == null;
-                            //dtActionsWS.Rows[DataGridViewWSAkce.CurrentCell.RowIndex]["textBoxPoznamka"] = podminkaPoznamka ? null : Convert.ToString(poznamka);
-                        }
+                        form.ShowDialog();
                     }
                 }
             }
         }
 
-        private void ButtonFiltrPopisProblemu_MouseClick(object sender, MouseEventArgs e)
-        {
-            //OdebratHandlery();
-            if (this.TextBoxFiltrPopisProblemu.Text == string.Empty)
-            {
-                this.PopisProblemuFiltr = string.Empty;
-            }
-            else
-            {
-                this.PopisProblemuFiltr = this.TextBoxFiltrPopisProblemu.Text;
-            }
+        private void ButtonFiltrPopisProblemu_MouseClick(object sender, MouseEventArgs e) => this.FilterData();
 
-            //if (ComboBoxOdpovedny1.SelectedIndex == 0)
-            //{
-            //    Odpovedny1Filtr = string.Empty;
-            //}
-            //else
-            //{
-            //    Odpovedny1Filtr = ComboBoxOdpovedny1.GetItemText(ComboBoxOdpovedny1.SelectedItem);
-            //}
-            this.FiltrovatData();
+        private void ButtonFiltrPricina_MouseClick(object sender, MouseEventArgs e) { }
 
-            //InitFiltryComboBox();
+        private void InitFiltersComboBox() => this.FiltrOdpovedny1();
 
-            //NastavitVybranouPolozku();
-
-            //PridatHandlery();
-            //ObarvitLabel();
-        }
-
-
-        private void ButtonFiltrPricina_MouseClick(object sender, MouseEventArgs e)
-        {
-        }
-
-        private void FiltrPopisProblemu()
-        {
-        }
-
-        private void InitFiltryComboBox()
-        {
-            this.FiltrOdpovedny1();
-            //FiltrPopisProblemu();
-        }
-
-        public void FiltrovatData()
+        private void FilterData()
         {
             if (this.dvBodyAP.Count == 0)
             {
@@ -344,18 +278,13 @@ namespace LearActionPlans.Views
         {
             this.OdebratHandlery();
 
-            if (this.ComboBoxOdpovedny1.SelectedIndex == 0)
-            {
-                this.Odpovedny1Filtr = string.Empty;
-            }
-            else
-            {
-                this.Odpovedny1Filtr = this.ComboBoxOdpovedny1.GetItemText(this.ComboBoxOdpovedny1.SelectedItem);
-            }
+            this.Odpovedny1Filtr = this.ComboBoxOdpovedny1.SelectedIndex == 0
+                ? string.Empty
+                : this.ComboBoxOdpovedny1.GetItemText(this.ComboBoxOdpovedny1.SelectedItem);
 
-            this.FiltrovatData();
+            this.FilterData();
 
-            this.InitFiltryComboBox();
+            this.InitFiltersComboBox();
 
             this.NastavitVybranouPolozku();
 

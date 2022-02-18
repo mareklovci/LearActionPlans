@@ -2,26 +2,23 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using LearActionPlans.Interfaces;
 using LearActionPlans.Models;
 using LearActionPlans.Utilities;
 using Microsoft.Extensions.Options;
 
-namespace LearActionPlans.DataMappers
+namespace LearActionPlans.Repositories
 {
-    public class ActionRepository
+    public class ActionRepository : IGenericRepository<Akce>
     {
-        private readonly ConnectionStringsOptions optionsMonitor;
         private readonly string connectionString;
 
-        public ActionRepository(IOptionsMonitor<ConnectionStringsOptions> optionsMonitor)
-        {
-            this.optionsMonitor = optionsMonitor.CurrentValue;
-            this.connectionString = this.optionsMonitor.LearDataAll;
-        }
+        public ActionRepository(IOptionsMonitor<ConnectionStringsOptions> optionsMonitor) =>
+            this.connectionString = optionsMonitor.CurrentValue.LearDataAll;
 
         public IEnumerable<Akce> GetAkceAll()
         {
-            using var connection = new SqlConnection(connectionString);
+            using var connection = new SqlConnection(this.connectionString);
             connection.Open();
 
             using var command = connection.CreateCommand();
@@ -56,5 +53,17 @@ namespace LearActionPlans.DataMappers
 
             return new Akce(id, bodAPId, stavObjektu);
         }
+
+        public IEnumerable<Akce> GetAll() => throw new NotImplementedException();
+
+        public Akce GetById(int id) => throw new NotImplementedException();
+
+        public void Insert(Akce obj) => throw new NotImplementedException();
+
+        public void Update(Akce obj) => throw new NotImplementedException();
+
+        public void Delete(int id) => throw new NotImplementedException();
+
+        public void Save() => throw new NotImplementedException();
     }
 }

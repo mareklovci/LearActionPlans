@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using LearActionPlans.ViewModels;
-using LearActionPlans.DataMappers;
 using System.Drawing;
+using LearActionPlans.Repositories;
 
 namespace LearActionPlans.Views
 {
-    public partial class FormEditAP : Form
+    public partial class FormEditActionPlan : Form
     {
+        private readonly ActionPlanPointDeadlineRepository actionPlanPointDeadlineRepository;
+
+        private readonly ActionPlanRepository actionPlanRepository;
         //public string Zadavatel1 { get; set; }
 
         private int apId_;
@@ -30,7 +33,6 @@ namespace LearActionPlans.Views
         private Label labelProjekt = new Label();
         private Label labelZakaznik = new Label();
 
-
         private bool zmenaDat;
 
         private byte znovuOtevritAP;
@@ -41,7 +43,16 @@ namespace LearActionPlans.Views
         private List<Label> labelTerminyDatum;
         private List<RichTextBox> richTextBoxTermin;
 
-        public FormEditAP() => this.InitializeComponent();
+        public FormEditActionPlan(ActionPlanPointDeadlineRepository actionPlanPointDeadlineRepository,
+            ActionPlanRepository actionPlanRepository)
+        {
+            // Repositories
+            this.actionPlanPointDeadlineRepository = actionPlanPointDeadlineRepository;
+            this.actionPlanRepository = actionPlanRepository;
+
+            // Initialize
+            this.InitializeComponent();
+        }
 
         public void CreateFormEditAp(int apId, string cisloAPRok, string zadavatel1, string zadavatel2, string tema,
             string projekt, string zakaznik, int zadavatel1Id, int? zadavatel2Id, int? projektId, int zakaznikId)
@@ -79,8 +90,8 @@ namespace LearActionPlans.Views
             //načíst všechny akce daného AP a zjistit, jestli mají všechny vyplněné datum efektivnosti
             //jestli ano, tak mohu aktivovat tlačítko pro ukončení AP
             //po uzavření AP uložím datum ukončení
-            var uzavreneAkce = EditAPViewModel.GetUkonceniAkce(this.apId_).ToList();
-            var znovuOtevrit = EditAPViewModel.GetZnovuOtevritAP(this.apId_).ToList();
+            var uzavreneAkce = this.actionPlanPointDeadlineRepository.GetUkonceniAkceAll(this.apId_).ToList();
+            var znovuOtevrit = this.actionPlanRepository.GetZnovuOtevritAP(this.apId_).ToList();
 
             var akceUkonceny = true;
             if (uzavreneAkce.Count == 0)
@@ -520,7 +531,7 @@ namespace LearActionPlans.Views
                 projektID = Convert.ToInt32(this.ComboBoxProjekty.SelectedValue);
             }
 
-            AkcniPlanyDataMapper.UpdateAP(this.apId_, Convert.ToInt32(this.ComboBoxZadavatel1.SelectedValue),
+            this.actionPlanRepository.UpdateAP(this.apId_, Convert.ToInt32(this.ComboBoxZadavatel1.SelectedValue),
                 zadavatel2ID, this.tema_, projektID, Convert.ToInt32(this.ComboBoxZakaznici.SelectedValue));
 
             //MessageBox.Show("Data has been saved.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -547,7 +558,7 @@ namespace LearActionPlans.Views
             }
             else
             {
-                AkcniPlanyDataMapper.ZmenaTerminuAP(this.apId_,
+                this.actionPlanRepository.ZmenaTerminuAP(this.apId_,
                     Convert.ToInt32(this.labelZbyvajiciPocetTerminu.Text) - 1,
                     Convert.ToDateTime(this.dateTimePickerDatumUkonceni.Value), this.richTextBoxNovaPoznamka.Text);
                 this.dateTimePickerDatumUkonceni.Enabled = false;
@@ -573,7 +584,7 @@ namespace LearActionPlans.Views
                 return;
             }
 
-            AkcniPlanyDataMapper.UpdateUkonceniAP(this.apId_);
+            this.actionPlanRepository.UpdateUkonceniAP(this.apId_);
 
             this.RemoveControl();
             this.InitForm();
@@ -596,7 +607,7 @@ namespace LearActionPlans.Views
             }
             else
             {
-                AkcniPlanyDataMapper.UpdateZnovuOtevritAP(this.apId_, this.richTextBoxDuvodZnovuOtevreni.Text);
+                this.actionPlanRepository.UpdateZnovuOtevritAP(this.apId_, this.richTextBoxDuvodZnovuOtevreni.Text);
 
                 this.RemoveControl();
                 this.InitForm();

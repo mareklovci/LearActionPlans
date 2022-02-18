@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LearActionPlans.DataMappers;
+using LearActionPlans.Repositories;
 
 namespace LearActionPlans.ViewModels
 {
@@ -171,7 +171,7 @@ namespace LearActionPlans.ViewModels
 
         public static IEnumerable<EditAPViewModel> GetZakaznikId(int id)
         {
-            var zakaznici = ZakazniciDataMapper.GetZakazniciAll().ToList();
+            var zakaznici = CustomerRepository.GetZakazniciAll().ToList();
 
             var query = zakaznici.Where(z => z.Id == id).Select(z => Zakaznik(z.Id, z.Nazev)).ToList();
 
@@ -188,7 +188,7 @@ namespace LearActionPlans.ViewModels
 
         public static IEnumerable<EditAPViewModel> GetZakaznici()
         {
-            var zakaznici = ZakazniciDataMapper.GetZakazniciAll().ToList();
+            var zakaznici = CustomerRepository.GetZakazniciAll().ToList();
 
             var query = zakaznici.OrderBy(z => z.Nazev).Select(z => Zakaznik(z.Id, z.Nazev)).ToList();
 
@@ -211,7 +211,7 @@ namespace LearActionPlans.ViewModels
 
         public static IEnumerable<EditAPViewModel> GetUkonceniAkce(int idAP)
         {
-            var uzavreneAkce = UkonceniBodAPDataMapper.GetUkonceniAkceAll(idAP).ToList();
+            var uzavreneAkce = ActionPlanPointDeadlineRepository.GetUkonceniAkceAll(idAP).ToList();
 
             if (!uzavreneAkce.Any())
             {
@@ -228,7 +228,7 @@ namespace LearActionPlans.ViewModels
 
         public static IEnumerable<EditAPViewModel> GetPocetTerminu(int idAP)
         {
-            var terminy = AkcniPlanyDataMapper.GetPocetTerminuAP(idAP).ToList();
+            var terminy = ActionPlanRepository.GetPocetTerminuAP(idAP).ToList();
 
             if (!terminy.Any())
             {
@@ -262,7 +262,7 @@ namespace LearActionPlans.ViewModels
 
         public static IEnumerable<EditAPViewModel> GetZnovuOtevritAP(int idAP)
         {
-            var znovuOtevrit = AkcniPlanyDataMapper.GetZnovuOtevritAP(idAP).ToList();
+            var znovuOtevrit = ActionPlanRepository.GetZnovuOtevritAP(idAP).ToList();
 
             if (!znovuOtevrit.Any())
             {

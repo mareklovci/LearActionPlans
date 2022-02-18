@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using LearActionPlans.ViewModels;
-using LearActionPlans.DataMappers;
+using LearActionPlans.Repositories;
 
 namespace LearActionPlans.Views
 {
@@ -11,6 +11,8 @@ namespace LearActionPlans.Views
     {
         private readonly FormPrehledBoduAP formPrehledBoduAp;
         private readonly EmployeeRepository employeeRepository;
+        private readonly ActionPlanRepository actionPlanRepository;
+
         private AkcniPlanTmp akcniPlan;
         private int posledniCisloAP;
 
@@ -45,10 +47,12 @@ namespace LearActionPlans.Views
 
         public FormNovyAkcniPlan(
             FormPrehledBoduAP formPrehledBoduAp,
-            EmployeeRepository employeeRepository)
+            EmployeeRepository employeeRepository,
+            ActionPlanRepository actionPlanRepository)
         {
             this.formPrehledBoduAp = formPrehledBoduAp;
             this.employeeRepository = employeeRepository;
+            this.actionPlanRepository = actionPlanRepository;
 
             this.InitializeComponent();
             this.ulozeniDat = false;
@@ -65,7 +69,7 @@ namespace LearActionPlans.Views
         private void FormNovyAkcniPlan_Load(object sender, EventArgs e)
         {
             //tady zjistím poslední obsazené číslo Akčního plánu
-            this.posledniCisloAP = NewActionPlanViewModel.GetLastActionPlanNumber(DateTime.Now.Year);
+            this.posledniCisloAP = this.actionPlanRepository.GetPosledniCisloAP(DateTime.Now.Year);
             //když bude posledniCisloAP = -1, došlo k problému při práci s databází a zadání AP se ukončí
             if (this.posledniCisloAP == -1)
             {
@@ -393,7 +397,7 @@ namespace LearActionPlans.Views
             this.akcniPlan.CisloAP = this.posledniCisloAP;
             //akcniPlan.Rok = DateTime.Now.Year;
 
-            this.akcniPlan.Id = AkcniPlanyDataMapper.InsertAP(this.akcniPlan);
+            this.akcniPlan.Id = this.actionPlanRepository.InsertAP(this.akcniPlan);
             //nastavím vlastníkAP na true, protože musí být editovány jednotlivé body
             //FormMain.VlastnikAP = true;
             using var form = this.formPrehledBoduAp;

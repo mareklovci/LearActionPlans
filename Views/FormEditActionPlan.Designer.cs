@@ -1,7 +1,7 @@
 ﻿
 namespace LearActionPlans.Views
 {
-    partial class FormEditAP
+    partial class FormEditActionPlan
     {
         /// <summary>
         /// Required designer variable.
@@ -401,7 +401,7 @@ namespace LearActionPlans.Views
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1080, 750);
             this.MinimumSize = new System.Drawing.Size(1080, 750);
-            this.Name = "FormEditAP";
+            this.Name = "FormEditActionPlan";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Action plan";

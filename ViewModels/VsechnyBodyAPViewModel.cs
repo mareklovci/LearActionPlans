@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LearActionPlans.DataMappers;
+using LearActionPlans.Repositories;
 
 namespace LearActionPlans.ViewModels
 {
@@ -66,7 +66,7 @@ namespace LearActionPlans.ViewModels
         public static IEnumerable<VsechnyBodyAPViewModel> GetBodyAPAll()
         {
             var bodyAP = BodAPDataMapper.GetBodyAPAll().ToList();
-            var akcniPlany = AkcniPlanyDataMapper.GetAPAll().ToList();
+            var akcniPlany = ActionPlanRepository.GetAll().ToList();
             var zamestnanci = EmployeeRepository.GetZamestnanciAll().ToList();
 
             if (!bodyAP.Any() || !akcniPlany.Any())
@@ -114,10 +114,10 @@ namespace LearActionPlans.ViewModels
 
         public static IEnumerable<VsechnyBodyAPViewModel> GetSelectedAP(int idAP)
         {
-            var akcniPlany = AkcniPlanyDataMapper.GetAPId(idAP).ToList();
+            var akcniPlany = ActionPlanRepository.GetAPId(idAP).ToList();
             var zamestnanci = EmployeeRepository.GetZamestnanciAll().ToList();
             var projekty = ProjektyDataMapper.GetProjektyAll().ToList();
-            var zakaznici = ZakazniciDataMapper.GetZakazniciAll().ToList();
+            var zakaznici = CustomerRepository.GetZakazniciAll().ToList();
 
             var query = from ap in akcniPlany
                 join zam in zamestnanci

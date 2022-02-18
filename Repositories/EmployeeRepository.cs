@@ -1,25 +1,21 @@
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Collections.Generic;
-using LearActionPlans.Models;
-using System;
 using System.Linq;
 using System.Windows.Forms;
+using LearActionPlans.Models;
 using LearActionPlans.Utilities;
 using Microsoft.Extensions.Options;
 
-namespace LearActionPlans.DataMappers
+namespace LearActionPlans.Repositories
 {
     public class EmployeeRepository
     {
-        private readonly ConnectionStringsOptions optionsMonitor;
         private readonly string connectionString;
 
-        public EmployeeRepository(IOptionsMonitor<ConnectionStringsOptions> optionsMonitor)
-        {
-            this.optionsMonitor = optionsMonitor.CurrentValue;
-            this.connectionString = this.optionsMonitor.LearDataAll;
-        }
+        public EmployeeRepository(IOptionsMonitor<ConnectionStringsOptions> optionsMonitor) =>
+            this.connectionString = optionsMonitor.CurrentValue.LearDataAll;
 
         public IEnumerable<Zamestnanci> GetZamestnanciAll()
         {

@@ -1,4 +1,4 @@
-﻿using LearActionPlans.DataMappers;
+﻿using LearActionPlans.Repositories;
 using LearActionPlans.Utilities;
 using LearActionPlans.Views;
 using Microsoft.Extensions.Configuration;
@@ -58,7 +58,7 @@ namespace LearActionPlans
             services.AddScoped<FormMain>();
             services.AddScoped<FormAdmin>();
             services.AddScoped<FormDatumUkonceni>();
-            services.AddScoped<FormEditAP>();
+            services.AddScoped<FormEditActionPlan>();
             services.AddScoped<FormKontrolaEfektivnosti>();
             services.AddScoped<FormNovyAkcniPlan>();
             services.AddScoped<FormPosunutiTerminuBodAP>();
@@ -72,10 +72,12 @@ namespace LearActionPlans
 
         private static void RegisterRepositories(IServiceCollection services)
         {
+            services.AddSingleton<ActionPlanRepository>();
             services.AddSingleton<ActionRepository>();
-            services.AddSingleton<EmployeeRepository>();
+            services.AddSingleton<CustomerRepository>();
             services.AddSingleton<DepartmentRepository>();
             services.AddSingleton<EffectivityControlRepository>();
+            services.AddSingleton<EmployeeRepository>();
         }
 
         private static void RegisterViewModels(IServiceCollection services)

@@ -1,23 +1,19 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
-using System.Collections.Generic;
 using System.Linq;
 using LearActionPlans.Models;
 using LearActionPlans.Utilities;
 using Microsoft.Extensions.Options;
 
-namespace LearActionPlans.DataMappers
+namespace LearActionPlans.Repositories
 {
     public class DepartmentRepository
     {
-        private readonly ConnectionStringsOptions optionsMonitor;
         private readonly string connectionString;
 
-        public DepartmentRepository(IOptionsMonitor<ConnectionStringsOptions> optionsMonitor)
-        {
-            this.optionsMonitor = optionsMonitor.CurrentValue;
-            this.connectionString = this.optionsMonitor.LearDataAll;
-        }
+        public DepartmentRepository(IOptionsMonitor<ConnectionStringsOptions> optionsMonitor) =>
+            this.connectionString = optionsMonitor.CurrentValue.LearDataAll;
 
         public IEnumerable<Oddeleni> GetOddeleniAll()
         {

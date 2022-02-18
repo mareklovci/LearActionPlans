@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using LearActionPlans.Models;
 
-namespace LearActionPlans.DataMappers
+namespace LearActionPlans.Repositories
 {
     public static partial class BodAPDataMapper
     {

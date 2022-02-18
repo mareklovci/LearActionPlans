@@ -1,6 +1,5 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
@@ -9,14 +8,11 @@ using LearActionPlans.Utilities;
 
 namespace LearActionPlans.Repositories
 {
-    public static partial class BodAPDataMapper
+    public partial class ActionPlanPointRepository
     {
-        private static readonly string ConnectionString =
-            ConfigurationManager.ConnectionStrings["ActionPlansEntity"].ConnectionString;
-
-        public static IEnumerable<BodAP> GetBodyAPAll()
+        public IEnumerable<BodAP> GetBodyAPAll()
         {
-            using var connection = new SqlConnection(ConnectionString);
+            using var connection = new SqlConnection(this.connectionString);
             connection.Open();
 
             using var command = connection.CreateCommand();
@@ -31,14 +27,14 @@ namespace LearActionPlans.Repositories
             {
                 while (reader.Read())
                 {
-                    yield return ConstructBodyAP(reader);
+                    yield return this.ConstructBodyAP(reader);
                 }
             }
         }
 
-        public static IEnumerable<BodAP> GetBodId(int bodAPId)
+        public IEnumerable<BodAP> GetBodId(int bodAPId)
         {
-            using var connection = new SqlConnection(ConnectionString);
+            using var connection = new SqlConnection(this.connectionString);
             connection.Open();
 
             using var command = connection.CreateCommand();
@@ -62,13 +58,13 @@ namespace LearActionPlans.Repositories
 
             while (reader.Read())
             {
-                yield return ConstructBodyAP(reader);
+                yield return this.ConstructBodyAP(reader);
             }
         }
 
-        public static IEnumerable<BodAP> GetBodyIdAP(int aPId)
+        public IEnumerable<BodAP> GetBodyIdAP(int aPId)
         {
-            using var connection = new SqlConnection(ConnectionString);
+            using var connection = new SqlConnection(this.connectionString);
             connection.Open();
 
             using var command = connection.CreateCommand();
@@ -92,11 +88,11 @@ namespace LearActionPlans.Repositories
 
             while (reader.Read())
             {
-                yield return ConstructBodyAP(reader);
+                yield return this.ConstructBodyAP(reader);
             }
         }
 
-        private static BodAP ConstructBodyAP(IDataRecord readerData)
+        private BodAP ConstructBodyAP(IDataRecord readerData)
         {
             var id = (int)readerData["BodAPID"];
             var akcniPlanId = (int)readerData["AkcniPlanID"];
@@ -123,14 +119,15 @@ namespace LearActionPlans.Repositories
             var stavObjektu = (byte)readerData["StavObjektu"];
 
             return new BodAP(id, akcniPlanId, cisloBoduAP, datumZalozeni, odkazNaNormu, hodnoceniNeshody, popisProblemu,
-                skutecnaPricinaWM, napravnaOpatreniWM, skutecnaPricinaWS, napravnaOpatreniWS, odpovednaOsoba1Id, odpovednaOsoba2Id,
+                skutecnaPricinaWM, napravnaOpatreniWM, skutecnaPricinaWS, napravnaOpatreniWS, odpovednaOsoba1Id,
+                odpovednaOsoba2Id,
                 kontrolaEfektivnosti, oddeleniId, priloha, zamitnutiTerminu, zmenaTerminu,
                 znovuOtevrit, true, emailOdeslan, stavObjektu);
         }
 
-        public static IEnumerable<UkonceniBodAP> GetUkonceniAkceZadost()
+        public IEnumerable<UkonceniBodAP> GetUkonceniAkceZadost()
         {
-            using var connection = new SqlConnection(ConnectionString);
+            using var connection = new SqlConnection(this.connectionString);
             connection.Open();
 
             using var command = connection.CreateCommand();
@@ -153,11 +150,11 @@ namespace LearActionPlans.Repositories
 
             while (reader.Read())
             {
-                yield return ConstructUkonceniAkceZadost(reader);
+                yield return this.ConstructUkonceniAkceZadost(reader);
             }
         }
 
-        private static UkonceniBodAP ConstructUkonceniAkceZadost(IDataRecord readerData)
+        private UkonceniBodAP ConstructUkonceniAkceZadost(IDataRecord readerData)
         {
             var id = Convert.ToInt32(readerData["UkonceniAkceID"]);
             var akceId = Convert.ToInt32(readerData["AkceID"]);
@@ -170,9 +167,9 @@ namespace LearActionPlans.Repositories
             return new UkonceniBodAP(id, akceId, ukonceniAkce, poznamka, odpoved, stavZadosti, stavObjektu);
         }
 
-        public static IEnumerable<UkonceniBodAP> GetUkonceniBodAP(int bodAPId)
+        public IEnumerable<UkonceniBodAP> GetUkonceniBodAP(int bodAPId)
         {
-            using var connection = new SqlConnection(ConnectionString);
+            using var connection = new SqlConnection(this.connectionString);
             connection.Open();
 
             using var command = connection.CreateCommand();
@@ -192,12 +189,12 @@ namespace LearActionPlans.Repositories
             {
                 while (reader.Read())
                 {
-                    yield return ConstructUkonceniBodAP(reader);
+                    yield return this.ConstructUkonceniBodAP(reader);
                 }
             }
         }
 
-        private static UkonceniBodAP ConstructUkonceniBodAP(IDataRecord readerData)
+        private UkonceniBodAP ConstructUkonceniBodAP(IDataRecord readerData)
         {
             var id = Convert.ToInt32(readerData["UkonceniBodAPID"]);
             var bodAPId = Convert.ToInt32(readerData["BodAPID"]);
@@ -210,15 +207,13 @@ namespace LearActionPlans.Repositories
             return new UkonceniBodAP(id, bodAPId, ukonceniBodAP, poznamka, odpoved, stavZadosti, stavObjektu, true);
         }
 
-        //public static void InsertBodyAP(FormNovyAkcniPlan.AkcniPlanTmp akcniPlany)
-        //public static void InsertUpdateBodyAP(int idAP)
-        public static int InsertUpdateBodAP(BodAP ulozitBodAP)
+        public int InsertUpdateBodAP(BodAP ulozitBodAP)
         {
             var idZaznamu = 0;
 
             try
             {
-                using var connection = new SqlConnection(ConnectionString);
+                using var connection = new SqlConnection(this.connectionString);
                 connection.Open();
 
                 if (ulozitBodAP.BodUlozen == false)
@@ -227,8 +222,9 @@ namespace LearActionPlans.Repositories
                 }
                 else
                 {
-                    UpdateBodAP(ulozitBodAP, connection);
+                    this.UpdateBodAP(ulozitBodAP, connection);
                 }
+
                 connection.Close();
             }
             catch (Exception)
@@ -241,7 +237,7 @@ namespace LearActionPlans.Repositories
             return idZaznamu;
         }
 
-        private static void UpdateBodAP(BodAP bodAP, SqlConnection connection)
+        private void UpdateBodAP(BodAP bodAP, SqlConnection connection)
         {
             using var command = connection.CreateCommand();
             //bodAP byl uložen
@@ -321,17 +317,18 @@ namespace LearActionPlans.Repositories
             command.ExecuteNonQuery();
         }
 
-        public static void UpdateKontrolaEfektivity(int bodAPId, DateTime datumEfektivita)
+        public void UpdateKontrolaEfektivity(int bodAPId, DateTime datumEfektivita)
         {
             try
             {
-                using var connection = new SqlConnection(ConnectionString);
+                using var connection = new SqlConnection(this.connectionString);
                 connection.Open();
 
                 using (var commandAkce = connection.CreateCommand())
                 {
                     commandAkce.CommandType = CommandType.Text;
-                    commandAkce.CommandText = $"UPDATE BodAP SET KontrolaEfektivnosti = @kontrolaEfektivnosti WHERE BodAPID = @bodAPId";
+                    commandAkce.CommandText =
+                        $"UPDATE BodAP SET KontrolaEfektivnosti = @kontrolaEfektivnosti WHERE BodAPID = @bodAPId";
                     commandAkce.Parameters.AddWithValue("@bodAPId", bodAPId);
                     commandAkce.Parameters.AddWithValue("@kontrolaEfektivnosti", datumEfektivita);
 
@@ -348,21 +345,23 @@ namespace LearActionPlans.Repositories
             }
         }
 
-        public static void RemoveKontrolaEfektivity(int bodAPId, DateTime? puvodniDatum, string poznamka)
+        public void RemoveKontrolaEfektivity(int bodAPId, DateTime? puvodniDatum, string poznamka)
         {
             try
             {
-                using var connection = new SqlConnection(ConnectionString);
+                using var connection = new SqlConnection(this.connectionString);
                 connection.Open();
 
                 using (var commandAkce = connection.CreateCommand())
                 {
                     commandAkce.CommandType = CommandType.Text;
-                    commandAkce.CommandText = $"INSERT INTO OdstranitKontrolaEfektivnosti (BodAPID, KontrolaEfektivnosti, OdstranitDatum, Poznamka, StavObjektu) " +
-                                              $"VALUES (@bodAPId, @kontrolaEfektivnosti, @odstranitDatum, @poznamka, @stavObjektu)";
+                    commandAkce.CommandText =
+                        $"INSERT INTO OdstranitKontrolaEfektivnosti (BodAPID, KontrolaEfektivnosti, OdstranitDatum, Poznamka, StavObjektu) " +
+                        $"VALUES (@bodAPId, @kontrolaEfektivnosti, @odstranitDatum, @poznamka, @stavObjektu)";
                     commandAkce.Parameters.AddWithValue("@bodAPId", bodAPId);
                     commandAkce.Parameters.AddWithValue("@kontrolaEfektivnosti", puvodniDatum);
-                    commandAkce.Parameters.AddWithValue("@odstranitDatum", Convert.ToDateTime(DateTime.Now.ToShortDateString()));
+                    commandAkce.Parameters.AddWithValue("@odstranitDatum",
+                        Convert.ToDateTime(DateTime.Now.ToShortDateString()));
                     commandAkce.Parameters.AddWithValue("@poznamka", poznamka);
                     commandAkce.Parameters.AddWithValue("@stavObjektu", 1);
 
@@ -373,7 +372,8 @@ namespace LearActionPlans.Repositories
                 using (var commandAkce = connection.CreateCommand())
                 {
                     commandAkce.CommandType = CommandType.Text;
-                    commandAkce.CommandText = $"UPDATE BodAP SET KontrolaEfektivnosti = @kontrolaEfektivnosti WHERE BodAPID = @bodAPId";
+                    commandAkce.CommandText =
+                        $"UPDATE BodAP SET KontrolaEfektivnosti = @kontrolaEfektivnosti WHERE BodAPID = @bodAPId";
                     commandAkce.Parameters.AddWithValue("@bodAPId", bodAPId);
                     commandAkce.Parameters.AddWithValue("@kontrolaEfektivnosti", DBNull.Value);
 
@@ -391,9 +391,9 @@ namespace LearActionPlans.Repositories
         }
 
         //zjistí počet zbývajících
-        public static IEnumerable<BodAP> GetZbyvajiciTerminyBodAPId(int bodAPId)
+        public IEnumerable<BodAP> GetZbyvajiciTerminyBodAPId(int bodAPId)
         {
-            using var connection = new SqlConnection(ConnectionString);
+            using var connection = new SqlConnection(this.connectionString);
             connection.Open();
 
             using var command = connection.CreateCommand();
@@ -416,11 +416,11 @@ namespace LearActionPlans.Repositories
 
             while (reader.Read())
             {
-                yield return ConstructBodAP(reader);
+                yield return this.ConstructBodAP(reader);
             }
         }
 
-        private static BodAP ConstructBodAP(IDataRecord readerData)
+        private BodAP ConstructBodAP(IDataRecord readerData)
         {
             var bodAPid = Convert.ToInt32(readerData["BodAPID"]);
             var zamitnutiTerminu = Convert.ToByte(readerData["ZamitnutiTerminu"]);

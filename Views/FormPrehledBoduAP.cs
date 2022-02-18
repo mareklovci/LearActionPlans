@@ -15,6 +15,10 @@ namespace LearActionPlans.Views
     {
         private readonly FormZadaniBoduAP formZadaniBoduAp;
         private readonly EmployeeRepository employeeRepository;
+        private readonly ActionPlanPointRepository actionPlanPointRepository;
+        private readonly DepartmentRepository departmentRepository;
+        private readonly ActionPlanEndRepository actionPlanEndRepository;
+        private readonly EmailRepository emailRepository;
 
         //při volání konstruktoru vytvořím novou prom jako readonly, protože ji nastavím při volání konstruktoru a pak už její hodnoty neměním
         private FormNovyAkcniPlan.AkcniPlanTmp akcniPlany_;
@@ -37,11 +41,23 @@ namespace LearActionPlans.Views
 
         public FormPrehledBoduAP(
             FormZadaniBoduAP formZadaniBoduAp,
-            EmployeeRepository employeeRepository)
+            EmployeeRepository employeeRepository,
+            ActionPlanPointRepository actionPlanPointRepository,
+            DepartmentRepository departmentRepository,
+            ActionPlanEndRepository actionPlanEndRepository,
+            EmailRepository emailRepository)
         {
+            // Forms
             this.formZadaniBoduAp = formZadaniBoduAp;
-            this.employeeRepository = employeeRepository;
 
+            // Repositories
+            this.employeeRepository = employeeRepository;
+            this.actionPlanPointRepository = actionPlanPointRepository;
+            this.departmentRepository = departmentRepository;
+            this.actionPlanEndRepository = actionPlanEndRepository;
+            this.emailRepository = emailRepository;
+
+            // Initialize
             this.InitializeComponent();
         }
 
@@ -55,6 +71,26 @@ namespace LearActionPlans.Views
             this.spusteniBezParametru_ = spusteniBezParametru;
             this.akcniPlany_ = akcniPlany;
             this.volani_ = volani;
+        }
+
+        public IEnumerable<PrehledBoduAPViewModel> GetUkonceniAPId(int idAP)
+        {
+            var ukonceniAP = this.actionPlanEndRepository.GetUkonceniAP(idAP).ToList();
+
+            if (!ukonceniAP.Any())
+            {
+                yield break;
+            }
+
+            var query = from u in ukonceniAP
+                where u.APId == idAP
+                orderby u.Id descending
+                select PrehledBoduAPViewModel.UkonceniAP(u.Id, u.DatumUkonceni);
+
+            foreach (var q in query)
+            {
+                yield return q;
+            }
         }
 
         private void FormNovyBodAP_Load(object sender, EventArgs e)
@@ -72,7 +108,7 @@ namespace LearActionPlans.Views
             this.labelDatumUkonceniAP.Text = string.Empty;
             this.labelZakaznikAP.Text = this.akcniPlany_.ZakaznikNazev ?? "";
 
-            var ukonceniAP = PrehledBoduAPViewModel.GetUkonceniAPId(this.akcniPlany_.Id);
+            var ukonceniAP = this.GetUkonceniAPId(this.akcniPlany_.Id);
 
             foreach (var u in ukonceniAP)
             {
@@ -125,10 +161,30 @@ namespace LearActionPlans.Views
 
         }
 
+        public IEnumerable<PrehledBoduAPViewModel> GetUkonceniBodAP(int bodAPId)
+        {
+            var ukonceniBodAP = this.actionPlanPointRepository.GetUkonceniBodAP(bodAPId).ToList();
+
+            if (!ukonceniBodAP.Any())
+            {
+                yield break;
+            }
+
+            var query = from u in ukonceniBodAP
+                where u.StavObjektuUkonceni == 1
+                orderby u.Id
+                select PrehledBoduAPViewModel.UkonceniBodAP(u.Id, u.BodAPId, u.DatumUkonceni, u.Poznamka, u.Odpoved, u.StavZadosti, u.StavObjektuUkonceni);
+
+            foreach (var q in query)
+            {
+                yield return q;
+            }
+        }
+
         private void ZobrazeniDGV()
         {
             //tady se naplní prom bodyAP z databáze
-            var bodyAP_ = PrehledBoduAPViewModel.GetBodyIdAPAll(this.akcniPlany_.Id).ToList();
+            var bodyAP_ = this.GetBodyIdAPAll(this.akcniPlany_.Id).ToList();
             var odpOsoba2 = this.employeeRepository.GetZamestnanciAll().ToList();
 
             var i = 0;
@@ -137,7 +193,7 @@ namespace LearActionPlans.Views
 
             foreach (var b in bodyAP_)
             {
-                var datumUkonceni = PrehledBoduAPViewModel.GetUkonceniBodAP(b.Id).ToList();
+                var datumUkonceni = this.GetUkonceniBodAP(b.Id).ToList();
                 datumUkonceni.Reverse();
                 datumUkonceni_ = null;
                 foreach (var du in datumUkonceni)
@@ -212,6 +268,36 @@ namespace LearActionPlans.Views
                     this.DataGridViewBodyAP.Rows[i].DefaultCellStyle.BackColor = Color.LightGreen;
                 }
                 i++;
+            }
+        }
+
+        public IEnumerable<PrehledBoduAPViewModel> GetBodyIdAPAll(int idAP)
+        {
+            var bodyAP = this.actionPlanPointRepository.GetBodyIdAP(idAP).ToList();
+            var zamestnanci = this.employeeRepository.GetZamestnanciAll().ToList();
+            var oddeleni = this.departmentRepository.GetOddeleniAll();
+
+            if (!bodyAP.Any())
+            {
+                yield break;
+            }
+
+            var query = from b in bodyAP
+                join zam in zamestnanci
+                    on b.OdpovednaOsoba1Id equals zam.Id into gZam
+                from subZam in gZam.DefaultIfEmpty()
+                join odd in oddeleni
+                    on b.OddeleniId equals odd.Id into gOdd
+                from subOdd in gOdd.DefaultIfEmpty()
+                orderby b.CisloBoduAP
+                select PrehledBoduAPViewModel.BodyAP(b.Id, b.AkcniPlanId, b.CisloBoduAP, b.DatumZalozeni, b.OdkazNaNormu, b.HodnoceniNeshody, b.PopisProblemu,
+                    b.SkutecnaPricinaWM, b.NapravnaOpatreniWM, b.SkutecnaPricinaWS, b.NapravnaOpatreniWS,
+                    b.OdpovednaOsoba1Id, b.OdpovednaOsoba2Id, subZam.Prijmeni + " " + subZam.Jmeno, b.KontrolaEfektivnosti, b.OddeleniId, subOdd.Nazev, b.Priloha,
+                    b.ZamitnutiTerminu, b.ZmenaTerminu, b.ZnovuOtevrit, b.EmailOdeslan, b.StavObjektu);
+
+            foreach (var q in query)
+            {
+                yield return q;
             }
         }
 
@@ -335,14 +421,14 @@ namespace LearActionPlans.Views
                 bodyAP = new List<BodAP>();
             }
 
-            var bodyAP_ = PrehledBoduAPViewModel.GetBodyIdAPAll(this.akcniPlany_.Id).ToList();
+            var bodyAP_ = this.GetBodyIdAPAll(this.akcniPlany_.Id).ToList();
             var odpOsoba2 = this.employeeRepository.GetZamestnanciAll().ToList();
 
             DateTime? datumUkonceni_;
             var j = 0;
             foreach (var b in bodyAP_)
             {
-                var datumUkonceni = PrehledBoduAPViewModel.GetUkonceniBodAP(b.Id).ToList();
+                var datumUkonceni = this.GetUkonceniBodAP(b.Id).ToList();
                 datumUkonceni.Reverse();
                 datumUkonceni_ = null;
                 foreach (var du in datumUkonceni)
@@ -564,7 +650,7 @@ namespace LearActionPlans.Views
                     }
                     htmlText += @"</p>";
                     // uloží zprávu do tabulky OdeslatEmail
-                    OdeslatEmailDataMapper.InsertEmailOdpovedny1(emailOdpovPrac, @"New points AP", htmlText, odeslaneEmaily1[i]);
+                    this.emailRepository.InsertEmailOdpovedny1(emailOdpovPrac, @"New points AP", htmlText, odeslaneEmaily1[i]);
 
                     i++;
                 }
@@ -602,7 +688,7 @@ namespace LearActionPlans.Views
                     }
                     htmlText += @"</p>";
                     // uloží zprávu do tabulky OdeslatEmail
-                    OdeslatEmailDataMapper.InsertEmailOdpovedny2(emailOdpovPrac, @"New points AP", htmlText);
+                    this.emailRepository.InsertEmailOdpovedny2(emailOdpovPrac, @"New points AP", htmlText);
                 }
             }
 

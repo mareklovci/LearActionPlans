@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Reflection;
+using LearActionPlans.Repositories;
 using LearActionPlans.ViewModels;
 using LearActionPlans.Utilities;
 
@@ -12,6 +14,11 @@ namespace LearActionPlans.Views
     public partial class FormVsechnyBodyAP : Form
     {
         private readonly FormPrehledBoduAP formPrehledBoduAp;
+        private readonly EmployeeRepository employeeRepository;
+        private readonly CustomerRepository customerRepository;
+        private readonly ActionPlanRepository actionPlanRepository;
+        private readonly ActionPlanPointRepository actionPlanPointRepository;
+        private readonly ProjectRepository projectRepository;
         FormNovyAkcniPlan.AkcniPlanTmp akcniPlany;
 
         private readonly BindingSource bindingSource;
@@ -21,10 +28,22 @@ namespace LearActionPlans.Views
         private string Odpovedny1Filtr;
         private string PricinaFiltr;
 
-        public FormVsechnyBodyAP(FormPrehledBoduAP formPrehledBoduAp)
+        public FormVsechnyBodyAP(FormPrehledBoduAP formPrehledBoduAp,
+            EmployeeRepository employeeRepository,
+            CustomerRepository customerRepository,
+            ActionPlanRepository actionPlanRepository,
+            ActionPlanPointRepository actionPlanPointRepository,
+            ProjectRepository projectRepository)
         {
             // Forms
             this.formPrehledBoduAp = formPrehledBoduAp;
+
+            // Repositories
+            this.employeeRepository = employeeRepository;
+            this.customerRepository = customerRepository;
+            this.actionPlanRepository = actionPlanRepository;
+            this.actionPlanPointRepository = actionPlanPointRepository;
+            this.projectRepository = projectRepository;
 
             // Initialize
             this.InitializeComponent();
@@ -54,7 +73,7 @@ namespace LearActionPlans.Views
 
         private void ZobrazitDGV()
         {
-            var bodyAP_ = VsechnyBodyAPViewModel.GetBodyAPAll().ToList();
+            var bodyAP_ = this.GetBodyAPAll().ToList();
 
             foreach (var b in bodyAP_)
             {
@@ -77,6 +96,35 @@ namespace LearActionPlans.Views
 
             this.PridatHandlery();
             this.ColorLabel();
+        }
+
+        private IEnumerable<VsechnyBodyAPViewModel> GetBodyAPAll()
+        {
+            var bodyAP = this.actionPlanPointRepository.GetBodyAPAll().ToList();
+            var akcniPlany = this.actionPlanRepository.GetAll().ToList();
+            var zamestnanci = this.employeeRepository.GetZamestnanciAll().ToList();
+
+            if (!bodyAP.Any() || !akcniPlany.Any())
+            {
+                yield break;
+            }
+
+            var query = from b in bodyAP
+                join ap in akcniPlany
+                    on b.AkcniPlanId equals ap.Id into gAP
+                from subAP in gAP.DefaultIfEmpty()
+                join zam in zamestnanci
+                    on b.OdpovednaOsoba1Id equals zam.Id into gZam
+                from subZam in gZam.DefaultIfEmpty()
+                orderby b.AkcniPlanId, b.CisloBoduAP
+                select VsechnyBodyAPViewModel.BodyAP(subAP.DatumZalozeni, subAP.CisloAP, b.Id, b.AkcniPlanId, b.CisloBoduAP, b.DatumZalozeni,
+                    b.OdkazNaNormu, b.HodnoceniNeshody,
+                    b.PopisProblemu, subZam.Prijmeni + " " + subZam.Jmeno, b.SkutecnaPricinaWM, b.StavObjektu);
+
+            foreach (var q in query)
+            {
+                yield return q;
+            }
         }
 
         private void CreateColumns()
@@ -167,9 +215,9 @@ namespace LearActionPlans.Views
                         var idAP = Convert.ToInt32(this.dvBodyAP[this.DataGridViewBodyAP.CurrentCell.RowIndex]["APId"]);
                         this.akcniPlany.Id = idAP;
 
-                        var ap = VsechnyBodyAPViewModel.GetSelectedAP(idAP).ToList();
+                        var ap = this.GetSelectedAP(idAP).ToList();
                         var dtAP = DataTableConverter.ConvertToDataTable(ap);
-                        var zad2 = PrehledAPViewModel.GetZadavatel2().ToList();
+                        var zad2 = this.employeeRepository.GetAll().ToList();
 
                         foreach (DataRow row in dtAP.Rows)
                         {
@@ -183,8 +231,8 @@ namespace LearActionPlans.Views
                             else
                             {
                                 var id = Convert.ToInt32(row["Zadavatel2Id"]);
-                                var vyhledaneJmeno = zad2.Find(x => x.Zadavatel2Id == id);
-                                zadavatel2 = vyhledaneJmeno.Zadavatel2;
+                                var vyhledaneJmeno = zad2.Find(x => x.Id == id);
+                                zadavatel2 = vyhledaneJmeno?.Jmeno;
                             }
 
                             this.akcniPlany.Zadavatel2Jmeno = zadavatel2;
@@ -211,6 +259,33 @@ namespace LearActionPlans.Views
                         form.ShowDialog();
                     }
                 }
+            }
+        }
+
+        public IEnumerable<VsechnyBodyAPViewModel> GetSelectedAP(int idAP)
+        {
+            var akcniPlany = this.actionPlanRepository.GetAPId(idAP).ToList();
+            var zamestnanci = this.employeeRepository.GetZamestnanciAll().ToList();
+            var projekty = this.projectRepository.GetProjektyAll().ToList();
+            var zakaznici = this.customerRepository.GetAll().ToList();
+
+            var query = from ap in akcniPlany
+                join zam in zamestnanci
+                    on ap.Zadavatel1Id equals zam.Id into gZam
+                from subZam in gZam.DefaultIfEmpty()
+                join pro in projekty
+                    on ap.ProjektId equals pro.Id into gPro
+                from subPro in gPro.DefaultIfEmpty()
+                join zak in zakaznici
+                    on ap.ZakaznikId equals zak.Id into gZak
+                from subZak in gZak.DefaultIfEmpty()
+                select VsechnyBodyAPViewModel.AP(ap.Zadavatel1Id, ap?.Zadavatel2Id, subZam.Prijmeni + " " + subZam.Jmeno, ap.Tema,
+                    ap?.ProjektId,
+                    subPro?.Nazev ?? string.Empty, ap.ZakaznikId, subZak.Nazev, ap.TypAP, ap.StavObjektu);
+
+            foreach (var q in query)
+            {
+                yield return q;
             }
         }
 

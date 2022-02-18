@@ -24,12 +24,6 @@ namespace LearActionPlans.Views
                 //this.RichTextBoxPopisProblemu.BackColor = Color.Yellow;
             }
 
-            //if (ulozit == false)
-            //{
-            //    MessageBox.Show("The yellow cells must be filled.", "Notice", MessageBoxButtons.OK,
-            //        MessageBoxIcon.Information);
-            //}
-
             if (Convert.ToInt32(this.ComboBoxOdpovednaOsoba1.SelectedValue) == 0)
             {
                 ulozit = false;
@@ -110,7 +104,7 @@ namespace LearActionPlans.Views
             }
 
             //vytvoření nebo aktualizace nového bodu
-            var bodAPId = BodAPDataMapper.InsertUpdateBodAP(ulozitBodAP);
+            var bodAPId = this.actionPlanPointRepository.InsertUpdateBodAP(ulozitBodAP);
 
             //při uložení nového bodu je přepsána rpměnná novyBodAP na false, protože dále mohu editovat tento bod jako již uložený
             if (this.novyBodAP)

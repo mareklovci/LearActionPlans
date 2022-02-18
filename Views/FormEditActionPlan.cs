@@ -13,6 +13,14 @@ namespace LearActionPlans.Views
         private readonly ActionPlanPointDeadlineRepository actionPlanPointDeadlineRepository;
 
         private readonly ActionPlanRepository actionPlanRepository;
+
+        private readonly CustomerRepository customerRepository;
+
+        private readonly EmployeeRepository employeeRepository;
+
+        private readonly ActionPlanEndRepository actionPlanEndRepository;
+
+        private readonly ProjectRepository projectRepository;
         //public string Zadavatel1 { get; set; }
 
         private int apId_;
@@ -43,12 +51,21 @@ namespace LearActionPlans.Views
         private List<Label> labelTerminyDatum;
         private List<RichTextBox> richTextBoxTermin;
 
-        public FormEditActionPlan(ActionPlanPointDeadlineRepository actionPlanPointDeadlineRepository,
-            ActionPlanRepository actionPlanRepository)
+        public FormEditActionPlan(
+            ActionPlanPointDeadlineRepository actionPlanPointDeadlineRepository,
+            ActionPlanRepository actionPlanRepository,
+            CustomerRepository customerRepository,
+            EmployeeRepository employeeRepository,
+            ActionPlanEndRepository actionPlanEndRepository,
+            ProjectRepository projectRepository)
         {
             // Repositories
             this.actionPlanPointDeadlineRepository = actionPlanPointDeadlineRepository;
             this.actionPlanRepository = actionPlanRepository;
+            this.customerRepository = customerRepository;
+            this.employeeRepository = employeeRepository;
+            this.actionPlanEndRepository = actionPlanEndRepository;
+            this.projectRepository = projectRepository;
 
             // Initialize
             this.InitializeComponent();
@@ -137,7 +154,7 @@ namespace LearActionPlans.Views
             }
 
             //počet zbývajícíh termínů
-            var pocetTerminu = EditAPViewModel.GetPocetTerminu(this.apId_).ToList();
+            var pocetTerminu = this.actionPlanRepository.GetPocetTerminuAP(this.apId_).ToList();
             this.labelZbyvajiciPocetTerminu.Text = pocetTerminu[0].ZmenaTerminu.ToString();
             //pokud ještě mám volné termíny a AP nebyl uzavřen
             if (pocetTerminu[0].ZmenaTerminu == 0 || !(znovuOtevrit[0].UzavreniAP == null))
@@ -188,28 +205,28 @@ namespace LearActionPlans.Views
 
                 //tlačítko pro uzavření AP musí být neaktivní, když je aktivní tlačítko pro Reopen
                 this.ButtonUkoncitAP.Enabled = false;
-                var zamestnanec1 = EditAPViewModel.GetZamestnanecId(this.zadavatel1Id_).ToList();
+                var zamestnanec1 = this.employeeRepository.GetById(this.zadavatel1Id_);
                 this.labelZam1.Location = new Point(20, 105);
                 this.labelZam1.Visible = true;
                 this.labelZam1.AutoSize = true;
-                this.labelZam1.Text = zamestnanec1[0].Jmeno;
+                this.labelZam1.Text = zamestnanec1.Jmeno;
                 this.groupBoxEditAP.Controls.Add(this.labelZam1);
 
                 if (this.zadavatel2Id_ == null) { }
                 else
                 {
-                    var zamestnanec2 = EditAPViewModel.GetZamestnanecId(Convert.ToInt32(this.zadavatel2Id_)).ToList();
+                    var zamestnanec2 = this.employeeRepository.GetById(Convert.ToInt32(this.zadavatel2Id_));
                     this.labelZam2.Location = new Point(20, 165);
                     this.labelZam2.Visible = true;
                     this.labelZam1.AutoSize = true;
-                    this.labelZam2.Text = zamestnanec2[0].Jmeno;
+                    this.labelZam2.Text = zamestnanec2.Jmeno;
                     this.groupBoxEditAP.Controls.Add(this.labelZam2);
                 }
 
                 if (this.projektId_ == null) { }
                 else
                 {
-                    var projekt = EditAPViewModel.GetProjektId(Convert.ToInt32(this.projektId_)).ToList();
+                    var projekt = this.GetProjektId(Convert.ToInt32(this.projektId_)).ToList();
                     this.labelProjekt.Location = new Point(20, 225);
                     this.labelProjekt.Visible = true;
                     this.labelProjekt.AutoSize = true;
@@ -217,17 +234,34 @@ namespace LearActionPlans.Views
                     this.groupBoxEditAP.Controls.Add(this.labelProjekt);
                 }
 
-                var zakaznik = EditAPViewModel.GetZakaznikId(Convert.ToInt32(this.zakaznikId_)).ToList();
+                var zakaznik = this.customerRepository.GetById(Convert.ToInt32(this.zakaznikId_));
                 this.labelZakaznik.Location = new Point(20, 285);
                 this.labelZakaznik.Visible = true;
                 this.labelZakaznik.AutoSize = true;
-                this.labelZakaznik.Text = zakaznik[0].NazevZakaznika;
+                this.labelZakaznik.Text = zakaznik.Nazev;
                 this.groupBoxEditAP.Controls.Add(this.labelZakaznik);
             }
 
             this.ButtonUlozit.Enabled = false;
 
             this.HistorieTerminu();
+        }
+
+        private IEnumerable<EditAPViewModel> GetProjektId(int id)
+        {
+            var projekty = this.projectRepository.GetProjektyAll().ToList();
+
+            var query = projekty.Where(p => p.Id == id).Select(p => EditAPViewModel.Projekt(p.Id, p.Nazev)).ToList();
+
+            if (!query.Any())
+            {
+                yield break;
+            }
+
+            foreach (var q in query)
+            {
+                yield return q;
+            }
         }
 
         private void RemoveControl()
@@ -299,7 +333,7 @@ namespace LearActionPlans.Views
         private void HistorieTerminu()
         {
             //zjištění posledního termínu
-            var datumUkonceni = EditAPViewModel.GetDatumUkonceniAP(this.apId_).ToList();
+            var datumUkonceni = this.actionPlanEndRepository.GetUkonceniAP(this.apId_).ToList();
 
             this.panelTerminy.Size = new Size(390, 550);
             this.panelTerminy.Name = "panelPrehledTerminu";
@@ -316,7 +350,7 @@ namespace LearActionPlans.Views
 
             this.groupBoxNovyTermin.Controls.Add(this.panelTerminy);
 
-            var datumUkonceniASC = datumUkonceni.OrderBy(index => index.UkonceniAPId);
+            var datumUkonceniASC = datumUkonceni.OrderBy(index => index.APId);
             foreach (var du in datumUkonceni)
             {
                 this.dateTimePickerDatumUkonceni.Value = du.DatumUkonceni.AddDays(1);
@@ -338,10 +372,10 @@ namespace LearActionPlans.Views
                     Name = "groupBoxTerminy" + i + 1,
                     Location = new Point(10, 10 + (i * 150)),
                     Size = new Size(340, 140),
-                    Text = (i + 1).ToString() + ". term",
+                    Text = (i + 1) + ". term",
                 });
 
-                this.labelTerminyDatum.Add(new Label()
+                this.labelTerminyDatum.Add(new Label
                 {
                     Name = "labelTerminyDatum" + i + 1,
                     Location = new Point(10, 20),
@@ -363,7 +397,7 @@ namespace LearActionPlans.Views
                     Size = new Size(320, 80),
                     Text = du.Poznamka,
                     Enabled = false,
-                    Tag = du.UkonceniAPId.ToString(),
+                    Tag = du.APId.ToString(),
                     ForeColor = Color.Black
                 });
 
@@ -392,7 +426,7 @@ namespace LearActionPlans.Views
 
         private bool NaplnitComboBoxZamestnanec1a2()
         {
-            var zamestnanci = EditAPViewModel.GetZamestnanci().ToList();
+            var zamestnanci = this.employeeRepository.GetZamestnanciAll().ToList();
 
             if (zamestnanci.Count == 0)
             {
@@ -405,8 +439,8 @@ namespace LearActionPlans.Views
 
             foreach (var z in zamestnanci)
             {
-                zam1.Add(new Zam(z.Jmeno, z.ZamestnanecId));
-                zam2.Add(new Zam(z.Jmeno, z.ZamestnanecId));
+                zam1.Add(new Zam(z.Jmeno, z.Id));
+                zam2.Add(new Zam(z.Jmeno, z.Id));
             }
 
             this.ComboBoxZadavatel1.DataSource = zam1;
@@ -432,9 +466,26 @@ namespace LearActionPlans.Views
             }
         }
 
+        private IEnumerable<EditAPViewModel> GetProjekty()
+        {
+            var projekty = this.projectRepository.GetProjektyAll().ToList();
+
+            var query = projekty.OrderBy(p => p.Nazev).Select(p => EditAPViewModel.Projekt(p.Id, p.Nazev)).ToList();
+
+            if (!query.Any())
+            {
+                yield break;
+            }
+
+            foreach (var q in query)
+            {
+                yield return q;
+            }
+        }
+
         private bool NaplnitComboBoxProjekty()
         {
-            var projekty = EditAPViewModel.GetProjekty().ToList();
+            var projekty = this.GetProjekty().ToList();
 
             if (projekty.Count == 0)
             {
@@ -465,7 +516,7 @@ namespace LearActionPlans.Views
 
         private bool NaplnitComboBoxZakaznici()
         {
-            var zakaznici = EditAPViewModel.GetZakaznici().ToList();
+            var zakaznici = this.customerRepository.GetAll().ToList();
 
             if (zakaznici.Count == 0)
             {
@@ -473,7 +524,7 @@ namespace LearActionPlans.Views
             }
 
             var zak = new List<Zak> {new Zak("(choose a customer)", 0)};
-            zak.AddRange(zakaznici.Select(z => new Zak(z.NazevZakaznika, z.ZakaznikId)));
+            zak.AddRange(zakaznici.Select(z => new Zak(z.Nazev, z.Id)));
 
             this.ComboBoxZakaznici.DataSource = zak;
             this.ComboBoxZakaznici.DisplayMember = "NazevZakaznika";
@@ -566,7 +617,7 @@ namespace LearActionPlans.Views
                 this.richTextBoxNovaPoznamka.Enabled = false;
                 this.richTextBoxNovaPoznamka.Text = string.Empty;
 
-                var pocetTerminu = EditAPViewModel.GetPocetTerminu(this.apId_).ToList();
+                var pocetTerminu = this.actionPlanRepository.GetPocetTerminuAP(this.apId_).ToList();
                 this.labelZbyvajiciPocetTerminu.Text = pocetTerminu[0].ZmenaTerminu.ToString();
 
                 this.RemoveControl();

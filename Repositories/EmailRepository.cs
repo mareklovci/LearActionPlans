@@ -1,22 +1,25 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using LearActionPlans.Utilities;
+using Microsoft.Extensions.Options;
 
 namespace LearActionPlans.Repositories
 {
-    public static class OdeslatEmailDataMapper
+    public class EmailRepository
     {
-        private static readonly string ConnectionString =
-            ConfigurationManager.ConnectionStrings["ActionPlansEntity"].ConnectionString;
+        private readonly string connectionString;
 
-        public static void InsertEmailOdpovedny1(string emailTo, string predmet, string zprava, List<int>odeslaneEmailyProBody)
+        public EmailRepository(IOptionsMonitor<ConnectionStringsOptions> optionsMonitor) =>
+            this.connectionString = optionsMonitor.CurrentValue.LearDataAll;
+
+        public void InsertEmailOdpovedny1(string emailTo, string predmet, string zprava, List<int>odeslaneEmailyProBody)
         {
             try
             {
-                using var connection = new SqlConnection(ConnectionString);
+                using var connection = new SqlConnection(this.connectionString);
                 connection.Open();
 
                 using (var commandAkce = connection.CreateCommand())
@@ -54,11 +57,11 @@ namespace LearActionPlans.Repositories
             }
         }
 
-        public static void InsertEmailOdpovedny2(string emailTo, string predmet, string zprava)
+        public void InsertEmailOdpovedny2(string emailTo, string predmet, string zprava)
         {
             try
             {
-                using var connection = new SqlConnection(ConnectionString);
+                using var connection = new SqlConnection(this.connectionString);
                 connection.Open();
 
                 using (var commandAkce = connection.CreateCommand())

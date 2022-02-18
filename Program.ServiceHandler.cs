@@ -24,7 +24,6 @@ namespace LearActionPlans
             // Initialize MVVM
             RegisterForms(services);
             RegisterRepositories(services);
-            RegisterViewModels(services);
         }
 
         /// <summary>
@@ -53,6 +52,11 @@ namespace LearActionPlans
             services.AddOptions();
         }
 
+        /// <summary>
+        /// Register All Forms
+        /// Missing registration of already used Form will result in program failure during build.
+        /// </summary>
+        /// <param name="services">ServiceCollection</param>
         private static void RegisterForms(IServiceCollection services)
         {
             services.AddScoped<FormMain>();
@@ -70,19 +74,24 @@ namespace LearActionPlans
             services.AddScoped<FormZadaniBoduAP>();
         }
 
+        /// <summary>
+        /// Register All Repositories
+        /// Missing registration of already used Repository will result in program failure during build.
+        /// </summary>
+        /// <param name="services">ServiceCollection</param>
         private static void RegisterRepositories(IServiceCollection services)
         {
+            services.AddSingleton<ActionPlanEndRepository>();
+            services.AddSingleton<ActionPlanPointDeadlineRepository>();
+            services.AddSingleton<ActionPlanPointRepository>();
             services.AddSingleton<ActionPlanRepository>();
             services.AddSingleton<ActionRepository>();
             services.AddSingleton<CustomerRepository>();
             services.AddSingleton<DepartmentRepository>();
             services.AddSingleton<EffectivityControlRepository>();
+            services.AddSingleton<EmailRepository>();
             services.AddSingleton<EmployeeRepository>();
-        }
-
-        private static void RegisterViewModels(IServiceCollection services)
-        {
-            // services.AddSingleton<AdminViewModel>();
+            services.AddSingleton<ProjectRepository>();
         }
     }
 }

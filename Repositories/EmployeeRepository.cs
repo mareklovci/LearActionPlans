@@ -4,13 +4,14 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Windows.Forms;
+using LearActionPlans.Interfaces;
 using LearActionPlans.Models;
 using LearActionPlans.Utilities;
 using Microsoft.Extensions.Options;
 
 namespace LearActionPlans.Repositories
 {
-    public class EmployeeRepository
+    public class EmployeeRepository : IGenericRepository<Zamestnanci>
     {
         private readonly string connectionString;
 
@@ -239,7 +240,16 @@ namespace LearActionPlans.Repositories
             }
         }
 
-        public Zamestnanci GetZamestnanecFromViewModel(int idZam) =>
-            this.GetZamestnanciAll().FirstOrDefault(z => z.Id == idZam);
+        public IEnumerable<Zamestnanci> GetAll() => throw new NotImplementedException();
+
+        public Zamestnanci GetById(int id) => this.GetZamestnanciAll().FirstOrDefault(z => z.Id == id);
+
+        public void Insert(Zamestnanci obj) => throw new NotImplementedException();
+
+        public void Update(Zamestnanci obj) => throw new NotImplementedException();
+
+        public void Delete(int id) => throw new NotImplementedException();
+
+        public void Save() => throw new NotImplementedException();
     }
 }

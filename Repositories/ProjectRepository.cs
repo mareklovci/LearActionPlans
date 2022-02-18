@@ -3,17 +3,21 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using LearActionPlans.Models;
+using LearActionPlans.Utilities;
+using Microsoft.Extensions.Options;
 
 namespace LearActionPlans.Repositories
 {
-    public static class ProjektyDataMapper
+    public class ProjectRepository
     {
-        private static readonly string ConnectionString =
-            ConfigurationManager.ConnectionStrings["ActionPlansEntity"].ConnectionString;
+        private readonly string connectionString;
 
-        public static IEnumerable<Projekty> GetProjektyAll()
+        public ProjectRepository(IOptionsMonitor<ConnectionStringsOptions> optionsMonitor) =>
+            this.connectionString = optionsMonitor.CurrentValue.LearDataAll;
+
+        public IEnumerable<Projekty> GetProjektyAll()
         {
-            using var connection = new SqlConnection(ConnectionString);
+            using var connection = new SqlConnection(this.connectionString);
             connection.Open();
 
             using var command = connection.CreateCommand();
@@ -30,11 +34,11 @@ namespace LearActionPlans.Repositories
 
             while (reader.Read())
             {
-                yield return ConstructProjekt(reader);
+                yield return CreateProject(reader);
             }
         }
 
-        private static Projekty ConstructProjekt(IDataRecord reader)
+        private static Projekty CreateProject(IDataRecord reader)
         {
             var id = (int)reader["ProjektID"];
             var nazev = (string)reader["Nazev"];

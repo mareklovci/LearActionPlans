@@ -5,9 +5,9 @@ using LearActionPlans.Models;
 
 namespace LearActionPlans.Repositories
 {
-    public static partial class BodAPDataMapper
+    public partial class ActionPlanPointRepository
     {
-        private static int InsertBodAP(BodAP bodAP, SqlConnection connection)
+        private int InsertBodAP(BodAP bodAP, SqlConnection connection)
         {
             using var command = connection.CreateCommand();
             //bodAP ještě nebyl uložen a tak bude proveden pouze Insert

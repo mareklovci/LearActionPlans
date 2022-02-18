@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using LearActionPlans.Models;
 using LearActionPlans.Utilities;
 using Microsoft.Extensions.Options;
@@ -157,6 +158,23 @@ namespace LearActionPlans.Repositories
             commandAkce.Parameters.AddWithValue("@stavZadosti", 2);
             commandAkce.Parameters.AddWithValue("@ukonceniBodAPId", ukonceniBodAPId);
             commandAkce.ExecuteNonQuery();
+        }
+
+        public IEnumerable<UkonceniBodAP> GetZavritPrvniTermin(int bodAPId)
+        {
+            var ukonceni = this.GetUkonceniBodAPId(bodAPId);
+
+            var query = ukonceni.Where(u => u.BodAPId == bodAPId && u.StavZadosti == 1).ToList();
+
+            if (!query.Any())
+            {
+                yield break;
+            }
+
+            foreach (var q in query)
+            {
+                yield return q;
+            }
         }
     }
 }

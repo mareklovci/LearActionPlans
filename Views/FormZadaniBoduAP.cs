@@ -4,33 +4,33 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using LearActionPlans.Repositories;
-using LearActionPlans.ViewModels;
 
 namespace LearActionPlans.Views
 {
     public partial class FormZadaniBoduAP : Form
     {
+        // Form Fields
         private readonly FormPosunutiTerminuBodAP formPosunutiTerminuBodAp;
         private readonly FormAttachment formAttachment;
         private readonly FormKontrolaEfektivnosti formKontrolaEfektivnosti;
         private readonly FormDatumUkonceni formDatumUkonceni;
+
+        // Repository Fields
         private readonly EmployeeRepository employeeRepository;
         private readonly DepartmentRepository departmentRepository;
-        private FormNovyAkcniPlan.AkcniPlanTmp akcniPlany_;
+        private readonly ActionPlanRepository actionPlanRepository;
+        private readonly ActionPlanPointRepository actionPlanPointRepository;
 
+        // Other WTF
+        private FormNovyAkcniPlan.AkcniPlanTmp akcniPlany_;
         private string cisloAPStr_;
         private DataTable dtActionsWM;
         private DataTable dtActionsWS;
-
         private bool novyBodAP;
-
         private int cisloRadkyDGVBody;
-
         private readonly BindingSource _bindingSourceWM = new BindingSource();
         private readonly BindingSource _bindingSourceWS = new BindingSource();
-
         private bool changedDGV;
-
         private byte znovuOtevritAP;
         private DateTime? kontrolaEfektivnostiDatum;
         private string priloha;
@@ -44,7 +44,9 @@ namespace LearActionPlans.Views
             FormKontrolaEfektivnosti formKontrolaEfektivnosti,
             FormDatumUkonceni formDatumUkonceni,
             EmployeeRepository employeeRepository,
-            DepartmentRepository departmentRepository)
+            DepartmentRepository departmentRepository,
+            ActionPlanRepository actionPlanRepository,
+            ActionPlanPointRepository actionPlanPointRepository)
         {
             // Inject Forms
             this.formPosunutiTerminuBodAp = formPosunutiTerminuBodAp;
@@ -55,6 +57,8 @@ namespace LearActionPlans.Views
             // Inject Repositories
             this.employeeRepository = employeeRepository;
             this.departmentRepository = departmentRepository;
+            this.actionPlanRepository = actionPlanRepository;
+            this.actionPlanPointRepository = actionPlanPointRepository;
 
             // Initialize
             this.InitializeComponent();
@@ -123,7 +127,8 @@ namespace LearActionPlans.Views
 
             this.deadLineZadan = true;
 
-            var znovuOtevrit = EditAPViewModel.GetZnovuOtevritAP(this.akcniPlany_.Id).ToList();
+            var znovuOtevrit = this.actionPlanRepository.GetZnovuOtevritAP(this.akcniPlany_.Id).ToList();
+
             //jestliže proměnná znovuotevritAP je rovna 0, byl AP znovuotevřen
             this.znovuOtevritAP = znovuOtevrit[0].ZnovuOtevrit;
 

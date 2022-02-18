@@ -12,6 +12,8 @@ namespace LearActionPlans.Views
         private readonly FormPrehledBoduAP formPrehledBoduAp;
         private readonly EmployeeRepository employeeRepository;
         private readonly ActionPlanRepository actionPlanRepository;
+        private readonly CustomerRepository customerRepository;
+        private readonly ProjectRepository projectRepository;
 
         private AkcniPlanTmp akcniPlan;
         private int posledniCisloAP;
@@ -48,12 +50,20 @@ namespace LearActionPlans.Views
         public FormNovyAkcniPlan(
             FormPrehledBoduAP formPrehledBoduAp,
             EmployeeRepository employeeRepository,
-            ActionPlanRepository actionPlanRepository)
+            ActionPlanRepository actionPlanRepository,
+            CustomerRepository customerRepository,
+            ProjectRepository projectRepository)
         {
+            // Forms
             this.formPrehledBoduAp = formPrehledBoduAp;
+
+            // Repositories
             this.employeeRepository = employeeRepository;
             this.actionPlanRepository = actionPlanRepository;
+            this.customerRepository = customerRepository;
+            this.projectRepository = projectRepository;
 
+            // Initialize
             this.InitializeComponent();
             this.ulozeniDat = false;
 
@@ -198,9 +208,28 @@ namespace LearActionPlans.Views
             }
         }
 
+        public IEnumerable<NewActionPlanViewModel> GetProjects()
+        {
+            var projects = this.projectRepository.GetProjektyAll().ToList();
+
+            var query = projects.Where(p => p.StavObjektu == 1)
+                .OrderBy(p => p.Nazev)
+                .Select(p => NewActionPlanViewModel.Project(p.Id, p.Nazev)).ToList();
+
+            if (!query.Any())
+            {
+                yield break;
+            }
+
+            foreach (var q in query)
+            {
+                yield return q;
+            }
+        }
+
         private bool NaplnitComboBoxProjekty()
         {
-            var projekty = NewActionPlanViewModel.GetProjects().ToList();
+            var projekty = this.GetProjects().ToList();
 
             if (projekty.Count == 0)
             {
@@ -232,7 +261,7 @@ namespace LearActionPlans.Views
 
         private bool NaplnitComboBoxZakaznici()
         {
-            var zakaznici = NewActionPlanViewModel.GetCustomers().ToList();
+            var zakaznici = this.GetCustomers().ToList();
 
             if (zakaznici.Count == 0)
             {
@@ -248,6 +277,25 @@ namespace LearActionPlans.Views
             this.ComboBoxZakaznici.ValueMember = "ZakaznikId";
             this.ComboBoxZakaznici.SelectedIndex = 0;
             return true;
+        }
+
+        private IEnumerable<NewActionPlanViewModel> GetCustomers()
+        {
+            var customers = this.customerRepository.GetAll().ToList();
+
+            var query = customers.Where(z => z.StavObjektu == 1)
+                .OrderBy(z => z.Nazev)
+                .Select(z => NewActionPlanViewModel.Customer(z.Id, z.Nazev)).ToList();
+
+            if (!query.Any())
+            {
+                yield break;
+            }
+
+            foreach (var q in query)
+            {
+                yield return q;
+            }
         }
 
         private void ComboBoxZadavatel1_SelectedIndexChanged(object sender, EventArgs e)

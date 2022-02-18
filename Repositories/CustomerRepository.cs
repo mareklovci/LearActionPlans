@@ -1,26 +1,29 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using LearActionPlans.Interfaces;
 using LearActionPlans.Models;
+using LearActionPlans.Utilities;
+using Microsoft.Extensions.Options;
 
 namespace LearActionPlans.Repositories
 {
     public class CustomerRepository : IGenericRepository<Zakaznici>
     {
-        private static readonly string ConnectionString =
-            ConfigurationManager.ConnectionStrings["ActionPlansEntity"].ConnectionString;
+        private readonly string connectionString;
 
-        public static IEnumerable<Zakaznici> GetZakazniciAll()
+        public CustomerRepository(IOptionsMonitor<ConnectionStringsOptions> optionsMonitor) =>
+            this.connectionString = optionsMonitor.CurrentValue.LearDataAll;
+
+        public IEnumerable<Zakaznici> GetAll()
         {
-            using var connection = new SqlConnection(ConnectionString);
+            using var connection = new SqlConnection(this.connectionString);
             connection.Open();
 
             using var command = connection.CreateCommand();
             command.CommandType = CommandType.Text;
 
-            command.CommandText = $"SELECT * FROM Zakaznik";
+            command.CommandText = "SELECT * FROM Zakaznik";
 
             var reader = command.ExecuteReader();
 
@@ -31,20 +34,9 @@ namespace LearActionPlans.Repositories
 
             while (reader.Read())
             {
-                yield return ConstructZakaznik(reader);
+                yield return CreateCustomer(reader);
             }
         }
-
-        private static Zakaznici ConstructZakaznik(IDataRecord reader)
-        {
-            var id = (int)reader["ZakaznikID"];
-            var nazev = (string)reader["Nazev"];
-            var stavObjektu = (byte)reader["StavObjektu"];
-
-            return new Zakaznici(id, nazev, stavObjektu);
-        }
-
-        public IEnumerable<Zakaznici> GetAll() => throw new System.NotImplementedException();
 
         public Zakaznici GetById(int id) => throw new System.NotImplementedException();
 
@@ -55,5 +47,14 @@ namespace LearActionPlans.Repositories
         public void Delete(int id) => throw new System.NotImplementedException();
 
         public void Save() => throw new System.NotImplementedException();
+
+        private static Zakaznici CreateCustomer(IDataRecord reader)
+        {
+            var id = (int)reader["ZakaznikID"];
+            var name = (string)reader["Nazev"];
+            var objectState = (byte)reader["StavObjektu"];
+
+            return new Zakaznici(id, name, objectState);
+        }
     }
 }

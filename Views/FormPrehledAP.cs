@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
@@ -18,6 +19,9 @@ namespace LearActionPlans.Views
         private readonly FormPrehledBoduAP formPrehledBoduAp;
         private readonly FormEditActionPlan formEditActionPlan;
         private readonly EmployeeRepository employeeRepository;
+        private readonly ActionPlanRepository actionPlanRepository;
+        private readonly CustomerRepository customerRepository;
+        private readonly ProjectRepository projectRepository;
 
         private readonly BindingSource bindingSourceAp;
         private DataTable dtAp;
@@ -38,7 +42,10 @@ namespace LearActionPlans.Views
         public FormPrehledAp(IOptionsMonitor<ArgumentOptions> optionsMonitor,
             FormPrehledBoduAP formPrehledBoduAp,
             FormEditActionPlan formEditActionPlan,
-            EmployeeRepository employeeRepository)
+            EmployeeRepository employeeRepository,
+            ActionPlanRepository actionPlanRepository,
+            CustomerRepository customerRepository,
+            ProjectRepository projectRepository)
         {
             // Arguments
             this.arguments = optionsMonitor.CurrentValue;
@@ -49,6 +56,9 @@ namespace LearActionPlans.Views
 
             // Repositories
             this.employeeRepository = employeeRepository;
+            this.actionPlanRepository = actionPlanRepository;
+            this.customerRepository = customerRepository;
+            this.projectRepository = projectRepository;
 
             // Initialize
             this.InitializeComponent();
@@ -246,7 +256,7 @@ namespace LearActionPlans.Views
 
         private bool ZobrazitDgv()
         {
-            var ap = PrehledAPViewModel.GetAPAll().ToList();
+            var ap = GetAPAll().ToList();
             var zad2 = this.employeeRepository.GetZamestnanciAll().ToList();
 
             //pokud počet záznamů bude roven 0, namohu naplnit filtry
@@ -302,6 +312,34 @@ namespace LearActionPlans.Views
             this.dvAp = this.dtAp.DefaultView;
 
             return true;
+        }
+
+        public IEnumerable<PrehledAPViewModel> GetAPAll()
+        {
+            var akcniPlany = this.actionPlanRepository.GetAll().ToList();
+            var zamestnanci = this.employeeRepository.GetZamestnanciAll().ToList();
+            var projekty = this.projectRepository.GetProjektyAll().ToList();
+            var zakaznici = this.customerRepository.GetAll().ToList();
+
+            var query = from ap in akcniPlany
+                join zam in zamestnanci
+                    on ap.Zadavatel1Id equals zam.Id into gZam
+                from subZam in gZam.DefaultIfEmpty()
+                join pro in projekty
+                    on ap.ProjektId equals pro.Id into gPro
+                from subPro in gPro.DefaultIfEmpty()
+                join zak in zakaznici
+                    on ap.ZakaznikId equals zak.Id into gZak
+                from subZak in gZak.DefaultIfEmpty()
+                where ap.StavObjektu == 1
+                orderby ap.DatumZalozeni.Year, ap.CisloAP
+                select new PrehledAPViewModel(ap.Id, ap.DatumZalozeni, ap.CisloAP, ap.Zadavatel1Id, ap?.Zadavatel2Id, subZam.Prijmeni + " " + subZam.Jmeno, ap.Tema, ap?.ProjektId,
+                    subPro?.Nazev ?? string.Empty, ap.ZakaznikId, subZak.Nazev, ap.TypAP, ap.StavObjektu, ap.UzavreniAP);
+
+            foreach (var q in query)
+            {
+                yield return q;
+            }
         }
 
         private void DataGridViewAP_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)

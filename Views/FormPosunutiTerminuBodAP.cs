@@ -6,8 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Windows.Forms;
-
-using LearActionPlans.ViewModels;
+using LearActionPlans.Models;
 using LearActionPlans.Repositories;
 using LearActionPlans.Utilities;
 
@@ -16,6 +15,7 @@ namespace LearActionPlans.Views
     public partial class FormPosunutiTerminuBodAP : Form
     {
         private readonly ActionPlanPointDeadlineRepository actionPlanPointDeadlineRepository;
+        private readonly ActionPlanPointRepository actionPlanPointRepository;
         private readonly EmployeeRepository employeeRepository;
 
         //private readonly DataRow action_;
@@ -37,10 +37,6 @@ namespace LearActionPlans.Views
         private List<Label> labelOdpoved;
         private List<RichTextBox> richTextBoxOdpoved;
         private DataTable dtUkonceni;
-
-        //private readonly bool vlastnikAP_;
-        //private readonly bool vlastnikAkce_;
-        //private readonly int vlastnikAkceId_;
         private bool opravitTermin_;
 
         private bool zmenaPoznamky;
@@ -48,19 +44,28 @@ namespace LearActionPlans.Views
         private bool zamitnutaZmena;
         private byte zmenaTerminu_;
 
-        private List<PosunutiTerminuBodAPViewModel> ukonceni;
-        //1 = první termín, 2 = první termín uzavřeno, 3 = žádost, 4 = nový termín potvrzeno, 5 = nový termín změna, 6 = nový termín zamítnuto
+        private List<UkonceniBodAP> ukonceni;
+        //1 = první termín
+        //2 = první termín uzavřeno,
+        //3 = žádost,
+        //4 = nový termín potvrzeno,
+        //5 = nový termín změna,
+        //6 = nový termín zamítnuto
         //když vytvořím nový termín (3), předchozí první termín nastavím na (2)
 
         private readonly string[] zadost = { "first term", "first term closed", "request", "new deadline confirmed", "new deadline changed", "new deadline reject" };
-        //private readonly bool kontrolaEfektivnosti_;
 
-        public FormPosunutiTerminuBodAP(ActionPlanPointDeadlineRepository actionPlanPointDeadlineRepository,
+        public FormPosunutiTerminuBodAP(
+            ActionPlanPointDeadlineRepository actionPlanPointDeadlineRepository,
+            ActionPlanPointRepository actionPlanPointRepository,
             EmployeeRepository employeeRepository)
         {
+            // Repositories
             this.actionPlanPointDeadlineRepository = actionPlanPointDeadlineRepository;
+            this.actionPlanPointRepository = actionPlanPointRepository;
             this.employeeRepository = employeeRepository;
 
+            // Initialize
             this.InitializeComponent();
             this.InitControls();
         }
@@ -89,7 +94,7 @@ namespace LearActionPlans.Views
             this.labelOdpoved = new List<Label>();
             this.richTextBoxOdpoved = new List<RichTextBox>();
 
-            this.ukonceni = new List<PosunutiTerminuBodAPViewModel>();
+            this.ukonceni = new List<UkonceniBodAP>();
         }
 
         private void FormPosunutiTerminuAkce_Load(object sender, EventArgs e)
@@ -99,7 +104,7 @@ namespace LearActionPlans.Views
             {
                 this.ButtonUlozit.Visible = true;
                 this.ButtonZavrit.Text = "Close";
-                this.CheckBoxPoslatZadost.CheckedChanged += new EventHandler(this.CheckBoxPoslatZadost_CheckedChanged);
+                this.CheckBoxPoslatZadost.CheckedChanged += this.CheckBoxPoslatZadost_CheckedChanged;
             }
             else
             {
@@ -109,11 +114,6 @@ namespace LearActionPlans.Views
                 this.groupBoxZadost.Visible = false;
             }
 
-            //if (FormMain.VlastnikAP == true)
-            //    ButtonZadost.Text = "Save a new Deadline";
-            //if (FormMain.VlastnikAkce == true)
-            //    ButtonZadost.Text = "Request for a new Deadline";
-
             this.VytvoritObsahPanelu();
         }
 
@@ -122,7 +122,6 @@ namespace LearActionPlans.Views
             this.richTextBoxNovaPoznamka.Text = string.Empty;
 
             //to je proto aby zareagoval handler
-            //kontrolaEfektivnosti_ == false &&  && (FormMain.VlastnikAP == true || FormMain.VlastnikAkce == true)
             if (this.opravitTermin_)
             {
                 this.CheckBoxPoslatZadost.Checked = true;
@@ -145,20 +144,20 @@ namespace LearActionPlans.Views
             this.Controls.Add(this.panelTerminy);
 
             //zbývající počet počet zamítnutí a změn
-
-            //var akce = PosunutiTerminuBodAPViewModel.GetZbyvajiciTerminy(Convert.ToInt32(action_["akceId"])).ToList();
-            var akce = PosunutiTerminuBodAPViewModel.GetZbyvajiciTerminy(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id).ToList();
+            var someOtherId = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id;
+            var akce = this.actionPlanPointRepository.GetZbyvajiciTerminyBodAPId(someOtherId).ToList();
             byte zamitnutiTerminu = 0;
             byte zmenaTerminu = 0;
             int i;
 
             //vyhledá datumy ukončení pro dané ID akce
             //jsou setříděny podle UkonceniAkceID
-            //ukonceni = PosunutiTerminuBodAPViewModel.GetUkonceniAkce(Convert.ToInt32(action_["akceId"])).ToList();
-            this.ukonceni = PosunutiTerminuBodAPViewModel.GetUkonceniBodAP(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id).ToList();
+            var someId = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id;
+            this.ukonceni = this.actionPlanPointDeadlineRepository.GetUkonceniBodAPId(someId).ToList();
             this.dtUkonceni = DataTableConverter.ConvertToDataTable(this.ukonceni);
+
             //to je kvůli nastavení minimálního datumu pro datetimepicker - založení nového termínu
-            var minDatumZmeny = this.ukonceni.OrderByDescending(item => item.UkonceniBodAPId);
+            var minDatumZmeny = this.ukonceni.OrderByDescending(item => item.BodAPId);
 
             foreach (var a in akce)
             {
@@ -343,7 +342,7 @@ namespace LearActionPlans.Views
                     Text = u.Poznamka,
                     //Enabled = podminka ? true : false,
                     Enabled = false,
-                    Tag = u.UkonceniBodAPId.ToString(),
+                    Tag = u.BodAPId.ToString(),
                     ForeColor = Color.Black
                 });
                 this.richTextBoxPoznamka[i].TextChanged += this.RichTextBoxPoznamka_TextChanged;
@@ -363,7 +362,7 @@ namespace LearActionPlans.Views
                     Size = new Size(340, 80),
                     Text = u.Odpoved,
                     Enabled = false,
-                    Tag = u.UkonceniBodAPId.ToString(),
+                    Tag = u.BodAPId.ToString(),
                     ForeColor = Color.Black
                 });
 
@@ -441,12 +440,12 @@ namespace LearActionPlans.Views
                     this.UlozitPoznamky();
                 }
 
-                //var prvniTermin = PosunutiTerminuBodAPViewModel.GetZavritPrvniTermin(Convert.ToInt32(action_["akceId"])).ToList();
-                var prvniTermin = PosunutiTerminuBodAPViewModel.GetZavritPrvniTermin(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id).ToList();
+                var firstTermId = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id;
+                var prvniTermin = this.actionPlanPointDeadlineRepository.GetZavritPrvniTermin(firstTermId).ToList();
                 if (prvniTermin.Count > 0)
                 {
                     //provede se jenom při první změně termínu
-                    this.actionPlanPointDeadlineRepository.UpdatePrvniTermin(Convert.ToInt32(prvniTermin[0].UkonceniBodAPId));
+                    this.actionPlanPointDeadlineRepository.UpdatePrvniTermin(Convert.ToInt32(prvniTermin.FirstOrDefault()!.BodAPId));
                 }
                 //nejdřív založím nový termín
                 idZadost = this.actionPlanPointDeadlineRepository.InsertUkonceniBodAP(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Id, this.dateTimePickerNovyTerminUkonceni.Value, this.richTextBoxNovaPoznamka.Text);
@@ -456,7 +455,7 @@ namespace LearActionPlans.Views
 
                 //----- odeslání požadavku -----------------------------------------------------------------------------------------------------
                 var zamId = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OdpovednaOsoba1Id;
-                var zam = this.employeeRepository.GetZamestnanecFromViewModel(zamId);
+                var zam = this.employeeRepository.GetById(zamId);
 
                 var odpovedny1 = zam.Prijmeni + " " + zam.Jmeno;
                 var odpovedny2 = string.Empty;
@@ -464,7 +463,7 @@ namespace LearActionPlans.Views
                 if (FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OdpovednaOsoba2Id > 0)
                 {
                     zamId = Convert.ToInt32(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OdpovednaOsoba2Id);
-                    zam = this.employeeRepository.GetZamestnanecFromViewModel(zamId);
+                    zam = this.employeeRepository.GetById(zamId);
 
                     odpovedny2 = zam.Prijmeni + " " + zam.Jmeno;
                 }

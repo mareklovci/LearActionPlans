@@ -45,11 +45,7 @@ namespace LearActionPlans.ViewModels
         public byte StavZadosti { get; set; }
         public byte StavObjektuUkonceni { get; set; }
 
-        // zaměstnanec
-        public string JmenoPracovnika { get; set; }
-        public string EmailOdpovednyPracovnik { get; set; }
-
-        private static PrehledBoduAPViewModel BodyAP(int id, int idAP, int cisloBoduAP, DateTime datumZalozeni, string odkazNaNormu,
+        public static PrehledBoduAPViewModel BodyAP(int id, int idAP, int cisloBoduAP, DateTime datumZalozeni, string odkazNaNormu,
             string hodnoceniNeshody, string popisProblemu,
             string skutecnaPricinaWM, string napravnaOpatreniWM, string skutecnaPricinaWS, string napravnaOpatreniWS,
             int odpovednaOsoba1Id, int? odpovednaOsoba2Id, string odpovednaOsoba1, DateTime? kontrolaEfektivnosti, int oddeleniId, string oddeleni, string priloha,
@@ -84,7 +80,7 @@ namespace LearActionPlans.ViewModels
             return prehledBoduAPViewModel;
         }
 
-        private static PrehledBoduAPViewModel UkonceniBodAP(int id, int bodAPId, DateTime datumUkonceni, string poznamka, string odpoved, byte stavZadosti, byte stavObjektuUkonceni)
+        public static PrehledBoduAPViewModel UkonceniBodAP(int id, int bodAPId, DateTime datumUkonceni, string poznamka, string odpoved, byte stavZadosti, byte stavObjektuUkonceni)
         {
             var prehledBoduAPViewModel = new PrehledBoduAPViewModel
             {
@@ -100,7 +96,7 @@ namespace LearActionPlans.ViewModels
             return prehledBoduAPViewModel;
         }
 
-        private static PrehledBoduAPViewModel UkonceniAP(int id, DateTime datumUkonceniAP)
+        public static PrehledBoduAPViewModel UkonceniAP(int id, DateTime datumUkonceniAP)
         {
             var prehledBoduAPViewModel = new PrehledBoduAPViewModel
             {
@@ -109,76 +105,6 @@ namespace LearActionPlans.ViewModels
             };
 
             return prehledBoduAPViewModel;
-        }
-
-        public static IEnumerable<PrehledBoduAPViewModel> GetBodyIdAPAll(int idAP)
-        {
-            var bodyAP = BodAPDataMapper.GetBodyIdAP(idAP).ToList();
-            var zamestnanci = EmployeeRepository.GetZamestnanciAll().ToList();
-            var oddeleni = DepartmentRepository.GetOddeleniAll();
-
-            if (!bodyAP.Any())
-            {
-                yield break;
-            }
-
-            var query = from b in bodyAP
-                        join zam in zamestnanci
-                            on b.OdpovednaOsoba1Id equals zam.Id into gZam
-                        from subZam in gZam.DefaultIfEmpty()
-                        join odd in oddeleni
-                            on b.OddeleniId equals odd.Id into gOdd
-                        from subOdd in gOdd.DefaultIfEmpty()
-                        orderby b.CisloBoduAP
-                        select BodyAP(b.Id, b.AkcniPlanId, b.CisloBoduAP, b.DatumZalozeni, b.OdkazNaNormu, b.HodnoceniNeshody, b.PopisProblemu,
-                        b.SkutecnaPricinaWM, b.NapravnaOpatreniWM, b.SkutecnaPricinaWS, b.NapravnaOpatreniWS,
-                        b.OdpovednaOsoba1Id, b.OdpovednaOsoba2Id, subZam.Prijmeni + " " + subZam.Jmeno, b.KontrolaEfektivnosti, b.OddeleniId, subOdd.Nazev, b.Priloha,
-                        b.ZamitnutiTerminu, b.ZmenaTerminu, b.ZnovuOtevrit, b.EmailOdeslan, b.StavObjektu);
-
-            foreach (var q in query)
-            {
-                yield return q;
-            }
-        }
-
-        public static IEnumerable<PrehledBoduAPViewModel> GetUkonceniBodAP(int bodAPId)
-        {
-            var ukonceniBodAP = BodAPDataMapper.GetUkonceniBodAP(bodAPId).ToList();
-
-            if (!ukonceniBodAP.Any())
-            {
-                yield break;
-            }
-
-            var query = from u in ukonceniBodAP
-                        where u.StavObjektuUkonceni == 1
-                        orderby u.Id
-                        select UkonceniBodAP(u.Id, u.BodAPId, u.DatumUkonceni, u.Poznamka, u.Odpoved, u.StavZadosti, u.StavObjektuUkonceni);
-
-            foreach (var q in query)
-            {
-                yield return q;
-            }
-        }
-
-        public static IEnumerable<PrehledBoduAPViewModel> GetUkonceniAPId(int idAP)
-        {
-            var ukonceniAP = UkonceniAPDataMapper.GetUkonceniAP(idAP).ToList();
-
-            if (!ukonceniAP.Any())
-            {
-                yield break;
-            }
-
-            var query = from u in ukonceniAP
-                        where u.APId == idAP
-                        orderby u.Id descending
-                        select UkonceniAP(u.Id, u.DatumUkonceni);
-
-            foreach (var q in query)
-            {
-                yield return q;
-            }
         }
     }
 }

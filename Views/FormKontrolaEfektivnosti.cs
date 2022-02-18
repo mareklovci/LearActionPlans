@@ -9,6 +9,7 @@ namespace LearActionPlans.Views
     public partial class FormKontrolaEfektivnosti : Form
     {
         private readonly EffectivityControlRepository effectivityControlRepository;
+        private readonly ActionPlanPointRepository actionPlanPointRepository;
         public DateTime? ReturnValuePuvodniDatum { get; set; }
         public DateTime? ReturnValueDatum { get; set; }
         public string ReturnValuePoznamka { get; set; }
@@ -30,10 +31,14 @@ namespace LearActionPlans.Views
         private List<RichTextBox> richTextBoxPoznamka;
 
         public FormKontrolaEfektivnosti(
-            EffectivityControlRepository effectivityControlRepository)
+            EffectivityControlRepository effectivityControlRepository,
+            ActionPlanPointRepository actionPlanPointRepository)
         {
+            // Repositories
             this.effectivityControlRepository = effectivityControlRepository;
+            this.actionPlanPointRepository = actionPlanPointRepository;
 
+            // Initialize
             this.InitializeComponent();
         }
 
@@ -87,7 +92,8 @@ namespace LearActionPlans.Views
             this.panelPuvodniDatumy.HorizontalScroll.Maximum = 0;
 
             //zobrazení původních termínů kontrol efektivity
-            var efektivita = this.effectivityControlRepository.GetKontrolaEfektivnostiBodAPId(Convert.ToInt32(this.bodApId));
+            var efektivita =
+                this.effectivityControlRepository.GetKontrolaEfektivnostiBodAPId(Convert.ToInt32(this.bodApId));
 
             var i = 0;
             foreach (var ef in efektivita)
@@ -160,7 +166,8 @@ namespace LearActionPlans.Views
             this.ReturnValuePotvrdit = false;
         }
 
-        public void CreateFormKontrolaEfektivnosti(bool novyBodAP, bool apUzavren, bool deadLineZadan, int bodAPId, bool kontrolaEfektivnosti, DateTime? datum)
+        public void CreateFormKontrolaEfektivnosti(bool novyBodAP, bool apUzavren, bool deadLineZadan, int bodAPId,
+            bool kontrolaEfektivnosti, DateTime? datum)
         {
             var podminkaDatum = datum == null;
 
@@ -189,7 +196,8 @@ namespace LearActionPlans.Views
 
         private void ButtonNoveDatum_MouseClick(object sender, MouseEventArgs e)
         {
-            var dialogResult = MessageBox.Show(@"You really want to create effectiveness.", @"Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            var dialogResult = MessageBox.Show(@"You really want to create effectiveness.", @"Notice",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
             if (dialogResult == DialogResult.Yes)
             {
@@ -202,7 +210,8 @@ namespace LearActionPlans.Views
 
                 if (this.novyBodAp == false)
                 {
-                    BodAPDataMapper.UpdateKontrolaEfektivity(this.bodApId, Convert.ToDateTime(this.dateTimePickerKontrolaEfektivnosti.Value));
+                    this.actionPlanPointRepository.UpdateKontrolaEfektivity(this.bodApId,
+                        Convert.ToDateTime(this.dateTimePickerKontrolaEfektivnosti.Value));
                 }
 
                 //znovu načíst hodnoty
@@ -215,7 +224,8 @@ namespace LearActionPlans.Views
 
         private void ButtonOdstranitDatum_MouseClick(object sender, MouseEventArgs e)
         {
-            var dialogResult = MessageBox.Show(@"You really want to cancel effectiveness.", @"Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            var dialogResult = MessageBox.Show(@"You really want to cancel effectiveness.", @"Notice",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
             if (dialogResult != DialogResult.Yes)
             {
@@ -224,7 +234,8 @@ namespace LearActionPlans.Views
 
             if (this.richTextBoxPoznamkaOdstranitDatum.Text == string.Empty)
             {
-                MessageBox.Show(@"You must fill out a note.", @"Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(@"You must fill out a note.", @"Notice", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
             }
             else
             {
@@ -239,7 +250,8 @@ namespace LearActionPlans.Views
                 this.ReturnValuePuvodniDatum = this.dateTimePickerKontrolaEfektivnosti.Value;
                 this.ReturnValuePoznamka = this.richTextBoxPoznamkaOdstranitDatum.Text;
 
-                BodAPDataMapper.RemoveKontrolaEfektivity(this.bodApId, this.datum, this.richTextBoxPoznamkaOdstranitDatum.Text);
+                this.actionPlanPointRepository.RemoveKontrolaEfektivity(this.bodApId, this.datum,
+                    this.richTextBoxPoznamkaOdstranitDatum.Text);
 
                 //znovu načíst hodnoty
                 //InitFormLoad();

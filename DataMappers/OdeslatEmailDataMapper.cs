@@ -32,7 +32,6 @@ namespace LearActionPlans.DataMappers
                 }
 
                 // body AP, které byly odeslány, byly nastaveny jako odeslané
-                // to odstraním, sloupec EmailOdeslan je zbytečný
                 foreach (var jedenBodAP in odeslaneEmailyProBody)
                 {
                     using var command = connection.CreateCommand();

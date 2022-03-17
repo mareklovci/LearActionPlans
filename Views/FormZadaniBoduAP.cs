@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+
+using LearActionPlans.Models;
 using LearActionPlans.ViewModels;
 
 namespace LearActionPlans.Views
@@ -25,7 +27,7 @@ namespace LearActionPlans.Views
         //private readonly BindingSource _bindingSourceWM = new BindingSource();
         //private readonly BindingSource _bindingSourceWS = new BindingSource();
 
-        private bool changedDGV;
+        private bool changeOfContent;
 
         private byte znovuOtevritAP;
         private DateTime? kontrolaEfektivnostiDatum;
@@ -112,7 +114,7 @@ namespace LearActionPlans.Views
             this.ZobrazeniDGV();
 
             this.ButtonUlozit.Enabled = false;
-            this.changedDGV = false;
+            this.changeOfContent = false;
 
             if (this.akcniPlany_.APUzavren)
             {
@@ -121,8 +123,8 @@ namespace LearActionPlans.Views
                 this.RichTextBoxPopisProblemu.Enabled = false;
                 this.RichTextBoxSkutecnaPricinaWM.Enabled = false;
 
-                this.ButtonNovaAkce.Visible = false;
-                this.ButtonOdstranitAkci.Visible = false;
+                //this.ButtonNovaAkce.Visible = false;
+                //this.ButtonOdstranitAkci.Visible = false;
                 this.ButtonUlozit.Visible = false;
                 this.ButtonZavrit.Text = "Close";
             }
@@ -136,8 +138,8 @@ namespace LearActionPlans.Views
                 this.ButtonUlozit.Visible = true;
                 this.ButtonUlozit.Text = "Save";
                 this.ButtonZavrit.Text = "Close";
-                this.ButtonNovaAkce.Visible = true;
-                this.ButtonOdstranitAkci.Visible = true;
+                //this.ButtonNovaAkce.Visible = true;
+                //this.ButtonOdstranitAkci.Visible = true;
             }
         }
 
@@ -237,7 +239,7 @@ namespace LearActionPlans.Views
 
         private void ZobrazeniDGV()
         {
-            if (this.novyBodAP == false)
+            if ((this.novyBodAP == false && this.spusteniBezParametru == true) || this.spusteniBezParametru == false)
             {
                 this.TextBoxOdkazNaNormu.Text = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].OdkazNaNormu;
                 this.TextBoxHodnoceniNeshody.Text = FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].HodnoceniNeshody;
@@ -326,7 +328,6 @@ namespace LearActionPlans.Views
                 this.ButtonKontrolaEfektivnosti.Enabled = false;
             }
 
-
             this.ComboBoxOdpovednaOsoba1.SelectedIndexChanged += this.ComboBoxOdpovednaOsoba1_SelectedIndexChanged;
             this.ComboBoxOddeleni.SelectedIndexChanged += this.ComboBoxOddeleni_SelectedIndexChanged;
         }
@@ -335,46 +336,14 @@ namespace LearActionPlans.Views
         {
             this.UlozitBodAP();
             this.ButtonUlozit.Enabled = false;
-            this.changedDGV = false;
+            this.changeOfContent = false;
             this.bodAPUlozen = true;
         }
-
-        //private void ButtonNovaAkce_MouseClick(object sender, MouseEventArgs e)
-        //{
-        //    //if (this.TabControlAkce.SelectedTab == this.TabControlAkce.TabPages["tabPageWM"]) //your specific tabname
-        //    //{
-        //    //    this.dtActionsWM.Rows.Add(string.Empty, 0, 0, null, null, null, null, null, 0, string.Empty, null, 0,
-        //    //        false);
-        //    //    this.ButtonOdstranitAkci.Enabled = this.DataGridViewWMAkce.Rows.Count > 0;
-        //    //}
-
-        //    //if (this.TabControlAkce.SelectedTab == this.TabControlAkce.TabPages["tabPageWS"]) //your specific tabname
-        //    //{
-        //    //    this.dtActionsWS.Rows.Add(string.Empty, 0, 0, null, null, null, null, null, 0, string.Empty, null, 0,
-        //    //        false);
-        //    //    this.ButtonOdstranitAkci.Enabled = this.DataGridViewWSAkce.Rows.Count > 0;
-        //    //}
-
-        //    this.ButtonUlozit.Enabled = true;
-        //}
-
-        //private void TabControlAkce_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    if (this.TabControlAkce.SelectedTab == this.TabControlAkce.TabPages["tabPageWM"])
-        //    {
-        //        this.ButtonOdstranitAkci.Enabled = this.DataGridViewWMAkce.Rows.Count > 0;
-        //    }
-
-        //    if (this.TabControlAkce.SelectedTab == this.TabControlAkce.TabPages["tabPageWS"])
-        //    {
-        //        this.ButtonOdstranitAkci.Enabled = this.DataGridViewWSAkce.Rows.Count > 0;
-        //    }
-        //}
 
         private void ComboBoxOdpovednaOsoba1_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.ButtonUlozit.Enabled = true;
-            this.changedDGV = true;
+            this.changeOfContent = true;
 
             if (this.ComboBoxOdpovednaOsoba1.SelectedIndex == 0)
             {
@@ -386,7 +355,7 @@ namespace LearActionPlans.Views
         private void ComboBoxOddeleni_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.ButtonUlozit.Enabled = true;
-            this.changedDGV = true;
+            this.changeOfContent = true;
 
             if (this.ComboBoxOddeleni.SelectedIndex == 0)
             {
@@ -398,31 +367,31 @@ namespace LearActionPlans.Views
         private void RichTextBoxPopisProblemu_TextChanged(object sender, EventArgs e)
         {
             this.ButtonUlozit.Enabled = true;
-            this.changedDGV = true;
+            this.changeOfContent = true;
         }
 
         private void RichTextBoxSkutecnaPricinaWM_TextChanged(object sender, EventArgs e)
         {
             this.ButtonUlozit.Enabled = true;
-            this.changedDGV = true;
+            this.changeOfContent = true;
         }
 
         private void RichTextBoxNapravnaOpatreniWM_TextChanged(object sender, EventArgs e)
         {
             this.ButtonUlozit.Enabled = true;
-            this.changedDGV = true;
+            this.changeOfContent = true;
         }
 
         private void RichTextBoxSkutecnaPricinaWS_TextChanged(object sender, EventArgs e)
         {
             this.ButtonUlozit.Enabled = true;
-            this.changedDGV = true;
+            this.changeOfContent = true;
         }
 
         private void RichTextBoxNapravnaOpatreniWS_TextChanged(object sender, EventArgs e)
         {
             this.ButtonUlozit.Enabled = true;
-            this.changedDGV = true;
+            this.changeOfContent = true;
         }
 
         private void DataGridViewWMAkce_SelectionChanged(object sender, EventArgs e) =>
@@ -446,10 +415,13 @@ namespace LearActionPlans.Views
                     }
 
                     this.datumUkonceni = form.ReturnValueDatum;
+                    FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].DatumUkonceni = this.datumUkonceni;
                     this.poznamkaDatumUkonceni = form.ReturnValuePoznamka;
                     this.labelDatumUkonceni.Text = Convert.ToDateTime(this.datumUkonceni).ToShortDateString();
+
                     this.deadLineZadan = true;
-                    this.changedDGV = true;
+                    this.ButtonUlozit.Enabled = true;
+                    this.changeOfContent = true;
                     // bylo zadáno datum ukončení, tak bude povolena možnost zadat také fatu efektivity
                     this.ButtonKontrolaEfektivnosti.Enabled = true;
                 }
@@ -461,12 +433,23 @@ namespace LearActionPlans.Views
                     var opravitTermin = !(this.akcniPlany_.APUzavren || kontrolaEfektivnosti);
 
                     using var form = new FormPosunutiTerminuBodAP(this.spusteniBezParametru, opravitTermin, this.cisloAPStr_, this.cisloRadkyDGVBody, this.akcniPlany_.Zadavatel1Id, this.akcniPlany_.Zadavatel2Id);
-                    var result = form.ShowDialog();
-                    if (result == DialogResult.OK)
-                    { }
+                    // protože nepotřebuji vyhodnocovat DialogResult
+                    _ = form.ShowDialog();
+                    //var result = form.ShowDialog();
+                    //if (result == DialogResult.OK)
+                    //{ }
                 }
             }
+            if (this.spusteniBezParametru == false)
+            {
+                var kontrolaEfektivnosti =
+                    !(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti == null);
+                var opravitTermin = !(this.akcniPlany_.APUzavren || kontrolaEfektivnosti);
 
+                using var form = new FormPosunutiTerminuBodAP(this.spusteniBezParametru, opravitTermin, this.cisloAPStr_, this.cisloRadkyDGVBody, this.akcniPlany_.Zadavatel1Id, this.akcniPlany_.Zadavatel2Id);
+                // protože nepotřebuji vyhodnocovat DialogResult
+                _ = form.ShowDialog();
+            }
         }
 
         private void ButtonKontrolaEfektivnosti_MouseClick(object sender, MouseEventArgs e)
@@ -683,7 +666,7 @@ namespace LearActionPlans.Views
                 FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Priloha = form.ReturnValueFolder;
             }
 
-            this.changedDGV = true;
+            this.changeOfContent = true;
             this.ButtonUlozit.Enabled = true;
         }
 
@@ -698,7 +681,7 @@ namespace LearActionPlans.Views
                 FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].Priloha = string.Empty;
             }
 
-            this.changedDGV = true;
+            this.changeOfContent = true;
             this.ButtonUlozit.Enabled = true;
         }
 
@@ -710,7 +693,7 @@ namespace LearActionPlans.Views
             }
 
             this.ButtonUlozit.Enabled = true;
-            this.changedDGV = true;
+            this.changeOfContent = true;
         }
 
         private void DataGridViewWSAkce_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -721,7 +704,7 @@ namespace LearActionPlans.Views
             }
 
             this.ButtonUlozit.Enabled = true;
-            this.changedDGV = true;
+            this.changeOfContent = true;
         }
 
         private void DataGridViewWMAkce_CurrentCellDirtyStateChanged(object sender, EventArgs e)
@@ -743,21 +726,27 @@ namespace LearActionPlans.Views
         private void TextBoxOdkazNaNormu_TextChanged(object sender, EventArgs e)
         {
             this.ButtonUlozit.Enabled = true;
-            this.changedDGV = true;
+            this.changeOfContent = true;
         }
 
         private void TextBoxHodnoceniNeshody_TextChanged(object sender, EventArgs e)
         {
             this.ButtonUlozit.Enabled = true;
-            this.changedDGV = true;
+            this.changeOfContent = true;
         }
 
         private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e) => this.Close();
 
         private void FormZadaniBoduAP_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!this.changedDGV)
+            //if (this.spusteniBezParametru == false)
+            //{
+            //    Application.Exit();
+            //}
+
+            if (!this.changeOfContent)
             {
+                // v případě, že nebyla provedena žádná aktualizace, bude ukončeno okamžitě
                 return;
             }
 
@@ -770,7 +759,11 @@ namespace LearActionPlans.Views
             {
                 case DialogResult.Yes:
                     this.UlozitBodAP();
-                    this.changedDGV = false;
+                    this.changeOfContent = false;
+                    if (this.spusteniBezParametru == false)
+                    {
+                        Application.Exit();
+                    }
                     break;
                 case DialogResult.Cancel:
                     e.Cancel = true;

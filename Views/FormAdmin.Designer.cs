@@ -1,4 +1,4 @@
-﻿
+
 namespace LearActionPlans.Views
 {
     partial class FormAdmin
@@ -32,12 +32,12 @@ namespace LearActionPlans.Views
             this.ButtonZavrit = new System.Windows.Forms.Button();
             this.tabControlAdmin = new System.Windows.Forms.TabControl();
             this.tabPageZamestnanci = new System.Windows.Forms.TabPage();
-            this.ButtonUlozit = new System.Windows.Forms.Button();
-            this.groupBoxStav = new System.Windows.Forms.GroupBox();
+            this.ButtonUlozitZamestnance = new System.Windows.Forms.Button();
+            this.groupBoxStavZamestnance = new System.Windows.Forms.GroupBox();
             this.labelMaterskaDovolena = new System.Windows.Forms.Label();
-            this.radioButtonOdstranen = new System.Windows.Forms.RadioButton();
-            this.radioButtonNeaktivni = new System.Windows.Forms.RadioButton();
-            this.radioButtonAktivni = new System.Windows.Forms.RadioButton();
+            this.radioButtonOdstranenZam = new System.Windows.Forms.RadioButton();
+            this.radioButtonNeaktivniZam = new System.Windows.Forms.RadioButton();
+            this.radioButtonAktivniZam = new System.Windows.Forms.RadioButton();
             this.checkBoxAdmin = new System.Windows.Forms.CheckBox();
             this.RadioButtonAktualizaceZamestnance = new System.Windows.Forms.RadioButton();
             this.RadioButtonNovyZamestnanec = new System.Windows.Forms.RadioButton();
@@ -54,24 +54,37 @@ namespace LearActionPlans.Views
             this.labelKrestniJmeno = new System.Windows.Forms.Label();
             this.ComboBoxZamestnanci = new System.Windows.Forms.ComboBox();
             this.tabPageOddeleni = new System.Windows.Forms.TabPage();
-            this.tabPageProjekty = new System.Windows.Forms.TabPage();
-            this.tabPageZakaznici = new System.Windows.Forms.TabPage();
-            this.RadioButtonAktualizaceOddeleni = new System.Windows.Forms.RadioButton();
-            this.RadioButtonNoveOddeleni = new System.Windows.Forms.RadioButton();
-            this.label1 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.textBoxDepartment = new System.Windows.Forms.TextBox();
-            this.labelOddeleni = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.button1 = new System.Windows.Forms.Button();
+            this.textBoxDepartment = new System.Windows.Forms.TextBox();
+            this.labelOddeleni = new System.Windows.Forms.Label();
+            this.RadioButtonAktualizaceOddeleni = new System.Windows.Forms.RadioButton();
+            this.RadioButtonNoveOddeleni = new System.Windows.Forms.RadioButton();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.tabPageProjekty = new System.Windows.Forms.TabPage();
+            this.ButtonUlozitProjekt = new System.Windows.Forms.Button();
+            this.groupBoxStavProjektu = new System.Windows.Forms.GroupBox();
+            this.radioButtonNeaktivniProjekt = new System.Windows.Forms.RadioButton();
+            this.radioButtonAktivniProjekt = new System.Windows.Forms.RadioButton();
+            this.RadioButtonAktualizaceProjektu = new System.Windows.Forms.RadioButton();
+            this.RadioButtonNovyProjekt = new System.Windows.Forms.RadioButton();
+            this.textBoxNazevProjektu = new System.Windows.Forms.TextBox();
+            this.labelSeznamProjektu = new System.Windows.Forms.Label();
+            this.labelNazevProjektu = new System.Windows.Forms.Label();
+            this.ComboBoxProjekty = new System.Windows.Forms.ComboBox();
+            this.tabPageZakaznici = new System.Windows.Forms.TabPage();
+            this.labelUkonceniPracovniCinnosti = new System.Windows.Forms.Label();
             this.tabControlAdmin.SuspendLayout();
             this.tabPageZamestnanci.SuspendLayout();
-            this.groupBoxStav.SuspendLayout();
+            this.groupBoxStavZamestnance.SuspendLayout();
             this.tabPageOddeleni.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.tabPageProjekty.SuspendLayout();
+            this.groupBoxStavProjektu.SuspendLayout();
             this.SuspendLayout();
             // 
             // ButtonZavrit
@@ -100,8 +113,8 @@ namespace LearActionPlans.Views
             // 
             // tabPageZamestnanci
             // 
-            this.tabPageZamestnanci.Controls.Add(this.ButtonUlozit);
-            this.tabPageZamestnanci.Controls.Add(this.groupBoxStav);
+            this.tabPageZamestnanci.Controls.Add(this.ButtonUlozitZamestnance);
+            this.tabPageZamestnanci.Controls.Add(this.groupBoxStavZamestnance);
             this.tabPageZamestnanci.Controls.Add(this.checkBoxAdmin);
             this.tabPageZamestnanci.Controls.Add(this.RadioButtonAktualizaceZamestnance);
             this.tabPageZamestnanci.Controls.Add(this.RadioButtonNovyZamestnanec);
@@ -125,29 +138,30 @@ namespace LearActionPlans.Views
             this.tabPageZamestnanci.Text = "Emploees";
             this.tabPageZamestnanci.UseVisualStyleBackColor = true;
             // 
-            // ButtonUlozit
+            // ButtonUlozitZamestnance
             // 
-            this.ButtonUlozit.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.ButtonUlozit.Location = new System.Drawing.Point(714, 359);
-            this.ButtonUlozit.Name = "ButtonUlozit";
-            this.ButtonUlozit.Size = new System.Drawing.Size(110, 30);
-            this.ButtonUlozit.TabIndex = 2;
-            this.ButtonUlozit.Text = "Save";
-            this.ButtonUlozit.UseVisualStyleBackColor = true;
-            this.ButtonUlozit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonUlozit_MouseClick);
+            this.ButtonUlozitZamestnance.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.ButtonUlozitZamestnance.Location = new System.Drawing.Point(714, 359);
+            this.ButtonUlozitZamestnance.Name = "ButtonUlozitZamestnance";
+            this.ButtonUlozitZamestnance.Size = new System.Drawing.Size(110, 30);
+            this.ButtonUlozitZamestnance.TabIndex = 2;
+            this.ButtonUlozitZamestnance.Text = "Save";
+            this.ButtonUlozitZamestnance.UseVisualStyleBackColor = true;
+            this.ButtonUlozitZamestnance.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonUlozitZamestnance_MouseClick);
             // 
-            // groupBoxStav
+            // groupBoxStavZamestnance
             // 
-            this.groupBoxStav.Controls.Add(this.labelMaterskaDovolena);
-            this.groupBoxStav.Controls.Add(this.radioButtonOdstranen);
-            this.groupBoxStav.Controls.Add(this.radioButtonNeaktivni);
-            this.groupBoxStav.Controls.Add(this.radioButtonAktivni);
-            this.groupBoxStav.Location = new System.Drawing.Point(570, 130);
-            this.groupBoxStav.Name = "groupBoxStav";
-            this.groupBoxStav.Size = new System.Drawing.Size(254, 154);
-            this.groupBoxStav.TabIndex = 15;
-            this.groupBoxStav.TabStop = false;
-            this.groupBoxStav.Text = "State";
+            this.groupBoxStavZamestnance.Controls.Add(this.labelUkonceniPracovniCinnosti);
+            this.groupBoxStavZamestnance.Controls.Add(this.labelMaterskaDovolena);
+            this.groupBoxStavZamestnance.Controls.Add(this.radioButtonOdstranenZam);
+            this.groupBoxStavZamestnance.Controls.Add(this.radioButtonNeaktivniZam);
+            this.groupBoxStavZamestnance.Controls.Add(this.radioButtonAktivniZam);
+            this.groupBoxStavZamestnance.Location = new System.Drawing.Point(570, 130);
+            this.groupBoxStavZamestnance.Name = "groupBoxStavZamestnance";
+            this.groupBoxStavZamestnance.Size = new System.Drawing.Size(254, 154);
+            this.groupBoxStavZamestnance.TabIndex = 15;
+            this.groupBoxStavZamestnance.TabStop = false;
+            this.groupBoxStavZamestnance.Text = "State";
             // 
             // labelMaterskaDovolena
             // 
@@ -158,38 +172,38 @@ namespace LearActionPlans.Views
             this.labelMaterskaDovolena.TabIndex = 17;
             this.labelMaterskaDovolena.Text = "Maternity leave";
             // 
-            // radioButtonOdstranen
+            // radioButtonOdstranenZam
             // 
-            this.radioButtonOdstranen.AutoSize = true;
-            this.radioButtonOdstranen.Location = new System.Drawing.Point(17, 97);
-            this.radioButtonOdstranen.Name = "radioButtonOdstranen";
-            this.radioButtonOdstranen.Size = new System.Drawing.Size(84, 23);
-            this.radioButtonOdstranen.TabIndex = 2;
-            this.radioButtonOdstranen.TabStop = true;
-            this.radioButtonOdstranen.Text = "Removed";
-            this.radioButtonOdstranen.UseVisualStyleBackColor = true;
+            this.radioButtonOdstranenZam.AutoSize = true;
+            this.radioButtonOdstranenZam.Location = new System.Drawing.Point(17, 97);
+            this.radioButtonOdstranenZam.Name = "radioButtonOdstranenZam";
+            this.radioButtonOdstranenZam.Size = new System.Drawing.Size(84, 23);
+            this.radioButtonOdstranenZam.TabIndex = 2;
+            this.radioButtonOdstranenZam.TabStop = true;
+            this.radioButtonOdstranenZam.Text = "Removed";
+            this.radioButtonOdstranenZam.UseVisualStyleBackColor = true;
             // 
-            // radioButtonNeaktivni
+            // radioButtonNeaktivniZam
             // 
-            this.radioButtonNeaktivni.AutoSize = true;
-            this.radioButtonNeaktivni.Location = new System.Drawing.Point(17, 47);
-            this.radioButtonNeaktivni.Name = "radioButtonNeaktivni";
-            this.radioButtonNeaktivni.Size = new System.Drawing.Size(74, 23);
-            this.radioButtonNeaktivni.TabIndex = 1;
-            this.radioButtonNeaktivni.TabStop = true;
-            this.radioButtonNeaktivni.Text = "Inactive";
-            this.radioButtonNeaktivni.UseVisualStyleBackColor = true;
+            this.radioButtonNeaktivniZam.AutoSize = true;
+            this.radioButtonNeaktivniZam.Location = new System.Drawing.Point(17, 47);
+            this.radioButtonNeaktivniZam.Name = "radioButtonNeaktivniZam";
+            this.radioButtonNeaktivniZam.Size = new System.Drawing.Size(74, 23);
+            this.radioButtonNeaktivniZam.TabIndex = 1;
+            this.radioButtonNeaktivniZam.TabStop = true;
+            this.radioButtonNeaktivniZam.Text = "Inactive";
+            this.radioButtonNeaktivniZam.UseVisualStyleBackColor = true;
             // 
-            // radioButtonAktivni
+            // radioButtonAktivniZam
             // 
-            this.radioButtonAktivni.AutoSize = true;
-            this.radioButtonAktivni.Location = new System.Drawing.Point(17, 22);
-            this.radioButtonAktivni.Name = "radioButtonAktivni";
-            this.radioButtonAktivni.Size = new System.Drawing.Size(64, 23);
-            this.radioButtonAktivni.TabIndex = 0;
-            this.radioButtonAktivni.TabStop = true;
-            this.radioButtonAktivni.Text = "Active";
-            this.radioButtonAktivni.UseVisualStyleBackColor = true;
+            this.radioButtonAktivniZam.AutoSize = true;
+            this.radioButtonAktivniZam.Location = new System.Drawing.Point(17, 22);
+            this.radioButtonAktivniZam.Name = "radioButtonAktivniZam";
+            this.radioButtonAktivniZam.Size = new System.Drawing.Size(64, 23);
+            this.radioButtonAktivniZam.TabIndex = 0;
+            this.radioButtonAktivniZam.TabStop = true;
+            this.radioButtonAktivniZam.Text = "Active";
+            this.radioButtonAktivniZam.UseVisualStyleBackColor = true;
             // 
             // checkBoxAdmin
             // 
@@ -318,6 +332,8 @@ namespace LearActionPlans.Views
             // 
             // ComboBoxZamestnanci
             // 
+            this.ComboBoxZamestnanci.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.ComboBoxZamestnanci.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.ComboBoxZamestnanci.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboBoxZamestnanci.FormattingEnabled = true;
             this.ComboBoxZamestnanci.Location = new System.Drawing.Point(25, 77);
@@ -343,92 +359,6 @@ namespace LearActionPlans.Views
             this.tabPageOddeleni.TabIndex = 1;
             this.tabPageOddeleni.Text = "Departments";
             this.tabPageOddeleni.UseVisualStyleBackColor = true;
-            // 
-            // tabPageProjekty
-            // 
-            this.tabPageProjekty.Location = new System.Drawing.Point(4, 28);
-            this.tabPageProjekty.Name = "tabPageProjekty";
-            this.tabPageProjekty.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageProjekty.Size = new System.Drawing.Size(847, 408);
-            this.tabPageProjekty.TabIndex = 2;
-            this.tabPageProjekty.Text = "Projects";
-            this.tabPageProjekty.UseVisualStyleBackColor = true;
-            // 
-            // tabPageZakaznici
-            // 
-            this.tabPageZakaznici.Location = new System.Drawing.Point(4, 28);
-            this.tabPageZakaznici.Name = "tabPageZakaznici";
-            this.tabPageZakaznici.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageZakaznici.Size = new System.Drawing.Size(847, 408);
-            this.tabPageZakaznici.TabIndex = 3;
-            this.tabPageZakaznici.Text = "Customers";
-            this.tabPageZakaznici.UseVisualStyleBackColor = true;
-            // 
-            // RadioButtonAktualizaceOddeleni
-            // 
-            this.RadioButtonAktualizaceOddeleni.AutoSize = true;
-            this.RadioButtonAktualizaceOddeleni.Location = new System.Drawing.Point(160, 15);
-            this.RadioButtonAktualizaceOddeleni.Name = "RadioButtonAktualizaceOddeleni";
-            this.RadioButtonAktualizaceOddeleni.Size = new System.Drawing.Size(154, 23);
-            this.RadioButtonAktualizaceOddeleni.TabIndex = 17;
-            this.RadioButtonAktualizaceOddeleni.TabStop = true;
-            this.RadioButtonAktualizaceOddeleni.Text = "Department updates";
-            this.RadioButtonAktualizaceOddeleni.UseVisualStyleBackColor = true;
-            // 
-            // RadioButtonNoveOddeleni
-            // 
-            this.RadioButtonNoveOddeleni.AutoSize = true;
-            this.RadioButtonNoveOddeleni.Location = new System.Drawing.Point(25, 15);
-            this.RadioButtonNoveOddeleni.Name = "RadioButtonNoveOddeleni";
-            this.RadioButtonNoveOddeleni.Size = new System.Drawing.Size(130, 23);
-            this.RadioButtonNoveOddeleni.TabIndex = 16;
-            this.RadioButtonNoveOddeleni.TabStop = true;
-            this.RadioButtonNoveOddeleni.Text = "New department";
-            this.RadioButtonNoveOddeleni.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(25, 55);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(128, 19);
-            this.label1.TabIndex = 15;
-            this.label1.Text = "List of departments";
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(25, 77);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(250, 27);
-            this.comboBox1.TabIndex = 14;
-            // 
-            // textBoxDepartment
-            // 
-            this.textBoxDepartment.Location = new System.Drawing.Point(25, 152);
-            this.textBoxDepartment.Name = "textBoxDepartment";
-            this.textBoxDepartment.Size = new System.Drawing.Size(254, 26);
-            this.textBoxDepartment.TabIndex = 19;
-            // 
-            // labelOddeleni
-            // 
-            this.labelOddeleni.AutoSize = true;
-            this.labelOddeleni.Location = new System.Drawing.Point(25, 130);
-            this.labelOddeleni.Name = "labelOddeleni";
-            this.labelOddeleni.Size = new System.Drawing.Size(121, 19);
-            this.labelOddeleni.TabIndex = 18;
-            this.labelOddeleni.Text = "Department name";
-            // 
-            // button1
-            // 
-            this.button1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.button1.Location = new System.Drawing.Point(169, 200);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(110, 30);
-            this.button1.TabIndex = 20;
-            this.button1.Text = "Save";
-            this.button1.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
@@ -475,6 +405,213 @@ namespace LearActionPlans.Views
             this.radioButton3.Text = "Active";
             this.radioButton3.UseVisualStyleBackColor = true;
             // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.button1.Location = new System.Drawing.Point(169, 200);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(110, 30);
+            this.button1.TabIndex = 20;
+            this.button1.Text = "Save";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // textBoxDepartment
+            // 
+            this.textBoxDepartment.Location = new System.Drawing.Point(25, 152);
+            this.textBoxDepartment.Name = "textBoxDepartment";
+            this.textBoxDepartment.Size = new System.Drawing.Size(254, 26);
+            this.textBoxDepartment.TabIndex = 19;
+            // 
+            // labelOddeleni
+            // 
+            this.labelOddeleni.AutoSize = true;
+            this.labelOddeleni.Location = new System.Drawing.Point(25, 130);
+            this.labelOddeleni.Name = "labelOddeleni";
+            this.labelOddeleni.Size = new System.Drawing.Size(121, 19);
+            this.labelOddeleni.TabIndex = 18;
+            this.labelOddeleni.Text = "Department name";
+            // 
+            // RadioButtonAktualizaceOddeleni
+            // 
+            this.RadioButtonAktualizaceOddeleni.AutoSize = true;
+            this.RadioButtonAktualizaceOddeleni.Location = new System.Drawing.Point(160, 15);
+            this.RadioButtonAktualizaceOddeleni.Name = "RadioButtonAktualizaceOddeleni";
+            this.RadioButtonAktualizaceOddeleni.Size = new System.Drawing.Size(154, 23);
+            this.RadioButtonAktualizaceOddeleni.TabIndex = 17;
+            this.RadioButtonAktualizaceOddeleni.TabStop = true;
+            this.RadioButtonAktualizaceOddeleni.Text = "Department updates";
+            this.RadioButtonAktualizaceOddeleni.UseVisualStyleBackColor = true;
+            // 
+            // RadioButtonNoveOddeleni
+            // 
+            this.RadioButtonNoveOddeleni.AutoSize = true;
+            this.RadioButtonNoveOddeleni.Location = new System.Drawing.Point(25, 15);
+            this.RadioButtonNoveOddeleni.Name = "RadioButtonNoveOddeleni";
+            this.RadioButtonNoveOddeleni.Size = new System.Drawing.Size(130, 23);
+            this.RadioButtonNoveOddeleni.TabIndex = 16;
+            this.RadioButtonNoveOddeleni.TabStop = true;
+            this.RadioButtonNoveOddeleni.Text = "New department";
+            this.RadioButtonNoveOddeleni.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(25, 55);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(128, 19);
+            this.label1.TabIndex = 15;
+            this.label1.Text = "List of departments";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(25, 77);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(250, 27);
+            this.comboBox1.TabIndex = 14;
+            // 
+            // tabPageProjekty
+            // 
+            this.tabPageProjekty.Controls.Add(this.ButtonUlozitProjekt);
+            this.tabPageProjekty.Controls.Add(this.groupBoxStavProjektu);
+            this.tabPageProjekty.Controls.Add(this.RadioButtonAktualizaceProjektu);
+            this.tabPageProjekty.Controls.Add(this.RadioButtonNovyProjekt);
+            this.tabPageProjekty.Controls.Add(this.textBoxNazevProjektu);
+            this.tabPageProjekty.Controls.Add(this.labelSeznamProjektu);
+            this.tabPageProjekty.Controls.Add(this.labelNazevProjektu);
+            this.tabPageProjekty.Controls.Add(this.ComboBoxProjekty);
+            this.tabPageProjekty.Location = new System.Drawing.Point(4, 28);
+            this.tabPageProjekty.Name = "tabPageProjekty";
+            this.tabPageProjekty.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageProjekty.Size = new System.Drawing.Size(847, 408);
+            this.tabPageProjekty.TabIndex = 2;
+            this.tabPageProjekty.Text = "Projects";
+            this.tabPageProjekty.UseVisualStyleBackColor = true;
+            // 
+            // ButtonUlozitProjekt
+            // 
+            this.ButtonUlozitProjekt.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.ButtonUlozitProjekt.Location = new System.Drawing.Point(169, 195);
+            this.ButtonUlozitProjekt.Name = "ButtonUlozitProjekt";
+            this.ButtonUlozitProjekt.Size = new System.Drawing.Size(110, 30);
+            this.ButtonUlozitProjekt.TabIndex = 21;
+            this.ButtonUlozitProjekt.Text = "Save";
+            this.ButtonUlozitProjekt.UseVisualStyleBackColor = true;
+            this.ButtonUlozitProjekt.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonUlozitProjekt_MouseClick);
+            // 
+            // groupBoxStavProjektu
+            // 
+            this.groupBoxStavProjektu.Controls.Add(this.radioButtonNeaktivniProjekt);
+            this.groupBoxStavProjektu.Controls.Add(this.radioButtonAktivniProjekt);
+            this.groupBoxStavProjektu.Location = new System.Drawing.Point(300, 55);
+            this.groupBoxStavProjektu.Name = "groupBoxStavProjektu";
+            this.groupBoxStavProjektu.Size = new System.Drawing.Size(254, 154);
+            this.groupBoxStavProjektu.TabIndex = 20;
+            this.groupBoxStavProjektu.TabStop = false;
+            this.groupBoxStavProjektu.Text = "State";
+            // 
+            // radioButtonNeaktivniProjekt
+            // 
+            this.radioButtonNeaktivniProjekt.AutoSize = true;
+            this.radioButtonNeaktivniProjekt.Location = new System.Drawing.Point(17, 47);
+            this.radioButtonNeaktivniProjekt.Name = "radioButtonNeaktivniProjekt";
+            this.radioButtonNeaktivniProjekt.Size = new System.Drawing.Size(74, 23);
+            this.radioButtonNeaktivniProjekt.TabIndex = 1;
+            this.radioButtonNeaktivniProjekt.TabStop = true;
+            this.radioButtonNeaktivniProjekt.Text = "Inactive";
+            this.radioButtonNeaktivniProjekt.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonAktivniProjekt
+            // 
+            this.radioButtonAktivniProjekt.AutoSize = true;
+            this.radioButtonAktivniProjekt.Location = new System.Drawing.Point(17, 22);
+            this.radioButtonAktivniProjekt.Name = "radioButtonAktivniProjekt";
+            this.radioButtonAktivniProjekt.Size = new System.Drawing.Size(64, 23);
+            this.radioButtonAktivniProjekt.TabIndex = 0;
+            this.radioButtonAktivniProjekt.TabStop = true;
+            this.radioButtonAktivniProjekt.Text = "Active";
+            this.radioButtonAktivniProjekt.UseVisualStyleBackColor = true;
+            // 
+            // RadioButtonAktualizaceProjektu
+            // 
+            this.RadioButtonAktualizaceProjektu.AutoSize = true;
+            this.RadioButtonAktualizaceProjektu.Location = new System.Drawing.Point(150, 15);
+            this.RadioButtonAktualizaceProjektu.Name = "RadioButtonAktualizaceProjektu";
+            this.RadioButtonAktualizaceProjektu.Size = new System.Drawing.Size(122, 23);
+            this.RadioButtonAktualizaceProjektu.TabIndex = 19;
+            this.RadioButtonAktualizaceProjektu.TabStop = true;
+            this.RadioButtonAktualizaceProjektu.Text = "Project updates";
+            this.RadioButtonAktualizaceProjektu.UseVisualStyleBackColor = true;
+            this.RadioButtonAktualizaceProjektu.CheckedChanged += new System.EventHandler(this.RadioButtonAktualizaceProjektu_CheckedChanged);
+            // 
+            // RadioButtonNovyProjekt
+            // 
+            this.RadioButtonNovyProjekt.AutoSize = true;
+            this.RadioButtonNovyProjekt.Location = new System.Drawing.Point(25, 15);
+            this.RadioButtonNovyProjekt.Name = "RadioButtonNovyProjekt";
+            this.RadioButtonNovyProjekt.Size = new System.Drawing.Size(100, 23);
+            this.RadioButtonNovyProjekt.TabIndex = 18;
+            this.RadioButtonNovyProjekt.TabStop = true;
+            this.RadioButtonNovyProjekt.Text = "New project";
+            this.RadioButtonNovyProjekt.UseVisualStyleBackColor = true;
+            this.RadioButtonNovyProjekt.CheckedChanged += new System.EventHandler(this.RadioButtonNovyProjekt_CheckedChanged);
+            // 
+            // textBoxNazevProjektu
+            // 
+            this.textBoxNazevProjektu.Location = new System.Drawing.Point(25, 152);
+            this.textBoxNazevProjektu.Name = "textBoxNazevProjektu";
+            this.textBoxNazevProjektu.Size = new System.Drawing.Size(254, 26);
+            this.textBoxNazevProjektu.TabIndex = 17;
+            // 
+            // labelSeznamProjektu
+            // 
+            this.labelSeznamProjektu.AutoSize = true;
+            this.labelSeznamProjektu.Location = new System.Drawing.Point(25, 55);
+            this.labelSeznamProjektu.Name = "labelSeznamProjektu";
+            this.labelSeznamProjektu.Size = new System.Drawing.Size(98, 19);
+            this.labelSeznamProjektu.TabIndex = 16;
+            this.labelSeznamProjektu.Text = "List of projects";
+            // 
+            // labelNazevProjektu
+            // 
+            this.labelNazevProjektu.AutoSize = true;
+            this.labelNazevProjektu.Location = new System.Drawing.Point(25, 130);
+            this.labelNazevProjektu.Name = "labelNazevProjektu";
+            this.labelNazevProjektu.Size = new System.Drawing.Size(89, 19);
+            this.labelNazevProjektu.TabIndex = 15;
+            this.labelNazevProjektu.Text = "Project name";
+            // 
+            // ComboBoxProjekty
+            // 
+            this.ComboBoxProjekty.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.ComboBoxProjekty.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.ComboBoxProjekty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ComboBoxProjekty.FormattingEnabled = true;
+            this.ComboBoxProjekty.Location = new System.Drawing.Point(25, 77);
+            this.ComboBoxProjekty.Name = "ComboBoxProjekty";
+            this.ComboBoxProjekty.Size = new System.Drawing.Size(250, 27);
+            this.ComboBoxProjekty.TabIndex = 14;
+            // 
+            // tabPageZakaznici
+            // 
+            this.tabPageZakaznici.Location = new System.Drawing.Point(4, 28);
+            this.tabPageZakaznici.Name = "tabPageZakaznici";
+            this.tabPageZakaznici.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageZakaznici.Size = new System.Drawing.Size(847, 408);
+            this.tabPageZakaznici.TabIndex = 3;
+            this.tabPageZakaznici.Text = "Customers";
+            this.tabPageZakaznici.UseVisualStyleBackColor = true;
+            // 
+            // labelUkonceniPracovniCinnosti
+            // 
+            this.labelUkonceniPracovniCinnosti.AutoSize = true;
+            this.labelUkonceniPracovniCinnosti.Location = new System.Drawing.Point(33, 123);
+            this.labelUkonceniPracovniCinnosti.Name = "labelUkonceniPracovniCinnosti";
+            this.labelUkonceniPracovniCinnosti.Size = new System.Drawing.Size(104, 19);
+            this.labelUkonceniPracovniCinnosti.TabIndex = 18;
+            this.labelUkonceniPracovniCinnosti.Text = "Maternity leave";
+            // 
             // FormAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -483,20 +620,26 @@ namespace LearActionPlans.Views
             this.Controls.Add(this.tabControlAdmin);
             this.Controls.Add(this.ButtonZavrit);
             this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(900, 550);
             this.MinimumSize = new System.Drawing.Size(900, 550);
             this.Name = "FormAdmin";
             this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.FormAdmin_Load);
             this.tabControlAdmin.ResumeLayout(false);
             this.tabPageZamestnanci.ResumeLayout(false);
             this.tabPageZamestnanci.PerformLayout();
-            this.groupBoxStav.ResumeLayout(false);
-            this.groupBoxStav.PerformLayout();
+            this.groupBoxStavZamestnance.ResumeLayout(false);
+            this.groupBoxStavZamestnance.PerformLayout();
             this.tabPageOddeleni.ResumeLayout(false);
             this.tabPageOddeleni.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.tabPageProjekty.ResumeLayout(false);
+            this.tabPageProjekty.PerformLayout();
+            this.groupBoxStavProjektu.ResumeLayout(false);
+            this.groupBoxStavProjektu.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -524,11 +667,11 @@ namespace LearActionPlans.Views
         private System.Windows.Forms.Label labelSeznamZamestnancu;
         private System.Windows.Forms.Label labelKrestniJmeno;
         private System.Windows.Forms.CheckBox checkBoxAdmin;
-        private System.Windows.Forms.GroupBox groupBoxStav;
-        private System.Windows.Forms.RadioButton radioButtonNeaktivni;
-        private System.Windows.Forms.RadioButton radioButtonAktivni;
-        private System.Windows.Forms.RadioButton radioButtonOdstranen;
-        private System.Windows.Forms.Button ButtonUlozit;
+        private System.Windows.Forms.GroupBox groupBoxStavZamestnance;
+        private System.Windows.Forms.RadioButton radioButtonNeaktivniZam;
+        private System.Windows.Forms.RadioButton radioButtonAktivniZam;
+        private System.Windows.Forms.RadioButton radioButtonOdstranenZam;
+        private System.Windows.Forms.Button ButtonUlozitZamestnance;
         private System.Windows.Forms.Label labelMaterskaDovolena;
         private System.Windows.Forms.RadioButton RadioButtonAktualizaceOddeleni;
         private System.Windows.Forms.RadioButton RadioButtonNoveOddeleni;
@@ -541,5 +684,16 @@ namespace LearActionPlans.Views
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton3;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.RadioButton RadioButtonAktualizaceProjektu;
+        private System.Windows.Forms.RadioButton RadioButtonNovyProjekt;
+        private System.Windows.Forms.TextBox textBoxNazevProjektu;
+        private System.Windows.Forms.Label labelSeznamProjektu;
+        private System.Windows.Forms.Label labelNazevProjektu;
+        private System.Windows.Forms.ComboBox ComboBoxProjekty;
+        private System.Windows.Forms.GroupBox groupBoxStavProjektu;
+        private System.Windows.Forms.RadioButton radioButtonNeaktivniProjekt;
+        private System.Windows.Forms.RadioButton radioButtonAktivniProjekt;
+        private System.Windows.Forms.Button ButtonUlozitProjekt;
+        private System.Windows.Forms.Label labelUkonceniPracovniCinnosti;
     }
 }

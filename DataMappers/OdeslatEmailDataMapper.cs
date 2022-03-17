@@ -83,7 +83,7 @@ namespace LearActionPlans.DataMappers
             }
         }
 
-        public static byte UlozitEmail(string emailTo, string predmet, string zprava)
+        public static byte UlozitEmailPosunutiTerminu(string emailTo, string predmet, string zprava)
         {
             byte exitCode = 0;
 

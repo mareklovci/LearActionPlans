@@ -83,6 +83,8 @@ namespace LearActionPlans.Views
             // 
             // ComboBoxZadavatel1
             // 
+            this.ComboBoxZadavatel1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.ComboBoxZadavatel1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.ComboBoxZadavatel1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboBoxZadavatel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.ComboBoxZadavatel1.FormattingEnabled = true;
@@ -103,6 +105,8 @@ namespace LearActionPlans.Views
             // 
             // ComboBoxZadavatel2
             // 
+            this.ComboBoxZadavatel2.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.ComboBoxZadavatel2.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.ComboBoxZadavatel2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboBoxZadavatel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.ComboBoxZadavatel2.FormattingEnabled = true;
@@ -141,6 +145,8 @@ namespace LearActionPlans.Views
             // 
             // ComboBoxProjekty
             // 
+            this.ComboBoxProjekty.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.ComboBoxProjekty.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.ComboBoxProjekty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboBoxProjekty.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.ComboBoxProjekty.FormattingEnabled = true;
@@ -179,6 +185,8 @@ namespace LearActionPlans.Views
             // 
             // ComboBoxZakaznici
             // 
+            this.ComboBoxZakaznici.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.ComboBoxZakaznici.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.ComboBoxZakaznici.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboBoxZakaznici.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.ComboBoxZakaznici.FormattingEnabled = true;

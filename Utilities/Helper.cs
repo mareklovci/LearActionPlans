@@ -1,8 +1,7 @@
-using Microsoft.Win32;
 using System;
-using System.Net;
-using System.Net.Mail;
-using System.Windows.Forms;
+using Microsoft.Win32;
+using System.IO;
+using System.Reflection;
 using System.Diagnostics;
 
 using LearActionPlans.Models;
@@ -12,25 +11,44 @@ namespace LearActionPlans.Utilities
 {
     public class Helper
     {
-        //public static DataTable dtAP;
+        private static string logPath = string.Empty;
+        public static void LogWriter(string logMessage) => LogWrite(logMessage);
 
-        public static byte OdeslatEmail(SmtpClient smtp, MailMessage message)
+        public static void LogWrite(string logMessage)
         {
-            byte stav;
+            logPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             try
             {
-                //pro Lear to uložím do souboru
-                smtp.Send(message);
-                MessageBox.Show(@"Email was sent", @"Email", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                stav = 1;
+                if (!Directory.Exists(logPath + "\\Logs"))
+                {
+                    // vytvoří adresář
+                    Directory.CreateDirectory(logPath + "\\Logs");
+                }
+                using var w = File.AppendText(logPath + "\\Logs\\" + "LearActionPlans.log");
+                Log(logMessage, w);
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
-                stav = 2;
+                // nepodařilo se otevřít log
             }
+        }
 
-            return stav;
+        public static void Log(string logMessage, TextWriter txtWriter)
+        {
+            try
+            {
+                txtWriter.Write("\r\nLog Entry : ");
+                txtWriter.WriteLine("{0} {1}", DateTime.Now.ToLongTimeString(),
+                    DateTime.Now.ToLongDateString());
+                txtWriter.WriteLine("  :");
+                txtWriter.WriteLine("  :{0}", logMessage);
+                txtWriter.WriteLine("--------------------------------------------------------------");
+            }
+            catch (Exception ex)
+            {
+                // nepodařilo se zapsat do logu
+            }
         }
 
         public static void RegisterMyProtocol(string protocol, string myAppPath)  //myAppPath = full path to your application
@@ -72,29 +90,6 @@ namespace LearActionPlans.Utilities
             int bodAPId,
             int idZadost)
         {
-            //using (var message = new MailMessage())
-            //{
-            //    //MailMessage message = new MailMessage();
-            //    //var smtp = new SmtpClient
-            //    //{
-            //    //    UseDefaultCredentials = false,
-            //    //    Credentials = new NetworkCredential("bartos.grammer@seznam.cz", "stepan12"),
-            //    //    //Credentials = new NetworkCredential("LSCEurope@grammer.com", "Grammer123"),
-            //    //    DeliveryMethod = SmtpDeliveryMethod.Network,
-            //    //    Port = 25,
-            //    //    Host = "smtp.seznam.cz",
-            //    //    //Host = "smtp.grammer.com",
-            //    //    EnableSsl = false
-            //    //};
-            //    ////zajistí zobrazení češtiny v emailu
-            //    //message.BodyEncoding = System.Text.Encoding.UTF8;
-            //    //message.From = new MailAddress("bartos.grammer@seznam.cz");
-            //    //message.Subject = string.Format(@"Request for a new Deadline");
-            //    //message.IsBodyHtml = true;
-            //}
-            //----- odeslání požadavku -----------------------------------------------------------------------------------------------------
-
-
             var htmlTableStart = "<table style=\"border-collapse:collapse; text-align:left; font-family:Arial, Helvetica, Sans-serif;\" >";
             var htmlTableEnd = "</table>";
 
@@ -208,21 +203,13 @@ namespace LearActionPlans.Utilities
             // uložit do tabulky EmailOdelat
             var predmet = @"Request for a new Deadline";
 
-            var exitCode = OdeslatEmailDataMapper.UlozitEmail(zadavatel1Email, predmet, zprava);
+            var exitCode = OdeslatEmailDataMapper.UlozitEmailPosunutiTerminu(zadavatel1Email, predmet, zprava);
 
             if (exitCode == 1)
             {
                 // spustit externí program pro odeslání emailů
                 OdeslatEmail();
             }
-            // Prepare the process to run
-            //using (var proc = Process.Start("C:\\Users\\pc\\source\\repos\\LearSendEmail\\bin\\Release\\netcoreapp3.1\\LearSendEmail.exe"))
-            //{
-            //    proc.WaitForExit();
-
-            //    // Retrieve the app's exit code
-            //    var exitCode = proc.ExitCode;
-            //}
         }
 
         public static void OdeslatEmail()
@@ -231,9 +218,10 @@ namespace LearActionPlans.Utilities
             {
                 myProcess.StartInfo.UseShellExecute = false;
                 // You can start any process, HelloWorld is a do-nothing example.
-                myProcess.StartInfo.FileName = "C:\\Users\\pc\\source\\repos\\LearSendEmail\\bin\\Release\\netcoreapp3.1\\LearSendEmail.exe";
+                myProcess.StartInfo.FileName = "..\\LearSendEmail\\LearSendEmail.exe";
+                //myProcess.StartInfo.FileName = "C:\\Users\\pc\\source\\repos\\LearSendEmail\\bin\\Release\\netcoreapp3.1\\LearSendEmail.exe";
                 myProcess.StartInfo.CreateNoWindow = true;
-                myProcess.Start();
+                _ = myProcess.Start();
                 // This code assumes the process you are starting will terminate itself.
                 // Given that it is started without a window so you cannot terminate it
                 // on the desktop, it must terminate itself or you can do it programmatically

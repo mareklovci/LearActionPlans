@@ -32,21 +32,22 @@ namespace LearActionPlans.Views
         //2 - aktualizace již vytvořeného AP
         //3 - bude volání z formuláře FormVsechnyBodyAP
 
-        private readonly bool spusteniBezParametru;
-        private readonly int vybranyRadek_;
+        private readonly bool spusteniBezParametru_;
+        private readonly int vybranyBodId;
+        private int vybranyRadek;
 
         // vybranyRadek - používá se při volbě z přehledu všech bodů AP, to abych zvýraznil vybraný bod k editaci
-        public FormPrehledBoduAP(bool spusteniBezParametru, FormNovyAkcniPlan.AkcniPlanTmp akcniPlany, byte volani, int vybranyRadek)
+        public FormPrehledBoduAP(bool spusteniBezParametru, FormNovyAkcniPlan.AkcniPlanTmp akcniPlany, byte volani, int vybranyBodId)
         {
             this.InitializeComponent();
             this.bindingSource = new BindingSource();
             bodyAP = new List<BodAP>();
             this.dtBodyAP = new DataTable();
 
-            this.spusteniBezParametru = spusteniBezParametru;
+            this.spusteniBezParametru_ = spusteniBezParametru;
             this.akcniPlany_ = akcniPlany;
             this.volani_ = volani;
-            this.vybranyRadek_ = vybranyRadek;
+            this.vybranyBodId = vybranyBodId;
         }
 
         private void FormPrehledBoduAP_Load(object sender, EventArgs e)
@@ -56,8 +57,8 @@ namespace LearActionPlans.Views
 
             this.labelCisloAP.Text = this.akcniPlany_.CisloAPRok ?? "";
             this.labelZadavatel1Zadano.Text = this.akcniPlany_.Zadavatel1Jmeno ?? "";
-            this.labelZadavatel2Zadano.Text =
-                this.akcniPlany_.Zadavatel2Jmeno ?? (this.akcniPlany_.Zadavatel2Jmeno = "");
+            //this.labelZadavatel2Zadano.Text = this.akcniPlany_.Zadavatel2Jmeno ?? (this.akcniPlany_.Zadavatel2Jmeno = "");
+            this.labelZadavatel2Zadano.Text = (this.akcniPlany_.Zadavatel2Jmeno ??= "");
             this.labelTemaAP.Text = this.akcniPlany_.Tema ?? "";
             this.labelProjektAP.Text = this.akcniPlany_.ProjektNazev ?? "";
             this.labelDatumZahajeniAP.Text = this.akcniPlany_.DatumZalozeni == null ? "" : Convert.ToDateTime(this.akcniPlany_.DatumZalozeni).ToShortDateString();
@@ -92,28 +93,28 @@ namespace LearActionPlans.Views
                 this.ButtonNovyBodAP.Visible = false;
                 this.ButtonOdeslatEmail.Visible = false;
                 this.ButtonZavrit.Text = "Close";
-                this.ButtonOpravitBodAP.Text = "Display Point AP";
+                this.ButtonOpravitBodAP.Text = "Display AP Point";
             }
             else
             {
                 this.ButtonNovyBodAP.Visible = true;
                 this.ButtonOdeslatEmail.Visible = true;
                 this.ButtonZavrit.Text = "Close";
-                this.ButtonOpravitBodAP.Text = "Edit Point AP";
+                this.ButtonOpravitBodAP.Text = "Edit AP Point";
             }
 
-            //tato část bude spuštěna z emailu
-            if (this.spusteniBezParametru)
+            if (this.spusteniBezParametru_)
             {
                 return;
             }
 
             // tato část se vykoná, když bude program spuštěn z poštovního programu
-            using var form = new FormZadaniBoduAP(this.spusteniBezParametru, this.labelCisloAP.Text, this.akcniPlany_,
-                this.DataGridViewBodyAP.CurrentCell.RowIndex, false);
+            using var form = new FormZadaniBoduAP(this.spusteniBezParametru_, this.labelCisloAP.Text, this.akcniPlany_,
+                this.vybranyRadek, false);
 
-            form.ShowDialog();
-            this.NacistDGV();
+            _ = form.ShowDialog();
+            // proč je tady this.NacistDGV(), mohu odstranit ??
+            //this.NacistDGV();
 
             //this.ButtonOdeslatEmail.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonOdeslatEmail_MouseClick);
         }
@@ -205,16 +206,17 @@ namespace LearActionPlans.Views
             }
 
             i = 0;
-            // obarví se řídky, kde je již vyplněna daum efektivity
             foreach (var b in bodyAP_)
             {
                 if (b.KontrolaEfektivnosti != null)
                 {
+                    // obarví se řídky, kde je již vyplněna daum efektivity
                     this.DataGridViewBodyAP.Rows[i].DefaultCellStyle.BackColor = Color.LightGreen;
                 }
-                if (b.Id == this.vybranyRadek_)
+                if (b.Id == this.vybranyBodId)
                 {
                     this.DataGridViewBodyAP.Rows[i].DefaultCellStyle.BackColor = Color.LightBlue;
+                    this.vybranyRadek = i;
                 }
                 i++;
             }
@@ -306,8 +308,8 @@ namespace LearActionPlans.Views
         {
             var cisloRadkyDGV = -1;
 
-            using var form = new FormZadaniBoduAP(this.spusteniBezParametru, this.labelCisloAP.Text, this.akcniPlany_, cisloRadkyDGV, true);
-            form.ShowDialog();
+            using var form = new FormZadaniBoduAP(this.spusteniBezParametru_, this.labelCisloAP.Text, this.akcniPlany_, cisloRadkyDGV, true);
+            _ = form.ShowDialog();
             this.NacistDGV();
         }
 
@@ -318,9 +320,9 @@ namespace LearActionPlans.Views
                 return;
             }
 
-            using var form = new FormZadaniBoduAP(this.spusteniBezParametru, this.labelCisloAP.Text, this.akcniPlany_,
+            using var form = new FormZadaniBoduAP(this.spusteniBezParametru_, this.labelCisloAP.Text, this.akcniPlany_,
                 this.DataGridViewBodyAP.CurrentCell.RowIndex, false);
-            form.ShowDialog();
+            _ = form.ShowDialog();
             this.NacistDGV();
         }
 
@@ -410,7 +412,7 @@ namespace LearActionPlans.Views
                 {
                     this.DataGridViewBodyAP.Rows[j].DefaultCellStyle.BackColor = Color.LightGreen;
                 }
-                if (b.Id == this.vybranyRadek_)
+                if (b.Id == this.vybranyBodId)
                 {
                     this.DataGridViewBodyAP.Rows[j].DefaultCellStyle.BackColor = Color.LightBlue;
                 }
@@ -624,15 +626,12 @@ namespace LearActionPlans.Views
                     // uloží zprávu do tabulky OdeslatEmail
                     OdeslatEmailDataMapper.InsertEmailOdpovedny2(emailOdpovPrac, @"New points AP", htmlText);
                 }
-
-
-                // tady odešlu emaily o založení nových bodů
-                Helper.OdeslatEmail();
-
-                this.NacistDGV();
-
-                // spustí se externí aplikace pro odeslání emailů
             }
+            // spustí se externí aplikace pro odeslání emailů
+            // tady odešlu emaily o založení nových bodů
+            Helper.OdeslatEmail();
+
+            this.NacistDGV();
         }
     }
 }

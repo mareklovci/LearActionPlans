@@ -116,12 +116,13 @@ namespace LearActionPlans.ViewModels
             }
         }
 
-        public static VsechnyBodyAPViewModel AP(int zadavatel1Id, int? zadavatel2Id,
+        public static VsechnyBodyAPViewModel AP(DateTime datumZalozeniAP, int zadavatel1Id, int? zadavatel2Id,
             string zadavatel1Jmeno, string tema, int? projektId, string projekt,
             int zakaznikId, string zakaznik, byte typAP, byte stavObjektuAP)
         {
             var vsechnyBodyAPViewModel = new VsechnyBodyAPViewModel
             {
+                DatumZalozeniAP = datumZalozeniAP,
                 Zadavatel1Id = zadavatel1Id,
                 Zadavatel2Id = zadavatel2Id,
                 Zadavatel1 = zadavatel1Jmeno,
@@ -153,7 +154,7 @@ namespace LearActionPlans.ViewModels
                         join zak in zakaznici
                             on ap.ZakaznikId equals zak.Id into gZak
                         from subZak in gZak.DefaultIfEmpty()
-                        select AP(ap.Zadavatel1Id, ap?.Zadavatel2Id, subZam.Prijmeni + " " + subZam.Jmeno, ap.Tema, ap?.ProjektId,
+                        select AP(ap.DatumZalozeni, ap.Zadavatel1Id, ap?.Zadavatel2Id, subZam.Prijmeni + " " + subZam.Jmeno, ap.Tema, ap?.ProjektId,
                             subPro?.Nazev ?? string.Empty, ap.ZakaznikId, subZak.Nazev, ap.TypAP, ap.StavObjektu);
 
             //where z.Storno = false

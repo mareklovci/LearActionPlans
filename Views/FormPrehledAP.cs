@@ -18,17 +18,17 @@ namespace LearActionPlans.Views
 
         private FormNovyAkcniPlan.AkcniPlanTmp akcniPlany;
 
-        private string Odpovedny1Filtr;
-        private string Odpovedny2Filtr;
-        private string ProjektyFiltr;
-        private string TypAPFiltr;
-        private string RokZalozeniFiltr;
-        private string OtevreneUzavreneFiltr;
+        private string odpovedny1Filtr;
+        private string odpovedny2Filtr;
+        private string projektyFiltr;
+        private string typAPFiltr;
+        private string rokZalozeniFiltr;
+        private string otevreneUzavreneFiltr;
 
         private readonly string[] args_;
         private readonly ArgumentOptions arguments;
 
-        private string cisloAPStr;
+        private readonly string cisloAPStr;
         private readonly int apId;
         private readonly int bodAPId;
         private readonly int ukonceniAkceId;
@@ -103,25 +103,30 @@ namespace LearActionPlans.Views
             //tato část bude spuštěna z emailu
             if (!this.arguments.RunWithoutParameters)
             {
-                var idAP = Convert.ToInt32(this.apId);
-                this.akcniPlany.Id = idAP;
-                string cisloAPRok;
-                //cisloAPRok = Convert.ToInt32(dvAP[DataGridViewAP.CurrentCell.RowIndex]["CisloAP"]).ToString("D3") + " / " + Convert.ToDateTime(dvAP[DataGridViewAP.CurrentCell.RowIndex]["DatumZalozeni"]).Year;
-                cisloAPRok = this.cisloAPStr;
-                this.akcniPlany.CisloAPRok = cisloAPRok;
-                this.akcniPlany.Zadavatel1Id = this.vlastnikAkceId;
-                using var form = new FormPrehledBoduAP(false, this.akcniPlany, 2, -1);
-                var result = form.ShowDialog();
-                if (result == DialogResult.OK)
+                // podle apId vyhledám řádek, který tomu odpovídá
+                var vyhledanyRadek = 0;
+                for (var i = 0; i < this.dvAP.Count; i++)
                 {
-                    //string dateString = form.ReturnValueDatum;
-                    //string poznamka = form.ReturnValuePoznamka;
-
-                    //dtActionsWS.Rows[DataGridViewWSAkce.CurrentCell.RowIndex]["textBoxDatumUkonceni"] = Convert.ToDateTime(dateString);
-                    //changedDGV = true;
-                    //podminkaPoznamka = poznamka == null;
-                    //dtActionsWS.Rows[DataGridViewWSAkce.CurrentCell.RowIndex]["textBoxPoznamka"] = podminkaPoznamka ? null : Convert.ToString(poznamka);
+                    if (Convert.ToInt32(this.dvAP[i]["APId"]) == Convert.ToInt32(this.apId))
+                    {
+                        this.HlavickaAP(vyhledanyRadek);
+                        break;
+                    }
+                    vyhledanyRadek++;
                 }
+
+                //var idAP = Convert.ToInt32(this.apId);
+                //this.akcniPlany.Id = idAP;
+                //string cisloAPRok;
+                //cisloAPRok = this.cisloAPStr;
+                //this.akcniPlany.CisloAPRok = cisloAPRok;
+                //this.akcniPlany.Zadavatel1Id = this.vlastnikAkceId;
+                using var form = new FormPrehledBoduAP(false, this.akcniPlany, 2, this.bodAPId);
+                _ = form.ShowDialog();
+                //var result = form.ShowDialog();
+                //if (result == DialogResult.OK)
+                //{
+                //}
             }
         }
 
@@ -339,71 +344,78 @@ namespace LearActionPlans.Views
             var senderGrid = (DataGridView)sender;
             //bool vlastniPrihlasen;
 
-            if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
+            if (e.ColumnIndex < 0 || e.RowIndex < 0)
             {
-                if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn)
+                return;
+            }
+            //if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
+            //{
+            //}
+            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn)
+            {
+                if (senderGrid.Columns[e.ColumnIndex].Name == "ButtonCisloAPRok")
                 {
-                    if (senderGrid.Columns[e.ColumnIndex].Name == "ButtonCisloAPRok")
-                    {
-                        //bez přihlášení se otevře přehled bodů ReadOnly
-                        var idAP = Convert.ToInt32(this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["APId"]);
-                        this.akcniPlany.Id = idAP;
-                        string cisloAPRok;
-                        cisloAPRok =
-                            Convert.ToInt32(this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["CisloAP"])
-                                .ToString("D3") + " / " +
-                            Convert.ToDateTime(this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["DatumZalozeni"])
-                                .Year;
-                        this.akcniPlany.CisloAPRok = cisloAPRok;
-                        this.akcniPlany.Zadavatel1Jmeno =
-                            Convert.ToString(this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["Zadavatel1Jmeno"]);
-
-                        this.akcniPlany.Zadavatel1Id = Convert.ToInt32(
-                                    this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["Zadavatel1Id"]);
-
-                        if (this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["Zadavatel1Jmeno"] == null)
-                        {
-                            this.akcniPlany.Zadavatel2Jmeno = null;
-                        }
-                        else
-                        {
-                            this.akcniPlany.Zadavatel2Jmeno =
-                                Convert.ToString(
-                                    this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["Zadavatel2Jmeno"]);
-                            this.akcniPlany.Zadavatel2Id = Convert.ToInt32(
-                                        this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["Zadavatel2Id"]);
-                        }
-
-
-                        this.akcniPlany.Tema =
-                            Convert.ToString(this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["Tema"]);
-                        if (this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["ProjektNazev"] == null)
-                        {
-                            this.akcniPlany.ProjektNazev = null;
-                        }
-                        else
-                        {
-                            this.akcniPlany.ProjektNazev =
-                                Convert.ToString(this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["ProjektNazev"]);
-                        }
-
-                        this.akcniPlany.DatumZalozeni = Convert.ToDateTime(this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["DatumZalozeni"]);
-                        this.akcniPlany.ZakaznikNazev =
-                            Convert.ToString(this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["ZakaznikNazev"]);
-
-                        var apUzavren =
-                            Convert.ToString(this.dvAP[this.DataGridViewAP.CurrentCell.RowIndex]["OtevrenoUzavreno"]) ==
-                            "Closed";
-
-                        this.akcniPlany.APUzavren = apUzavren;
-                        using var form = new FormPrehledBoduAP(true, this.akcniPlany, 2, -1);
-                        var result = form.ShowDialog();
-                        if (result == DialogResult.OK) { }
-                    }
+                    this.HlavickaAP(this.DataGridViewAP.CurrentCell.RowIndex);
+                    using var form = new FormPrehledBoduAP(true, this.akcniPlany, 2, -1);
+                    _ = form.ShowDialog();
+                    //var result = form.ShowDialog();
+                    //if (result == DialogResult.OK) { }
                 }
             }
         }
 
+        private void HlavickaAP(int radek)
+        {
+            //bez přihlášení se otevře přehled bodů ReadOnly
+            this.akcniPlany.Id = Convert.ToInt32(this.dvAP[radek]["APId"]);
+            string cisloAPRok;
+            cisloAPRok =
+                Convert.ToInt32(this.dvAP[radek]["CisloAP"])
+                    .ToString("D3") + " / " +
+                Convert.ToDateTime(this.dvAP[radek]["DatumZalozeni"])
+                    .Year;
+            this.akcniPlany.CisloAPRok = cisloAPRok;
+            this.akcniPlany.Zadavatel1Jmeno =
+                Convert.ToString(this.dvAP[radek]["Zadavatel1Jmeno"]);
+
+            this.akcniPlany.Zadavatel1Id = Convert.ToInt32(
+                        this.dvAP[radek]["Zadavatel1Id"]);
+
+            if (this.dvAP[radek]["Zadavatel1Jmeno"] == null)
+            {
+                this.akcniPlany.Zadavatel2Jmeno = null;
+            }
+            else
+            {
+                this.akcniPlany.Zadavatel2Jmeno =
+                    Convert.ToString(
+                        this.dvAP[radek]["Zadavatel2Jmeno"]);
+                this.akcniPlany.Zadavatel2Id = Convert.ToInt32(
+                            this.dvAP[radek]["Zadavatel2Id"]);
+            }
+
+            this.akcniPlany.Tema =
+                Convert.ToString(this.dvAP[radek]["Tema"]);
+            if (this.dvAP[radek]["ProjektNazev"] == null)
+            {
+                this.akcniPlany.ProjektNazev = null;
+            }
+            else
+            {
+                this.akcniPlany.ProjektNazev =
+                    Convert.ToString(this.dvAP[radek]["ProjektNazev"]);
+            }
+
+            this.akcniPlany.DatumZalozeni = Convert.ToDateTime(this.dvAP[radek]["DatumZalozeni"]);
+            this.akcniPlany.ZakaznikNazev =
+                Convert.ToString(this.dvAP[radek]["ZakaznikNazev"]);
+
+            var apUzavren =
+                Convert.ToString(this.dvAP[radek]["OtevrenoUzavreno"]) ==
+                "Closed";
+
+            this.akcniPlany.APUzavren = apUzavren;
+        }
 
         //filtrování dat, nastavení filtrů
         private void FiltrOdpovedny1()
@@ -442,11 +454,11 @@ namespace LearActionPlans.Views
 
             if (this.ComboBoxOdpovedny1.SelectedIndex == 0)
             {
-                this.Odpovedny1Filtr = string.Empty;
+                this.odpovedny1Filtr = string.Empty;
             }
             else
             {
-                this.Odpovedny1Filtr = this.ComboBoxOdpovedny1.GetItemText(this.ComboBoxOdpovedny1.SelectedItem);
+                this.odpovedny1Filtr = this.ComboBoxOdpovedny1.GetItemText(this.ComboBoxOdpovedny1.SelectedItem);
             }
 
             this.FiltrovatData();
@@ -499,11 +511,11 @@ namespace LearActionPlans.Views
 
             if (this.ComboBoxOdpovedny2.SelectedIndex == 0)
             {
-                this.Odpovedny2Filtr = string.Empty;
+                this.odpovedny2Filtr = string.Empty;
             }
             else
             {
-                this.Odpovedny2Filtr = this.ComboBoxOdpovedny2.GetItemText(this.ComboBoxOdpovedny2.SelectedItem);
+                this.odpovedny2Filtr = this.ComboBoxOdpovedny2.GetItemText(this.ComboBoxOdpovedny2.SelectedItem);
             }
 
             this.FiltrovatData();
@@ -558,11 +570,11 @@ namespace LearActionPlans.Views
 
             if (this.ComboBoxProjekty.SelectedIndex == 0)
             {
-                this.ProjektyFiltr = string.Empty;
+                this.projektyFiltr = string.Empty;
             }
             else
             {
-                this.ProjektyFiltr = this.ComboBoxProjekty.GetItemText(this.ComboBoxProjekty.SelectedItem);
+                this.projektyFiltr = this.ComboBoxProjekty.GetItemText(this.ComboBoxProjekty.SelectedItem);
             }
 
             this.FiltrovatData();
@@ -617,11 +629,11 @@ namespace LearActionPlans.Views
 
             if (this.ComboBoxTypAP.SelectedIndex == 0)
             {
-                this.TypAPFiltr = string.Empty;
+                this.typAPFiltr = string.Empty;
             }
             else
             {
-                this.TypAPFiltr = this.ComboBoxTypAP.GetItemText(this.ComboBoxTypAP.SelectedItem);
+                this.typAPFiltr = this.ComboBoxTypAP.GetItemText(this.ComboBoxTypAP.SelectedItem);
             }
 
             this.FiltrovatData();
@@ -676,11 +688,11 @@ namespace LearActionPlans.Views
 
             if (this.ComboBoxRoky.SelectedIndex == 0)
             {
-                this.RokZalozeniFiltr = string.Empty;
+                this.rokZalozeniFiltr = string.Empty;
             }
             else
             {
-                this.RokZalozeniFiltr = this.ComboBoxRoky.GetItemText(this.ComboBoxRoky.SelectedItem);
+                this.rokZalozeniFiltr = this.ComboBoxRoky.GetItemText(this.ComboBoxRoky.SelectedItem);
             }
 
             this.FiltrovatData();
@@ -735,11 +747,11 @@ namespace LearActionPlans.Views
 
             if (this.ComboBoxOtevreneUzavrene.SelectedIndex == 0)
             {
-                this.OtevreneUzavreneFiltr = string.Empty;
+                this.otevreneUzavreneFiltr = string.Empty;
             }
             else
             {
-                this.OtevreneUzavreneFiltr =
+                this.otevreneUzavreneFiltr =
                     this.ComboBoxOtevreneUzavrene.GetItemText(this.ComboBoxOtevreneUzavrene.SelectedItem);
             }
 
@@ -785,45 +797,45 @@ namespace LearActionPlans.Views
 
         private void InitFiltr()
         {
-            this.Odpovedny1Filtr = string.Empty;
-            this.Odpovedny2Filtr = string.Empty;
-            this.ProjektyFiltr = string.Empty;
-            this.TypAPFiltr = string.Empty;
-            this.RokZalozeniFiltr = string.Empty;
-            this.OtevreneUzavreneFiltr = string.Empty;
+            this.odpovedny1Filtr = string.Empty;
+            this.odpovedny2Filtr = string.Empty;
+            this.projektyFiltr = string.Empty;
+            this.typAPFiltr = string.Empty;
+            this.rokZalozeniFiltr = string.Empty;
+            this.otevreneUzavreneFiltr = string.Empty;
         }
 
         private void NastavitVybranouPolozku()
         {
-            this.ComboBoxOdpovedny1.SelectedIndex = this.Odpovedny1Filtr == string.Empty
+            this.ComboBoxOdpovedny1.SelectedIndex = this.odpovedny1Filtr == string.Empty
                 ? 0
-                : this.ComboBoxOdpovedny1.FindStringExact(this.Odpovedny1Filtr);
-            this.ComboBoxOdpovedny2.SelectedIndex = this.Odpovedny2Filtr == string.Empty
+                : this.ComboBoxOdpovedny1.FindStringExact(this.odpovedny1Filtr);
+            this.ComboBoxOdpovedny2.SelectedIndex = this.odpovedny2Filtr == string.Empty
                 ? 0
-                : this.ComboBoxOdpovedny2.FindStringExact(this.Odpovedny2Filtr);
-            this.ComboBoxProjekty.SelectedIndex = this.ProjektyFiltr == string.Empty
+                : this.ComboBoxOdpovedny2.FindStringExact(this.odpovedny2Filtr);
+            this.ComboBoxProjekty.SelectedIndex = this.projektyFiltr == string.Empty
                 ? 0
-                : this.ComboBoxProjekty.FindStringExact(this.ProjektyFiltr);
-            this.ComboBoxTypAP.SelectedIndex = this.TypAPFiltr == string.Empty
+                : this.ComboBoxProjekty.FindStringExact(this.projektyFiltr);
+            this.ComboBoxTypAP.SelectedIndex = this.typAPFiltr == string.Empty
                 ? 0
-                : this.ComboBoxTypAP.FindStringExact(this.TypAPFiltr);
-            this.ComboBoxRoky.SelectedIndex = this.RokZalozeniFiltr == string.Empty
+                : this.ComboBoxTypAP.FindStringExact(this.typAPFiltr);
+            this.ComboBoxRoky.SelectedIndex = this.rokZalozeniFiltr == string.Empty
                 ? 0
-                : this.ComboBoxRoky.FindStringExact(this.RokZalozeniFiltr);
-            this.ComboBoxOtevreneUzavrene.SelectedIndex = this.OtevreneUzavreneFiltr == string.Empty
+                : this.ComboBoxRoky.FindStringExact(this.rokZalozeniFiltr);
+            this.ComboBoxOtevreneUzavrene.SelectedIndex = this.otevreneUzavreneFiltr == string.Empty
                 ? 0
-                : this.ComboBoxOtevreneUzavrene.FindStringExact(this.OtevreneUzavreneFiltr);
+                : this.ComboBoxOtevreneUzavrene.FindStringExact(this.otevreneUzavreneFiltr);
         }
 
         private void ObarvitLabel()
         {
-            this.labelOdpovedny1.ForeColor = this.Odpovedny1Filtr == string.Empty ? Color.Black : Color.Blue;
-            this.labelOdpovedny2.ForeColor = this.Odpovedny2Filtr == string.Empty ? Color.Black : Color.Blue;
-            this.labelProjekty.ForeColor = this.ProjektyFiltr == string.Empty ? Color.Black : Color.Blue;
-            this.labelTypAP.ForeColor = this.TypAPFiltr == string.Empty ? Color.Black : Color.Blue;
-            this.labelRoky.ForeColor = this.RokZalozeniFiltr == string.Empty ? Color.Black : Color.Blue;
+            this.labelOdpovedny1.ForeColor = this.odpovedny1Filtr == string.Empty ? Color.Black : Color.Blue;
+            this.labelOdpovedny2.ForeColor = this.odpovedny2Filtr == string.Empty ? Color.Black : Color.Blue;
+            this.labelProjekty.ForeColor = this.projektyFiltr == string.Empty ? Color.Black : Color.Blue;
+            this.labelTypAP.ForeColor = this.typAPFiltr == string.Empty ? Color.Black : Color.Blue;
+            this.labelRoky.ForeColor = this.rokZalozeniFiltr == string.Empty ? Color.Black : Color.Blue;
             this.labelOtevreneUzavrene.ForeColor =
-                this.OtevreneUzavreneFiltr == string.Empty ? Color.Black : Color.Blue;
+                this.otevreneUzavreneFiltr == string.Empty ? Color.Black : Color.Blue;
         }
 
         public void FiltrovatData()
@@ -839,69 +851,69 @@ namespace LearActionPlans.Views
             else
             {
                 this.dvAP.RowFilter = string.Empty;
-                if (!string.IsNullOrEmpty(this.Odpovedny1Filtr))
+                if (!string.IsNullOrEmpty(this.odpovedny1Filtr))
                 {
-                    this.dvAP.RowFilter = string.Format("Zadavatel1Jmeno = '{0}'", this.Odpovedny1Filtr);
+                    this.dvAP.RowFilter = string.Format("Zadavatel1Jmeno = '{0}'", this.odpovedny1Filtr);
                 }
 
-                if (!string.IsNullOrEmpty(this.Odpovedny2Filtr))
+                if (!string.IsNullOrEmpty(this.odpovedny2Filtr))
                 {
                     if (this.dvAP.RowFilter == string.Empty)
                     {
-                        this.dvAP.RowFilter = string.Format("Zadavatel2Jmeno = '{0}'", this.Odpovedny2Filtr);
+                        this.dvAP.RowFilter = string.Format("Zadavatel2Jmeno = '{0}'", this.odpovedny2Filtr);
                     }
                     else
                     {
-                        this.dvAP.RowFilter += string.Format(" AND Zadavatel2Jmeno = '{0}'", this.Odpovedny2Filtr);
+                        this.dvAP.RowFilter += string.Format(" AND Zadavatel2Jmeno = '{0}'", this.odpovedny2Filtr);
                     }
                 }
 
-                if (!string.IsNullOrEmpty(this.ProjektyFiltr))
+                if (!string.IsNullOrEmpty(this.projektyFiltr))
                 {
                     if (this.dvAP.RowFilter == string.Empty)
                     {
-                        this.dvAP.RowFilter = string.Format("ProjektNazev = '{0}'", this.ProjektyFiltr);
+                        this.dvAP.RowFilter = string.Format("ProjektNazev = '{0}'", this.projektyFiltr);
                     }
                     else
                     {
-                        this.dvAP.RowFilter += string.Format(" AND ProjektNazev = '{0}'", this.ProjektyFiltr);
+                        this.dvAP.RowFilter += string.Format(" AND ProjektNazev = '{0}'", this.projektyFiltr);
                     }
                 }
 
-                if (!string.IsNullOrEmpty(this.TypAPFiltr))
+                if (!string.IsNullOrEmpty(this.typAPFiltr))
                 {
                     if (this.dvAP.RowFilter == string.Empty)
                     {
-                        this.dvAP.RowFilter = string.Format("TypAPNazev = '{0}'", this.TypAPFiltr);
+                        this.dvAP.RowFilter = string.Format("TypAPNazev = '{0}'", this.typAPFiltr);
                     }
                     else
                     {
-                        this.dvAP.RowFilter += string.Format(" AND TypAPNazev = '{0}'", this.TypAPFiltr);
+                        this.dvAP.RowFilter += string.Format(" AND TypAPNazev = '{0}'", this.typAPFiltr);
                     }
                 }
 
-                if (!string.IsNullOrEmpty(this.RokZalozeniFiltr))
+                if (!string.IsNullOrEmpty(this.rokZalozeniFiltr))
                 {
                     if (this.dvAP.RowFilter == string.Empty)
                     {
-                        this.dvAP.RowFilter = string.Format("DatumZalozeniRok = {0}", this.RokZalozeniFiltr);
+                        this.dvAP.RowFilter = string.Format("DatumZalozeniRok = {0}", this.rokZalozeniFiltr);
                     }
                     else
                     {
-                        this.dvAP.RowFilter += string.Format(" AND DatumZalozeniRok = {0}", this.RokZalozeniFiltr);
+                        this.dvAP.RowFilter += string.Format(" AND DatumZalozeniRok = {0}", this.rokZalozeniFiltr);
                     }
                 }
 
-                if (!string.IsNullOrEmpty(this.OtevreneUzavreneFiltr))
+                if (!string.IsNullOrEmpty(this.otevreneUzavreneFiltr))
                 {
                     if (this.dvAP.RowFilter == string.Empty)
                     {
-                        this.dvAP.RowFilter = string.Format("OtevrenoUzavreno = '{0}'", this.OtevreneUzavreneFiltr);
+                        this.dvAP.RowFilter = string.Format("OtevrenoUzavreno = '{0}'", this.otevreneUzavreneFiltr);
                     }
                     else
                     {
                         this.dvAP.RowFilter +=
-                            string.Format(" AND OtevrenoUzavreno = '{0}'", this.OtevreneUzavreneFiltr);
+                            string.Format(" AND OtevrenoUzavreno = '{0}'", this.otevreneUzavreneFiltr);
                     }
                 }
             }

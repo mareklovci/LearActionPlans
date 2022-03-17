@@ -143,7 +143,7 @@ namespace LearActionPlans.DataMappers
                         command.CommandType = CommandType.Text;
 
                         // vyhledá poslední číslo v daném roce
-                        command.CommandText = $"SELECT  TOP 1 CisloAP FROM AkcniPlan WHERE YEAR(DatumZalozeni) = @rok ORDER BY CisloAP DESC";
+                        command.CommandText = $"SELECT TOP 1 CisloAP FROM AkcniPlan WHERE YEAR(DatumZalozeni) = @rok ORDER BY CisloAP DESC";
                         command.Parameters.AddWithValue("@rok", rok);
 
                         var reader = command.ExecuteReader();
@@ -272,15 +272,15 @@ namespace LearActionPlans.DataMappers
                 command.Parameters.AddWithValue("@datumZalozeni", DateTime.Now);
                 command.Parameters.AddWithValue("@cisloAP", cisloAP);
                 //command.Parameters.AddWithValue("@rok", akcniPlany.Rok);
-                command.Parameters.AddWithValue("@zadavatel1Id", -1);
-                command.Parameters.AddWithValue("@zadavatel2Id", -1);
+                command.Parameters.AddWithValue("@zadavatel1Id", 1);
+                command.Parameters.AddWithValue("@zadavatel2Id", DBNull.Value);
                 command.Parameters.AddWithValue("@tema", string.Empty);
                 command.Parameters.AddWithValue("@projektId", DBNull.Value);
-                command.Parameters.AddWithValue("@zakaznikId", -1);
-                command.Parameters.AddWithValue("@typAP", 0);
-                command.Parameters.AddWithValue("@ZmenaTerminu", 0);
+                command.Parameters.AddWithValue("@zakaznikId", 1);
+                command.Parameters.AddWithValue("@typAP", 1);
+                command.Parameters.AddWithValue("@ZmenaTerminu", 1);
                 command.Parameters.AddWithValue("@UzavreniAP", DBNull.Value);
-                command.Parameters.AddWithValue("@ZnovuOtevrit", 0);
+                command.Parameters.AddWithValue("@ZnovuOtevrit", 1);
                 command.Parameters.AddWithValue("@DuvodZnovuotevreni", DBNull.Value);
                 command.Parameters.AddWithValue("@stavObjektu", 2);
 
@@ -295,6 +295,48 @@ namespace LearActionPlans.DataMappers
             return idZaznamu;
         }
 
+        public static void UpdateNewAP(FormNovyAkcniPlan.AkcniPlanTmp ap)
+        {
+            try
+            {
+                using var connection = new SqlConnection(ConnectionString);
+                connection.Open();
+
+                using var command = connection.CreateCommand();
+                command.CommandType = CommandType.Text;
+                command.CommandText = $"UPDATE AkcniPlan SET Zadavatel1ID = @zadavatel1ID, Zadavatel2ID = @zadavatel2ID," +
+                                      $" Tema = @tema, ZakaznikId = @zakaznikID, ProjektID = @projektID, StavObjektu = @stavObjektu WHERE AkcniPlanID = @akcniPlanID";
+
+                command.Parameters.AddWithValue("@akcniPlanID", ap.Id);
+                command.Parameters.AddWithValue("@zadavatel1ID", ap.Zadavatel1Id);
+                if (ap.Zadavatel2Id == null)
+                {
+                    command.Parameters.AddWithValue("@zadavatel2ID", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@zadavatel2ID", ap.Zadavatel2Id);
+                }
+
+                command.Parameters.AddWithValue("@tema", ap.Tema);
+                command.Parameters.AddWithValue("@zakaznikID", ap.ZakaznikId);
+                if (ap.ProjektId == null)
+                {
+                    command.Parameters.AddWithValue("@projektID", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@projektID", ap.ProjektId);
+                }
+                command.Parameters.AddWithValue("@stavObjektu", 1);
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                // Došlo k problému při práci s databází.
+                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
 
         public static int InsertAP(FormNovyAkcniPlan.AkcniPlanTmp akcniPlany)
         {

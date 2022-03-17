@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using LearActionPlans.DataMappers;
@@ -21,6 +21,7 @@ namespace LearActionPlans.ViewModels
         //Start Projekty
         public int ProjektId { get; set; }
         public string NazevProjektu { get; set; }
+        public byte StavObjektuProjekt { get; set; }
         //End Projekty
 
         //Start Zákazníci
@@ -68,12 +69,13 @@ namespace LearActionPlans.ViewModels
             return adminViewModel;
         }
 
-        public static AdminViewModel Projekt(int projektId, string nazev)
+        public static AdminViewModel Projekt(int projektId, string nazev, byte stavObjektu)
         {
             var adminViewModel = new AdminViewModel
             {
                 ProjektId = projektId,
-                NazevProjektu = nazev
+                NazevProjektu = nazev,
+                StavObjektuProjekt = stavObjektu
             };
             return adminViewModel;
         }
@@ -148,14 +150,13 @@ namespace LearActionPlans.ViewModels
             }
         }
 
-        public static IEnumerable<NewActionPlanViewModel> GetProjekty()
+        public static IEnumerable<AdminViewModel> GetProjekty()
         {
             var projekty = ProjektyDataMapper.GetProjektyAll().ToList();
 
             var query = from p in projekty
-                        where p.StavObjektu == 1
                         orderby p.Nazev
-                        select NewActionPlanViewModel.Project(p.Id, p.Nazev);
+                        select Projekt(p.Id, p.Nazev, p.StavObjektu);
 
             if (query.Count() == 0)
             {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -11,10 +11,11 @@ namespace LearActionPlans.Views
 {
     public partial class FormAdmin : Form
     {
-        protected IList<Emploee> itemsEmploee = new BindingList<Emploee>();
+        //protected IList<Emploee> itemsEmploee = new BindingList<Emploee>();
 
-        private Emploee selectedZamestnanec = null;
-        private Oddeleni selectedOddeleni = null;
+        private Emploee selectedZamestnanec;
+        private Projekt selectedProjekt;
+        private Oddeleni selectedOddeleni;
 
         private bool oldAdmin;
 
@@ -22,14 +23,32 @@ namespace LearActionPlans.Views
         {
             this.InitializeComponent();
 
+            selectedZamestnanec = null;
+            selectedProjekt = null;
+            selectedOddeleni = null;
+
             this.RadioButtonNovyZamestnanec.Checked = true;
             this.RadioButtonAktualizaceZamestnance.Checked = false;
+
+            this.RadioButtonNovyProjekt.Checked = true;
+            this.RadioButtonAktualizaceProjektu.Checked = false;
         }
 
         private void FormAdmin_Load(object sender, EventArgs e)
         {
-            //init zaměstnanci
+            // karta zaměstnanci
             this.NaplnitComboBoxZamestnanci();
+            this.NaplnitComboBoxOddeleni();
+
+            // karta projekty
+            _ = this.NaplnitComboBoxProjekty();
+
+            this.InitZamestnanci();
+            this.InitProjekty();
+        }
+
+        private void InitZamestnanci()
+        {
             if (this.RadioButtonNovyZamestnanec.Checked)
             {
                 this.labelSeznamZamestnancu.Enabled = false;
@@ -40,10 +59,17 @@ namespace LearActionPlans.Views
                 this.textBoxLogin.Text = string.Empty;
                 this.textBoxEmail.Text = string.Empty;
             }
+        }
 
-            this.NaplnitComboBoxOddeleni();
+        private void InitProjekty()
+        {
+            if (this.RadioButtonNovyProjekt.Checked)
+            {
+                this.labelSeznamProjektu.Enabled = false;
+                this.ComboBoxProjekty.Enabled = false;
 
-            //init zaměstnanci
+                this.textBoxNazevProjektu.Text = string.Empty;
+            }
         }
 
         public class Oddeleni
@@ -80,6 +106,20 @@ namespace LearActionPlans.Views
                 this.Email = email;
                 this.AdminAP = adminAP;
                 this.OddeleniId = oddeleniId;
+                this.StavObjektu = stavObjektu;
+            }
+        }
+
+        public class Projekt
+        {
+            public int ProjektId { get; set; }
+            public string NazevProjektu { get; set; }
+            public byte StavObjektu { get; set; }
+
+            public Projekt(int projektId, string nazevProjektu, byte stavObjektu)
+            {
+                this.ProjektId = projektId;
+                this.NazevProjektu = nazevProjektu;
                 this.StavObjektu = stavObjektu;
             }
         }
@@ -149,9 +189,9 @@ namespace LearActionPlans.Views
                 this.ComboBoxZamestnanci.Enabled = false;
                 this.comboBoxOddeleniZamestnanci.SelectedValue = 0;
 
-                this.radioButtonAktivni.Checked = false;
-                this.radioButtonNeaktivni.Checked = false;
-                this.radioButtonOdstranen.Checked = false;
+                this.radioButtonAktivniZam.Checked = false;
+                this.radioButtonNeaktivniZam.Checked = false;
+                this.radioButtonOdstranenZam.Checked = false;
 
                 this.checkBoxAdmin.Checked = false;
 
@@ -171,9 +211,9 @@ namespace LearActionPlans.Views
                 this.ComboBoxZamestnanci.Enabled = true;
                 this.comboBoxOddeleniZamestnanci.SelectedValue = 0;
 
-                this.radioButtonAktivni.Checked = false;
-                this.radioButtonNeaktivni.Checked = false;
-                this.radioButtonOdstranen.Checked = false;
+                this.radioButtonAktivniZam.Checked = false;
+                this.radioButtonNeaktivniZam.Checked = false;
+                this.radioButtonOdstranenZam.Checked = false;
 
                 this.checkBoxAdmin.Checked = false;
 
@@ -212,40 +252,30 @@ namespace LearActionPlans.Views
 
                 if (this.selectedZamestnanec.StavObjektu == 0)
                 {
-                    this.radioButtonAktivni.Checked = false;
-                    this.radioButtonNeaktivni.Checked = false;
-                    this.radioButtonOdstranen.Checked = false;
+                    this.radioButtonAktivniZam.Checked = false;
+                    this.radioButtonNeaktivniZam.Checked = false;
+                    this.radioButtonOdstranenZam.Checked = false;
                 }
                 else if (this.selectedZamestnanec.StavObjektu == 1)
                 {
-                    this.radioButtonAktivni.Checked = true;
-                    this.radioButtonNeaktivni.Checked = false;
-                    this.radioButtonOdstranen.Checked = false;
+                    this.radioButtonAktivniZam.Checked = true;
+                    this.radioButtonNeaktivniZam.Checked = false;
+                    this.radioButtonOdstranenZam.Checked = false;
                 }
                 else if (this.selectedZamestnanec.StavObjektu == 2)
                 {
-                    this.radioButtonAktivni.Checked = false;
-                    this.radioButtonNeaktivni.Checked = true;
-                    this.radioButtonOdstranen.Checked = false;
+                    this.radioButtonAktivniZam.Checked = false;
+                    this.radioButtonNeaktivniZam.Checked = true;
+                    this.radioButtonOdstranenZam.Checked = false;
                 }
                 else if (this.selectedZamestnanec.StavObjektu == 3)
                 {
-                    this.radioButtonAktivni.Checked = false;
-                    this.radioButtonNeaktivni.Checked = false;
-                    this.radioButtonOdstranen.Checked = true;
+                    this.radioButtonAktivniZam.Checked = false;
+                    this.radioButtonNeaktivniZam.Checked = false;
+                    this.radioButtonOdstranenZam.Checked = true;
                 }
 
                 this.comboBoxOddeleniZamestnanci.SelectedValue = this.selectedZamestnanec.OddeleniId;
-                //if (combo.SelectedIndex == 0)
-                //{
-                //    emailDopravce1 = null;
-                //    emailDopravce = false;
-                //}
-                //else
-                //{
-                //    emailDopravce1 = selectedDopravce.Email1.ToString();
-                //    emailDopravce = true;
-                //}
             }
         }
 
@@ -273,7 +303,7 @@ namespace LearActionPlans.Views
                 MessageBox.Show("You must fill in the item 'Email'.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 ulozit = false;
             }
-            else if (this.radioButtonAktivni.Checked == false && this.radioButtonNeaktivni.Checked == false && this.radioButtonOdstranen.Checked == false)
+            else if (this.radioButtonAktivniZam.Checked == false && this.radioButtonNeaktivniZam.Checked == false && this.radioButtonOdstranenZam.Checked == false)
             {
                 MessageBox.Show("You must fill in the item 'State'.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 ulozit = false;
@@ -291,15 +321,16 @@ namespace LearActionPlans.Views
             return ulozit;
         }
 
-        private void ButtonUlozit_MouseClick(object sender, MouseEventArgs e)
+        private void ButtonUlozitZamestnance_MouseClick(object sender, MouseEventArgs e)
         {
             byte stav = 0;
 
-            if (this.KontrolaZamestnance() == false) { }
+            if (this.KontrolaZamestnance() == false)
+            { }
             else
             {
                 var pokracovat = true;
-                if (((this.radioButtonNeaktivni.Checked == true || this.radioButtonOdstranen.Checked == true) && this.oldAdmin == true) || (this.checkBoxAdmin.Checked == false && this.oldAdmin == true))
+                if (((this.radioButtonNeaktivniZam.Checked == true || this.radioButtonOdstranenZam.Checked == true) && this.oldAdmin == true) || (this.checkBoxAdmin.Checked == false && this.oldAdmin == true))
                 {
                     //pokud nyní bude v databázi jeden admin, nemohu ho odebrat, protože je jediný
                     var pocetAdmin = AdminViewModel.GetPocetAdmin();
@@ -323,17 +354,17 @@ namespace LearActionPlans.Views
                     }
                     else
                     {
-                        if (this.radioButtonAktivni.Checked == true)
+                        if (this.radioButtonAktivniZam.Checked == true)
                         {
                             stav = 1;
                         }
 
-                        if (this.radioButtonNeaktivni.Checked == true)
+                        if (this.radioButtonNeaktivniZam.Checked == true)
                         {
                             stav = 2;
                         }
 
-                        if (this.radioButtonOdstranen.Checked == true)
+                        if (this.radioButtonOdstranenZam.Checked == true)
                         {
                             stav = 3;
                         }
@@ -362,9 +393,9 @@ namespace LearActionPlans.Views
                         this.ComboBoxZamestnanci.SelectedValue = 0;
                         this.comboBoxOddeleniZamestnanci.SelectedValue = 0;
 
-                        this.radioButtonAktivni.Checked = false;
-                        this.radioButtonNeaktivni.Checked = false;
-                        this.radioButtonOdstranen.Checked = false;
+                        this.radioButtonAktivniZam.Checked = false;
+                        this.radioButtonNeaktivniZam.Checked = false;
+                        this.radioButtonOdstranenZam.Checked = false;
 
                         this.checkBoxAdmin.Checked = false;
 
@@ -377,9 +408,158 @@ namespace LearActionPlans.Views
             }
         }
 
-        private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e)
+        private bool NaplnitComboBoxProjekty()
         {
-            this.Close();
+            var projekty = AdminViewModel.GetProjekty().ToList();
+
+            if (projekty.Count == 0)
+            {
+                return false;
+            }
+            else
+            {
+                var proj = new List<Projekt>
+                {
+                    new Projekt(0, "(select project)", 0)
+                };
+
+                foreach (var p in projekty)
+                {
+                    proj.Add(new Projekt(p.ProjektId, p.NazevProjektu, p.StavObjektuProjekt));
+                }
+
+                this.ComboBoxProjekty.DataSource = null;
+                this.ComboBoxProjekty.DataSource = proj;
+                this.ComboBoxProjekty.DisplayMember = "NazevProjektu";
+                this.ComboBoxProjekty.ValueMember = "ProjektId";
+                this.ComboBoxProjekty.SelectedIndex = 0;
+
+                this.ComboBoxProjekty.SelectedIndexChanged +=
+                    new System.EventHandler(this.ComboBoxProjekty_SelectedIndexChanged);
+
+                return true;
+            }
         }
+
+        private void RadioButtonNovyProjekt_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.RadioButtonNovyProjekt.Checked == true)
+            {
+                this.labelSeznamProjektu.Enabled = false;
+                this.ComboBoxProjekty.SelectedValue = 0;
+                this.ComboBoxProjekty.Enabled = false;
+
+                this.radioButtonAktivniProjekt.Checked = false;
+                this.radioButtonNeaktivniProjekt.Checked = false;
+
+                this.textBoxNazevProjektu.Text = string.Empty;
+            }
+        }
+
+        private void RadioButtonAktualizaceProjektu_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.RadioButtonAktualizaceProjektu.Checked == true)
+            {
+                this.labelSeznamProjektu.Enabled = true;
+                this.ComboBoxProjekty.SelectedValue = 0;
+                this.ComboBoxProjekty.Enabled = true;
+
+                this.radioButtonAktivniProjekt.Checked = false;
+                this.radioButtonNeaktivniProjekt.Checked = false;
+
+                this.textBoxNazevProjektu.Text = string.Empty;
+            }
+        }
+
+        private void ComboBoxProjekty_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!(sender is ComboBox combo))
+            {
+                return;
+            }
+
+            this.selectedProjekt = combo.SelectedItem as Projekt;
+            if (this.selectedProjekt == null)
+            {
+                return;
+            }
+
+            if (this.selectedProjekt.ProjektId == 0)
+            {
+                this.textBoxNazevProjektu.Text = string.Empty;
+            }
+            else
+            {
+                this.textBoxNazevProjektu.Text = this.selectedProjekt.NazevProjektu;
+            }
+
+
+            if (this.selectedProjekt.StavObjektu == 0)
+            {
+                this.radioButtonAktivniProjekt.Checked = false;
+                this.radioButtonNeaktivniProjekt.Checked = false;
+            }
+            else if (this.selectedProjekt.StavObjektu == 1)
+            {
+                this.radioButtonAktivniProjekt.Checked = true;
+                this.radioButtonNeaktivniProjekt.Checked = false;
+            }
+            else if (this.selectedProjekt.StavObjektu == 2)
+            {
+                this.radioButtonAktivniProjekt.Checked = false;
+                this.radioButtonNeaktivniProjekt.Checked = true;
+            }
+        }
+
+        private void ButtonUlozitProjekt_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (this.textBoxNazevProjektu.Text == string.Empty)
+            {
+                MessageBox.Show("The Project name field must be filled in.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (this.RadioButtonNovyProjekt.Checked == true)
+            {
+                // uložím nový projekt
+                if (this.radioButtonAktivniProjekt.Checked == false && this.radioButtonNeaktivniProjekt.Checked == false)
+                {
+                    _ = MessageBox.Show("The Active or Inactive state must be selected.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    ProjektyDataMapper.InsertProjekt(this.textBoxNazevProjektu.Text);
+
+                    this.ComboBoxProjekty.SelectedIndexChanged -=
+                        new System.EventHandler(this.ComboBoxProjekty_SelectedIndexChanged);
+
+                    _ = this.NaplnitComboBoxProjekty();
+
+                    this.textBoxNazevProjektu.Text = string.Empty;
+                    this.radioButtonAktivniProjekt.Checked = false;
+                    this.radioButtonNeaktivniProjekt.Checked = false;
+                }
+            }
+
+            if (this.RadioButtonAktualizaceProjektu.Checked == true)
+            {
+                // aktualizuji stávající projekt
+                var podminka = this.radioButtonAktivniProjekt.Checked == true;
+                var aktivniNeaktivni = podminka ? (byte)1 : (byte)2;
+
+                ProjektyDataMapper.UpdateProjekt(Convert.ToInt32(this.ComboBoxProjekty.SelectedValue), this.textBoxNazevProjektu.Text, aktivniNeaktivni);
+
+                this.ComboBoxProjekty.SelectedIndexChanged -=
+                    new System.EventHandler(this.ComboBoxProjekty_SelectedIndexChanged);
+
+                _ = this.NaplnitComboBoxProjekty();
+
+                this.textBoxNazevProjektu.Text = string.Empty;
+                this.radioButtonAktivniProjekt.Checked = false;
+                this.radioButtonNeaktivniProjekt.Checked = false;
+            }
+        }
+
+        private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e) => this.Close();
     }
 }

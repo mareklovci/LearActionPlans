@@ -193,7 +193,7 @@ namespace LearActionPlans.Views
             this.TabControlAkce.SelectedIndex = 0;
             this.TabControlAkce.Size = new System.Drawing.Size(1029, 151);
             this.TabControlAkce.TabIndex = 61;
-            //this.TabControlAkce.SelectedIndexChanged += new System.EventHandler(this.TabControlAkce_SelectedIndexChanged);
+            this.TabControlAkce.Visible = false;
             // 
             // tabPageWM
             // 
@@ -261,7 +261,7 @@ namespace LearActionPlans.Views
             this.ButtonNovaAkce.TabIndex = 62;
             this.ButtonNovaAkce.Text = "New action";
             this.ButtonNovaAkce.UseVisualStyleBackColor = true;
-            //this.ButtonNovaAkce.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonNovaAkce_MouseClick);
+            this.ButtonNovaAkce.Visible = false;
             // 
             // ButtonOdstranitAkci
             // 
@@ -273,6 +273,7 @@ namespace LearActionPlans.Views
             this.ButtonOdstranitAkci.TabIndex = 63;
             this.ButtonOdstranitAkci.Text = "Delete action";
             this.ButtonOdstranitAkci.UseVisualStyleBackColor = true;
+            this.ButtonOdstranitAkci.Visible = false;
             // 
             // groupBoxWhyMade
             // 

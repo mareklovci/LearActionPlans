@@ -25,7 +25,7 @@ namespace LearActionPlans.Views
 
         private bool ulozeniDat;
 
-        private int APId;
+        private int aPId;
         public class AkcniPlanTmp
         {
             public int Id { get; set; }
@@ -61,7 +61,7 @@ namespace LearActionPlans.Views
 
             this.ButtonUlozit.Enabled = false;
 
-            this.APId = 0;
+            this.aPId = 0;
         }
 
         private void FormNovyAkcniPlan_Load(object sender, EventArgs e)
@@ -73,14 +73,15 @@ namespace LearActionPlans.Views
             {
                 // založení nového AP v novém roce
                 this.posledniCisloAP = 1;
-                this.APId = AkcniPlanyDataMapper.InsertNewAP(this.posledniCisloAP);
+                this.aPId = AkcniPlanyDataMapper.InsertNewAP(this.posledniCisloAP);
             }
-            if (this.posledniCisloAP > 0)
+            else if (this.posledniCisloAP > 0)
             {
                 this.posledniCisloAP++;
-                this.APId = AkcniPlanyDataMapper.InsertNewAP(this.posledniCisloAP);
+                this.aPId = AkcniPlanyDataMapper.InsertNewAP(this.posledniCisloAP);
+                this.akcniPlan.Id = this.aPId;
             }
-            if (this.posledniCisloAP == -1)
+            else if (this.posledniCisloAP == -1)
             {
                 // došlo k chybě při zjištění posledního číslo AP
                 // program bude ukončen
@@ -443,7 +444,8 @@ namespace LearActionPlans.Views
             this.akcniPlan.CisloAP = this.posledniCisloAP;
             //akcniPlan.Rok = DateTime.Now.Year;
 
-            this.akcniPlan.Id = AkcniPlanyDataMapper.InsertAP(this.akcniPlan);
+            //this.akcniPlan.Id = AkcniPlanyDataMapper.InsertAP(this.akcniPlan);
+            AkcniPlanyDataMapper.UpdateNewAP(this.akcniPlan);
             //nastavím vlastníkAP na true, protože musí být editovány jednotlivé body
             //FormMain.VlastnikAP = true;
             using var form = new FormPrehledBoduAP(true, this.akcniPlan, 1, -1);

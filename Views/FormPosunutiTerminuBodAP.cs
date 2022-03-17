@@ -477,9 +477,6 @@ namespace LearActionPlans.Views
                 this.ButtonUlozit.Enabled = true;
                 this.zmenaPoznamky = true;
             }
-            else
-            { 
-            }
         }
 
         private void ButtonZadost_MouseClick(object sender, MouseEventArgs e)

@@ -241,6 +241,7 @@ namespace LearActionPlans.DataMappers
                 //Došlo k problému při práci s databází.
                 //MessageBox.Show(ex.ToString(), "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Helper.LogWriter(ex.ToString());
             }
 
             return idZaznamu;
@@ -248,89 +249,159 @@ namespace LearActionPlans.DataMappers
 
         private static void UpdateBodAP(BodAP bodAP, SqlConnection connection)
         {
-            using var command = connection.CreateCommand();
-            //bodAP byl uložen
-            //aktualizovat bodAP
-            command.CommandType = CommandType.Text;
-            command.CommandText = $"UPDATE BodAP SET " +
-                                  $"OdkazNaNormu = @odkazNaNormu, " +
-                                  $"HodnoceniNeshody = @hodnoceniNeshody, " +
-                                  $"PopisProblemu = @popisProblemu, " +
-                                  $"SkutecnaPricinaWM = @skutecnaPricinaWM, " +
-                                  $"NapravnaOpatreniWM = @napravnaOpatreniWM, " +
-                                  $"SkutecnaPricinaWS = @skutecnaPricinaWS, " +
-                                  $"NapravnaOpatreniWS = @napravnaOpatreniWS, " +
-                                  $"OdpovednaOsoba1ID = @odpovednaOsoba1Id, " +
-                                  $"OdpovednaOsoba2ID = @odpovednaOsoba2Id, " +
-                                  $"KontrolaEfektivnosti = @kontrolaEfektivnosti, " +
-                                  $"OddeleniID = @oddeleniId, " +
-                                  $"Priloha = @priloha" +
-                                  $" WHERE BodAPID = @bodAPId";
-            command.Parameters.AddWithValue("@bodAPId", bodAP.Id);
-            if (string.IsNullOrWhiteSpace(bodAP.OdkazNaNormu))
+            try
             {
-                command.Parameters.AddWithValue("@odkazNaNormu", DBNull.Value);
-            }
-            else
-            {
-                command.Parameters.AddWithValue("@odkazNaNormu", bodAP.OdkazNaNormu);
-            }
+                using var command = connection.CreateCommand();
+                //bodAP byl uložen
+                //aktualizovat bodAP
+                command.CommandType = CommandType.Text;
+                command.CommandText = $"UPDATE BodAP SET " +
+                                      $"OdkazNaNormu = @odkazNaNormu, " +
+                                      $"HodnoceniNeshody = @hodnoceniNeshody, " +
+                                      $"PopisProblemu = @popisProblemu, " +
+                                      $"SkutecnaPricinaWM = @skutecnaPricinaWM, " +
+                                      $"NapravnaOpatreniWM = @napravnaOpatreniWM, " +
+                                      $"SkutecnaPricinaWS = @skutecnaPricinaWS, " +
+                                      $"NapravnaOpatreniWS = @napravnaOpatreniWS, " +
+                                      $"OdpovednaOsoba1ID = @odpovednaOsoba1Id, " +
+                                      $"OdpovednaOsoba2ID = @odpovednaOsoba2Id, " +
+                                      $"KontrolaEfektivnosti = @kontrolaEfektivnosti, " +
+                                      $"OddeleniID = @oddeleniId, " +
+                                      $"Priloha = @priloha" +
+                                      $" WHERE BodAPID = @bodAPId";
+                command.Parameters.AddWithValue("@bodAPId", bodAP.Id);
+                if (string.IsNullOrWhiteSpace(bodAP.OdkazNaNormu))
+                {
+                    command.Parameters.AddWithValue("@odkazNaNormu", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@odkazNaNormu", bodAP.OdkazNaNormu);
+                }
 
-            if (string.IsNullOrWhiteSpace(bodAP.HodnoceniNeshody))
-            {
-                command.Parameters.AddWithValue("@hodnoceniNeshody", DBNull.Value);
-            }
-            else
-            {
-                command.Parameters.AddWithValue("@hodnoceniNeshody", bodAP.HodnoceniNeshody);
-            }
+                if (string.IsNullOrWhiteSpace(bodAP.HodnoceniNeshody))
+                {
+                    command.Parameters.AddWithValue("@hodnoceniNeshody", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@hodnoceniNeshody", bodAP.HodnoceniNeshody);
+                }
 
-            command.Parameters.AddWithValue("@popisProblemu", bodAP.PopisProblemu);
+                command.Parameters.AddWithValue("@popisProblemu", bodAP.PopisProblemu);
 
-            command.Parameters.AddWithValue("@skutecnaPricinaWM", bodAP.SkutecnaPricinaWM);
-            command.Parameters.AddWithValue("@napravnaOpatreniWM", bodAP.NapravnaOpatreniWM);
-            command.Parameters.AddWithValue("@skutecnaPricinaWS", bodAP.SkutecnaPricinaWS);
-            command.Parameters.AddWithValue("@napravnaOpatreniWS", bodAP.NapravnaOpatreniWS);
+                if (string.IsNullOrWhiteSpace(bodAP.SkutecnaPricinaWM))
+                {
+                    command.Parameters.AddWithValue("@skutecnaPricinaWM", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@skutecnaPricinaWM", bodAP.SkutecnaPricinaWM);
+                }
 
-            command.Parameters.AddWithValue("@odpovednaOsoba1Id", bodAP.OdpovednaOsoba1Id);
+                if (string.IsNullOrWhiteSpace(bodAP.NapravnaOpatreniWM))
+                {
+                    command.Parameters.AddWithValue("@napravnaOpatreniWM", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@napravnaOpatreniWM", bodAP.NapravnaOpatreniWM);
+                }
 
-            if (bodAP.OdpovednaOsoba2Id == null)
-            {
-                command.Parameters.AddWithValue("@odpovednaOsoba2Id", DBNull.Value);
-            }
-            else
-            {
-                command.Parameters.AddWithValue("@odpovednaOsoba2Id", bodAP.OdpovednaOsoba2Id);
-            }
+                if (string.IsNullOrWhiteSpace(bodAP.SkutecnaPricinaWS))
+                {
+                    command.Parameters.AddWithValue("@skutecnaPricinaWS", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@skutecnaPricinaWS", bodAP.SkutecnaPricinaWS);
+                }
 
-            if (bodAP.KontrolaEfektivnosti == null)
-            {
-                command.Parameters.AddWithValue("@kontrolaEfektivnosti", DBNull.Value);
-            }
-            else
-            {
-                command.Parameters.AddWithValue("@kontrolaEfektivnosti", bodAP.KontrolaEfektivnosti);
-            }
+                if (string.IsNullOrWhiteSpace(bodAP.NapravnaOpatreniWS))
+                {
+                    command.Parameters.AddWithValue("@napravnaOpatreniWS", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@napravnaOpatreniWS", bodAP.NapravnaOpatreniWS);
+                }
 
-            if (bodAP.OddeleniId == null)
-            {
-                command.Parameters.AddWithValue("@oddeleniId", DBNull.Value);
-            }
-            else
-            {
-                command.Parameters.AddWithValue("@oddeleniId", bodAP.OddeleniId);
-            }
+                command.Parameters.AddWithValue("@odpovednaOsoba1Id", bodAP.OdpovednaOsoba1Id);
 
-            if (string.IsNullOrWhiteSpace(bodAP.Priloha))
-            {
-                command.Parameters.AddWithValue("@priloha", DBNull.Value);
-            }
-            else
-            {
-                command.Parameters.AddWithValue("@priloha", bodAP.Priloha);
-            }
+                if (bodAP.OdpovednaOsoba2Id == 0)
+                {
+                    command.Parameters.AddWithValue("@odpovednaOsoba2Id", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@odpovednaOsoba2Id", bodAP.OdpovednaOsoba2Id);
+                }
 
-            command.ExecuteNonQuery();
+                if (bodAP.KontrolaEfektivnosti == null)
+                {
+                    command.Parameters.AddWithValue("@kontrolaEfektivnosti", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@kontrolaEfektivnosti", bodAP.KontrolaEfektivnosti);
+                }
+
+                if (bodAP.OddeleniId == 0)
+                {
+                    command.Parameters.AddWithValue("@oddeleniId", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@oddeleniId", bodAP.OddeleniId);
+                }
+
+                if (string.IsNullOrWhiteSpace(bodAP.Priloha))
+                {
+                    command.Parameters.AddWithValue("@priloha", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@priloha", bodAP.Priloha);
+                }
+
+                command.ExecuteNonQuery();
+
+                if (bodAP.DatumUkonceni != null)
+                {
+                    using var commandUkonceniDatum = connection.CreateCommand();
+                    commandUkonceniDatum.CommandType = CommandType.Text;
+                    commandUkonceniDatum.CommandText = $"INSERT INTO UkonceniBodAP (BodAPID, DatumUkonceni, Poznamka) output INSERTED.UkonceniBodAPID VALUES" +
+                                                       $"(@bodAPId, @datumUkonceni, @poznamka)";
+                    commandUkonceniDatum.Parameters.AddWithValue("@bodAPId", bodAP.Id);
+                    commandUkonceniDatum.Parameters.AddWithValue("@datumUkonceni", bodAP.DatumUkonceni);
+                    string poznamka = null;
+                    if (string.IsNullOrWhiteSpace(bodAP.UkonceniPoznamka))
+                    {
+                        commandUkonceniDatum.Parameters.AddWithValue("@poznamka", DBNull.Value);
+                    }
+                    else
+                    {
+                        commandUkonceniDatum.Parameters.AddWithValue("@poznamka", bodAP.UkonceniPoznamka);
+                        poznamka = bodAP.UkonceniPoznamka;
+                    }
+
+                    //commandUkonceniDatum.ExecuteNonQuery();
+                    var idZaznamu = Convert.ToInt32(commandUkonceniDatum.ExecuteScalar());
+
+                    bodAP.UkonceniBodAP = new List<UkonceniBodAP>
+                    {
+                        new UkonceniBodAP(idZaznamu,
+                        bodAP.Id,
+                        Convert.ToDateTime(bodAP.DatumUkonceni),
+                        poznamka,
+                        null, 1, 1, true)
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                Helper.LogWriter(ex.ToString());
+            }
         }
 
         public static void UpdateKontrolaEfektivity(int bodAPId, DateTime datumEfektivita)
@@ -357,6 +428,7 @@ namespace LearActionPlans.DataMappers
                 //Došlo k problému při práci s databází.
                 //MessageBox.Show(ex.ToString(), "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Helper.LogWriter(ex.ToString());
             }
         }
 
@@ -381,7 +453,6 @@ namespace LearActionPlans.DataMappers
                     commandAkce.ExecuteNonQuery();
                 }
 
-
                 using (var commandAkce = connection.CreateCommand())
                 {
                     commandAkce.CommandType = CommandType.Text;
@@ -399,6 +470,7 @@ namespace LearActionPlans.DataMappers
                 //Došlo k problému při práci s databází.
                 //MessageBox.Show(ex.ToString(), "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Helper.LogWriter(ex.ToString());
             }
         }
 

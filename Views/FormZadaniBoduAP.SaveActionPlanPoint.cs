@@ -111,6 +111,9 @@ namespace LearActionPlans.Views
             //vytvoření nebo aktualizace nového bodu
             var bodAPId = BodAPDataMapper.InsertUpdateBodAP(ulozitBodAP);
 
+            MessageBox.Show("The AP Point has been saved.", "Notice", MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+
             //při uložení nového bodu je přepsána proměnná novyBodAP na false, protože dále mohu editovat tento bod jako již uložený
             if (this.novyBodAP)
             {

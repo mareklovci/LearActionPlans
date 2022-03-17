@@ -50,11 +50,19 @@ namespace LearActionPlans.Views
 
             //nastaví filtry na string.empty
             this.InitFiltr();
-            this.ZobrazitDGV(string.Empty);
+            if (this.ZobrazitDGV(string.Empty) == true)
+            {
+                this.groupBoxFiltry.Enabled = true;
+            }
+            else
+            {
+                this.groupBoxFiltry.Enabled = false;
+            }
         }
 
-        private void ZobrazitDGV(string filtr)
+        private bool ZobrazitDGV(string filtr)
         {
+            var zobrazitZaznamy = false;
             var datumUkonceni_ = (DateTime?)null;
             var i = 0;
             //nejdřív odstraním všechny řádky z dtBody
@@ -73,6 +81,7 @@ namespace LearActionPlans.Views
 
             foreach (var b in bodyAP_)
             {
+                zobrazitZaznamy = true;
                 var datumUkonceni = PrehledBoduAPViewModel.GetUkonceniBodAP(b.IdBodAP).ToList();
                 datumUkonceni.Reverse();
                 datumUkonceni_ = null;
@@ -110,12 +119,12 @@ namespace LearActionPlans.Views
                         ? string.Empty
                         : Convert.ToDateTime(b.KontrolaEfektivnosti).ToShortDateString(),
                     b.ZnovuOtevrit});
-
-                this.dvBodyAP = this.dtBodyAP.DefaultView;
-                //dvAP.RowFilter = string.Format("DatumZalozeniRok = {0}", DateTime.Now.Year);
             }
 
-            this.dvBodyAP.RowFilter = filtr;
+            this.dvBodyAP = this.dtBodyAP.DefaultView;
+            //dvAP.RowFilter = string.Format("DatumZalozeniRok = {0}", DateTime.Now.Year);
+
+            //this.dvBodyAP.RowFilter = filtr;
 
             // odebere handlery
             this.OdebratHandlery();
@@ -143,6 +152,8 @@ namespace LearActionPlans.Views
                 i++;
             }
             this.DataGridViewBodyAP.Refresh();
+
+            return zobrazitZaznamy;
         }
 
         private void CreateColumns()
@@ -275,6 +286,7 @@ namespace LearActionPlans.Views
 
                         foreach (DataRow row in dtAP.Rows)
                         {
+                            this.akcniPlany.DatumZalozeni = Convert.ToDateTime(row["DatumZalozeniAP"]);
                             this.akcniPlany.Zadavatel1Jmeno = Convert.ToString(row["Zadavatel1"]);
 
                             string zadavatel2;

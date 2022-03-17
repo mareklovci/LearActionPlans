@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace LearActionPlans.Models
 {
@@ -13,12 +13,9 @@ namespace LearActionPlans.Models
         public byte StavObjektuUkonceni { get; set; }
         public bool DatUkonBodAPUlozen { get; set; }
         public DateTime? KontrolaEfektivnosti { get; set; }
-        
 
-        public UkonceniBodAP(DateTime? kontrolaEfektivnosti)
-        {
-            this.KontrolaEfektivnosti = kontrolaEfektivnosti;
-        }
+
+        public UkonceniBodAP(DateTime? kontrolaEfektivnosti) => this.KontrolaEfektivnosti = kontrolaEfektivnosti;
 
         public UkonceniBodAP(int id, int bodAPId, DateTime datumUkonceni, string poznamka, string odpoved,  byte stavZadosti, byte stavObjektu, bool datUkonBodAPUlozen)
         {

@@ -162,7 +162,7 @@ namespace LearActionPlans.Views
             this.ButtonNovyBodAP.Name = "ButtonNovyBodAP";
             this.ButtonNovyBodAP.Size = new System.Drawing.Size(110, 30);
             this.ButtonNovyBodAP.TabIndex = 23;
-            this.ButtonNovyBodAP.Text = "New Point AP";
+            this.ButtonNovyBodAP.Text = "New AP Point";
             this.ButtonNovyBodAP.UseVisualStyleBackColor = true;
             this.ButtonNovyBodAP.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonNovyBodAP_MouseClick);
             // 
@@ -236,7 +236,7 @@ namespace LearActionPlans.Views
             this.ButtonOpravitBodAP.Name = "ButtonOpravitBodAP";
             this.ButtonOpravitBodAP.Size = new System.Drawing.Size(120, 30);
             this.ButtonOpravitBodAP.TabIndex = 30;
-            this.ButtonOpravitBodAP.Text = "Edit Point AP";
+            this.ButtonOpravitBodAP.Text = "Edit AP Point";
             this.ButtonOpravitBodAP.UseVisualStyleBackColor = true;
             this.ButtonOpravitBodAP.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonOpravitBodAP_MouseClick);
             // 
@@ -264,11 +264,11 @@ namespace LearActionPlans.Views
             // 
             this.ButtonOdeslatEmail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ButtonOdeslatEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.ButtonOdeslatEmail.Location = new System.Drawing.Point(903, 193);
+            this.ButtonOdeslatEmail.Location = new System.Drawing.Point(823, 193);
             this.ButtonOdeslatEmail.Name = "ButtonOdeslatEmail";
-            this.ButtonOdeslatEmail.Size = new System.Drawing.Size(110, 30);
+            this.ButtonOdeslatEmail.Size = new System.Drawing.Size(190, 30);
             this.ButtonOdeslatEmail.TabIndex = 34;
-            this.ButtonOdeslatEmail.Text = "Send info";
+            this.ButtonOdeslatEmail.Text = "Send email (new AP Points)";
             this.ButtonOdeslatEmail.UseVisualStyleBackColor = true;
             this.ButtonOdeslatEmail.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonOdeslatEmail_MouseClick);
             // 

@@ -61,7 +61,6 @@ namespace LearActionPlans.Views
             // 
             // ButtonVsechnyBodyAP
             // 
-            this.ButtonVsechnyBodyAP.Enabled = false;
             this.ButtonVsechnyBodyAP.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.ButtonVsechnyBodyAP.Location = new System.Drawing.Point(484, 65);
             this.ButtonVsechnyBodyAP.Name = "ButtonVsechnyBodyAP";

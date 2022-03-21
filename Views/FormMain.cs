@@ -27,20 +27,29 @@ namespace LearActionPlans.Views
 
         private void ButtonNovyAkcniPlan_MouseClick(object sender, MouseEventArgs e)
         {
-            using var form = new FormNovyAkcniPlan();
-            form.ShowDialog();
+            var dialogResult = MessageBox.Show("You really want to create a new Action plan.", "New Action plan", MessageBoxButtons.YesNo);
+
+            if (dialogResult == DialogResult.Yes)
+            {
+                using var form = new FormNovyAkcniPlan();
+                form.ShowDialog();
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                //do something else
+            }
         }
 
         private void ButtonOpravaAkcnihoPlanu_MouseClick(object sender, MouseEventArgs e)
         {
             using var form = new FormPrehledAP(this.arguments);
-            form.ShowDialog();
+            _ = form.ShowDialog();
         }
 
         private void ButtonVsechnyBodyAP_MouseClick(object sender, MouseEventArgs e)
         {
             using var form = new FormVsechnyBodyAP();
-            form.ShowDialog();
+            _ = form.ShowDialog();
         }
 
         private void ButtonSeznamZadosti_MouseClick(object sender, MouseEventArgs e)

@@ -66,106 +66,153 @@ namespace LearActionPlans.Views
 
         private void FormNovyAkcniPlan_Load(object sender, EventArgs e)
         {
-            //tady zjistím poslední obsazené číslo Akčního plánu
-            this.posledniCisloAP = NewActionPlanViewModel.GetLastActionPlanNumber(DateTime.Now.Year);
-            //když bude posledniCisloAP = -1, došlo k problému při práci s databází a zadání AP se ukončí
-            if (this.posledniCisloAP == 0)
+            var zakaznici = NewActionPlanViewModel.GetCustomers().ToList();
+            var employees = ZamestnanciDataMapper.GetZamestnanciAll().ToList();
+            var idZakaznik = 0;
+            var idZamestnanec = 0;
+            var ukoncitNovyAP = false;
+ 
+            if (zakaznici.Count == 0)
             {
-                // založení nového AP v novém roce
-                this.posledniCisloAP = 1;
-                this.aPId = AkcniPlanyDataMapper.InsertNewAP(this.posledniCisloAP);
-            }
-            else if (this.posledniCisloAP > 0)
-            {
-                this.posledniCisloAP++;
-                this.aPId = AkcniPlanyDataMapper.InsertNewAP(this.posledniCisloAP);
-                this.akcniPlan.Id = this.aPId;
-            }
-            else if (this.posledniCisloAP == -1)
-            {
-                // došlo k chybě při zjištění posledního číslo AP
-                // program bude ukončen
-                MessageBox.Show("The program will finish.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
-            }
-
-            this.labelCisloAPVygenerovat.Text = this.posledniCisloAP.ToString("D3") + " / " + DateTime.Now.Year.ToString();
-            this.akcniPlan.CisloAPRok = this.labelCisloAPVygenerovat.Text;
-
-            if (this.NaplnitComboBoxZamestnanec1a2() == false)
-            {
-                this.ComboBoxZadavatel1.Enabled = false;
-                this.ComboBoxZadavatel2.Enabled = false;
-                //Nejsou dostupní žádní zaměstnanci.
-                //Zadání nového Akčního plánu bude ukončeno.
-                MessageBox.Show("No employees available." + (char)10 + "Entering a new Action plan will be completed.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
+                // program bude ukončen, protože v seznamu zaměstnanců není žádný zaměstnanec
+                _ = MessageBox.Show("There are no costumers on the list." + "\n" + "The creation of a new Action plan will be completed..", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ukoncitNovyAP = true;
             }
             else
             {
-                this.ComboBoxZadavatel1.Enabled = true;
-                this.ComboBoxZadavatel2.Enabled = true;
+                foreach (var z in zakaznici)
+                {
+                    idZakaznik = z.CustomerId;
+                    break;
+                }
             }
 
-            if (this.NaplnitComboBoxProjekty() == false)
+            if (employees.Count == 0)
             {
-                this.ComboBoxProjekty.Enabled = false;
-                //Nejsou dostupné žádné projekty.
-                //Zadání nového Akčního plánu bude ukončeno.
-                MessageBox.Show("No projects available." + (char)10 + "Entering a new Action plan will be completed.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
+                // program bude ukončen, protože v seznamu zaměstnanců není žádný zaměstnanec
+                _ = MessageBox.Show("There are no emploees on the list." + "\n" + "The creation of a new Action plan will be completed.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ukoncitNovyAP = true;
             }
             else
             {
-                this.ComboBoxProjekty.Enabled = true;
+                foreach (var z in employees)
+                {
+                    idZamestnanec = z.Id;
+                    break;
+                }
             }
 
-            if (this.NaplnitComboBoxZakaznici() == false)
+            if (ukoncitNovyAP == false)
             {
-                this.ComboBoxZakaznici.Enabled = false;
-                //Nejsou dostupní žádní zákazníci.
-                //Zadání nového Akčního plánu bude ukončeno.
-                MessageBox.Show("No customers available." + (char)10 + "Entering a new Action plan will be completed.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
+                //tady zjistím poslední obsazené číslo Akčního plánu
+                this.posledniCisloAP = NewActionPlanViewModel.GetLastActionPlanNumber(DateTime.Now.Year);
+
+                //když bude posledniCisloAP = -1, došlo k problému při práci s databází a zadání AP se ukončí
+                if (this.posledniCisloAP == 0)
+                {
+                    // založení nového AP v novém roce
+                    this.posledniCisloAP = 1;
+                    this.aPId = AkcniPlanyDataMapper.InsertNewAP(this.posledniCisloAP, idZakaznik, idZamestnanec);
+                    this.akcniPlan.DatumZalozeni = DateTime.Now;
+                }
+                else if (this.posledniCisloAP > 0)
+                {
+                    this.posledniCisloAP++;
+                    this.aPId = AkcniPlanyDataMapper.InsertNewAP(this.posledniCisloAP, idZakaznik, idZamestnanec);
+                    this.akcniPlan.Id = this.aPId;
+                    this.akcniPlan.DatumZalozeni = DateTime.Now;
+                }
+                else if (this.posledniCisloAP == -1)
+                {
+                    // došlo k chybě při zjištění posledního číslo AP
+                    // program bude ukončen
+                    _ = MessageBox.Show("The creation of a new Action plan will be completed.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Close();
+                }
+
+                this.labelCisloAPVygenerovat.Text = this.posledniCisloAP.ToString("D3") + " / " + DateTime.Now.Year.ToString();
+                this.akcniPlan.CisloAPRok = this.labelCisloAPVygenerovat.Text;
+
+                if (this.NaplnitComboBoxZamestnanec1a2() == false)
+                {
+                    this.ComboBoxZadavatel1.Enabled = false;
+                    this.ComboBoxZadavatel2.Enabled = false;
+                    //Nejsou dostupní žádní zaměstnanci.
+                    //Zadání nového Akčního plánu bude ukončeno.
+                    _ = MessageBox.Show("No employees available." + "\n" + "The creation of a new Action plan will be completed.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Close();
+                }
+                else
+                {
+                    this.ComboBoxZadavatel1.Enabled = true;
+                    this.ComboBoxZadavatel2.Enabled = true;
+                }
+
+                if (this.NaplnitComboBoxProjekty() == false)
+                {
+                    this.ComboBoxProjekty.Enabled = false;
+                    //Nejsou dostupné žádné projekty.
+                    //Zadání nového Akčního plánu bude ukončeno.
+                    _ = MessageBox.Show("No projects available." + "\n" + "The creation of a new Action plan will be completed.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Close();
+                }
+                else
+                {
+                    this.ComboBoxProjekty.Enabled = true;
+                }
+
+                if (this.NaplnitComboBoxZakaznici() == false)
+                {
+                    this.ComboBoxZakaznici.Enabled = false;
+                    //Nejsou dostupní žádní zákazníci.
+                    //Zadání nového Akčního plánu bude ukončeno.
+                    _ = MessageBox.Show("No customers available." + "\n" + "The creation of a new Action plan will be completed.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Close();
+                }
+                else
+                {
+                    this.ComboBoxZakaznici.Enabled = true;
+                }
+
+                //tady se vytvoří event handlery
+                this.ComboBoxZadavatel1.SelectedIndexChanged +=
+                new EventHandler(this.ComboBoxZadavatel1_SelectedIndexChanged);
+
+                this.ComboBoxZadavatel2.SelectedIndexChanged +=
+                new EventHandler(this.ComboBoxZadavatel2_SelectedIndexChanged);
+
+                this.TextBoxTema.TextChanged +=
+                new EventHandler(this.TextBoxTema_TextChanged);
+
+                this.ComboBoxProjekty.SelectedIndexChanged +=
+                new EventHandler(this.ComboBoxProjekty_SelectedIndexChanged);
+
+                this.DateTimePickerDatumUkonceni.ValueChanged +=
+                new EventHandler(this.DateTimePickerDatumUkonceni_ValueChanged);
+
+                this.ComboBoxZakaznici.SelectedIndexChanged +=
+                new EventHandler(this.ComboBoxZakaznici_SelectedIndexChanged);
+
+                this.RadioButtonAudity.CheckedChanged +=
+                new EventHandler(this.RadioButtonAudity_CheckedChanged);
+
+                this.RadioButtonOstatni.CheckedChanged +=
+                new EventHandler(this.RadioButtonOstatni_CheckedChanged);
+
+                this.akcniPlan.DatumUkonceni = this.DateTimePickerDatumUkonceni.Value;
+
+                this.RadioButtonAudity.Checked = true;
+                this.RadioButtonOstatni.Checked = false;
+
+                this.akcniPlan.TypAP = 1;
+
+                this.datumUkonceniPovolen = true;
             }
             else
             {
-                this.ComboBoxZakaznici.Enabled = true;
+                // uzavře zadavání nového AP
+                this.Close();
             }
-
-            //tady se vytvoří event handlery
-            this.ComboBoxZadavatel1.SelectedIndexChanged +=
-            new EventHandler(this.ComboBoxZadavatel1_SelectedIndexChanged);
-
-            this.ComboBoxZadavatel2.SelectedIndexChanged +=
-            new EventHandler(this.ComboBoxZadavatel2_SelectedIndexChanged);
-
-            this.TextBoxTema.TextChanged +=
-            new EventHandler(this.TextBoxTema_TextChanged);
-
-            this.ComboBoxProjekty.SelectedIndexChanged +=
-            new EventHandler(this.ComboBoxProjekty_SelectedIndexChanged);
-
-            this.DateTimePickerDatumUkonceni.ValueChanged +=
-            new EventHandler(this.DateTimePickerDatumUkonceni_ValueChanged);
-
-            this.ComboBoxZakaznici.SelectedIndexChanged +=
-            new EventHandler(this.ComboBoxZakaznici_SelectedIndexChanged);
-
-            this.RadioButtonAudity.CheckedChanged +=
-            new EventHandler(this.RadioButtonAudity_CheckedChanged);
-
-            this.RadioButtonOstatni.CheckedChanged +=
-            new EventHandler(this.RadioButtonOstatni_CheckedChanged);
-
-            this.akcniPlan.DatumUkonceni = this.DateTimePickerDatumUkonceni.Value;
-
-            this.RadioButtonAudity.Checked = true;
-            this.RadioButtonOstatni.Checked = false;
-
-            this.akcniPlan.TypAP = 1;
-
-            this.datumUkonceniPovolen = true;
         }
 
         private class Zam
@@ -442,6 +489,7 @@ namespace LearActionPlans.Views
         private void UlozitAP()
         {
             this.akcniPlan.CisloAP = this.posledniCisloAP;
+
             //akcniPlan.Rok = DateTime.Now.Year;
 
             //this.akcniPlan.Id = AkcniPlanyDataMapper.InsertAP(this.akcniPlan);
@@ -450,7 +498,7 @@ namespace LearActionPlans.Views
             //FormMain.VlastnikAP = true;
             using var form = new FormPrehledBoduAP(true, this.akcniPlan, 1, -1);
             this.Hide();
-            form.ShowDialog();
+            _ = form.ShowDialog();
             //Close();
         }
 
@@ -479,14 +527,8 @@ namespace LearActionPlans.Views
             }
         }
 
-        private void FormNovyAkcniPlan_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            this.ZavritOkno();
-        }
+        private void FormNovyAkcniPlan_FormClosing(object sender, FormClosingEventArgs e) => this.ZavritOkno();
 
-        private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e)
-        {
-            this.Close();
-        }
+        private void ButtonZavrit_MouseClick(object sender, MouseEventArgs e) => this.Close();
     }
 }

@@ -63,6 +63,7 @@ namespace LearActionPlans.Views
             this.labelProjektAP.Text = this.akcniPlany_.ProjektNazev ?? "";
             this.labelDatumZahajeniAP.Text = this.akcniPlany_.DatumZalozeni == null ? "" : Convert.ToDateTime(this.akcniPlany_.DatumZalozeni).ToShortDateString();
             this.labelDatumUkonceniAP.Text = string.Empty;
+            this.labelDatumUkonceniAP.Text = this.akcniPlany_.DatumUkonceni == null ? "" : Convert.ToDateTime(this.akcniPlany_.DatumUkonceni).ToShortDateString();
             this.labelZakaznikAP.Text = this.akcniPlany_.ZakaznikNazev ?? "";
 
             var ukonceniAP = PrehledBoduAPViewModel.GetUkonceniAPId(this.akcniPlany_.Id);

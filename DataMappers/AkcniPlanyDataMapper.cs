@@ -216,9 +216,8 @@ namespace LearActionPlans.DataMappers
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
-                //Problém s databází.
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _ = MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Helper.LogWriter(ex.ToString());
             }
 
             return -1;
@@ -255,7 +254,7 @@ namespace LearActionPlans.DataMappers
             return noveCisloAP;
         }
 
-        public static int InsertNewAP(int cisloAP)
+        public static int InsertNewAP(int cisloAP, int idZakaznik, int idZamestnanec)
         {
             var idZaznamu = 0;
 
@@ -272,11 +271,11 @@ namespace LearActionPlans.DataMappers
                 command.Parameters.AddWithValue("@datumZalozeni", DateTime.Now);
                 command.Parameters.AddWithValue("@cisloAP", cisloAP);
                 //command.Parameters.AddWithValue("@rok", akcniPlany.Rok);
-                command.Parameters.AddWithValue("@zadavatel1Id", 1);
+                command.Parameters.AddWithValue("@zadavatel1Id", idZamestnanec);
                 command.Parameters.AddWithValue("@zadavatel2Id", DBNull.Value);
                 command.Parameters.AddWithValue("@tema", string.Empty);
                 command.Parameters.AddWithValue("@projektId", DBNull.Value);
-                command.Parameters.AddWithValue("@zakaznikId", 1);
+                command.Parameters.AddWithValue("@zakaznikId", idZakaznik);
                 command.Parameters.AddWithValue("@typAP", 1);
                 command.Parameters.AddWithValue("@ZmenaTerminu", 1);
                 command.Parameters.AddWithValue("@UzavreniAP", DBNull.Value);
@@ -288,8 +287,8 @@ namespace LearActionPlans.DataMappers
             }
             catch (Exception ex)
             {
-                //Došlo k problému při práci s databází.
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _ = MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Helper.LogWriter(ex.ToString());
                 return 0;
             }
             return idZaznamu;
@@ -333,8 +332,8 @@ namespace LearActionPlans.DataMappers
             }
             catch (Exception ex)
             {
-                // Došlo k problému při práci s databází.
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _ = MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Helper.LogWriter(ex.ToString());
             }
         }
 
@@ -406,8 +405,8 @@ namespace LearActionPlans.DataMappers
             }
             catch (Exception ex)
             {
-                //Došlo k problému při práci s databází.
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _ = MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Helper.LogWriter(ex.ToString());
                 return 0;
             }
             return idZaznamu;
@@ -451,8 +450,8 @@ namespace LearActionPlans.DataMappers
             }
             catch (Exception ex)
             {
-                // Došlo k problému při práci s databází.
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _ = MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Helper.LogWriter(ex.ToString());
             }
         }
 
@@ -505,8 +504,8 @@ namespace LearActionPlans.DataMappers
             }
             catch (Exception ex)
             {
-                // Došlo k problému při práci s databází.
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _ = MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Helper.LogWriter(ex.ToString());
             }
         }
 
@@ -527,8 +526,8 @@ namespace LearActionPlans.DataMappers
             }
             catch (Exception ex)
             {
-                //Došlo k problému při práci s databází.
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _ = MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Helper.LogWriter(ex.ToString());
             }
         }
 
@@ -547,13 +546,12 @@ namespace LearActionPlans.DataMappers
                 command.Parameters.AddWithValue("@znovuOtevrit", 0);
                 command.Parameters.AddWithValue("@duvodZnovuotevreni", duvod);
 
-
                 command.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
-                //Došlo k problému při práci s databází.
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _ = MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Helper.LogWriter(ex.ToString());
             }
         }
     }

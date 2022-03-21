@@ -240,7 +240,7 @@ namespace LearActionPlans.DataMappers
             {
                 //Došlo k problému při práci s databází.
                 //MessageBox.Show(ex.ToString(), "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _ = MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Helper.LogWriter(ex.ToString());
             }
 
@@ -427,7 +427,7 @@ namespace LearActionPlans.DataMappers
             {
                 //Došlo k problému při práci s databází.
                 //MessageBox.Show(ex.ToString(), "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _ = MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Helper.LogWriter(ex.ToString());
             }
         }
@@ -469,7 +469,7 @@ namespace LearActionPlans.DataMappers
             {
                 //Došlo k problému při práci s databází.
                 //MessageBox.Show(ex.ToString(), "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _ = MessageBox.Show("Database problem.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Helper.LogWriter(ex.ToString());
             }
         }
@@ -487,11 +487,6 @@ namespace LearActionPlans.DataMappers
             command.Parameters.AddWithValue("@bodAPId", bodAPId);
 
             var reader = command.ExecuteReader();
-
-            if (reader == null)
-            {
-                yield break;
-            }
 
             if (!reader.HasRows)
             {

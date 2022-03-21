@@ -147,6 +147,7 @@ namespace LearActionPlans.Views
             this.DataGridViewAP.Columns.Add(colBtn);
 
             this.dtAP.Columns.Add(new DataColumn("DatumZalozeni", typeof(DateTime)));
+            //this.dtAP.Columns.Add(new DataColumn("DatumUkonceni", typeof(DateTime)));
             this.dtAP.Columns.Add(new DataColumn("DatumZalozeniRok", typeof(int)));
             this.dtAP.Columns.Add(new DataColumn("Zadavatel1Id", typeof(int)));
             this.dtAP.Columns.Add(new DataColumn("Zadavatel2Id", typeof(int)));
@@ -165,6 +166,7 @@ namespace LearActionPlans.Views
             this.DataGridViewAP.Columns["APId"].Visible = false;
             this.DataGridViewAP.Columns["CisloAP"].Visible = false;
             this.DataGridViewAP.Columns["CisloAPRok"].Visible = false;
+            //this.DataGridViewAP.Columns["DatumUkonceni"].Visible = false;
             this.DataGridViewAP.Columns["DatumZalozeniRok"].Visible = false;
             this.DataGridViewAP.Columns["Zadavatel1Id"].Visible = false;
             this.DataGridViewAP.Columns["Zadavatel2Id"].Visible = false;
@@ -364,6 +366,7 @@ namespace LearActionPlans.Views
             }
         }
 
+        // naplní hlavičku vybraného AP před jeho zobrazením
         private void HlavickaAP(int radek)
         {
             //bez přihlášení se otevře přehled bodů ReadOnly
@@ -407,6 +410,8 @@ namespace LearActionPlans.Views
             }
 
             this.akcniPlany.DatumZalozeni = Convert.ToDateTime(this.dvAP[radek]["DatumZalozeni"]);
+            //this.akcniPlany.DatumUkonceni = Convert.ToDateTime(this.dvAP[radek]["DatumUkonceni"]);
+
             this.akcniPlany.ZakaznikNazev =
                 Convert.ToString(this.dvAP[radek]["ZakaznikNazev"]);
 

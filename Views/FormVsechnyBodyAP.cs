@@ -12,7 +12,7 @@ namespace LearActionPlans.Views
 {
     public partial class FormVsechnyBodyAP : Form
     {
-        FormNovyAkcniPlan.AkcniPlanTmp akcniPlany;
+        private FormNovyAkcniPlan.AkcniPlanTmp akcniPlany;
 
         private readonly BindingSource bindingSource;
         private DataTable dtBodyAP;
@@ -52,6 +52,18 @@ namespace LearActionPlans.Views
             this.InitFiltr();
             if (this.ZobrazitDGV(string.Empty) == true)
             {
+                // odebere handlery
+                this.OdebratHandlery();
+
+                //naplní comboBoxy
+                this.InitFiltryComboBox();
+
+                //v comboBoxech nastaví vybrané položky
+                this.NastavitVybranouPolozku();
+
+                this.PridatHandlery();
+                this.ObarvitLabel();
+
                 this.groupBoxFiltry.Enabled = true;
             }
             else
@@ -73,7 +85,7 @@ namespace LearActionPlans.Views
                     this.dtBodyAP.Rows.Remove(this.dtBodyAP.Rows[j]);
                 }
 
-                this.dtBodyAP.Rows.Clear();
+                this.dtBodyAP.Rows.Clear(); 
             }
 
             var bodyAP_ = VsechnyBodyAPViewModel.GetBodyAPAll().ToList();
@@ -126,17 +138,8 @@ namespace LearActionPlans.Views
 
             //this.dvBodyAP.RowFilter = filtr;
 
-            // odebere handlery
-            this.OdebratHandlery();
-
-            //naplní comboBoxy
-            this.InitFiltryComboBox();
-
-            //v comboBoxech nastaví vybrané položky
-            this.NastavitVybranouPolozku();
-
-            this.PridatHandlery();
-            this.ObarvitLabel();
+            //---------------------------------------------------------
+            //---------------------------------------------------------
 
             // nastaví filtr pro dataview
             //this.dvBodyAP.RowFilter = filtr;
@@ -147,6 +150,7 @@ namespace LearActionPlans.Views
                 var row = rowView.Row;
                 if (Convert.ToString(row["Efektivita"]) != string.Empty)
                 {
+                    // obarví zelenou barvou řádky, kde byla nastavena datum efektivity
                     this.DataGridViewBodyAP.Rows[i].DefaultCellStyle.BackColor = Color.LightGreen;
                 }
                 i++;
@@ -287,6 +291,9 @@ namespace LearActionPlans.Views
                         foreach (DataRow row in dtAP.Rows)
                         {
                             this.akcniPlany.DatumZalozeni = Convert.ToDateTime(row["DatumZalozeniAP"]);
+                            // tady musím zkontrolovat datum ukončení
+                            this.akcniPlany.DatumUkonceni = Convert.ToDateTime(row["DatumUkonceni"]);
+
                             this.akcniPlany.Zadavatel1Jmeno = Convert.ToString(row["Zadavatel1"]);
 
                             string zadavatel2;

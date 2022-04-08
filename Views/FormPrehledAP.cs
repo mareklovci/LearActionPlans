@@ -384,7 +384,7 @@ namespace LearActionPlans.Views
             this.akcniPlany.Zadavatel1Id = Convert.ToInt32(
                         this.dvAP[radek]["Zadavatel1Id"]);
 
-            if (this.dvAP[radek]["Zadavatel1Jmeno"] == null)
+            if (string.IsNullOrEmpty(Convert.ToString(this.dvAP[radek]["Zadavatel2Jmeno"])))
             {
                 this.akcniPlany.Zadavatel2Jmeno = null;
             }
@@ -399,7 +399,7 @@ namespace LearActionPlans.Views
 
             this.akcniPlany.Tema =
                 Convert.ToString(this.dvAP[radek]["Tema"]);
-            if (this.dvAP[radek]["ProjektNazev"] == null)
+            if (string.IsNullOrEmpty(Convert.ToString(this.dvAP[radek]["ProjektNazev"])))
             {
                 this.akcniPlany.ProjektNazev = null;
             }

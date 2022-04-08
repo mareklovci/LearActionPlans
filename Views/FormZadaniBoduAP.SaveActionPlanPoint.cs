@@ -17,7 +17,7 @@ namespace LearActionPlans.Views
 
             if (string.IsNullOrWhiteSpace(this.RichTextBoxPopisProblemu.Text))
             {
-                MessageBox.Show("You must fill in the Problem description field.", "Notice", MessageBoxButtons.OK,
+                _ = MessageBox.Show("You must fill in the Problem description field.", "Notice", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
                 ulozit = false;
                 //this.RichTextBoxPopisProblemu.BackColor = Color.Yellow;
@@ -32,14 +32,14 @@ namespace LearActionPlans.Views
             if (Convert.ToInt32(this.ComboBoxOdpovednaOsoba1.SelectedValue) == 0)
             {
                 ulozit = false;
-                MessageBox.Show("You must select a Responsible employee #1.", "Notice", MessageBoxButtons.OK,
+                _ = MessageBox.Show("You must select a Responsible employee #1.", "Notice", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
             }
 
             if (Convert.ToInt32(this.ComboBoxOddeleni.SelectedValue) == 0)
             {
                 ulozit = false;
-                MessageBox.Show("You must select a Department.", "Notice", MessageBoxButtons.OK,
+                _ = MessageBox.Show("You must select a Department.", "Notice", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
             }
 
@@ -83,10 +83,12 @@ namespace LearActionPlans.Views
                 ulozitBodAP.OdkazNaNormu = this.TextBoxOdkazNaNormu.Text;
                 ulozitBodAP.HodnoceniNeshody = this.TextBoxHodnoceniNeshody.Text;
                 ulozitBodAP.PopisProblemu = this.RichTextBoxPopisProblemu.Text;
-                ulozitBodAP.SkutecnaPricinaWM = this.RichTextBoxSkutecnaPricinaWM.Text;
-                ulozitBodAP.NapravnaOpatreniWM = this.RichTextBoxNapravnaOpatreniWM.Text;
-                ulozitBodAP.SkutecnaPricinaWS = this.RichTextBoxSkutecnaPricinaWS.Text;
-                ulozitBodAP.NapravnaOpatreniWS = this.RichTextBoxNapravnaOpatreniWS.Text;
+                ulozitBodAP.DatumUkonceni = this.datumUkonceni;
+                ulozitBodAP.UkonceniPoznamka = this.poznamkaDatumUkonceni;
+                //ulozitBodAP.SkutecnaPricinaWM = this.RichTextBoxSkutecnaPricinaWM.Text;
+                //ulozitBodAP.NapravnaOpatreniWM = this.RichTextBoxNapravnaOpatreniWM.Text;
+                //ulozitBodAP.SkutecnaPricinaWS = this.RichTextBoxSkutecnaPricinaWS.Text;
+                //ulozitBodAP.NapravnaOpatreniWS = this.RichTextBoxNapravnaOpatreniWS.Text;
                 ulozitBodAP.OdpovednaOsoba1Id = Convert.ToInt32(this.ComboBoxOdpovednaOsoba1.SelectedValue);
                 ulozitBodAP.OdpovednaOsoba2Id = this.ComboBoxOdpovednaOsoba2.SelectedIndex == 0
                     ? 0
@@ -111,7 +113,7 @@ namespace LearActionPlans.Views
             //vytvoření nebo aktualizace nového bodu
             var bodAPId = BodAPDataMapper.InsertUpdateBodAP(ulozitBodAP);
 
-            MessageBox.Show("The AP Point has been saved.", "Notice", MessageBoxButtons.OK,
+            _ = MessageBox.Show("The AP Point has been saved.", "Notice", MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
 
             //při uložení nového bodu je přepsána proměnná novyBodAP na false, protože dále mohu editovat tento bod jako již uložený

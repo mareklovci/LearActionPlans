@@ -20,7 +20,7 @@ namespace LearActionPlans.Views
 
         private bool zadavatel1Povolen;
         private bool temaPovoleno;
-        private bool datumUkonceniPovolen;
+        //private bool datumUkonceniPovolen;
         private bool zakaznikPovolen;
 
         private bool ulozeniDat;
@@ -43,9 +43,23 @@ namespace LearActionPlans.Views
             public string ZakaznikNazev { get; set; }
             public byte TypAP { get; set; }
             public byte StavObjektu { get; set; }
-            public DateTime DatumUkonceni { get; set; }
+            public DateTime? DatumUkonceni { get; set; }
             public bool APUzavren { get; set; }
             public string Poznamka { get; set; }
+
+            public AkcniPlanTmp()
+            {
+                this.CisloAPRok = null;
+                this.Zadavatel2Id = null;
+                this.Zadavatel1Jmeno = null;
+                this.Zadavatel2Jmeno = null;
+                this.Tema = null;
+                this.ProjektId = null;
+                this.ProjektNazev = null;
+                this.ZakaznikNazev = null;
+                this.DatumUkonceni = null;
+                this.Poznamka = null;
+            }
         }
 
         public FormNovyAkcniPlan()
@@ -56,7 +70,7 @@ namespace LearActionPlans.Views
             this.akcniPlan = new AkcniPlanTmp();
             this.zadavatel1Povolen = false;
             this.temaPovoleno = false;
-            this.datumUkonceniPovolen = false;
+            //this.datumUkonceniPovolen = false;
             this.zakaznikPovolen = false;
 
             this.ButtonUlozit.Enabled = false;
@@ -187,8 +201,8 @@ namespace LearActionPlans.Views
                 this.ComboBoxProjekty.SelectedIndexChanged +=
                 new EventHandler(this.ComboBoxProjekty_SelectedIndexChanged);
 
-                this.DateTimePickerDatumUkonceni.ValueChanged +=
-                new EventHandler(this.DateTimePickerDatumUkonceni_ValueChanged);
+                //this.DateTimePickerDatumUkonceni.ValueChanged +=
+                //new EventHandler(this.DateTimePickerDatumUkonceni_ValueChanged);
 
                 this.ComboBoxZakaznici.SelectedIndexChanged +=
                 new EventHandler(this.ComboBoxZakaznici_SelectedIndexChanged);
@@ -199,14 +213,14 @@ namespace LearActionPlans.Views
                 this.RadioButtonOstatni.CheckedChanged +=
                 new EventHandler(this.RadioButtonOstatni_CheckedChanged);
 
-                this.akcniPlan.DatumUkonceni = this.DateTimePickerDatumUkonceni.Value;
+                //this.akcniPlan.DatumUkonceni = this.DateTimePickerDatumUkonceni.Value;
 
                 this.RadioButtonAudity.Checked = true;
                 this.RadioButtonOstatni.Checked = false;
 
                 this.akcniPlan.TypAP = 1;
 
-                this.datumUkonceniPovolen = true;
+                //this.datumUkonceniPovolen = true;
             }
             else
             {
@@ -360,7 +374,7 @@ namespace LearActionPlans.Views
             }
 
             // kontrola, jsetli mohu zaktivnit talčítko pro uložení AP
-            if (this.zadavatel1Povolen == true && this.temaPovoleno == true && this.datumUkonceniPovolen == true && this.zakaznikPovolen == true)
+            if (this.zadavatel1Povolen == true && this.temaPovoleno == true && this.zakaznikPovolen == true)
             {
                 this.ButtonUlozit.Enabled = true;
             }
@@ -384,7 +398,7 @@ namespace LearActionPlans.Views
             }
 
             // kontrola, jestli mohu zaktivnit talčítko pro uložení AP
-            if (this.zadavatel1Povolen == true && this.temaPovoleno == true && this.datumUkonceniPovolen == true && this.zakaznikPovolen == true)
+            if (this.zadavatel1Povolen == true && this.temaPovoleno == true && this.zakaznikPovolen == true)
             {
                 this.ButtonUlozit.Enabled = true;
             }
@@ -408,7 +422,7 @@ namespace LearActionPlans.Views
             }
 
             // kontrola, jestli mohu zaktivnit talčítko pro uložení AP
-            if (this.zadavatel1Povolen == true && this.temaPovoleno == true && this.datumUkonceniPovolen == true && this.zakaznikPovolen == true)
+            if (this.zadavatel1Povolen == true && this.temaPovoleno == true && this.zakaznikPovolen == true)
             {
                 this.ButtonUlozit.Enabled = true;
             }
@@ -432,11 +446,11 @@ namespace LearActionPlans.Views
             }
         }
 
-        private void DateTimePickerDatumUkonceni_ValueChanged(object sender, EventArgs e)
-        {
-            this.akcniPlan.DatumUkonceni = this.DateTimePickerDatumUkonceni.Value;
-            this.datumUkonceniPovolen = true;
-        }
+        //private void DateTimePickerDatumUkonceni_ValueChanged(object sender, EventArgs e)
+        //{
+        //    this.akcniPlan.DatumUkonceni = this.DateTimePickerDatumUkonceni.Value;
+        //    this.datumUkonceniPovolen = true;
+        //}
 
         private void ComboBoxZakaznici_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -453,7 +467,7 @@ namespace LearActionPlans.Views
             }
 
             // kontrola, jsetli mohu zaktivnit talčítko pro uložení AP
-            if (this.zadavatel1Povolen == true && this.temaPovoleno == true && this.datumUkonceniPovolen == true && this.zakaznikPovolen == true)
+            if (this.zadavatel1Povolen == true && this.temaPovoleno == true && this.zakaznikPovolen == true)
             {
                 this.ButtonUlozit.Enabled = true;
             }
@@ -489,8 +503,6 @@ namespace LearActionPlans.Views
         private void UlozitAP()
         {
             this.akcniPlan.CisloAP = this.posledniCisloAP;
-
-            //akcniPlan.Rok = DateTime.Now.Year;
 
             //this.akcniPlan.Id = AkcniPlanyDataMapper.InsertAP(this.akcniPlan);
             AkcniPlanyDataMapper.UpdateNewAP(this.akcniPlan);

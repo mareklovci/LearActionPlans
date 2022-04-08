@@ -6,6 +6,7 @@ using System.Diagnostics;
 
 using LearActionPlans.Models;
 using LearActionPlans.DataMappers;
+using LearActionPlans.Views;
 
 namespace LearActionPlans.Utilities
 {
@@ -64,17 +65,55 @@ namespace LearActionPlans.Utilities
                 //key = Registry.ClassesRoot.CreateSubKey("LearActionPlans");
                 key = Registry.ClassesRoot.CreateSubKey(protocol);
                 //key.SetValue(string.Empty, "URL: LearActionPlans Protocol");
-                key.SetValue("URL Protocol", string.Empty);
+                //key.SetValue("URL Protocol", string.Empty);
 
-                key = key.CreateSubKey(@"shell\open\command");
+                if (protocol == "LearAPPath")
+                {
+                    key.SetValue(protocol, myAppPath + " " + "%1");
+                }
+                else
+                {
+                    key.SetValue("URL Protocol", string.Empty);
+                    key = key.CreateSubKey(@"shell\open\command");
+                    key.SetValue(string.Empty, myAppPath + " " + "%1");
+                }
+
+                //key = key.CreateSubKey(@"shell\open\command");
+                //key = key.CreateSubKey(@"LearAP");
 
                 //key.SetValue(string.Empty, myAppPath1 + " " + "%1");
-                key.SetValue(string.Empty, myAppPath + " " + "%1");
+                //key.SetValue(string.Empty, myAppPath + " " + "%1");
 
                 //%1 represents the argument - this tells windows to open this program with an argument / parameter
             }
 
             key.Close();
+        }
+
+        public static void GetRegistryKeyValue(string keyName)
+        {
+            try
+            {
+                using (var key = Registry.ClassesRoot.OpenSubKey(keyName))
+                {
+                    if (key != null)
+                    {
+                        //string[] temp = key.GetSubKeyNames();
+
+                        var o = key.GetValue(keyName);
+
+                        if (o != null)
+                        {
+                            FormMain.pathAP = o.ToString();
+                            FormMain.pathAP = FormMain.pathAP.Substring(0, FormMain.pathAP.Length - 3);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)  //just for demonstration...it's always best to handle specific exceptions
+            {
+                //react appropriately
+            }
         }
 
         public static void EmailPosunutíTerminuBodAP(string zadavatel1Email,
@@ -218,7 +257,7 @@ namespace LearActionPlans.Utilities
             {
                 myProcess.StartInfo.UseShellExecute = false;
                 // You can start any process, HelloWorld is a do-nothing example.
-                myProcess.StartInfo.FileName = "..\\LearSendEmail\\LearSendEmail.exe";
+                myProcess.StartInfo.FileName = FormMain.pathAP + "\\LearSendEmail\\LearSendEmail.exe";
                 //myProcess.StartInfo.FileName = "C:\\Users\\pc\\source\\repos\\LearSendEmail\\bin\\Release\\netcoreapp3.1\\LearSendEmail.exe";
                 myProcess.StartInfo.CreateNoWindow = true;
                 _ = myProcess.Start();

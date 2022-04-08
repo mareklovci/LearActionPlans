@@ -277,7 +277,7 @@ namespace LearActionPlans.DataMappers
                 command.Parameters.AddWithValue("@projektId", DBNull.Value);
                 command.Parameters.AddWithValue("@zakaznikId", idZakaznik);
                 command.Parameters.AddWithValue("@typAP", 1);
-                command.Parameters.AddWithValue("@ZmenaTerminu", 1);
+                command.Parameters.AddWithValue("@ZmenaTerminu", 3);
                 command.Parameters.AddWithValue("@UzavreniAP", DBNull.Value);
                 command.Parameters.AddWithValue("@ZnovuOtevrit", 1);
                 command.Parameters.AddWithValue("@DuvodZnovuotevreni", DBNull.Value);

@@ -23,10 +23,10 @@ namespace LearActionPlans
             var arguments = ParseArguments();
 
             // Modify System Registry
-            if (arguments.RunWithoutParameters)
-            {
-                ModifySystemRegistry();
-            }
+            //if (arguments.RunWithoutParameters)
+            //{
+            //    ModifySystemRegistry();
+            //}
 
             // Initialize Application
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
@@ -70,12 +70,14 @@ namespace LearActionPlans
         private static void ModifySystemRegistry()
         {
             var learAP = ConfigurationManager.AppSettings["LearActionPlans"];
-            var learConfirmation = ConfigurationManager.AppSettings["LearConfirmation"];
+            var learConfirmation = ConfigurationManager.AppSettings["LearAPConfirmation"];
+            var learAPPath = ConfigurationManager.AppSettings["LearAPPath"];
 
             try
             {
                 Helper.RegisterMyProtocol("LearActionPlans", learAP);
                 Helper.RegisterMyProtocol("LearAPConfirmation", learConfirmation);
+                Helper.RegisterMyProtocol("LearAPPath", learAPPath);
             }
             catch (Exception e)
             {

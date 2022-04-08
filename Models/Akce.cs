@@ -1,6 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-
 namespace LearActionPlans.Models
 {
     public class Akce : DatabaseTable

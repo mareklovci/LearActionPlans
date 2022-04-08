@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 
-using LearActionPlans.Models;
 using LearActionPlans.ViewModels;
 
 namespace LearActionPlans.Views
@@ -20,7 +19,7 @@ namespace LearActionPlans.Views
         private readonly bool spusteniBezParametru;
 
         private bool novyBodAP;
-        private bool bodAPUlozen;
+        //private bool bodAPUlozen;
 
         private int cisloRadkyDGVBody;
 
@@ -50,7 +49,7 @@ namespace LearActionPlans.Views
 
             this.cisloRadkyDGVBody = cisloRadkyDGV;
             this.novyBodAP = novyBod;
-            this.bodAPUlozen = false;
+            //this.bodAPUlozen = false;
 
             this.kontrolaEfektivnostiDatum = null;
             this.priloha = string.Empty;
@@ -66,7 +65,7 @@ namespace LearActionPlans.Views
                 this.ComboBoxOdpovednaOsoba2.Enabled = false;
                 //Nejsou dostupní žádní zaměstnanci.
                 //Zadání nového Akčního plánu bude ukončeno.
-                MessageBox.Show("No employees available." + (char)10 + "Entering a new Action plan will be completed.",
+                _ = MessageBox.Show("No employees available." + (char)10 + "Entering a new Action plan will be completed.",
                     "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
@@ -81,7 +80,7 @@ namespace LearActionPlans.Views
                 this.ComboBoxOddeleni.Enabled = false;
                 //Nejsou dostupné žádné projekty.
                 //Zadání nového Akčního plánu bude ukončeno.
-                MessageBox.Show(
+                _ = MessageBox.Show(
                     "No departments available." + (char)10 + "Entering a new Action plan will be completed.", "Notice",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
@@ -232,7 +231,7 @@ namespace LearActionPlans.Views
                 return true;
             }
 
-            MessageBox.Show("No Departments are available.", "Notice", MessageBoxButtons.OK,
+            _ = MessageBox.Show("No Departments are available.", "Notice", MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
             return false;
         }
@@ -337,7 +336,7 @@ namespace LearActionPlans.Views
             this.UlozitBodAP();
             this.ButtonUlozit.Enabled = false;
             this.changeOfContent = false;
-            this.bodAPUlozen = true;
+            //this.bodAPUlozen = true;
         }
 
         private void ComboBoxOdpovednaOsoba1_SelectedIndexChanged(object sender, EventArgs e)
@@ -347,7 +346,7 @@ namespace LearActionPlans.Views
 
             if (this.ComboBoxOdpovednaOsoba1.SelectedIndex == 0)
             {
-                MessageBox.Show("A responsible employee must be selected.", "Notice", MessageBoxButtons.OK,
+                _ = MessageBox.Show("A responsible employee must be selected.", "Notice", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
             }
         }
@@ -359,7 +358,7 @@ namespace LearActionPlans.Views
 
             if (this.ComboBoxOddeleni.SelectedIndex == 0)
             {
-                MessageBox.Show("A department must be selected.", "Notice", MessageBoxButtons.OK,
+                _ = MessageBox.Show("A department must be selected.", "Notice", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
             }
         }
@@ -402,7 +401,7 @@ namespace LearActionPlans.Views
 
         private void ButtonTerminUkonceni_MouseClick(object sender, MouseEventArgs e)
         {
-            if (this.spusteniBezParametru == true)
+            if (this.spusteniBezParametru == true || this.spusteniBezParametru == false)
             {
                 // (this.cisloRadkyDGVBody > -1 ? (FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].UkonceniBodAP == null ? true : false) : false)
                 if (this.novyBodAP == true || (this.cisloRadkyDGVBody > -1 && FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].UkonceniBodAP == null))
@@ -440,16 +439,16 @@ namespace LearActionPlans.Views
                     //{ }
                 }
             }
-            if (this.spusteniBezParametru == false)
-            {
-                var kontrolaEfektivnosti =
-                    !(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti == null);
-                var opravitTermin = !(this.akcniPlany_.APUzavren || kontrolaEfektivnosti);
+            //else if (this.spusteniBezParametru == false)
+            //{
+            //    var kontrolaEfektivnosti =
+            //        !(FormPrehledBoduAP.bodyAP[this.cisloRadkyDGVBody].KontrolaEfektivnosti == null);
+            //    var opravitTermin = !(this.akcniPlany_.APUzavren || kontrolaEfektivnosti);
 
-                using var form = new FormPosunutiTerminuBodAP(this.spusteniBezParametru, opravitTermin, this.cisloAPStr_, this.cisloRadkyDGVBody, this.akcniPlany_.Zadavatel1Id, this.akcniPlany_.Zadavatel2Id);
-                // protože nepotřebuji vyhodnocovat DialogResult
-                _ = form.ShowDialog();
-            }
+            //    using var form = new FormPosunutiTerminuBodAP(this.spusteniBezParametru, opravitTermin, this.cisloAPStr_, this.cisloRadkyDGVBody, this.akcniPlany_.Zadavatel1Id, this.akcniPlany_.Zadavatel2Id);
+            //    // protože nepotřebuji vyhodnocovat DialogResult
+            //    _ = form.ShowDialog();
+            //}
         }
 
         private void ButtonKontrolaEfektivnosti_MouseClick(object sender, MouseEventArgs e)
@@ -487,7 +486,7 @@ namespace LearActionPlans.Views
             using var form = new FormKontrolaEfektivnosti(this.novyBodAP, this.akcniPlany_.APUzavren,
                 this.deadLineZadan, bodAPId, kontrolaEfektivnostiUlozena, datumKontrolEfekt);
             //var result = form.ShowDialog();
-            form.ShowDialog();
+            _ = form.ShowDialog();
             var result = form.ReturnValuePotvrdit;
             if (!result)
             {
@@ -739,14 +738,13 @@ namespace LearActionPlans.Views
 
         private void FormZadaniBoduAP_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //if (this.spusteniBezParametru == false)
-            //{
-            //    Application.Exit();
-            //}
-
             if (!this.changeOfContent)
             {
                 // v případě, že nebyla provedena žádná aktualizace, bude ukončeno okamžitě
+                if (this.spusteniBezParametru == false)
+                {
+                    Application.Exit();
+                }
                 return;
             }
 
@@ -767,6 +765,10 @@ namespace LearActionPlans.Views
                     break;
                 case DialogResult.Cancel:
                     e.Cancel = true;
+                    if (this.spusteniBezParametru == false)
+                    {
+                        Application.Exit();
+                    }
                     break;
                 case DialogResult.No:
                 case DialogResult.None:
@@ -774,6 +776,10 @@ namespace LearActionPlans.Views
                 case DialogResult.Abort:
                 case DialogResult.Retry:
                 case DialogResult.Ignore:
+                    if (this.spusteniBezParametru == false)
+                    {
+                        Application.Exit();
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

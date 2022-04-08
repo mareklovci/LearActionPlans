@@ -1,4 +1,4 @@
-ï»¿
+
 namespace LearActionPlans.Views
 {
     partial class FormNovyAkcniPlan
@@ -49,6 +49,7 @@ namespace LearActionPlans.Views
             this.RadioButtonOstatni = new System.Windows.Forms.RadioButton();
             this.ButtonUlozit = new System.Windows.Forms.Button();
             this.ButtonZavrit = new System.Windows.Forms.Button();
+            this.labelPoznámka = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelCisloAP
@@ -74,12 +75,12 @@ namespace LearActionPlans.Views
             // labelZadavatel1
             // 
             this.labelZadavatel1.AutoSize = true;
-            this.labelZadavatel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.labelZadavatel1.Location = new System.Drawing.Point(48, 102);
+            this.labelZadavatel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.labelZadavatel1.Location = new System.Drawing.Point(17, 102);
             this.labelZadavatel1.Name = "labelZadavatel1";
-            this.labelZadavatel1.Size = new System.Drawing.Size(163, 17);
+            this.labelZadavatel1.Size = new System.Drawing.Size(194, 17);
             this.labelZadavatel1.TabIndex = 2;
-            this.labelZadavatel1.Text = "Contracting authority #1:";
+            this.labelZadavatel1.Text = "Contracting authority #1*:";
             // 
             // ComboBoxZadavatel1
             // 
@@ -118,12 +119,12 @@ namespace LearActionPlans.Views
             // labelTema
             // 
             this.labelTema.AutoSize = true;
-            this.labelTema.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.labelTema.Location = new System.Drawing.Point(164, 180);
+            this.labelTema.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.labelTema.Location = new System.Drawing.Point(152, 180);
             this.labelTema.Name = "labelTema";
-            this.labelTema.Size = new System.Drawing.Size(47, 17);
+            this.labelTema.Size = new System.Drawing.Size(59, 17);
             this.labelTema.TabIndex = 6;
-            this.labelTema.Text = "Topic:";
+            this.labelTema.Text = "Topic*:";
             // 
             // TextBoxTema
             // 
@@ -159,29 +160,31 @@ namespace LearActionPlans.Views
             // 
             this.labelDatumUkonceni.AutoSize = true;
             this.labelDatumUkonceni.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.labelDatumUkonceni.Location = new System.Drawing.Point(142, 263);
+            this.labelDatumUkonceni.Location = new System.Drawing.Point(398, 9);
             this.labelDatumUkonceni.Name = "labelDatumUkonceni";
             this.labelDatumUkonceni.Size = new System.Drawing.Size(69, 17);
             this.labelDatumUkonceni.TabIndex = 10;
             this.labelDatumUkonceni.Text = "End date:";
+            this.labelDatumUkonceni.Visible = false;
             // 
             // DateTimePickerDatumUkonceni
             // 
             this.DateTimePickerDatumUkonceni.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.DateTimePickerDatumUkonceni.Location = new System.Drawing.Point(217, 258);
+            this.DateTimePickerDatumUkonceni.Location = new System.Drawing.Point(473, 4);
             this.DateTimePickerDatumUkonceni.Name = "DateTimePickerDatumUkonceni";
             this.DateTimePickerDatumUkonceni.Size = new System.Drawing.Size(250, 23);
             this.DateTimePickerDatumUkonceni.TabIndex = 11;
+            this.DateTimePickerDatumUkonceni.Visible = false;
             // 
             // labelZakaznik
             // 
             this.labelZakaznik.AutoSize = true;
-            this.labelZakaznik.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.labelZakaznik.Location = new System.Drawing.Point(139, 302);
+            this.labelZakaznik.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.labelZakaznik.Location = new System.Drawing.Point(124, 263);
             this.labelZakaznik.Name = "labelZakaznik";
-            this.labelZakaznik.Size = new System.Drawing.Size(72, 17);
+            this.labelZakaznik.Size = new System.Drawing.Size(87, 17);
             this.labelZakaznik.TabIndex = 12;
-            this.labelZakaznik.Text = "Customer:";
+            this.labelZakaznik.Text = "Customer*:";
             // 
             // ComboBoxZakaznici
             // 
@@ -190,7 +193,7 @@ namespace LearActionPlans.Views
             this.ComboBoxZakaznici.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboBoxZakaznici.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.ComboBoxZakaznici.FormattingEnabled = true;
-            this.ComboBoxZakaznici.Location = new System.Drawing.Point(217, 299);
+            this.ComboBoxZakaznici.Location = new System.Drawing.Point(217, 260);
             this.ComboBoxZakaznici.Name = "ComboBoxZakaznici";
             this.ComboBoxZakaznici.Size = new System.Drawing.Size(250, 25);
             this.ComboBoxZakaznici.TabIndex = 13;
@@ -198,27 +201,27 @@ namespace LearActionPlans.Views
             // labelAudity
             // 
             this.labelAudity.AutoSize = true;
-            this.labelAudity.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.labelAudity.Location = new System.Drawing.Point(160, 343);
+            this.labelAudity.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.labelAudity.Location = new System.Drawing.Point(147, 314);
             this.labelAudity.Name = "labelAudity";
-            this.labelAudity.Size = new System.Drawing.Size(51, 17);
+            this.labelAudity.Size = new System.Drawing.Size(64, 17);
             this.labelAudity.TabIndex = 14;
-            this.labelAudity.Text = "Audits:";
+            this.labelAudity.Text = "Audits*:";
             // 
             // labelOstatni
             // 
             this.labelOstatni.AutoSize = true;
-            this.labelOstatni.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.labelOstatni.Location = new System.Drawing.Point(163, 378);
+            this.labelOstatni.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.labelOstatni.Location = new System.Drawing.Point(151, 349);
             this.labelOstatni.Name = "labelOstatni";
-            this.labelOstatni.Size = new System.Drawing.Size(48, 17);
+            this.labelOstatni.Size = new System.Drawing.Size(60, 17);
             this.labelOstatni.TabIndex = 15;
-            this.labelOstatni.Text = "Other:";
+            this.labelOstatni.Text = "Other*:";
             // 
             // RadioButtonAudity
             // 
             this.RadioButtonAudity.AutoSize = true;
-            this.RadioButtonAudity.Location = new System.Drawing.Point(217, 345);
+            this.RadioButtonAudity.Location = new System.Drawing.Point(217, 316);
             this.RadioButtonAudity.Name = "RadioButtonAudity";
             this.RadioButtonAudity.Size = new System.Drawing.Size(14, 13);
             this.RadioButtonAudity.TabIndex = 16;
@@ -228,7 +231,7 @@ namespace LearActionPlans.Views
             // RadioButtonOstatni
             // 
             this.RadioButtonOstatni.AutoSize = true;
-            this.RadioButtonOstatni.Location = new System.Drawing.Point(217, 380);
+            this.RadioButtonOstatni.Location = new System.Drawing.Point(217, 351);
             this.RadioButtonOstatni.Name = "RadioButtonOstatni";
             this.RadioButtonOstatni.Size = new System.Drawing.Size(14, 13);
             this.RadioButtonOstatni.TabIndex = 17;
@@ -238,7 +241,7 @@ namespace LearActionPlans.Views
             // ButtonUlozit
             // 
             this.ButtonUlozit.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.ButtonUlozit.Location = new System.Drawing.Point(476, 409);
+            this.ButtonUlozit.Location = new System.Drawing.Point(486, 379);
             this.ButtonUlozit.Name = "ButtonUlozit";
             this.ButtonUlozit.Size = new System.Drawing.Size(110, 30);
             this.ButtonUlozit.TabIndex = 18;
@@ -249,7 +252,7 @@ namespace LearActionPlans.Views
             // ButtonZavrit
             // 
             this.ButtonZavrit.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.ButtonZavrit.Location = new System.Drawing.Point(602, 409);
+            this.ButtonZavrit.Location = new System.Drawing.Point(612, 379);
             this.ButtonZavrit.Name = "ButtonZavrit";
             this.ButtonZavrit.Size = new System.Drawing.Size(110, 30);
             this.ButtonZavrit.TabIndex = 19;
@@ -257,11 +260,22 @@ namespace LearActionPlans.Views
             this.ButtonZavrit.UseVisualStyleBackColor = true;
             this.ButtonZavrit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ButtonZavrit_MouseClick);
             // 
+            // labelPoznámka
+            // 
+            this.labelPoznámka.AutoSize = true;
+            this.labelPoznámka.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.labelPoznámka.Location = new System.Drawing.Point(17, 386);
+            this.labelPoznámka.Name = "labelPoznámka";
+            this.labelPoznámka.Size = new System.Drawing.Size(293, 17);
+            this.labelPoznámka.TabIndex = 20;
+            this.labelPoznámka.Text = "Items marked with an asterisk are mandatory.";
+            // 
             // FormNovyAkcniPlan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(734, 461);
+            this.ClientSize = new System.Drawing.Size(734, 421);
+            this.Controls.Add(this.labelPoznámka);
             this.Controls.Add(this.ButtonZavrit);
             this.Controls.Add(this.ButtonUlozit);
             this.Controls.Add(this.RadioButtonOstatni);
@@ -317,5 +331,6 @@ namespace LearActionPlans.Views
         private System.Windows.Forms.RadioButton RadioButtonOstatni;
         private System.Windows.Forms.Button ButtonUlozit;
         private System.Windows.Forms.Button ButtonZavrit;
+        private System.Windows.Forms.Label labelPoznámka;
     }
 }

@@ -63,6 +63,7 @@ namespace LearActionPlans.Views
             this.labelProjektAP.Text = this.akcniPlany_.ProjektNazev ?? "";
             this.labelDatumZahajeniAP.Text = this.akcniPlany_.DatumZalozeni == null ? "" : Convert.ToDateTime(this.akcniPlany_.DatumZalozeni).ToShortDateString();
             this.labelDatumUkonceniAP.Text = string.Empty;
+
             this.labelDatumUkonceniAP.Text = this.akcniPlany_.DatumUkonceni == null ? "" : Convert.ToDateTime(this.akcniPlany_.DatumUkonceni).ToShortDateString();
             this.labelZakaznikAP.Text = this.akcniPlany_.ZakaznikNazev ?? "";
 
@@ -99,7 +100,15 @@ namespace LearActionPlans.Views
             else
             {
                 this.ButtonNovyBodAP.Visible = true;
-                this.ButtonOdeslatEmail.Visible = true;
+                if (this.DataGridViewBodyAP.Rows.Count == 0)
+                {
+                    this.ButtonOdeslatEmail.Visible = false;
+                }
+                else
+                {
+                    this.DataGridViewBodyAP.Visible = true;
+                }
+
                 this.ButtonZavrit.Text = "Close";
                 this.ButtonOpravitBodAP.Text = "Edit AP Point";
             }
@@ -245,7 +254,7 @@ namespace LearActionPlans.Views
 
             this.dtBodyAP.Columns.Add(new DataColumn("Reopen", typeof(bool)));
 
-            this.DataGridViewBodyAP.Columns["cisloBodAP"].HeaderText = @"AP point number";
+            this.DataGridViewBodyAP.Columns["cisloBodAP"].HeaderText = @"AP Point number";
             this.DataGridViewBodyAP.Columns["cisloBodAP"].Width = 120;
 
             this.DataGridViewBodyAP.Columns["textBoxOdkazNaNormu"].HeaderText = @"Standard chapter";
@@ -338,6 +347,10 @@ namespace LearActionPlans.Views
                 }
 
                 this.dtBodyAP.Rows.Clear();
+            }
+
+            if (bodyAP.Count > 0)
+            {
                 bodyAP = new List<BodAP>();
             }
 
@@ -426,6 +439,11 @@ namespace LearActionPlans.Views
 
             if (aktivovatTlacitkoOdeslatEmail == true)
             {
+                if (this.ButtonOdeslatEmail.Visible == false)
+                {
+                    this.ButtonOdeslatEmail.Visible = true;
+                }
+
                 this.ButtonOdeslatEmail.Enabled = true;
             }
             else
@@ -564,7 +582,7 @@ namespace LearActionPlans.Views
                     var htmlText = @"<p>Action plan: " + this.akcniPlany_.CisloAPRok + @"</p>";
                     htmlText += @"<p>Responsible #1:<br>";
                     htmlText += emailTo[0].JmenoPracovnika + @"</p>";
-                    htmlText += @"<p>Points AP: ";
+                    htmlText += @"<p>AP Point numbers: ";
 
                     var j = 0;
                     foreach (var bodAkcniPlan in jedenEmail)
@@ -586,7 +604,7 @@ namespace LearActionPlans.Views
                     }
                     htmlText += @"</p>";
                     // uloží zprávu do tabulky OdeslatEmail
-                    OdeslatEmailDataMapper.InsertEmailOdpovedny1(emailOdpovPrac, @"New points AP", htmlText, odeslaneEmaily1[i]);
+                    OdeslatEmailDataMapper.InsertEmailOdpovedny1(emailOdpovPrac, @"New AP Points", htmlText, odeslaneEmaily1[i]);
 
                     i++;
                 }
@@ -603,7 +621,7 @@ namespace LearActionPlans.Views
                     var htmlText = @"<p>Action plan: " + this.akcniPlany_.CisloAPRok + @"</p>";
                     htmlText += @"<p>Responsible #2:<br>";
                     htmlText += emailTo[0].JmenoPracovnika + @"</p>";
-                    htmlText += @"<p>Points AP: ";
+                    htmlText += @"<p>AP Point numbers: ";
 
                     var j = 0;
                     foreach (var bodyAP in jedenEmail)
@@ -625,12 +643,16 @@ namespace LearActionPlans.Views
                     }
                     htmlText += @"</p>";
                     // uloží zprávu do tabulky OdeslatEmail
-                    OdeslatEmailDataMapper.InsertEmailOdpovedny2(emailOdpovPrac, @"New points AP", htmlText);
+                    OdeslatEmailDataMapper.InsertEmailOdpovedny2(emailOdpovPrac, @"New AP Points", htmlText);
                 }
             }
             // spustí se externí aplikace pro odeslání emailů
             // tady odešlu emaily o založení nových bodů
             Helper.OdeslatEmail();
+
+            // zkontrolovat, jestli proběhlo uložení dat
+            // v případě, ža ano, zobrazí se zpráva, že odeslání proběhlo
+            _ = MessageBox.Show("Emails have been sent.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             this.NacistDGV();
         }

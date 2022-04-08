@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -24,11 +24,6 @@ namespace LearActionPlans.DataMappers
             command.Parameters.AddWithValue("@stavObjektu", 1);
 
             var reader = command.ExecuteReader();
-
-            if (reader == null)
-            {
-                yield break;
-            }
 
             if (!reader.HasRows)
             {

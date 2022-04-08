@@ -69,9 +69,9 @@ namespace LearActionPlans.Views
             this.labelDatumUkonceni.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.labelDatumUkonceni.Location = new System.Drawing.Point(25, 170);
             this.labelDatumUkonceni.Name = "labelDatumUkonceni";
-            this.labelDatumUkonceni.Size = new System.Drawing.Size(69, 17);
+            this.labelDatumUkonceni.Size = new System.Drawing.Size(105, 17);
             this.labelDatumUkonceni.TabIndex = 18;
-            this.labelDatumUkonceni.Text = "End date:";
+            this.labelDatumUkonceni.Text = "Date of ending:";
             // 
             // labelProjekty
             // 

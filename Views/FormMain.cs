@@ -6,7 +6,8 @@ namespace LearActionPlans.Views
 {
     public partial class FormMain : Form
     {
-        private ArgumentOptions arguments;
+        private readonly ArgumentOptions arguments;
+        public static string pathAP;
 
         public FormMain(ArgumentOptions arguments)
         {
@@ -16,10 +17,12 @@ namespace LearActionPlans.Views
 
         private void FormMain_Load(object sender, EventArgs e)
         {
+            Helper.GetRegistryKeyValue("LearAPPath");
+
             if (!this.arguments.RunWithoutParameters)
             {
                 using var form = new FormPrehledAP(this.arguments);
-                form.ShowDialog();
+                _ = form.ShowDialog();
             }
 
             this.ButtonAdmin.Enabled = true;
@@ -32,7 +35,7 @@ namespace LearActionPlans.Views
             if (dialogResult == DialogResult.Yes)
             {
                 using var form = new FormNovyAkcniPlan();
-                form.ShowDialog();
+                _ = form.ShowDialog();
             }
             else if (dialogResult == DialogResult.No)
             {
@@ -55,7 +58,7 @@ namespace LearActionPlans.Views
         private void ButtonSeznamZadosti_MouseClick(object sender, MouseEventArgs e)
         {
             using var form = new FormSeznamPozadavku();
-            form.ShowDialog();
+            _ = form.ShowDialog();
         }
 
         private void ButtonAdmin_MouseClick(object sender, MouseEventArgs e)
